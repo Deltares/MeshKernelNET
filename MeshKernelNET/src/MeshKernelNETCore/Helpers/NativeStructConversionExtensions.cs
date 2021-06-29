@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoAPI.Geometries;
 using MeshKernelNETCore.Api;
+using MeshKernelNETCore.Native;
 using NetTopologySuite.Geometries;
 
-namespace MeshKernelNETCore.Native
+namespace MeshKernelNETCore.Helpers
 {
     public static class NativeStructConversionExtensions
     {

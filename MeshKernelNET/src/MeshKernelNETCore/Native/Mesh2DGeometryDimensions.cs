@@ -3,10 +3,11 @@
 namespace MeshKernelNETCore.Native
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MeshGeometryDimensions
+    internal struct Mesh2DGeometryDimensions
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 255)]
         public char[] name;
+
         public int dim;
         public int numnode;
         public int numedge;

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace MeshKernelNETCore.Native
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MeshGeometry
+    internal struct Mesh2DGeometry
     {
         public IntPtr edge_nodes;
         public IntPtr face_nodes;
@@ -36,13 +36,14 @@ namespace MeshKernelNETCore.Native
 
         public IntPtr layer_zs;
         public IntPtr interface_zs;
-
         public IntPtr nodeids;
         public IntPtr nodelongnames;
+
         public IntPtr nbranchids;
         public IntPtr nbranchlongnames;
         public IntPtr nnodeids;
         public IntPtr nnodelongnames;
+
         public int startIndex;
     }
 }

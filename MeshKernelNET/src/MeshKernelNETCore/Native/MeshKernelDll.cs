@@ -37,24 +37,24 @@ namespace MeshKernelNETCore.Native
         internal static extern int RemoveGridState([In] int meshKernelId);
 
         /// <summary>
-        /// Gets the mesh state as a <see cref="MeshGeometry"/> structure
+        /// Gets the mesh state as a <see cref="Mesh2DGeometry"/> structure
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="meshGeometryDimensions">Mesh dimensions</param>
         /// <param name="meshGeometry">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetMeshState([In] int meshKernelId, [In, Out] ref MeshGeometryDimensions meshGeometryDimensions, [In, Out] ref MeshGeometry meshGeometry);
+        internal static extern int GetMeshState([In] int meshKernelId, [In, Out] ref Mesh2DGeometryDimensions meshGeometryDimensions, [In, Out] ref Mesh2DGeometry meshGeometry);
 
         /// <summary>
-        /// Gets the mesh state as a <see cref="MeshGeometry"/> structure including faces information
+        /// Gets the mesh state as a <see cref="Mesh2DGeometry"/> structure including faces information
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="meshGeometryDimensions">Grid dimensions</param>
         /// <param name="meshGeometry">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_faces_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetGridStateWithCells([In] int meshKernelId, [In, Out] ref MeshGeometryDimensions meshGeometryDimensions, [In, Out] ref MeshGeometry meshGeometry);
+        internal static extern int GetGridStateWithCells([In] int meshKernelId, [In, Out] ref Mesh2DGeometryDimensions meshGeometryDimensions, [In, Out] ref Mesh2DGeometry meshGeometry);
 
         /// <summary>
         /// Synchronize provided mesh (<param name="meshGeometryDimensions"/> and <param name="meshGeometry"/>) with the mesh state with <param name="meshKernelId"/>
@@ -65,7 +65,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="IsGeographic">Cartesian or spherical mesh</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_set_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int SetState([In] int meshKernelId, [In] ref MeshGeometryDimensions meshGeometryDimensions, [In] ref MeshGeometry meshGeometry, [In] bool IsGeographic);
+        internal static extern int SetState([In] int meshKernelId, [In] ref Mesh2DGeometryDimensions meshGeometryDimensions, [In] ref Mesh2DGeometry meshGeometry, [In] bool IsGeographic);
 
         #endregion
 

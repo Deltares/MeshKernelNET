@@ -17,7 +17,7 @@ namespace MeshKernelNETCore.Api
         [ProtoMember(3)] private int numberOfCoordinates;
         [ProtoMember(4)] private double[] xCoordinates;
         [ProtoMember(5)] private double[] yCoordinates;
-        [ProtoMember(6)] private double[] zCoordinates;
+        [ProtoMember(6)] private double[] values;
 
         /// <summary>
         /// Separator used for separating multiple geometries
@@ -73,10 +73,10 @@ namespace MeshKernelNETCore.Api
         /// The z coordinates of the geometries
         /// </summary>
 
-        public double[] ZCoordinates
+        public double[] Values
         {
-            get { return zCoordinates; }
-            set { zCoordinates = value; }
+            get { return values; }
+            set { values = value; }
         }
 
         private bool IsMemoryPinned
@@ -101,7 +101,7 @@ namespace MeshKernelNETCore.Api
             {
                 xCoordinates = lookup[XCoordinates].AddrOfPinnedObject(),
                 yCoordinates = lookup[YCoordinates].AddrOfPinnedObject(),
-                zCoordinates = lookup[ZCoordinates].AddrOfPinnedObject(),
+                zCoordinates = lookup[Values].AddrOfPinnedObject(),
                 numberOfCoordinates = NumberOfCoordinates,
                 geometrySeperator = GeometrySeparator,
                 innerOuterSeperator = InnerOuterSeparator
@@ -128,11 +128,11 @@ namespace MeshKernelNETCore.Api
             // compensate for null arrays
             XCoordinates = GetArray(XCoordinates);
             YCoordinates = GetArray(YCoordinates);
-            ZCoordinates = GetArray(ZCoordinates);
+            Values = GetArray(Values);
 
             objectGarbageCollectHandles.Add(GCHandle.Alloc(XCoordinates, GCHandleType.Pinned));
             objectGarbageCollectHandles.Add(GCHandle.Alloc(YCoordinates, GCHandleType.Pinned));
-            objectGarbageCollectHandles.Add(GCHandle.Alloc(ZCoordinates, GCHandleType.Pinned));
+            objectGarbageCollectHandles.Add(GCHandle.Alloc(Values, GCHandleType.Pinned));
         }
 
         private static T[] GetArray<T>(T[] array)

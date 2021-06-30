@@ -7,8 +7,9 @@ namespace MeshKernelNETCore.Api
         /// <summary>
         /// Create a new grid state and return the generated meshKernelId/>
         /// </summary>
+        /// <param name="projectionType"> Cartesian (0), spherical (1) or spherical accurate(2) state
         /// <returns>Generated meshKernelId</returns>
-        int CreateGridState();
+        int CreateGridState(int projectionType);
 
         /// <summary>
         /// Deallocate grid state (collections of mesh arrays with auxiliary variables)
@@ -18,27 +19,26 @@ namespace MeshKernelNETCore.Api
         bool RemoveGridState(int meshKernelId);
 
         /// <summary>
-        /// Synchronize provided grid (<param name="disposableMeshGeometry"/>) with the grid state with <param name="meshKernelId"/>
+        /// Synchronize provided grid (<param name="disposableMesh2D"/>) with the grid state with <param name="meshKernelId"/>
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableMeshGeometry">Grid state as <see cref="DisposableMeshGeometry"/> object</param>
-        /// <param name="isGeographic">Coordinate reference system type (cartesian or sferic)</param>
+        /// <param name="disposableMesh2D">Grid state as <see cref="DisposableMesh2D"/> object</param>
         /// <returns>If the operation succeeded</returns>
-        bool SetGridState(int meshKernelId, Disposable2DMeshGeometry disposableMeshGeometry, bool isGeographic);
+        bool SetGridState(int meshKernelId, DisposableMesh2D disposableMesh2D);
 
         /// <summary>
-        /// Gets the grid state as a <see cref="MeshGeometry"/> structure excluding the cell information
+        /// Gets the grid state as a <see cref="Mesh2D"/> structure excluding the cell information
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <returns><see cref="DisposableMeshGeometry"/> with the grid state</returns>
-        Disposable2DMeshGeometry GetGridState(int meshKernelId);
+        /// <returns><see cref="DisposableMesh2D"/> with the grid state</returns>
+        DisposableMesh2D GetGridState(int meshKernelId);
 
         /// <summary>
-        /// Gets the grid state as a <see cref="MeshGeometry"/> structure including the cell information
+        /// Gets the grid state as a <see cref="Mesh2D"/> structure including the cell information
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <returns><see cref="DisposableMeshGeometry"/> with the grid state</returns>
-        Disposable2DMeshGeometry GetGridStateWithCells(int meshKernelId);
+        /// <returns><see cref="DisposableMesh2D"/> with the grid state</returns>
+        DisposableMesh2D GetGridStateWithCells(int meshKernelId);
 
         /// <summary>
         /// Deletes a node with specified <param name="vertexIndex"/>
@@ -54,8 +54,10 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="isTriangulationRequired">The option to triangulate also non triangular cells </param>
         /// <param name="projectToLandBoundaryOption">The option to determine how to snap to land boundaries</param>
+        /// <param name="selectingPolygon">The polygon selecting the domain where to flip the edges</param>
+        /// <param name="landBoundaries">The land boundaries to account for when flipping the edges(num_coordinates = 0 for no land boundaries)
         /// <returns>If the operation succeeded</returns>
-        bool FlipEdges(int meshKernelId, bool isTriangulationRequired, ProjectToLandBoundaryOptions projectToLandBoundaryOption);
+        bool FlipEdges(int meshKernelId, bool isTriangulationRequired, ProjectToLandBoundaryOptions projectToLandBoundaryOption, DisposableGeometryList selectingPolygon, DisposableGeometryList landBoundaries);
 
         /// <summary>
         /// Merges vertex <param name="startVertexIndex"/> to <param name="endVertexIndex"/>
@@ -196,7 +198,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="innerPolygon">Compute inner polygon or not</param>
         /// <param name="numberOfPolygonVertices">The number of vertices of the offsetted polygon</param>
         /// <returns></returns>
-        bool CountVerticesOffsettedPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices);
+        bool CountVerticesOffsettedPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, int innerPolygon, double distance, ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Get the offsetted polygon
@@ -207,7 +209,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="innerPolygon">Compute inner polygon or not</param>
         /// <param name="disposableGeometryListOut">The offsetted polygon</param>
         /// <returns></returns>
-        bool GetOffsettedPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref DisposableGeometryList disposableGeometryListOut);
+        bool GetOffsettedPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, int innerPolygon, double distance, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
         /// Count the number of polygon vertices after refinement
@@ -267,7 +269,7 @@ namespace MeshKernelNETCore.Api
         /// Get the edges orthogonality
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableGeometryListOut">In ZCoordinates field the orthogonality values are stored</param>
+        /// <param name="disposableGeometryListOut">In Values field the orthogonality values are stored</param>
         /// <returns></returns>
         bool GetOrthogonality(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
 
@@ -275,7 +277,7 @@ namespace MeshKernelNETCore.Api
         /// Get the edges smoothness
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableGeometryListOut">In ZCoordinates field the smoothness values are stored</param>
+        /// <param name="disposableGeometryListOut">In Values field the smoothness values are stored</param>
         /// <returns></returns>
         bool GetSmoothness(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
 
@@ -303,21 +305,24 @@ namespace MeshKernelNETCore.Api
         /// Get the index of the closest existing vertex
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="geometryListIn">Vertex coordinates</param>
+        /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
+        /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
         /// <param name="searchRadius">the radius where to search for the vertex</param>
         /// <param name="vertexIndex">the index of the closest vertex</param>
         /// <returns>true if a vertex has been found</returns>
-        bool GetVertexIndex(int meshKernelId, DisposableGeometryList geometryListIn, double searchRadius, ref int vertexIndex);
+        bool GetVertexIndex(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius, ref int vertexIndex);
 
         /// <summary>
         /// Get the coordinates of the closest existing vertex
         /// </summary>
-        /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="geometryListIn">Vertex coordinates</param>
-        /// <param name="searchRadius">the radius where to search for the vertex</param>
-        /// <param name="geometryListOut">Mesh vertex coordinates</param>
+        /// <param name="meshKernelId">Id of the grid state
+        /// <param name="xCoordinateIn">The x coordinate of the node to insert
+        /// <param name="yCoordinateIn">The y coordinate of the node to insert
+        /// <param name="searchRadius">The radii where to search for mesh nodes
+        /// <param name="xCoordinateOut">The x coordinate of the found Mesh2D node
+        /// <param name="yCoordinateOut"></param>The y coordinate of the found Mesh2D node
         /// <returns>true if a vertex has been found</returns>
-        bool GetVertexCoordinates(int meshKernelId, DisposableGeometryList geometryListIn, double searchRadius, ref DisposableGeometryList geometryListOut);
+        bool GetVertexCoordinates(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius, ref double xCoordinateOut, ref double yCoordinateOut);
 
         /// <summary>
         /// Deletes the closest mesh edge within the search radius from the input point
@@ -382,13 +387,20 @@ namespace MeshKernelNETCore.Api
         /// Computes a curvilinear mesh in a triangle. 3 separate polygon nodes need to be selected. The MeshKernel implementation differs from the polygon case.
         /// For this reason a different api had to be made.
         /// </summary>
-        /// <param name="meshKernelId">>Id of the mesh state</param>
+        /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The input polygons</param>
         /// <param name="firstNode">The first selected node</param>
         /// <param name="secondNode">The second selected node</param>
         /// <param name="thirdNode">The third node<</param>
         /// <returns>If the operation succeeded</returns>
         bool MakeCurvilinearGridFromTriangle(int meshKernelId, DisposableGeometryList geometryList, int firstNode, int secondNode, int thirdNode);
+
+        /// <summary>
+        /// Converts a curvilinear mesh to an unstructured mesh
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns></returns>
+        bool ConvertCurvilinearToMesh2D(int meshKernelId);
 
         /// <summary>
         /// Gets the double value used in the back-end library as separator and missing value

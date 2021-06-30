@@ -6,8 +6,6 @@ namespace MeshKernelNETCore.Native
     [StructLayout(LayoutKind.Sequential)]
     public struct GeometryListNative
     {
-        public int type;
-
         public double geometrySeperator;
 
         public double innerOuterSeperator;

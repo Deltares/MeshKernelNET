@@ -147,7 +147,7 @@ namespace MeshKernelNETCoreTest.Native
 
             Assert.AreEqual(expectedXCoordinates, disposableGeometryList.XCoordinates);
             Assert.AreEqual(expectedYCoordinates, disposableGeometryList.YCoordinates);
-            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.ZCoordinates);
+            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.Values);
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace MeshKernelNETCoreTest.Native
 
             Assert.AreEqual(expectedXCoordinates, disposableGeometryList.XCoordinates);
             Assert.AreEqual(expectedYCoordinates, disposableGeometryList.YCoordinates);
-            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.ZCoordinates);
+            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.Values);
         }
 
         [Test]

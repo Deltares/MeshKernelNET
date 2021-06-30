@@ -157,7 +157,7 @@ namespace MeshKernelNETCore.Helpers
                     NumberOfCoordinates = xCoordinates.Count,
                     XCoordinates = xCoordinates.ToArray(),
                     YCoordinates = yCoordinates.ToArray(),
-                    ZCoordinates = zCoordinates.ToArray()
+                    Values = zCoordinates.ToArray()
                 };
             }
 
@@ -204,7 +204,7 @@ namespace MeshKernelNETCore.Helpers
                 NumberOfCoordinates = xCoordinates.Count,
                 XCoordinates = xCoordinates.ToArray(),
                 YCoordinates = yCoordinates.ToArray(),
-                ZCoordinates = zCoordinates.ToArray()
+                Values = zCoordinates.ToArray()
             };
         }
 
@@ -214,7 +214,7 @@ namespace MeshKernelNETCore.Helpers
             {
                 XCoordinates = new double[length],
                 YCoordinates = new double[length],
-                ZCoordinates = new double[length],
+                Values = new double[length],
                 GeometrySeparator = geometrySeparator,
                 InnerOuterSeparator = innerOuterSeparator,
                 NumberOfCoordinates = length

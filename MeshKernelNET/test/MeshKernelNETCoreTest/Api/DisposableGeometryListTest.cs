@@ -1,4 +1,5 @@
 ﻿using System;
+using MeshKernelNETCore.Api;
 using NUnit.Framework;
 
 namespace MeshKernelNETCoreTest.Api

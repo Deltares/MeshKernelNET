@@ -25,12 +25,12 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// The number of 1d nodes
         /// </summary>
-        int num_nodes;
+        public int num_nodes;
 
         /// <summary>
         /// The number of 1d edges
         /// </summary>
-        int num_edges;
+        public int num_edges;
     }
 
 } // namespace meshkernelapi

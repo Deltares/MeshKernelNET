@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using GeoAPI.Geometries;
-using MeshKernelNETCore.Native;
+﻿using MeshKernelNETCore.Native;
 using ProtoBuf;
 
 namespace MeshKernelNETCore.Api
@@ -52,8 +47,6 @@ namespace MeshKernelNETCore.Api
         [ProtoMember(13)]
         public int numFaceNodes;
 
-        private bool disposed = false;
-
         public DisposableMesh2D() { }
 
         public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
@@ -88,8 +81,8 @@ namespace MeshKernelNETCore.Api
                 nodes_per_face = GetPinnedObjectPointer(nodesPerFace),
                 node_x = GetPinnedObjectPointer(nodeX),
                 node_y = GetPinnedObjectPointer(nodeY),
-                edge_x = GetPinnedObjectPointer(faceX),
-                edge_y = GetPinnedObjectPointer(faceY),
+                edge_x = GetPinnedObjectPointer(edgeX),
+                edge_y = GetPinnedObjectPointer(edgeY),
                 face_x = GetPinnedObjectPointer(faceX),
                 face_y = GetPinnedObjectPointer(faceY),
                 num_nodes = numNodes,

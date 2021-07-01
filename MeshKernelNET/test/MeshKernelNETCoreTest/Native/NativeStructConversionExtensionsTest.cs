@@ -3,7 +3,6 @@ using System.Linq;
 using GeoAPI.Geometries;
 using MeshKernelNETCore.Api;
 using MeshKernelNETCore.Helpers;
-using MeshKernelNETCore.Native;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
 
@@ -123,7 +122,7 @@ namespace MeshKernelNETCoreTest.Native
                 new Coordinate(5,5),
             }));
 
-            var multiPolygon = new List<Polygon>(new []
+            var multiPolygon = new List<Polygon>(new[]
             {
                 polygonWithHole,
                 polygon2

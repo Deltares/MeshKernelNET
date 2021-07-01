@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using NUnit.Framework;
-
-namespace MeshKernelNETCoreTest.Api
+﻿namespace MeshKernelNETCoreTest.Api
 {
     /*[TestFixture]
     [Category(GridEditorTestCategories.API)]

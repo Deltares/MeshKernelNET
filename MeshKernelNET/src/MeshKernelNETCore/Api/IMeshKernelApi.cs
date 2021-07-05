@@ -328,18 +328,20 @@ namespace MeshKernelNETCore.Api
         /// Deletes the closest mesh edge within the search radius from the input point
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="geometryListIn">The input point coordinates</param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
         /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
-        bool DeleteEdge(int meshKernelId, ref DisposableGeometryList geometryListIn);
+        bool DeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate);
 
         /// <summary>
         /// Finds the closest edge within the search radius from the input point
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="geometryListIn">The input point coordinates</param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
         /// <param name="edgeIndex">The index of the found edge</param>
         /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
-        bool FindEdge(int meshKernelId, ref DisposableGeometryList geometryListIn, ref int edgeIndex);
+        bool FindEdge(int meshKernelId, double xCoordinate, double yCoordinate, ref int edgeIndex);
 
         /// <summary>
         /// Deletes a mesh in a polygon using several options
@@ -355,7 +357,8 @@ namespace MeshKernelNETCore.Api
         /// Function to move a selected vertex to a new position
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableGeometryLisIn">The new coordinate</param>
+        /// <param name="xCoordinate">x coordinate of the vertex</param>
+        /// <param name="yCoordinate">y coordinate of the vertex</param>
         /// <param name="vertexIndex">The vertex index (to be detailed)</param>
         /// <returns>If the operation succeeded</returns>
         bool MoveVertex(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex);

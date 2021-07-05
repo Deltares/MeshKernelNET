@@ -27,7 +27,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="projectionType">  Cartesian (0), spherical (1) or spherical accurate(2) mesh
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_allocate_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CreateGridState([In] int projectionType, [In, Out] ref int meshKernelId);
+        internal static extern int AllocateState([In] int projectionType, [In, Out] ref int meshKernelId);
 
         /// <summary>
         /// Deallocate mesh state (collections of mesh arrays with auxiliary variables)
@@ -35,7 +35,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_deallocate_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RemoveGridState([In] int meshKernelId);
+        internal static extern int DeallocateState([In] int meshKernelId);
 
         /// <summary>
         /// Gets the mesh2d dimensions <see cref="Mesh2D"/> structure
@@ -44,7 +44,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="mesh2D">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetMesh2DDimensions([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
+        internal static extern int Mesh2DGetDimensions([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
 
         /// <summary>
         /// Gets the mesh state as a <see cref="Mesh2D"/> structure including faces information
@@ -53,7 +53,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="mesh2D">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_data", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetMesh2D([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
+        internal static extern int Mesh2dGetData([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
 
         /// <summary>
         /// Synchronize provided mesh (<param name="meshGeometryDimensions"/> and <param name="mesh2D"/>) with the mesh state with <param name="meshKernelId"/>
@@ -64,7 +64,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="IsGeographic">Cartesian or spherical mesh</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_set", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int SetState([In] int meshKernelId, [In] ref Mesh2D Mesh2D);
+        internal static extern int Mesh2dSetState([In] int meshKernelId, [In] ref Mesh2D Mesh2D);
 
         #endregion
 
@@ -77,7 +77,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="nodeIndex">The nodeIndex to delete</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_node", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DeleteNode([In] int meshKernelId, [In] int nodeIndex);
+        internal static extern int Mesh2dDeleteNode([In] int meshKernelId, [In] int nodeIndex);
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="projectToLandBoundaryOption">The land boundaries to account for when flipping the edges (num_coordinates = 0 for no land boundaries)</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_flip_edges", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int FlipEdges([In] int meshKernelId, [In] int isTriangulationRequired, [In] int projectToLandBoundaryOption, [In] ref GeometryListNative selectingPolygon, [In] ref GeometryListNative landBoundaries);
+        internal static extern int Mesh2dFlipEdges([In] int meshKernelId, [In] int isTriangulationRequired, [In] int projectToLandBoundaryOption, [In] ref GeometryListNative selectingPolygon, [In] ref GeometryListNative landBoundaries);
 
         /// <summary>
         /// Insert a new edge connecting <param name="startVertexIndex"/> and <param name="endVertexIndex"/>
@@ -104,7 +104,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="newEdgeIndex">The index of the new edge</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_edge", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int InsertEdge([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex, [In, Out] ref int edgeIndex);
+        internal static extern int Mesh2dInsertEdge([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex, [In, Out] ref int edgeIndex);
         #endregion
 
         #region Vertices operations  
@@ -116,7 +116,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="endVertexIndex">The index of the second vertex to merge</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_two_nodes", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MergeTwoVertices([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex);
+        internal static extern int Mesh2dMergeTwoNodes([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex);
 
         /// <summary>
         /// Merges vertices within a distance of 0.001 m, effectively removing small edges 
@@ -125,7 +125,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_nodes", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MergeVertices([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dMergeNodes([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Inserts a new mesh node
@@ -135,7 +135,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="vertexIndex">The index of the new mesh node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_node", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int InsertVertex([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
+        public static extern int Mesh2dInsertNodes([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
 
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="invertDeletion">Inverts the deletion of selected features</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int DeleteMeshWithOptions([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int deletionOption, [In] bool invertDeletion);
+        public static extern int Mesh2dDelete([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int deletionOption, [In] bool invertDeletion);
 
         /// <summary>
         /// Get the index of the closest vertex
@@ -158,7 +158,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="vertexIndex">the index of the closest vertex</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_node_index", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetVertexIndex([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref int vertexIndex);
+        public static extern int Mesh2dGetNodeIndex([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref int vertexIndex);
 
         /// <summary>
         /// Get the coordinate of the closest vertex
@@ -171,7 +171,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="yCoordinateOut">The y coordinate of the found Mesh2D node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_closest_node", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetVertexCoordinate([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref double xCoordinateOut, [In, Out] ref double yCoordinateOut);
+        public static extern int Mesh2dGetClosestNode([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref double xCoordinateOut, [In, Out] ref double yCoordinateOut);
 
         #endregion
 
@@ -185,8 +185,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNativePolygon">The polygon where to perform the orthogonalization</param>
         /// <param name="geometryListNativeLandBoundaries">The land boundaries to account for in the orthogonalization process</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_compute_orthogonalization_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Orthogonalization([In] int meshKernelId, [In] int projectToLandBoundaryOption, [In] ref OrthogonalizationParametersNative orthogonalizationParametersNative, [In] ref GeometryListNative geometryListNativePolygon, [In] ref GeometryListNative geometryListNativeLandBoundaries);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_compute_orthogonalization", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dComputeOrthogonalization([In] int meshKernelId, [In] int projectToLandBoundaryOption, [In] ref OrthogonalizationParametersNative orthogonalizationParametersNative, [In] ref GeometryListNative geometryListNativePolygon, [In] ref GeometryListNative geometryListNativeLandBoundaries);
 
         /// <summary>
         /// Orthogonalization initialization (first function to use in interactive mode)
@@ -198,39 +198,39 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNativeLandBoundaries">The land boundaries to account for in the orthogonalization process</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_initialize_orthogonalization", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int OrthogonalizationInitialize([In] int meshKernelId, [In] int projectToLandBoundaryOption, [In] ref OrthogonalizationParametersNative orthogonalizationParametersNative, [In] ref GeometryListNative geometryListNativePolygon, [In] ref GeometryListNative geometryListNativeLandBoundaries);
+        internal static extern int Mesh2dInitializeOrthogonalization([In] int meshKernelId, [In] int projectToLandBoundaryOption, [In] ref OrthogonalizationParametersNative orthogonalizationParametersNative, [In] ref GeometryListNative geometryListNativePolygon, [In] ref GeometryListNative geometryListNativeLandBoundaries);
 
         /// <summary>
         /// Prepare outer orthogonalization iteration (interactive mode)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_prepare_outer_iteration_orthogonalization_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int OrthogonalizationPrepareOuterIteration([In] int meshKernelId);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_prepare_outer_iteration_orthogonalization", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dPrepareOuterIterationOrthogonalization([In] int meshKernelId);
 
         /// <summary>
         /// Perform inner orthogonalization iteration (interactive mode)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_compute_inner_ortogonalization_iteration_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int OrthogonalizationInnerIteration([In] int meshKernelId);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_compute_inner_ortogonalization_iteration", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dComputeInnerOrtogonalizationIteration([In] int meshKernelId);
 
         /// <summary>
         /// Perform outer orthogonalization iteration  (interactive mode)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_finalize_inner_ortogonalization_iteration_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int OrthogonalizationFinalizeOuterIteration([In] int meshKernelId);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_finalize_inner_ortogonalization_iteration", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dFinalizeInnerOrtogonalizationIteration([In] int meshKernelId);
 
         /// <summary>
         /// Clean up back-end orthogonalization algorithm  (interactive mode)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_delete_orthogonalization_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int OrthogonalizationDelete([In] int meshKernelId);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_orthogonalization", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dDeleteOrthogonalization([In] int meshKernelId);
 
         #endregion
 
@@ -243,7 +243,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNative">The polygon to account for</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeGrid([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParameters, [In] ref GeometryListNative geometryListNative);
+        internal static extern int CurvilinearMakeUniform([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParameters, [In] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Make a triangular grid in a polygon
@@ -252,7 +252,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNative">The polygon where to triangulate</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_mesh_from_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeTriangularGridFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dMakeMeshFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
 
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNative">The samples where to triangulate</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_mesh_from_samples", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeTriangularGridFromSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dMakeMeshFromSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
 
         #endregion
 
@@ -281,12 +281,12 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Generates curvilinear grid from splines with transfinite interpolation
         /// </summary>
-        /// <param name="meshKernelId"></param>
-        /// <param name="geometryListNativeIn"></param>
-        /// <param name="curvilinearParametersNative"></param>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="geometryListNativeIn">The splines</param>
+        /// <param name="curvilinearParametersNative">The curvilinear parameters</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_transfinite_from_splines", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeGridFromSplines([In] int meshKernelId, [In] ref GeometryListNative geometryListNativeIn, [In] ref CurvilinearParametersNative curvilinearParametersNative);
+        internal static extern int CurvilinearComputeTransfiniteFromSplines([In] int meshKernelId, [In] ref GeometryListNative geometryListNativeIn, [In] ref CurvilinearParametersNative curvilinearParametersNative);
 
         /// <summary>
         /// Make curvilinear grid from splines with an advancing front.
@@ -297,7 +297,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="splinesToCurvilinearParametersNative">The parameters of the advancing front algorithm</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_orthogonal_grid_from_splines", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeOrthogonalGridFromSplines([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref CurvilinearParametersNative curvilinearParametersNative, [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParametersNative);
+        internal static extern int CurvilinearComputeOrthogonalGridFromSplines([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref CurvilinearParametersNative curvilinearParametersNative, [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParametersNative);
 
         /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
@@ -310,7 +310,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="useFourthSide">Use (true/false) the fourth polygon side to compute the curvilinear grid</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_transfinite_from_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeCurvilinearGridFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int firstNode, [In] int secondNode, [In] int thirdNode, [In] bool useFourthSide);
+        internal static extern int CurvilinearComputeTransfiniteFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int firstNode, [In] int secondNode, [In] int thirdNode, [In] bool useFourthSide);
 
         /// <summary>
         /// Computes a curvilinear mesh in a triangle. 3 separate polygon nodes need to be selected.
@@ -319,10 +319,10 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListNative">The input polygons</param>
         /// <param name="firstNode">The first selected node</param>
         /// <param name="secondNode">The second selected node</param>
-        /// <param name="thirdNode">The third node<</param>
+        /// <param name="thirdNode">The third node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_transfinite_from_triangle", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MakeCurvilinearGridFromTriangle([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int firstNode, [In] int secondNode, [In] int thirdNode);
+        internal static extern int CurvilinearComputeTransfiniteFromTriangle([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] int firstNode, [In] int secondNode, [In] int thirdNode);
 
         /// <summary>
         /// Convert a curviliner mesh stored in meshkernel to an unstructured curvilinear mesh
@@ -330,7 +330,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_convert_to_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ConvertCurvilinearToMesh2D([In] int meshKernelId);
+        public static extern int CurvilinearConvertToMesh2D([In] int meshKernelId);
 
         #endregion
 
@@ -342,7 +342,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="numberOfPolygonVertices">The number of polygon points</param>
         /// <returns>Error code</returns>          
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_count_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CountMeshBoundaryPolygonVertices([In] int meshKernelId, [In, Out] ref int numberOfPolygonVertices);
+        internal static extern int Mesh2dCountMeshBoundariesAsPolygons([In] int meshKernelId, [In, Out] ref int numberOfPolygonVertices);
 
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryList">The output network boundary polygon</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetMeshBoundaryPolygon([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dGetMeshBoundariesAsPolygons([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Refine a grid based on the samples contained in the geometry list
@@ -363,7 +363,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="sampleRefineParametersNative">The interpolation settings related to the samples</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_samples", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RefineGridBasedOnSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative, [In] ref SampleRefineParametersNative sampleRefineParametersNative);
+        internal static extern int Mesh2dRefineBasedOnSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative, [In] ref SampleRefineParametersNative sampleRefineParametersNative);
 
         /// <summary>
         /// Refine a grid based on polygon
@@ -373,7 +373,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="interpolationParametersNative">The interpolation parameters</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RefineGridBasedOnPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative);
+        internal static extern int Mesh2dRefineBasedOnPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative);
 
         #endregion
 
@@ -389,7 +389,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="numberOfPolygonVertices">The number of vertices of the generated polygon</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_count_offset", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CountVerticesOffsettedPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int innerPolygon, [In] double distance, [In, Out] ref int numberOfPolygonVertices);
+        internal static extern int PolygonCountOffset([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int innerPolygon, [In] double distance, [In, Out] ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Get the offsetted polygon
@@ -401,7 +401,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListOut">The offsetted polygon</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_get_offset", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetOffsettedPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int innerPolygon, [In] double distance, [In, Out] ref GeometryListNative geometryListOut);
+        internal static extern int PolygonGetOffset([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int innerPolygon, [In] double distance, [In, Out] ref GeometryListNative geometryListOut);
 
         /// <summary>
         /// Count the number of vertices after polygon refinment
@@ -414,7 +414,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="numberOfPolygonVertices">The number of vertices after refinement </param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_count_refine", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CountVerticesRefinededPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In, Out] ref int numberOfPolygonVertices);
+        internal static extern int PolygonCountRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In, Out] ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Gets the refined polygon
@@ -427,7 +427,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListOut"></param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_refine", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetRefinededPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In, Out] ref GeometryListNative geometryListOut);
+        internal static extern int PolygonRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In, Out] ref GeometryListNative geometryListOut);
 
         /// <summary>
         /// Get the double value used in the back-end library as separator and missing value
@@ -487,23 +487,23 @@ namespace MeshKernelNETCore.Native
         /// Deletes the closest mesh edge within the search radius from the input point
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="geometryListIn">The input point coordinates</param>
-        /// <param name="searchRadius">The search radius</param>
+        /// <param name="xCoordinate">x coordinate of the vertex</param>
+        /// <param name="yCoordinate">y coordinate of the vertex</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_delete_edge_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int DeleteEdge([In] int meshKernelId, [In] ref GeometryListNative geometryListIn);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_edge", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dDeleteEdge([In] int meshKernelId, [In] ref double xCoordinate, [In] ref double yCoordinate);
 
 
         /// <summary>
         /// Deletes the closest mesh edge within the search radius from the input point
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="geometryListIn">The input point coordinates</param>
-        /// <param name="searchRadius">The search radius</param>
+        /// <param name="xCoordinate">x coordinate of the vertex</param>
+        /// <param name="yCoordinate">y coordinate of the vertex</param>
         /// <param name="edgeIndex">The edge index</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_find_edge_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int FindEdge([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In, Out] ref int edgeIndex);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_edge", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetEdge([In] int meshKernelId, [In] ref double xCoordinate, [In] ref double yCoordinate, [In, Out] ref int edgeIndex);
 
         /// <summary>
         /// Function to move a selected node to a new position

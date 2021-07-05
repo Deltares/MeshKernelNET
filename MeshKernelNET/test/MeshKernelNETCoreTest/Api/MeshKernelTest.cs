@@ -43,7 +43,7 @@
                 {
                     GetTiming(stopWatch, "Create grid state", () =>
                     {
-                        id = api.CreateGridState();
+                        id = api.AllocateState();
                         Assert.AreEqual(0, id);
                     });
 
@@ -71,7 +71,7 @@
             {
                 GetTiming(stopWatch, "Remove state", () =>
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                 });
 
                 if (useRemoting)
@@ -126,7 +126,7 @@
                 var id = 0;
                 try
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -143,7 +143,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -184,11 +184,11 @@
                 try
 
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
-                    Assert.IsTrue(api.FlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary));
+                    Assert.IsTrue(api.Mesh2dFlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -200,7 +200,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -240,13 +240,13 @@
                 {
 
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
 
                     int newEdgeIndex = 0;
-                    Assert.IsTrue(api.InsertEdge(id, 4, 1, ref newEdgeIndex));
+                    Assert.IsTrue(api.Mesh2dInsertEdge(id, 4, 1, ref newEdgeIndex));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -258,7 +258,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -297,12 +297,12 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
 
-                    Assert.IsTrue(api.MergeTwoVertices(id, 0, 4));
+                    Assert.IsTrue(api.Mesh2dMergeTwoNodes(id, 0, 4));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -314,7 +314,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -356,13 +356,13 @@
                 var id = 0;
                 try
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
 
                     var geometryList = new DisposableGeometryList();
-                    Assert.IsTrue(api.MergeVertices(id, geometryList));
+                    Assert.IsTrue(api.Mesh2dMergeNodes(id, geometryList));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -374,7 +374,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -414,7 +414,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -422,7 +422,7 @@
                     var orthogonalizationParametersList = OrthogonalizationParameters.CreateDefault();
                     var polygon = new DisposableGeometryList();
                     var landBoundaries = new DisposableGeometryList();
-                    Assert.IsTrue(api.OrthogonalizationInitialize(id, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, orthogonalizationParametersList, polygon, landBoundaries));
+                    Assert.IsTrue(api.Mesh2dInitializeOrthogonalization(id, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, orthogonalizationParametersList, polygon, landBoundaries));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -434,7 +434,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -474,7 +474,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -493,7 +493,7 @@
                     makeGridParameters.XGridBlockSize = 0.0;
                     makeGridParameters.YGridBlockSize = 0.0;
 
-                    Assert.IsTrue(api.MakeGrid(id, makeGridParameters, disposableGeometryList));
+                    Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -505,7 +505,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -560,7 +560,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -608,7 +608,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -627,7 +627,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -662,7 +662,7 @@
                     splinesToCurvilinearParameters.GrowGridOutside = 0;
 
 
-                    Assert.IsTrue(api.MakeOrthogonalGridFromSplines(id, ref geometryListIn,
+                    Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id, ref geometryListIn,
                         ref curvilinearParameters, ref splinesToCurvilinearParameters));
 
                     var newMeshGeometry = api.GetGridState(id);
@@ -670,7 +670,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -688,7 +688,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -769,7 +769,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -788,7 +788,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -825,14 +825,14 @@
                             0.0
                         };
 
-                    Assert.IsTrue(api.MakeTriangularGridFromSamples(id, ref geometryListIn));
+                    Assert.IsTrue(api.Mesh2dMakeMeshFromSamples(id, ref geometryListIn));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -852,13 +852,13 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
 
                     int numberOfPolygonVertices = -1;
-                    Assert.IsTrue(api.CountMeshBoundaryPolygonVertices(id, ref numberOfPolygonVertices));
+                    Assert.IsTrue(api.Mesh2dCountMeshBoundariesAsPolygons(id, ref numberOfPolygonVertices));
                     Assert.AreEqual(13, numberOfPolygonVertices);
 
                     var geometryListIn = new DisposableGeometryList();
@@ -869,7 +869,7 @@
                     geometryListIn.GeometrySeparator = geometrySeparator;
                     geometryListIn.NumberOfCoordinates = numberOfPolygonVertices;
 
-                    Assert.IsTrue(api.GetMeshBoundaryPolygon(id, ref geometryListIn));
+                    Assert.IsTrue(api.Mesh2dGetMeshBoundariesAsPolygons(id, ref geometryListIn));
 
                     var newMeshGeometry = api.GetGridState(id);
                     Assert.NotNull(newMeshGeometry);
@@ -877,7 +877,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -895,7 +895,7 @@
                 var id = 0;
                 try
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -932,12 +932,12 @@
                     double distance = 10.0;
                     int numberOfPolygonVertices = -1;
                     bool innerOffsetedPolygon = false;
-                    Assert.IsTrue(api.CountVerticesOffsettedPolygon(id, ref geometryListIn, innerOffsetedPolygon,
+                    Assert.IsTrue(api.PolygonCountOffset(id, ref geometryListIn, innerOffsetedPolygon,
                         distance, ref numberOfPolygonVertices));
                     Assert.AreEqual(16, numberOfPolygonVertices);
 
                     var disposableGeometryListOut = new DisposableGeometryList();
-                    bool success = api.GetOffsettedPolygon(id, ref geometryListIn, innerOffsetedPolygon, distance,
+                    bool success = api.PolygonGetOffset(id, ref geometryListIn, innerOffsetedPolygon, distance,
                         ref disposableGeometryListOut);
                     Assert.IsTrue(success);
 
@@ -947,7 +947,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -966,7 +966,7 @@
                 {
 
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1001,7 +1001,7 @@
                     int firstIndex = 0;
                     int secondIndex = 2;
                     int numberOfPolygonVertices = -1;
-                    Assert.IsTrue(api.CountVerticesRefinededPolygon(id, ref geometryListIn, firstIndex,
+                    Assert.IsTrue(api.PolygonCountRefine(id, ref geometryListIn, firstIndex,
                         secondIndex, distance, ref numberOfPolygonVertices));
 
                     var geometryListOut = new DisposableGeometryList();
@@ -1012,7 +1012,7 @@
                     geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
                     geometryListOut.ZCoordinates = new double[numberOfPolygonVertices];
 
-                    Assert.IsTrue(api.GetRefinededPolygon(id, ref geometryListIn, firstIndex,
+                    Assert.IsTrue(api.PolygonRefine(id, ref geometryListIn, firstIndex,
                         secondIndex, distance, ref geometryListOut));
 
                     var newMeshGeometry = api.GetGridState(id);
@@ -1020,7 +1020,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -1038,7 +1038,7 @@
                 var id = 0;
                 try
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1090,7 +1090,7 @@
 
                     var interpolationParameters = InterpolationParameters.CreateDefault();
                     var samplesRefineParameters = SamplesRefineParameters.CreateDefault();
-                    Assert.IsTrue(api.RefineGridBasedOnSamples(id, ref geometryListIn, interpolationParameters,
+                    Assert.IsTrue(api.Mesh2dRefineBasedOnSamples(id, ref geometryListIn, interpolationParameters,
                         samplesRefineParameters));
 
                     var newMeshGeometry = api.GetGridState(id);
@@ -1099,7 +1099,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -1118,7 +1118,7 @@
                 var id = 0;
                 try
                 {
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1158,7 +1158,7 @@
 
                     //Call
                     var interpolationParameters = InterpolationParameters.CreateDefault();
-                    Assert.IsTrue(api.RefineGridBasedOnPolygon(id, ref geometryListIn, interpolationParameters));
+                    Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, interpolationParameters));
 
                     //Assert
                     var newMeshGeometry = api.GetGridState(id);
@@ -1167,7 +1167,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -1187,7 +1187,7 @@
                 {
 
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1237,7 +1237,7 @@
                         };
 
                     // Call
-                    Assert.IsTrue(api.MakeCurvilinearGridFromPolygon(id, geometryListIn, 0, 2, 4, true));
+                    Assert.IsTrue(api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true));
 
                     var newMeshGeometry = api.GetGridState(id);
 
@@ -1249,7 +1249,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -1269,7 +1269,7 @@
                 try
                 {
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1322,7 +1322,7 @@
                         };
 
                     // Call
-                    Assert.IsTrue(api.MakeCurvilinearGridFromTriangle(id, geometryListIn, 0, 3, 6));
+                    Assert.IsTrue(api.CurvilinearComputeTransfiniteFromTriangle(id, geometryListIn, 0, 3, 6));
 
                     var newMeshGeometry = api.GetGridState(id);
 
@@ -1333,7 +1333,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
@@ -1356,7 +1356,7 @@
                 {
 
 
-                    id = api.CreateGridState();
+                    id = api.AllocateState();
                     Assert.AreEqual(0, id);
 
                     Assert.IsTrue(api.SetGridState(id, mesh, false));
@@ -1387,7 +1387,7 @@
                 }
                 finally
                 {
-                    api.RemoveGridState(id);
+                    api.DeallocateState(id);
                     RemoteInstanceContainer.RemoveInstance(api);
                 }
             }

@@ -292,10 +292,9 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.DeleteMeshWithOptions(meshKernelId, ref geometryListNativeIn, deletionOption, invertDeletion) == 0;
         }
 
-        public bool MoveVertex(int meshKernelId, ref DisposableGeometryList disposableGeometryLisIn, int vertexIndex)
+        public bool MoveVertex(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex)
         {
-            var geometryListNativeIn = disposableGeometryLisIn.CreateGeometryListNative();
-            return MeshKernelDll.MoveVertex(meshKernelId, ref geometryListNativeIn, vertexIndex) == 0;
+            return MeshKernelDll.Mesh2dMoveNode(meshKernelId, ref xCoordinate, ref yCoordinate, ref vertexIndex) == 0;
         }
 
         public bool PointsInPolygon(int meshKernelId, ref DisposableGeometryList inputPolygon, ref DisposableGeometryList inputPoints, ref DisposableGeometryList selectedPoints)
@@ -303,7 +302,7 @@ namespace MeshKernelNETCore.Api
             var geometryListNativeInputPolygon = inputPolygon.CreateGeometryListNative();
             var geometryListNativeinputPoints = inputPoints.CreateGeometryListNative();
             var geometryListNativeSelectedPoints = selectedPoints.CreateGeometryListNative();
-            return MeshKernelDll.PointsInPolygon(meshKernelId, ref geometryListNativeInputPolygon, ref geometryListNativeinputPoints, ref geometryListNativeSelectedPoints) == 0;
+            return MeshKernelDll.GetPointsInPolygon(meshKernelId, ref geometryListNativeInputPolygon, ref geometryListNativeinputPoints, ref geometryListNativeSelectedPoints) == 0;
         }
 
         public bool MakeCurvilinearGridFromPolygon(int meshKernelId, DisposableGeometryList geometryList, int firstNode,

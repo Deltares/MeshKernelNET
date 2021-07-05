@@ -81,7 +81,7 @@ namespace MeshKernelNETCore.Native
 
         #endregion
 
-        #region Links operations  
+        #region Edges operations  
 
         /// <summary>
         /// Flip the edges
@@ -509,11 +509,12 @@ namespace MeshKernelNETCore.Native
         /// Function to move a selected node to a new position
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="geometryListIn">The new coordinate</param>
-        /// <param name="vertexIndex">The node index (to be detailed)</param>
+        /// <param name="xCoordinate">The new x coordinate</param>
+        /// <param name="xCoordinate">The new y coordinate</param>
+        /// <param name="nodeIndex">The index of the mesh2d node to be moved</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_move_node_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int MoveVertex([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int vertexIndex);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_move_node", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMoveNode([In] int meshKernelId, [In] ref double xCoordinate, [In] ref double yCoordinate, [In, Out] ref int nodeIndex);
 
 
         /// <summary>
@@ -525,7 +526,61 @@ namespace MeshKernelNETCore.Native
         /// <param name="selectedPoints">The selected points in the zCoordinates field (0.0 not selected, 1.0 selected)</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_points_in_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int PointsInPolygon([In] int meshKernelId, [In] ref GeometryListNative inputPolygon, [In] ref GeometryListNative inputPoints, [In, Out] ref GeometryListNative selectedPoints);
+        internal static extern int GetPointsInPolygon([In] int meshKernelId, [In] ref GeometryListNative inputPolygon, [In] ref GeometryListNative inputPoints, [In, Out] ref GeometryListNative selectedPoints);
+
+
+        #region Compute contacts
+        /// <summary>
+        /// Computes 1d-2d contacts, where each single 1d node is connected to one mesh2d face circumcenter (ggeo_make1D2Dinternalnetlinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = connect node, 0 = do not connect)</param>
+        /// <param name="polygons">The polygons selecting the area where the 1d-2d contacts will be generated</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_single", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsComputeSingle([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where a single 1d node is connected to multiple 2d face circumcenters (ggeo_make1D2Dembeddedlinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_multiple", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsComputeMultiple([In] int meshKernelId, [In] ref int oneDNodeMask);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where a 2d face per polygon is connected to the closest 1d node (ggeo_make1D2Droofgutterpipes_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="polygons">The polygons to connect</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsComputeWithPolygons([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where 1d nodes are connected to the 2d faces mass centers containing the input point (ggeo_make1D2Dstreetinletpipes_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="points">The points selecting the faces to connect</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_points", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsComputeWithPoints([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative points);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary (ggeo_make1D2DRiverLinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="polygons">The points selecting the faces to connect</param>
+        /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_boundary", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsComputeBoundary([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons, double searchRadius);
+
+        #endregion
 
     }
 }

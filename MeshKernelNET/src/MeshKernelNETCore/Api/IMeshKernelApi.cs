@@ -358,7 +358,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="disposableGeometryLisIn">The new coordinate</param>
         /// <param name="vertexIndex">The vertex index (to be detailed)</param>
         /// <returns>If the operation succeeded</returns>
-        bool MoveVertex(int meshKernelId, ref DisposableGeometryList disposableGeometryLisIn, int vertexIndex);
+        bool MoveVertex(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex);
 
         /// <summary>
         /// Selects points in polygons

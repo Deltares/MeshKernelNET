@@ -74,8 +74,9 @@ namespace MeshKernelNETCore.Api
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
+        /// <param name="mergingDistance">The distance below which two nodes will be merged
         /// <returns>If the operation succeeded</returns>
-        bool Mesh2dMergeNodes(int meshKernelId, DisposableGeometryList disposableGeometryList);
+        bool Mesh2dMergeNodes(int meshKernelId, DisposableGeometryList disposableGeometryList, double mergingDistance);
 
         /// <summary>
         /// Orthogonalization initialization
@@ -245,7 +246,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="interpolationParameters">The settings for the interpolation algorithm</param>
         /// <param name="samplesRefineParameters">The settings for the interpolation related to samples</param>
         /// <returns></returns>
-        bool Mesh2dRefineBasedOnSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, InterpolationParameters interpolationParameters, SamplesRefineParameters samplesRefineParameters);
+        bool Mesh2dRefineBasedOnSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, MeshRefinementParameters meshRefinementParameters);
 
 
         /// <summary>

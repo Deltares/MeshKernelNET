@@ -87,10 +87,10 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc />
-        public bool Mesh2dMergeNodes(int meshKernelId, DisposableGeometryList disposableGeometryList)
+        public bool Mesh2dMergeNodes(int meshKernelId, DisposableGeometryList disposableGeometryList, double mergingDistance)
         {
             var geometryList = disposableGeometryList.CreateGeometryListNative();
-            return MeshKernelDll.Mesh2dMergeNodes(meshKernelId, ref geometryList) == 0;
+            return MeshKernelDll.Mesh2dMergeNodes(meshKernelId, ref geometryList, mergingDistance) == 0;
         }
 
         public bool Mesh2dInitializeOrthogonalization(int meshKernelId,
@@ -233,12 +233,11 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut) == 0;
         }
 
-        public bool Mesh2dRefineBasedOnSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, InterpolationParameters interpolationParameters, SamplesRefineParameters samplesRefineParameters)
+        public bool Mesh2dRefineBasedOnSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, MeshRefinementParameters meshRefinementParameters)
         {
             var disposableGeometryListInNative = disposableGeometryListIn.CreateGeometryListNative();
-            var interpolationParametersNative = interpolationParameters.ToInterpolationParametersNative();
-            var samplesRefineParametersNative = samplesRefineParameters.ToSampleRefineParametersNative();
-            return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, ref interpolationParametersNative, ref samplesRefineParametersNative) == 0;
+            var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
+            return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative) == 0;
         }
 
         public bool Mesh2dRefineBasedOnPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, InterpolationParameters interpolationParameters)

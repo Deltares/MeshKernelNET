@@ -123,9 +123,10 @@ namespace MeshKernelNETCore.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
+        /// <param name="mergingDistance">The distance below which two nodes will be merged</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_nodes", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMergeNodes([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dMergeNodes([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] double mergingDistance);
 
         /// <summary>
         /// Inserts a new mesh node
@@ -376,11 +377,12 @@ namespace MeshKernelNETCore.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The sample set</param>
-        /// <param name="interpolationParametersNative">The interpolation parameters</param>
-        /// <param name="sampleRefineParametersNative">The interpolation settings related to the samples</param>
+        /// <param name="relativeSearchRadius">The relative search radius relative to the face size, used for some interpolation algorithms</param>
+        /// <param name="minimumNumSamples">The minimum number of samples used for some averaging algorithms</param>
+        /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_samples", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dRefineBasedOnSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative, [In] ref SampleRefineParametersNative sampleRefineParametersNative);
+        internal static extern int Mesh2dRefineBasedOnSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] double relativeSearchRadius, [In] int minimumNumSamples, [In] ref MeshRefinementParametersNative meshRefinementParameters);
 
         /// <summary>
         /// Refine a grid based on polygon

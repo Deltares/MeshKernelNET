@@ -107,6 +107,21 @@ namespace MeshKernelNETCore.Helpers
             };
         }
 
+        internal static MeshRefinementParametersNative ToMeshRefinementParametersNative(this MeshRefinementParameters meshRefinementParameters)
+        {
+            return new MeshRefinementParametersNative
+            {
+                MaxNumRefinementIterations = meshRefinementParameters.MaxNumRefinementIterations,
+                RefineIntersected = meshRefinementParameters.RefineIntersected,
+                UseMassCenterWhenRefining = meshRefinementParameters.UseMassCenterWhenRefining,
+                MinFaceSize = meshRefinementParameters.MinFaceSize,
+                RefinementType = meshRefinementParameters.RefinementType,
+                ConnectHangingNodes = meshRefinementParameters.ConnectHangingNodes,
+                AccountForSamplesOutside = meshRefinementParameters.AccountForSamplesOutside
+
+            };
+        }
+
         /// <summary>
         /// Converts a multi-polygon into a <see cref="DisposableGeometryList"/>
         /// </summary>

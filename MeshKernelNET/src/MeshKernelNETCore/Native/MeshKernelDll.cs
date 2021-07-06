@@ -135,7 +135,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="vertexIndex">The index of the new mesh node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_node", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int Mesh2dInsertNodes([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
+        public static extern int Mesh2dInsertNode([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
 
 
         /// <summary>
@@ -232,19 +232,6 @@ namespace MeshKernelNETCore.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_orthogonalization", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dDeleteOrthogonalization([In] int meshKernelId);
 
-        #endregion
-
-        #region Make grid
-        /// <summary>
-        /// Make a new curvilinear mesh
-        /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
-        /// <param name="geometryListNative">The polygon to account for</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeUniform([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParameters, [In] ref GeometryListNative geometryListNative);
-
         /// <summary>
         /// Make a triangular grid in a polygon
         /// </summary>
@@ -266,7 +253,37 @@ namespace MeshKernelNETCore.Native
 
         #endregion
 
+
         #region Curvilinear grids
+
+        /// <summary>
+        /// Gets the curvilinear grid dimensions as a CurvilinearGrid struct (converted as set of edges and nodes) <see cref="CurvilinearGrid"/> structure
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="curvilinearGrid">The structure containing the dimensions of the curvilinear grid</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearGetDimensions([In] int meshKernelId, [In, Out] ref CurvilinearGrid curvilinearGrid);
+
+        /// <summary>
+        /// Gets the mesh state as a <see cref="Mesh2D"/> structure including faces information
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="curvilinearGrid">The structure containing the curvilinear grid arrays</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_data", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearGetData([In] int meshKernelId, [In, Out] ref CurvilinearGrid curvilinearGrid);
+
+        /// <summary>
+        /// Make a new curvilinear mesh
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
+        /// <param name="geometryListNative">The polygon to account for</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearMakeUniform([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParameters, [In] ref GeometryListNative geometryListNative);
+
 
         /// <summary>
         /// Get spline intermediate points 
@@ -471,8 +488,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListIn">The orthogonality values of each edge</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_orthogonality_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetOrthogonality([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListIn);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_orthogonality", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetOrthogonality([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListIn);
 
         /// <summary>
         /// Gets the smoothness 
@@ -480,8 +497,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListIn">The smoothness values of each edge</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_smoothness_mesh2d", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetSmoothness([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListIn);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_smoothness", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetSmoothness([In] int meshKernelId, [In, Out] ref GeometryListNative geometryListIn);
 
         /// <summary>
         /// Deletes the closest mesh edge within the search radius from the input point

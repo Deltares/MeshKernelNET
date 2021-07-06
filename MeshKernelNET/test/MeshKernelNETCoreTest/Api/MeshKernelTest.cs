@@ -1,86 +1,67 @@
-﻿namespace MeshKernelNETCoreTest.Api
+﻿using System;
+using System.Diagnostics;
+using MeshKernelNETCore.Api;
+using NUnit.Framework;
+
+namespace MeshKernelNETCoreTest.Api
 {
-    /*[TestFixture]
-    [Category(GridEditorTestCategories.API)]
+    [TestFixture]
+    [Category("MeshKernelNETTests")]
     public class MeshKernelTest
     {
-
-        [Test]
-        [Category(TestCategory.Performance)]
-        [TestCase(false)]
-        [TestCase(true)]
-        public void DeleteNodeThroughApiPerformanceTrace(bool useRemoting)
+        public static DisposableMesh2D GenerateRegularGrid(
+            int numbOfCellsHorizontal,
+            int numbOfCellsVertical,
+            double cellWidth,
+            double cellHeight,
+            double xOffset = 0.0,
+            double yOffset = 0.0)
         {
-            var stopWatch = new Stopwatch();
+            var result = new DisposableMesh2D();
 
-            UnstructuredGrid grid = null;
-            GetTiming(stopWatch, "Generate grid", () =>
-             {
-                 grid = UnstructuredGridTestHelper.GenerateRegularGrid(100, 100, 100, 200, 0, 0);
-             });
+            int[,] indicesValues = new int[numbOfCellsHorizontal, numbOfCellsVertical];
+            result.nodeX = new double[numbOfCellsHorizontal * numbOfCellsVertical];
+            result.nodeY = new double[numbOfCellsHorizontal * numbOfCellsVertical];
+            result.numNodes = numbOfCellsHorizontal * numbOfCellsVertical;
 
-            Console.WriteLine(new string('-', 100));
-            Console.WriteLine($"Number of vertices: {grid.Vertices.Count}");
-            Console.WriteLine($"Number of edges: {grid.Edges.Count}");
-            Console.WriteLine($"Number of cells: {grid.Cells.Count}");
-            Console.WriteLine(new string('-', 100));
-
-            var numberOfVerticesBefore = grid.Vertices.Count;
-
-            var id = 0;
-            IMeshKernelApi api = null;
-
-            GetTiming(stopWatch, "Create api", () =>
+            int nodeIndex = 0;
+            for (int i = 0; i < numbOfCellsHorizontal; ++i)
             {
-                api = useRemoting
-                    ? (IMeshKernelApi)new MeshKernelApiRemote()
-                    : new MeshKernelApi();
-            });
-
-            try
-            {
-                using (var mesh = new DisposableMeshGeometry(grid))
+                for (int j = 0; j < numbOfCellsVertical; ++j)
                 {
-                    GetTiming(stopWatch, "Create grid state", () =>
-                    {
-                        id = api.AllocateState();
-                        Assert.AreEqual(0, id);
-                    });
-
-                    GetTiming(stopWatch, "Set state", () =>
-                    {
-                        Assert.IsTrue(api.SetGridState(id, mesh, false));
-                    });
-
-                    GetTiming(stopWatch, "Delete node", () =>
-                    {
-                        Assert.IsTrue(api.DeleteVertex(id, 0));
-                    });
-
-                    GetTiming(stopWatch, "Get mesh state", () =>
-                    {
-                        var newMeshGeometry = api.GetGridState(id);
-                        var count = newMeshGeometry.xNodes.Length;
-
-                        Assert.AreEqual(numberOfVerticesBefore - 1, count);
-                        Assert.NotNull(newMeshGeometry);
-                    });
+                    indicesValues[i, j] = i * numbOfCellsVertical + j;
+                    result.nodeX[nodeIndex] = xOffset + i * cellWidth;
+                    result.nodeY[nodeIndex] = yOffset + j * cellHeight;
+                    nodeIndex++;
                 }
             }
-            finally
+
+            result.numEdges = (numbOfCellsHorizontal - 1) * numbOfCellsVertical + numbOfCellsHorizontal * (numbOfCellsVertical - 1);
+            result.edgeNodes = new int[result.numEdges * 2];
+            int edgeIndex = 0;
+            for (int i = 0; i < numbOfCellsHorizontal - 1; ++i)
             {
-                GetTiming(stopWatch, "Remove state", () =>
+                for (int j = 0; j < numbOfCellsVertical; ++j)
                 {
-                    api.DeallocateState(id);
-                });
-
-                if (useRemoting)
-                {
-                    GetTiming(stopWatch, "Remove instance", () => { RemoteInstanceContainer.RemoveInstance(api); });
+                    result.edgeNodes[edgeIndex] = indicesValues[i, j];
+                    edgeIndex++;
+                    result.edgeNodes[edgeIndex] = indicesValues[i + 1, j];
+                    edgeIndex++;
                 }
-
-                api.Dispose();
             }
+
+            for (int i = 0; i < numbOfCellsHorizontal; ++i)
+            {
+                for (int j = 0; j < numbOfCellsVertical - 1; ++j)
+                {
+                    result.edgeNodes[edgeIndex] = indicesValues[i, j + 1];
+                    edgeIndex++;
+                    result.edgeNodes[edgeIndex] = indicesValues[i, j];
+                    edgeIndex++;
+                }
+            }
+
+            return result;
         }
 
         private static void GetTiming(Stopwatch stopwatch, string actionName, Action action)
@@ -94,12 +75,41 @@
         }
 
         [Test]
-        public void DeleteNodeThroughApi()
+        [Category("PerformanceTests")]
+        public void Mesh2dDeleteNodeThroughApiPerformanceTrace()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
+            using (var api = new MeshKernelApi())
+            using (var mesh = GenerateRegularGrid(100, 100, 100, 200))
+            {
+                var stopWatch = new Stopwatch();
+                var numberOfVerticesBefore = mesh.numNodes;
+                var id = 0;
+                GetTiming(stopWatch, "Create grid state", () =>
+                {
+                    id = api.AllocateState(0);
 
-            var numberOfVerticesBefore = grid.Vertices.Count;
+                });
 
+                GetTiming(stopWatch, "Set state", () => { Assert.IsTrue(api.Mesh2dSetState(id, mesh)); });
+
+                GetTiming(stopWatch, "Delete node", () => { Assert.IsTrue(api.Mesh2dDeleteNode(id, 0)); });
+
+                GetTiming(stopWatch, "Get mesh state", () =>
+                {
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var count = mesh2d.nodeX.Length;
+
+                    Assert.AreEqual(numberOfVerticesBefore - 1, count);
+                    Assert.NotNull(mesh2d);
+                });
+
+                api.DeallocateState(id);
+            }
+        }
+
+        [Test]
+        public void Mesh2dDeleteNodeThroughApi()
+        {
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                           1 ------- 2 ------- 3
             // |         |         |         |                           |         |         |
@@ -119,44 +129,38 @@
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
 
-
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    var numberOfVerticesBefore = mesh.numNodes;
+                    id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
-                    Assert.IsTrue(api.DeleteVertex(id, 0));
+                    Assert.IsTrue(api.Mesh2dDeleteNode(id, 0));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    var count = newMeshGeometry.xNodes.Length;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var count = mesh2d.nodeX.Length;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh.numEdges);
                     Assert.AreEqual(numberOfVerticesBefore - 1, count);
-                    Assert.NotNull(newMeshGeometry);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
 
         [Test]
-        public void FlipEdgesThroughApi()
+        public void Mesh2dFlipEdgesThroughApi()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
-
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
             // |         |         |         |                 |      .  |      .  |      .  |
@@ -175,44 +179,39 @@
             // |         |         |         |                 |.        |.        |.        |
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
-
-
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var geometryListIn = new DisposableGeometryList())
+            using (var landBoundaries = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
             {
-                var id = -1;
+                var id = 0;
                 try
-
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    var numberOfEdgesBefore = mesh.numEdges;
+                    id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
-                    Assert.IsTrue(api.Mesh2dFlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dFlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, geometryListIn, landBoundaries));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
+                    var count = mesh2d.numEdges;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh2d.numEdges);
                     Assert.AreEqual(numberOfEdgesBefore + 9, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
+
         [Test]
-        public void InsertEdgeThroughApi()
+        public void Mesh2dInsertEdgeThroughApi()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
-
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
             // |         |         |         |                 |      .  |         |         |
@@ -232,45 +231,38 @@
             //12 ------ 13 ------ 14 ------ 15                 2 ------ 13 ------ 14 ------ 15
 
 
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
+                    var numberOfEdgesBefore = mesh.numEdges;
+                    id = api.AllocateState(0);
 
-
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     int newEdgeIndex = 0;
                     Assert.IsTrue(api.Mesh2dInsertEdge(id, 4, 1, ref newEdgeIndex));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
+                    var count = mesh2d.numEdges;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh2d.numEdges);
                     Assert.AreEqual(numberOfEdgesBefore + 1, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
         [Test]
-        public void MergeTwoVerticesThroughApi()
+        public void Mesh2dMergeTwoNodesThroughApi()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
-
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                           0 ------- 1 ------- 2
             // |         |         |         |                        .  |         |         |
@@ -290,43 +282,38 @@
             //12 ------ 13 ------ 14 ------ 15                 11 ------ 12 ------ 13 ------ 14
 
 
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
+                    var numberOfEdgesBefore = mesh.numEdges;
+                    id = api.AllocateState(0);
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     Assert.IsTrue(api.Mesh2dMergeTwoNodes(id, 0, 4));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
+                    var count = mesh2d.numEdges;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh2d.numEdges);
                     Assert.AreEqual(numberOfEdgesBefore - 1, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
 
         [Test]
-        public void MergeVerticesThroughApi()
+        public void Mesh2dMergeNodesThroughApi()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
 
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
@@ -350,44 +337,39 @@
             // In this case no small edges are present, so no edges shall be removed.
 
 
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    var numberOfEdgesBefore = mesh.numEdges;
+                    id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryList = new DisposableGeometryList();
                     Assert.IsTrue(api.Mesh2dMergeNodes(id, geometryList));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
+                    var count = mesh2d.numEdges;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh2d.numEdges);
                     Assert.AreEqual(numberOfEdgesBefore, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
 
         [Test]
-        public void OrthogonalizationThroughApi()
+        public void Mesh2dInitializeOrthogonalizationThroughApi()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
-
             // Before                                          After
             // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
             // |         |         |         |                 |         |         |         |
@@ -407,77 +389,47 @@
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
 
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var polygon = new DisposableGeometryList())
+            using (var landBoundaries = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
+                    var numberOfEdgesBefore = mesh.numEdges;
+                    id = api.AllocateState(0);
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var orthogonalizationParametersList = OrthogonalizationParameters.CreateDefault();
-                    var polygon = new DisposableGeometryList();
-                    var landBoundaries = new DisposableGeometryList();
                     Assert.IsTrue(api.Mesh2dInitializeOrthogonalization(id, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, orthogonalizationParametersList, polygon, landBoundaries));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
+                    var count = mesh2d.numEdges;
 
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
+                    Assert.AreNotEqual(2, mesh2d.numEdges);
                     Assert.AreEqual(numberOfEdgesBefore, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
 
         [Test]
-        public void MakeGridThroughAPI()
+        public void CurvilinearMakeUniformThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200);
-
-            var numberOfEdgesBefore = grid.Edges.Count;
-
-            // Before                                          After (2nd grid lies on top of the first)
-            // 0 ------- 1 ------- 2 ------- 3                16 --------17 -------18 -------19
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // 4 ------- 5 ------- 6 ------- 7                20 --------21 -------22 -------23
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // 8 ------- 9 ------ 10 ------ 11                24 --------25 ------ 26 ------ 27 
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |   
-            // |         |         |         |                 |         |         |         |
-            //12 ------ 13 ------ 14 ------ 15                28 ------ 29 ------- 30 ------ 31
-
-
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
-
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
 
                     var makeGridParameters = MakeGridParameters.CreateDefault();
                     var disposableGeometryList = new DisposableGeometryList();
@@ -495,23 +447,17 @@
 
                     Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
-                    var count = newMeshGeometry.numberOfEdges;
-
-                    Assert.AreNotEqual(2, newMeshGeometry.numberOfEdges);
-                    Assert.AreEqual(numberOfEdgesBefore * 2, count);
+                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    Assert.NotNull(curvilinearGrid);
+                    var count = curvilinearGrid.numEdges;
+                    Assert.AreEqual(24, count);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
-
-
-
         }
 
 
@@ -519,51 +465,40 @@
         public void GetSplinesThroughAPI()
         {
             using (var geometryListIn = new DisposableGeometryList())
-            using (var api = new MeshKernelApiRemote())
+            using (var api = new MeshKernelApi())
             {
-                try
-                {
-                    var geometrySeparator = api.GetSeparator();
-                    geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 3;
-                    geometryListIn.XCoordinates = new double[] { 10.0, 20.0, 30.0 };
-                    geometryListIn.YCoordinates = new double[] { -5.0, 5.0, -5.0 };
-                    geometryListIn.ZCoordinates = new double[] { 0.0, 0.0, 0.0 };
+                var geometrySeparator = api.GetSeparator();
+                geometryListIn.GeometrySeparator = geometrySeparator;
+                geometryListIn.NumberOfCoordinates = 3;
+                geometryListIn.XCoordinates = new[] { 10.0, 20.0, 30.0 };
+                geometryListIn.YCoordinates = new[] { -5.0, 5.0, -5.0 };
+                geometryListIn.Values = new[] { 0.0, 0.0, 0.0 };
 
-                    var geometryListOut = new DisposableGeometryList();
-                    int numberOfPointsBetweenVertices = 20;
-                    geometryListOut.GeometrySeparator = geometrySeparator;
-                    geometryListOut.NumberOfCoordinates = 60;
-                    geometryListOut.XCoordinates = new double[60];
-                    geometryListOut.YCoordinates = new double[60];
-                    geometryListOut.ZCoordinates = new double[60];
+                var geometryListOut = new DisposableGeometryList();
+                int numberOfPointsBetweenVertices = 20;
+                geometryListOut.GeometrySeparator = geometrySeparator;
+                geometryListOut.NumberOfCoordinates = 60;
+                geometryListOut.XCoordinates = new double[60];
+                geometryListOut.YCoordinates = new double[60];
+                geometryListOut.Values = new double[60];
 
-                    Assert.IsTrue(api.GetSplines(geometryListIn, ref geometryListOut, numberOfPointsBetweenVertices));
-                }
-                finally
-                {
-                    RemoteInstanceContainer.RemoveInstance(api);
-                }
+                Assert.IsTrue(api.GetSplines(geometryListIn, ref geometryListOut, numberOfPointsBetweenVertices));
             }
         }
 
+
         [Test]
-        public void GenerateCurvilinearGridThroughAPI()
+        public void CurvilinearComputeTransfiniteFromSplinesThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(0, 0, 100, 200);
-
-
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var mesh = GenerateRegularGrid(0, 0, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
+                    id = api.AllocateState(0);
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -585,7 +520,7 @@
                             6.026317E+02, 2.681283E+02
                         };
 
-                    geometryListIn.ZCoordinates = new[]
+                    geometryListIn.Values = new[]
                     {
                             0.0, 0.0, 0.0, geometrySeparator,
                             0.0, 0.0, 0.0, geometrySeparator,
@@ -600,16 +535,15 @@
                     curvilinearParameters.SmoothingIterations = 10;
                     curvilinearParameters.SmoothingParameter = 0.5;
                     curvilinearParameters.AttractionParameter = 0.0;
-                    Assert.IsTrue(api.MakeGridFromSplines(id, geometryListIn, curvilinearParameters));
+                    Assert.IsTrue(api.CurvilinearComputeTransfiniteFromSplines(id, geometryListIn, curvilinearParameters));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    Assert.NotNull(curvilinearGrid);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
@@ -618,19 +552,13 @@
         [Test]
         public void GenerateOrthogonalCurvilinearGridThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(0, 0, 100, 200);
-
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -649,7 +577,7 @@
                             2.388780E+02, 2.137584E+01
                         };
 
-                    geometryListIn.ZCoordinates = new[]
+                    geometryListIn.Values = new[]
                     {
                             0.0, 0.0, 0.0, geometrySeparator,
                             0.0, 0.0, geometrySeparator
@@ -665,33 +593,27 @@
                     Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id, ref geometryListIn,
                         ref curvilinearParameters, ref splinesToCurvilinearParameters));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
-        [Test]
-        public void GenerateTriangularGridThroughAPI()
-        {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(0, 0, 100, 200);
 
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+        [Test]
+        public void Mesh2dMakeMeshFromPolygonThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -740,7 +662,7 @@
                             490.293762
                         };
 
-                    geometryListIn.ZCoordinates = new[]
+                    geometryListIn.Values = new[]
                     {
                             0.0,
                             0.0,
@@ -761,37 +683,29 @@
                             0.0
                         };
 
-                    Assert.IsTrue(api.MakeTriangularGridInPolygon(id, ref geometryListIn));
+                    Assert.IsTrue(api.Mesh2dMakeMeshFromPolygon(id, ref geometryListIn));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
-
         [Test]
         public void GenerateTriangularGridFromSamplesThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(0, 0, 100, 200);
-
-            using (var mesh = new DisposableMeshGeometry(grid))
-            using (var api = new MeshKernelApiRemote())
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -816,7 +730,7 @@
                             0.0
                         };
 
-                    geometryListIn.ZCoordinates = new[]
+                    geometryListIn.Values = new[]
                     {
                             0.0,
                             0.0,
@@ -827,35 +741,29 @@
 
                     Assert.IsTrue(api.Mesh2dMakeMeshFromSamples(id, ref geometryListIn));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+
                 }
             }
         }
 
-
         [Test]
-        public void GetMeshBoundariesThroughAPI()
+        public void Mesh2dGetMeshBoundariesAsPolygonsThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(3, 3, 100, 200, 0, 0);
-
-
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     int numberOfPolygonVertices = -1;
                     Assert.IsTrue(api.Mesh2dCountMeshBoundariesAsPolygons(id, ref numberOfPolygonVertices));
@@ -864,21 +772,21 @@
                     var geometryListIn = new DisposableGeometryList();
                     geometryListIn.XCoordinates = new double[numberOfPolygonVertices];
                     geometryListIn.YCoordinates = new double[numberOfPolygonVertices];
-                    geometryListIn.ZCoordinates = new double[numberOfPolygonVertices];
+                    geometryListIn.Values = new double[numberOfPolygonVertices];
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
                     geometryListIn.NumberOfCoordinates = numberOfPolygonVertices;
 
                     Assert.IsTrue(api.Mesh2dGetMeshBoundariesAsPolygons(id, ref geometryListIn));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+
                 }
             }
         }
@@ -887,18 +795,12 @@
         [Test]
         public void OffsetAPolygonThroughAPI()
         {
-            var grid = UnstructuredGridTestHelper.GenerateRegularGrid(0, 0, 100, 200, 0, 0);
-
-            using (var api = new MeshKernelApiRemote())
-            using (var mesh = new DisposableMeshGeometry(grid))
+            using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
-
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    id = api.AllocateState(0);
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -921,7 +823,7 @@
                             1.0
                         };
 
-                    geometryListIn.ZCoordinates = new[]
+                    geometryListIn.Values = new[]
                     {
                             0.0,
                             0.0,
@@ -941,18 +843,18 @@
                         ref disposableGeometryListOut);
                     Assert.IsTrue(success);
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
                 }
             }
         }
 
+        /*
         [Test]
         public void RefineAPolygonThroughAPI()
         {
@@ -966,10 +868,10 @@
                 {
 
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1015,13 +917,13 @@
                     Assert.IsTrue(api.PolygonRefine(id, ref geometryListIn, firstIndex,
                         secondIndex, distance, ref geometryListOut));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
         }
@@ -1038,10 +940,10 @@
                 var id = 0;
                 try
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1093,14 +995,14 @@
                     Assert.IsTrue(api.Mesh2dRefineBasedOnSamples(id, ref geometryListIn, interpolationParameters,
                         samplesRefineParameters));
 
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
         }
@@ -1118,10 +1020,10 @@
                 var id = 0;
                 try
                 {
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1161,14 +1063,14 @@
                     Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, interpolationParameters));
 
                     //Assert
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
         }
@@ -1187,10 +1089,10 @@
                 {
 
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1239,18 +1141,18 @@
                     // Call
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true));
 
-                    var newMeshGeometry = api.GetGridState(id);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
 
                     // Assert a valid mesh is produced
-                    Assert.NotNull(newMeshGeometry);
-                    Assert.AreEqual(newMeshGeometry.numberOfEdges, 12);
-                    Assert.AreEqual(newMeshGeometry.numberOfNodes, 9);
+                    Assert.NotNull(mesh2d);
+                    Assert.AreEqual(mesh2d.numEdges, 12);
+                    Assert.AreEqual(mesh2d.numberOfNodes, 9);
 
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
         }
@@ -1269,10 +1171,10 @@
                 try
                 {
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1324,17 +1226,17 @@
                     // Call
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromTriangle(id, geometryListIn, 0, 3, 6));
 
-                    var newMeshGeometry = api.GetGridState(id);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
 
                     // Assert a valid mesh is produced
-                    Assert.NotNull(newMeshGeometry);
-                    Assert.AreEqual(newMeshGeometry.numberOfEdges, 23);
-                    Assert.AreEqual(newMeshGeometry.numberOfNodes, 16);
+                    Assert.NotNull(mesh2d);
+                    Assert.AreEqual(mesh2d.numEdges, 23);
+                    Assert.AreEqual(mesh2d.numberOfNodes, 16);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
         }
@@ -1356,10 +1258,10 @@
                 {
 
 
-                    id = api.AllocateState();
-                    Assert.AreEqual(0, id);
+                    id = api.AllocateState(0);
+                    
 
-                    Assert.IsTrue(api.SetGridState(id, mesh, false));
+                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
@@ -1377,20 +1279,22 @@
                     geometryListOut.NumberOfCoordinates = 1;
 
                     //Call
-                    Assert.IsTrue(api.GetVertexCoordinates(id, geometryListIn, 10.0, ref geometryListOut));
+                    Assert.IsTrue(api.Mesh2dGetClosestNode(id, geometryListIn, 10.0, ref geometryListOut));
 
                     //Assert
                     Assert.LessOrEqual(geometryListOut.XCoordinates[0], 1e-6);
                     Assert.LessOrEqual(geometryListOut.YCoordinates[0], 1e-6);
-                    var newMeshGeometry = api.GetGridState(id);
-                    Assert.NotNull(newMeshGeometry);
+                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    Assert.NotNull(mesh2d);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-                    RemoteInstanceContainer.RemoveInstance(api);
+                    
                 }
             }
+
         }
-    }*/
+    */
+    }
 }

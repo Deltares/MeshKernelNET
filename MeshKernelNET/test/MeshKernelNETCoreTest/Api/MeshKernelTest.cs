@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using MeshKernelNETCore.Api;
-using MeshKernelNETCore.Native;
 using NUnit.Framework;
 
 namespace MeshKernelNETCoreTest.Api
@@ -22,9 +21,9 @@ namespace MeshKernelNETCoreTest.Api
             var result = new DisposableMesh2D();
 
             int[,] indicesValues = new int[numbOfCellsHorizontal, numbOfCellsVertical];
-            result.nodeX = new double[numbOfCellsHorizontal * numbOfCellsVertical];
-            result.nodeY = new double[numbOfCellsHorizontal * numbOfCellsVertical];
-            result.numNodes = numbOfCellsHorizontal * numbOfCellsVertical;
+            result.NodeX = new double[numbOfCellsHorizontal * numbOfCellsVertical];
+            result.NodeY = new double[numbOfCellsHorizontal * numbOfCellsVertical];
+            result.NumNodes = numbOfCellsHorizontal * numbOfCellsVertical;
 
             int nodeIndex = 0;
             for (int i = 0; i < numbOfCellsHorizontal; ++i)
@@ -32,22 +31,22 @@ namespace MeshKernelNETCoreTest.Api
                 for (int j = 0; j < numbOfCellsVertical; ++j)
                 {
                     indicesValues[i, j] = i * numbOfCellsVertical + j;
-                    result.nodeX[nodeIndex] = xOffset + i * cellWidth;
-                    result.nodeY[nodeIndex] = yOffset + j * cellHeight;
+                    result.NodeX[nodeIndex] = xOffset + i * cellWidth;
+                    result.NodeY[nodeIndex] = yOffset + j * cellHeight;
                     nodeIndex++;
                 }
             }
 
-            result.numEdges = (numbOfCellsHorizontal - 1) * numbOfCellsVertical + numbOfCellsHorizontal * (numbOfCellsVertical - 1);
-            result.edgeNodes = new int[result.numEdges * 2];
+            result.NumEdges = (numbOfCellsHorizontal - 1) * numbOfCellsVertical + numbOfCellsHorizontal * (numbOfCellsVertical - 1);
+            result.EdgeNodes = new int[result.NumEdges * 2];
             int edgeIndex = 0;
             for (int i = 0; i < numbOfCellsHorizontal - 1; ++i)
             {
                 for (int j = 0; j < numbOfCellsVertical; ++j)
                 {
-                    result.edgeNodes[edgeIndex] = indicesValues[i, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[i, j];
                     edgeIndex++;
-                    result.edgeNodes[edgeIndex] = indicesValues[i + 1, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[i + 1, j];
                     edgeIndex++;
                 }
             }
@@ -56,9 +55,9 @@ namespace MeshKernelNETCoreTest.Api
             {
                 for (int j = 0; j < numbOfCellsVertical - 1; ++j)
                 {
-                    result.edgeNodes[edgeIndex] = indicesValues[i, j + 1];
+                    result.EdgeNodes[edgeIndex] = indicesValues[i, j + 1];
                     edgeIndex++;
-                    result.edgeNodes[edgeIndex] = indicesValues[i, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[i, j];
                     edgeIndex++;
                 }
             }
@@ -85,7 +84,7 @@ namespace MeshKernelNETCoreTest.Api
             using (var mesh = GenerateRegularGrid(100, 100, 100, 200))
             {
                 var stopWatch = new Stopwatch();
-                var numberOfVerticesBefore = mesh.numNodes;
+                var numberOfVerticesBefore = mesh.NumNodes;
                 var id = 0;
                 GetTiming(stopWatch, "Create grid state", () =>
                 {
@@ -100,7 +99,7 @@ namespace MeshKernelNETCoreTest.Api
                 GetTiming(stopWatch, "Get mesh state", () =>
                 {
                     var mesh2d = api.Mesh2DGetDimensions(id);
-                    var count = mesh2d.nodeX.Length;
+                    var count = mesh2d.NodeX.Length;
 
                     Assert.AreEqual(numberOfVerticesBefore - 1, count);
                     Assert.NotNull(mesh2d);
@@ -138,7 +137,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfVerticesBefore = mesh.numNodes;
+                    var numberOfVerticesBefore = mesh.NumNodes;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -146,9 +145,9 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dDeleteNode(id, 0));
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
-                    var count = mesh2d.nodeX.Length;
+                    var count = mesh2d.NodeX.Length;
 
-                    Assert.AreNotEqual(2, mesh.numEdges);
+                    Assert.AreNotEqual(2, mesh.NumEdges);
                     Assert.AreEqual(numberOfVerticesBefore - 1, count);
                     Assert.NotNull(mesh2d);
 
@@ -191,7 +190,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfEdgesBefore = mesh.numEdges;
+                    var numberOfEdgesBefore = mesh.NumEdges;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -199,9 +198,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
                     Assert.NotNull(mesh2d);
-                    var count = mesh2d.numEdges;
+                    var count = mesh2d.NumEdges;
 
-                    Assert.AreNotEqual(2, mesh2d.numEdges);
+                    Assert.AreNotEqual(2, mesh2d.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore + 9, count);
 
                 }
@@ -241,7 +240,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfEdgesBefore = mesh.numEdges;
+                    var numberOfEdgesBefore = mesh.NumEdges;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -251,9 +250,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
                     Assert.NotNull(mesh2d);
-                    var count = mesh2d.numEdges;
+                    var count = mesh2d.NumEdges;
 
-                    Assert.AreNotEqual(2, mesh2d.numEdges);
+                    Assert.AreNotEqual(2, mesh2d.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore + 1, count);
 
                 }
@@ -292,7 +291,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfEdgesBefore = mesh.numEdges;
+                    var numberOfEdgesBefore = mesh.NumEdges;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -301,9 +300,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
                     Assert.NotNull(mesh2d);
-                    var count = mesh2d.numEdges;
+                    var count = mesh2d.NumEdges;
 
-                    Assert.AreNotEqual(2, mesh2d.numEdges);
+                    Assert.AreNotEqual(2, mesh2d.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore - 1, count);
 
                 }
@@ -347,7 +346,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfEdgesBefore = mesh.numEdges;
+                    var numberOfEdgesBefore = mesh.NumEdges;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -357,9 +356,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
                     Assert.NotNull(mesh2d);
-                    var count = mesh2d.numEdges;
+                    var count = mesh2d.NumEdges;
 
-                    Assert.AreNotEqual(2, mesh2d.numEdges);
+                    Assert.AreNotEqual(2, mesh2d.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore, count);
 
                 }
@@ -401,7 +400,7 @@ namespace MeshKernelNETCoreTest.Api
                 var id = 0;
                 try
                 {
-                    var numberOfEdgesBefore = mesh.numEdges;
+                    var numberOfEdgesBefore = mesh.NumEdges;
                     id = api.AllocateState(0);
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
@@ -411,9 +410,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
                     Assert.NotNull(mesh2d);
-                    var count = mesh2d.numEdges;
+                    var count = mesh2d.NumEdges;
 
-                    Assert.AreNotEqual(2, mesh2d.numEdges);
+                    Assert.AreNotEqual(2, mesh2d.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore, count);
 
                 }
@@ -454,7 +453,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
                     Assert.NotNull(curvilinearGrid);
-                    var count = curvilinearGrid.numEdges;
+                    var count = curvilinearGrid.NumEdges;
                     Assert.AreEqual(24, count);
 
                 }
@@ -1139,8 +1138,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.numEdges, 12);
-                    Assert.AreEqual(curvilinearGrid.numNodes, 9);
+                    Assert.AreEqual(curvilinearGrid.NumEdges, 12);
+                    Assert.AreEqual(curvilinearGrid.NumNodes, 9);
                 }
                 finally
                 {
@@ -1217,8 +1216,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.numEdges, 23);
-                    Assert.AreEqual(curvilinearGrid.numNodes, 16);
+                    Assert.AreEqual(curvilinearGrid.NumEdges, 23);
+                    Assert.AreEqual(curvilinearGrid.NumNodes, 16);
                 }
                 finally
                 {
@@ -1296,7 +1295,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
-                    mesh1d.nodeX = new[]
+                    mesh1d.NodeX = new[]
                     {
                         1.73493900000000,
                         2.35659313023165,
@@ -1306,7 +1305,7 @@ namespace MeshKernelNETCoreTest.Api
                         25.3723169493137,
                         25.8072280000000
                     };
-                    mesh1d.nodeY = new[]
+                    mesh1d.NodeY = new[]
                     {
                         -7.6626510000000,
                         1.67281447902331,
@@ -1316,10 +1315,10 @@ namespace MeshKernelNETCoreTest.Api
                         24.1623588554512,
                         33.5111870000000
                     };
-                    mesh1d.numNodes = 7;
+                    mesh1d.NumNodes = 7;
 
-                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
-                    mesh1d.numEdges = 6;
+                    mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.NumEdges = 6;
                     Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
@@ -1327,7 +1326,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
 
                     var contacts = api.ContactsGetData(id);
-                    Assert.Greater(contacts.numContacts, 0);
+                    Assert.Greater(contacts.NumContacts, 0);
                 }
                 finally
                 {
@@ -1354,7 +1353,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
-                    mesh1d.nodeX = new[]
+                    mesh1d.NodeX = new[]
                     {
                         1.73493900000000,
                         2.35659313023165,
@@ -1364,7 +1363,7 @@ namespace MeshKernelNETCoreTest.Api
                         25.3723169493137,
                         25.8072280000000
                     };
-                    mesh1d.nodeY = new[]
+                    mesh1d.NodeY = new[]
                     {
                         -7.6626510000000,
                         1.67281447902331,
@@ -1374,17 +1373,17 @@ namespace MeshKernelNETCoreTest.Api
                         24.1623588554512,
                         33.5111870000000
                     };
-                    mesh1d.numNodes = 7;
+                    mesh1d.NumNodes = 7;
 
-                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
-                    mesh1d.numEdges = 6;
+                    mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.NumEdges = 6;
                     Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     Assert.IsTrue(api.ContactsComputeMultiple(id, ref onedNodeMaskPinnedAddress));
 
                     var contacts = api.ContactsGetData(id);
-                    Assert.Greater(contacts.numContacts, 0);
+                    Assert.Greater(contacts.NumContacts, 0);
                 }
                 finally
                 {
@@ -1411,7 +1410,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
-                    mesh1d.nodeX = new[]
+                    mesh1d.NodeX = new[]
                     {
                         1.73493900000000,
                         2.35659313023165,
@@ -1421,7 +1420,7 @@ namespace MeshKernelNETCoreTest.Api
                         25.3723169493137,
                         25.8072280000000
                     };
-                    mesh1d.nodeY = new[]
+                    mesh1d.NodeY = new[]
                     {
                         -7.6626510000000,
                         1.67281447902331,
@@ -1431,10 +1430,10 @@ namespace MeshKernelNETCoreTest.Api
                         24.1623588554512,
                         33.5111870000000
                     };
-                    mesh1d.numNodes = 7;
+                    mesh1d.NumNodes = 7;
 
-                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
-                    mesh1d.numEdges = 6;
+                    mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.NumEdges = 6;
                     Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
 
                     var geometryListIn = new DisposableGeometryList();
@@ -1449,7 +1448,7 @@ namespace MeshKernelNETCoreTest.Api
                     var contacts = api.ContactsGetData(id);
 
                     // Only one contact is generated, because only one polygon is present 
-                    Assert.AreEqual(contacts.numContacts, 1);
+                    Assert.AreEqual(contacts.NumContacts, 1);
                 }
                 finally
                 {
@@ -1476,7 +1475,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
-                    mesh1d.nodeX = new[]
+                    mesh1d.NodeX = new[]
                     {
                         1.73493900000000,
                         2.35659313023165,
@@ -1486,7 +1485,7 @@ namespace MeshKernelNETCoreTest.Api
                         25.3723169493137,
                         25.8072280000000
                     };
-                    mesh1d.nodeY = new[]
+                    mesh1d.NodeY = new[]
                     {
                         -7.6626510000000,
                         1.67281447902331,
@@ -1496,10 +1495,10 @@ namespace MeshKernelNETCoreTest.Api
                         24.1623588554512,
                         33.5111870000000
                     };
-                    mesh1d.numNodes = 7;
+                    mesh1d.NumNodes = 7;
 
-                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
-                    mesh1d.numEdges = 6;
+                    mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.NumEdges = 6;
                     Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
 
                     var geometryListIn = new DisposableGeometryList();
@@ -1514,7 +1513,7 @@ namespace MeshKernelNETCoreTest.Api
                     var contacts = api.ContactsGetData(id);
 
                     // Four contacts are generated, one for each point
-                    Assert.AreEqual(contacts.numContacts, 4);
+                    Assert.AreEqual(contacts.NumContacts, 4);
                 }
                 finally
                 {

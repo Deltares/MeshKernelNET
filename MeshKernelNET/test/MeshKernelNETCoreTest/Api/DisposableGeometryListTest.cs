@@ -23,7 +23,7 @@ namespace MeshKernelNETCoreTest.Api
             using (list)
             {
                 // Act
-                var nativeGeometryList = list.CreateGeometryListNative();
+                var nativeGeometryList = list.CreateNativeObject();
 
                 // Assert
 

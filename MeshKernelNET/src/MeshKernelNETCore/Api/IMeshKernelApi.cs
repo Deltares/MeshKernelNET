@@ -236,21 +236,15 @@ namespace MeshKernelNETCore.Api
             ref int vertexIndex);
 
         /// <summary>
-        ///     Get the coordinates of the closest existing vertex
+        /// Get the coordinates of the closest existing vertex
         /// </summary>
-        /// <param name="meshKernelId">
-        ///     Id of the grid state
-        ///     <param name="xCoordinateIn">
-        ///         The x coordinate of the node to insert
-        ///         <param name="yCoordinateIn">
-        ///             The y coordinate of the node to insert
-        ///             <param name="searchRadius">
-        ///                 The radii where to search for mesh nodes
-        ///                 <param name="xCoordinateOut">
-        ///                     The x coordinate of the found Mesh2DNative node
-        ///                     <param name="yCoordinateOut"></param>
-        ///                     The y coordinate of the found Mesh2DNative node
-        ///                     <returns>true if a vertex has been found</returns>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
+        /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
+        /// <param name="searchRadius">The radii where to search for mesh nodes</param>
+        /// <param name="xCoordinateOut">The found x coordinate</param>
+        /// <param name="yCoordinateOut">The found y coordinate</param>
+        /// <returns></returns>
         bool Mesh2dGetClosestNode(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius,
             ref double xCoordinateOut, ref double yCoordinateOut);
 
@@ -460,18 +454,6 @@ namespace MeshKernelNETCore.Api
             ref DisposableGeometryList inputPoints, ref DisposableGeometryList selectedPoints);
 
         /// <summary>
-        ///     Gets the double value used in the back-end library as separator and missing value
-        /// </summary>
-        /// <returns></returns>
-        double GetSeparator();
-
-        /// <summary>
-        ///     Gets the double value used to separate the inner part of a polygon from its outer part (e.g. donut shape polygons)
-        /// </summary>
-        /// <returns></returns>
-        double GetInnerOuterSeparator();
-
-        /// <summary>
         /// Computes 1d-2d contacts, where each single 1d node is connected to one mesh2d face circumcenter (ggeo_make1D2Dinternalnetlinks_dll)
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -505,5 +487,17 @@ namespace MeshKernelNETCore.Api
         /// <param name="points">The points selecting the faces to connect</param>
         /// <returns>Error code</returns>
         bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points);
+
+        /// <summary>
+        ///     Gets the double value used in the back-end library as separator and missing value
+        /// </summary>
+        /// <returns></returns>
+        double GetSeparator();
+
+        /// <summary>
+        ///     Gets the double value used to separate the inner part of a polygon from its outer part (e.g. donut shape polygons)
+        /// </summary>
+        /// <returns></returns>
+        double GetInnerOuterSeparator();
     }
 }

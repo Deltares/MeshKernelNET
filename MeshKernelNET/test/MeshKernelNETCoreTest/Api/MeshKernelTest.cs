@@ -1230,7 +1230,7 @@ namespace MeshKernelNETCoreTest.Api
 
 
         [Test]
-        public void GetClosestMeshCoordinateThroughAPI()
+        public void Mesh2dGetClosestNodeThroughAPI()
         {
             //Setup
 
@@ -1277,14 +1277,12 @@ namespace MeshKernelNETCoreTest.Api
 
                 }
             }
-
         }
 
         [Test]
         public void ContactsComputeSingleContactsThroughAPI()
         {
             //Setup
-
             using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
@@ -1322,7 +1320,6 @@ namespace MeshKernelNETCoreTest.Api
 
                     mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.numEdges = 6;
-
                     Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
@@ -1338,7 +1335,193 @@ namespace MeshKernelNETCoreTest.Api
                     api.DeallocateState(id);
                 }
             }
+        }
 
+        [Test]
+        public void ContactsComputeMultipleThroughAPI()
+        {
+            //Setup
+            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh1d = new DisposableMesh1D())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
+                var onedNodeMaskPinned = GCHandle.Alloc(onedNodeMask, GCHandleType.Pinned);
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    mesh1d.nodeX = new[]
+                    {
+                        1.73493900000000,
+                        2.35659313023165,
+                        5.38347452702839,
+                        14.2980910429074,
+                        22.9324017677239,
+                        25.3723169493137,
+                        25.8072280000000
+                    };
+                    mesh1d.nodeY = new[]
+                    {
+                        -7.6626510000000,
+                        1.67281447902331,
+                        10.3513746546384,
+                        12.4797224193970,
+                        15.3007317677239,
+                        24.1623588554512,
+                        33.5111870000000
+                    };
+                    mesh1d.numNodes = 7;
+
+                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.numEdges = 6;
+                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+
+                    var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
+                    Assert.IsTrue(api.ContactsComputeMultiple(id, ref onedNodeMaskPinnedAddress));
+
+                    var contacts = api.ContactsGetData(id);
+                    Assert.Greater(contacts.numContacts, 0);
+                }
+                finally
+                {
+                    onedNodeMaskPinned.Free();
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void ContactsComputeWithPolygonsThroughAPI()
+        {
+            //Setup
+            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh1d = new DisposableMesh1D())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
+                var onedNodeMaskPinned = GCHandle.Alloc(onedNodeMask, GCHandleType.Pinned);
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    mesh1d.nodeX = new[]
+                    {
+                        1.73493900000000,
+                        2.35659313023165,
+                        5.38347452702839,
+                        14.2980910429074,
+                        22.9324017677239,
+                        25.3723169493137,
+                        25.8072280000000
+                    };
+                    mesh1d.nodeY = new[]
+                    {
+                        -7.6626510000000,
+                        1.67281447902331,
+                        10.3513746546384,
+                        12.4797224193970,
+                        15.3007317677239,
+                        24.1623588554512,
+                        33.5111870000000
+                    };
+                    mesh1d.numNodes = 7;
+
+                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.numEdges = 6;
+                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+
+                    var geometryListIn = new DisposableGeometryList();
+                    geometryListIn.GeometrySeparator = api.GetSeparator();
+                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
+                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+
+                    var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
+                    Assert.IsTrue(api.ContactsComputeWithPolygons(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+                    var contacts = api.ContactsGetData(id);
+
+                    // Only one contact is generated, because only one polygon is present 
+                    Assert.AreEqual(contacts.numContacts, 1);
+                }
+                finally
+                {
+                    onedNodeMaskPinned.Free();
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void ContactsComputeWithPointsThroughAPI()
+        {
+            //Setup
+            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh1d = new DisposableMesh1D())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
+                var onedNodeMaskPinned = GCHandle.Alloc(onedNodeMask, GCHandleType.Pinned);
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    mesh1d.nodeX = new[]
+                    {
+                        1.73493900000000,
+                        2.35659313023165,
+                        5.38347452702839,
+                        14.2980910429074,
+                        22.9324017677239,
+                        25.3723169493137,
+                        25.8072280000000
+                    };
+                    mesh1d.nodeY = new[]
+                    {
+                        -7.6626510000000,
+                        1.67281447902331,
+                        10.3513746546384,
+                        12.4797224193970,
+                        15.3007317677239,
+                        24.1623588554512,
+                        33.5111870000000
+                    };
+                    mesh1d.numNodes = 7;
+
+                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.numEdges = 6;
+                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+
+                    var geometryListIn = new DisposableGeometryList();
+                    geometryListIn.GeometrySeparator = api.GetSeparator();
+                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
+                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+
+                    var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
+                    Assert.IsTrue(api.ContactsComputeWithPoints(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+                    var contacts = api.ContactsGetData(id);
+
+                    // Four contacts are generated, one for each point
+                    Assert.AreEqual(contacts.numContacts, 4);
+                }
+                finally
+                {
+                    onedNodeMaskPinned.Free();
+                    api.DeallocateState(id);
+                }
+            }
         }
 
     }

@@ -565,7 +565,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_multiple", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeMultiple([In] int meshKernelId, [In] ref IntPtr oneDNodeMask);
+        internal static extern int ContactsComputeMultiple([In] int meshKernelId, [In] IntPtr oneDNodeMask);
 
         /// <summary>
         /// Computes 1d-2d contacts, where a 2d face per polygon is connected to the closest 1d node (ggeo_make1D2Droofgutterpipes_dll)
@@ -575,7 +575,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="polygons">The polygons to connect</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeWithPolygons([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative polygons);
+        internal static extern int ContactsComputeWithPolygons([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative polygons);
 
         /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the 2d faces mass centers containing the input point (ggeo_make1D2Dstreetinletpipes_dll)
@@ -585,7 +585,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="points">The points selecting the faces to connect</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_points", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeWithPoints([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative points);
+        internal static extern int ContactsComputeWithPoints([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative points);
 
         /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary (ggeo_make1D2DRiverLinks_dll)
@@ -596,7 +596,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_boundary", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeBoundary([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative polygons, [In] double searchRadius);
+        internal static extern int ContactsComputeBoundary([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative polygons, [In] double searchRadius);
 
         /// <summary>
         /// Gets the number of 1d-2d contacts

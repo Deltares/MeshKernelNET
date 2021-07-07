@@ -397,21 +397,21 @@ namespace MeshKernelNETCore.Api
         /// <inheritdoc />
         public bool ContactsComputeMultiple(int meshKernelId, ref IntPtr oneDNodeMask)
         {
-            return MeshKernelDll.ContactsComputeMultiple(meshKernelId, ref oneDNodeMask) == 0;
+            return MeshKernelDll.ContactsComputeMultiple(meshKernelId, oneDNodeMask) == 0;
         }
 
         /// <inheritdoc />
         public bool ContactsComputeWithPolygons(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
         {
             var geometryListNativeInputPolygon = polygons.CreateGeometryListNative();
-            return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, ref oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
+            return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
         }
 
         /// <inheritdoc />
         public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points)
         {
             var pointsNative = points.CreateGeometryListNative();
-            return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, ref oneDNodeMask, ref pointsNative) == 0;
+            return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative) == 0;
         }
 
         public DisposableContacts ContactsGetDimensions(int meshKernelId)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using MeshKernelNETCore.Api;
+using MeshKernelNETCore.Native;
 using NUnit.Framework;
 
 namespace MeshKernelNETCoreTest.Api
@@ -91,7 +93,7 @@ namespace MeshKernelNETCoreTest.Api
 
                 });
 
-                GetTiming(stopWatch, "Set state", () => { Assert.IsTrue(api.Mesh2dSetState(id, mesh)); });
+                GetTiming(stopWatch, "Set state", () => { Assert.IsTrue(api.Mesh2dSet(id, mesh)); });
 
                 GetTiming(stopWatch, "Delete node", () => { Assert.IsTrue(api.Mesh2dDeleteNode(id, 0)); });
 
@@ -139,7 +141,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfVerticesBefore = mesh.numNodes;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     Assert.IsTrue(api.Mesh2dDeleteNode(id, 0));
 
@@ -192,7 +194,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfEdgesBefore = mesh.numEdges;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
                     Assert.IsTrue(api.Mesh2dFlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, geometryListIn, landBoundaries));
 
                     var mesh2d = api.Mesh2DGetDimensions(id);
@@ -242,7 +244,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfEdgesBefore = mesh.numEdges;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     int newEdgeIndex = 0;
                     Assert.IsTrue(api.Mesh2dInsertEdge(id, 4, 1, ref newEdgeIndex));
@@ -293,7 +295,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfEdgesBefore = mesh.numEdges;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     Assert.IsTrue(api.Mesh2dMergeTwoNodes(id, 0, 4));
 
@@ -348,7 +350,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfEdgesBefore = mesh.numEdges;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var geometryList = new DisposableGeometryList();
                     Assert.IsTrue(api.Mesh2dMergeNodes(id, geometryList, 0.001));
@@ -402,7 +404,7 @@ namespace MeshKernelNETCoreTest.Api
                     var numberOfEdgesBefore = mesh.numEdges;
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var orthogonalizationParametersList = OrthogonalizationParameters.CreateDefault();
                     Assert.IsTrue(api.Mesh2dInitializeOrthogonalization(id, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, orthogonalizationParametersList, polygon, landBoundaries));
@@ -503,7 +505,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -772,7 +774,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
 
                     id = api.AllocateState(0);
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     int numberOfPolygonVertices = -1;
                     Assert.IsTrue(api.Mesh2dCountMeshBoundariesAsPolygons(id, ref numberOfPolygonVertices));
@@ -944,7 +946,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1022,7 +1024,7 @@ namespace MeshKernelNETCoreTest.Api
                     id = api.AllocateState(0);
 
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
@@ -1241,7 +1243,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSetState(id, mesh));
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
@@ -1277,5 +1279,67 @@ namespace MeshKernelNETCoreTest.Api
             }
 
         }
+
+        [Test]
+        public void ContactsComputeSingleContactsThroughAPI()
+        {
+            //Setup
+
+            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh1d = new DisposableMesh1D())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
+                var onedNodeMaskPinned = GCHandle.Alloc(onedNodeMask, GCHandleType.Pinned);
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    mesh1d.nodeX = new[]
+                    {
+                        1.73493900000000,
+                        2.35659313023165,
+                        5.38347452702839,
+                        14.2980910429074,
+                        22.9324017677239,
+                        25.3723169493137,
+                        25.8072280000000
+                    };
+                    mesh1d.nodeY = new[]
+                    {
+                        -7.6626510000000,
+                        1.67281447902331,
+                        10.3513746546384,
+                        12.4797224193970,
+                        15.3007317677239,
+                        24.1623588554512,
+                        33.5111870000000
+                    };
+                    mesh1d.numNodes = 7;
+
+                    mesh1d.edgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
+                    mesh1d.numEdges = 6;
+
+                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+
+                    var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
+                    var geometryListIn = new DisposableGeometryList();
+                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+
+                    var contacts = api.ContactsGetData(id);
+                    Assert.Greater(contacts.numContacts, 0);
+                }
+                finally
+                {
+                    onedNodeMaskPinned.Free();
+                    api.DeallocateState(id);
+                }
+            }
+
+        }
+
     }
 }

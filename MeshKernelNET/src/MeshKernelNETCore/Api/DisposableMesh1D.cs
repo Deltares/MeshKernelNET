@@ -33,14 +33,14 @@ namespace MeshKernelNETCore.Api
             nodeY = new double[numNodes];
         }
 
-        public Mesh1D CreateMesh1D()
+        public Mesh1DNative CreateMesh1D()
         {
             if (!IsMemoryPinned)
             {
                 PinMemory();
             }
 
-            return new Mesh1D
+            return new Mesh1DNative
             {
                 edge_nodes = GetPinnedObjectPointer(edgeNodes),
                 node_x = GetPinnedObjectPointer(nodeX),

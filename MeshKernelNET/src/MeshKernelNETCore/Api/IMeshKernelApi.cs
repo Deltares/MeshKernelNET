@@ -29,17 +29,17 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableMesh2D">Grid state as <see cref="DisposableMesh2D" /> object</param>
         /// <returns>If the operation succeeded</returns>
-        bool Mesh2dSetState(int meshKernelId, DisposableMesh2D disposableMesh2D);
+        bool Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D);
 
         /// <summary>
-        ///     Gets the grid state as a <see cref="Mesh2D" /> structure excluding the cell information
+        ///     Gets the grid state as a <see cref="Mesh2DNative" /> structure excluding the cell information
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <returns><see cref="DisposableMesh2D" /> with the grid state</returns>
         DisposableMesh2D Mesh2DGetDimensions(int meshKernelId);
 
         /// <summary>
-        ///     Gets the grid state as a <see cref="Mesh2D" /> structure including the cell information
+        ///     Gets the grid state as a <see cref="Mesh2DNative" /> structure including the cell information
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <returns><see cref="DisposableMesh2D" /> with the grid state</returns>
@@ -247,9 +247,9 @@ namespace MeshKernelNETCore.Api
         ///             <param name="searchRadius">
         ///                 The radii where to search for mesh nodes
         ///                 <param name="xCoordinateOut">
-        ///                     The x coordinate of the found Mesh2D node
+        ///                     The x coordinate of the found Mesh2DNative node
         ///                     <param name="yCoordinateOut"></param>
-        ///                     The y coordinate of the found Mesh2D node
+        ///                     The y coordinate of the found Mesh2DNative node
         ///                     <returns>true if a vertex has been found</returns>
         bool Mesh2dGetClosestNode(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius,
             ref double xCoordinateOut, ref double yCoordinateOut);
@@ -363,20 +363,20 @@ namespace MeshKernelNETCore.Api
         bool CurvilinearConvertToMesh2D(int meshKernelId);
 
         /// <summary>
-        ///     Gets the curvilinear grid dimensions as a CurvilinearGrid struct
+        ///     Gets the curvilinear grid dimensions as a CurvilinearGridNative struct
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="curvilinearGrid">The structure containing the dimensions of the curvilinear grid</param>
+        /// <param name="curvilinearGridNative">The structure containing the dimensions of the curvilinear grid</param>
         /// <returns>Error code</returns>
-        bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGrid curvilinearGrid);
+        bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
-        ///     Gets the curvilinear grid data as a CurvilinearGrid struct
+        ///     Gets the curvilinear grid data as a CurvilinearGridNative struct
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="curvilinearGrid">The structure containing the curvilinear grid arrays</param>
+        /// <param name="curvilinearGridNative">The structure containing the curvilinear grid arrays</param>
         /// <returns>Error code</returns>
-        bool CurvilinearGetData(int meshKernelId, ref CurvilinearGrid curvilinearGrid);
+        bool CurvilinearGetData(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
         ///     Get spline intermediate points
@@ -470,5 +470,40 @@ namespace MeshKernelNETCore.Api
         /// </summary>
         /// <returns></returns>
         double GetInnerOuterSeparator();
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where each single 1d node is connected to one mesh2d face circumcenter (ggeo_make1D2Dinternalnetlinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = connect node, 0 = do not connect)</param>
+        /// <param name="polygons">The polygons selecting the area where the 1d-2d contacts will be generated</param>
+        /// <returns>Error code</returns>
+        bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where a single 1d node is connected to multiple 2d face circumcenters (ggeo_make1D2Dembeddedlinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <returns>Error code</returns>
+        bool ContactsComputeMultiple(int meshKernelId, ref IntPtr oneDNodeMask);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where a 2d face per polygon is connected to the closest 1d node (ggeo_make1D2Droofgutterpipes_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="polygons">The polygons to connect</param>
+        /// <returns>Error code</returns>
+        bool ContactsComputeWithPolygons(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons);
+
+        /// <summary>
+        /// Computes 1d-2d contacts, where 1d nodes are connected to the 2d faces mass centers containing the input point (ggeo_make1D2Dstreetinletpipes_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="points">The points selecting the faces to connect</param>
+        /// <returns>Error code</returns>
+        bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points);
     }
 }

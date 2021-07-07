@@ -41,14 +41,14 @@ namespace MeshKernelNETCore.Api
             edgeY = new double[numEdges];
         }
 
-        public CurvilinearGrid CreateCurvilinearGrid()
+        public CurvilinearGridNative CreateCurvilinearGrid()
         {
             if (!IsMemoryPinned)
             {
                 PinMemory();
             }
 
-            return new CurvilinearGrid
+            return new CurvilinearGridNative
             {
                 edge_nodes = GetPinnedObjectPointer(edgeNodes),
                 node_x = GetPinnedObjectPointer(nodeX),

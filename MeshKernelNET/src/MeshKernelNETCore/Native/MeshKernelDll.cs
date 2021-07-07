@@ -38,22 +38,22 @@ namespace MeshKernelNETCore.Native
         internal static extern int DeallocateState([In] int meshKernelId);
 
         /// <summary>
-        /// Gets the mesh2d dimensions <see cref="Mesh2D"/> structure
+        /// Gets the mesh2d dimensions <see cref="Mesh2DNative"/> structure
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="mesh2D">Grid data</param>
+        /// <param name="mesh2DNative">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2DGetDimensions([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
+        internal static extern int Mesh2DGetDimensions([In] int meshKernelId, [In, Out] ref Mesh2DNative mesh2DNative);
 
         /// <summary>
-        /// Gets the mesh state as a <see cref="Mesh2D"/> structure including faces information
+        /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure including faces information
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="mesh2D">Grid data</param>
+        /// <param name="mesh2DNative">Grid data</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_data", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetData([In] int meshKernelId, [In, Out] ref Mesh2D mesh2D);
+        internal static extern int Mesh2dGetData([In] int meshKernelId, [In, Out] ref Mesh2DNative mesh2DNative);
 
         /// <summary>
         /// Synchronize provided mesh (<param name="meshGeometryDimensions"/> and <param name="mesh2D"/>) with the mesh state with <param name="meshKernelId"/>
@@ -64,7 +64,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="IsGeographic">Cartesian or spherical mesh</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_set", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dSetState([In] int meshKernelId, [In] ref Mesh2D Mesh2D);
+        internal static extern int Mesh2dSet([In] int meshKernelId, [In] ref Mesh2DNative mesh2DNative);
 
         #endregion
 
@@ -122,7 +122,7 @@ namespace MeshKernelNETCore.Native
         /// Merges vertices within a distance of 0.001 m, effectively removing small edges 
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
+        /// <param name="geometryListNative">The polygon where to perform the operation</param>
         /// <param name="mergingDistance">The distance below which two nodes will be merged</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_nodes", CallingConvention = CallingConvention.Cdecl)]
@@ -137,7 +137,6 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_node", CallingConvention = CallingConvention.Cdecl)]
         public static extern int Mesh2dInsertNode([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
-
 
         /// <summary>
         /// Deletes a mesh in a polygon using several options
@@ -168,8 +167,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
         /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
         /// <param name="searchRadius">The radii where to search for mesh nodes</param>
-        /// <param name="xCoordinateOut">The x coordinate of the found Mesh2D node</param>
-        /// <param name="yCoordinateOut">The y coordinate of the found Mesh2D node</param>
+        /// <param name="xCoordinateOut">The x coordinate of the found Mesh2DNative node</param>
+        /// <param name="yCoordinateOut">The y coordinate of the found Mesh2DNative node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_closest_node", CallingConvention = CallingConvention.Cdecl)]
         public static extern int Mesh2dGetClosestNode([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref double xCoordinateOut, [In, Out] ref double yCoordinateOut);
@@ -258,22 +257,22 @@ namespace MeshKernelNETCore.Native
         #region Curvilinear grids
 
         /// <summary>
-        /// Gets the curvilinear grid dimensions as a CurvilinearGrid struct (converted as set of edges and nodes) <see cref="CurvilinearGrid"/> structure
+        /// Gets the curvilinear grid dimensions as a CurvilinearGridNative struct (converted as set of edges and nodes) <see cref="CurvilinearGridNative"/> structure
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="curvilinearGrid">The structure containing the dimensions of the curvilinear grid</param>
+        /// <param name="curvilinearGridNative">The structure containing the dimensions of the curvilinear grid</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearGetDimensions([In] int meshKernelId, [In, Out] ref CurvilinearGrid curvilinearGrid);
+        internal static extern int CurvilinearGetDimensions([In] int meshKernelId, [In, Out] ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
-        /// Gets the mesh state as a <see cref="Mesh2D"/> structure including faces information
+        /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure including faces information
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="curvilinearGrid">The structure containing the curvilinear grid arrays</param>
+        /// <param name="curvilinearGridNative">The structure containing the curvilinear grid arrays</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_data", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearGetData([In] int meshKernelId, [In, Out] ref CurvilinearGrid curvilinearGrid);
+        internal static extern int CurvilinearGetData([In] int meshKernelId, [In, Out] ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
         /// Make a new curvilinear mesh
@@ -557,7 +556,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="polygons">The polygons selecting the area where the 1d-2d contacts will be generated</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_single", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeSingle([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons);
+        internal static extern int ContactsComputeSingle([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative polygons);
 
         /// <summary>
         /// Computes 1d-2d contacts, where a single 1d node is connected to multiple 2d face circumcenters (ggeo_make1D2Dembeddedlinks_dll)
@@ -566,7 +565,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_multiple", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeMultiple([In] int meshKernelId, [In] ref int oneDNodeMask);
+        internal static extern int ContactsComputeMultiple([In] int meshKernelId, [In] ref IntPtr oneDNodeMask);
 
         /// <summary>
         /// Computes 1d-2d contacts, where a 2d face per polygon is connected to the closest 1d node (ggeo_make1D2Droofgutterpipes_dll)
@@ -576,7 +575,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="polygons">The polygons to connect</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeWithPolygons([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons);
+        internal static extern int ContactsComputeWithPolygons([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative polygons);
 
         /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the 2d faces mass centers containing the input point (ggeo_make1D2Dstreetinletpipes_dll)
@@ -586,7 +585,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="points">The points selecting the faces to connect</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_with_points", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeWithPoints([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative points);
+        internal static extern int ContactsComputeWithPoints([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative points);
 
         /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary (ggeo_make1D2DRiverLinks_dll)
@@ -597,9 +596,35 @@ namespace MeshKernelNETCore.Native
         /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_boundary", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeBoundary([In] int meshKernelId, [In] ref int oneDNodeMask, [In] ref GeometryListNative polygons, double searchRadius);
+        internal static extern int ContactsComputeBoundary([In] int meshKernelId, [In] ref IntPtr oneDNodeMask, [In] ref GeometryListNative polygons, [In] double searchRadius);
+
+        /// <summary>
+        /// Gets the number of 1d-2d contacts
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="contacts">Contacts data, filled on the dimension part</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsGetDimensions([In] int meshKernelId, [In, Out] ref ContactsNative contacts);
+
+        /// <summary>
+        /// Gets the 1d-2d contacts indices (from index / to indices)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="contacts">Contacts data</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_get_data", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ContactsGetData([In] int meshKernelId, [In, Out] ref ContactsNative contacts);
 
         #endregion
 
+        /// <summary>
+        /// Sets the meshkernel::Mesh1D state
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="mesh1d">The mesh1d</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh1d_set", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh1dSet(int meshKernelId, [In] ref Mesh1DNative mesh1d);
     }
 }

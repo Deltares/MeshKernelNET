@@ -18,21 +18,21 @@ namespace MeshKernelNETCore.Api
 
         public DisposableContacts() { }
 
-        public DisposableContacts(int nContacts, int nEdges)
+        public DisposableContacts(int nContacts)
         {
             numContacts = nContacts;
             mesh1dIndices = new int[numContacts];
             mesh2dIndices = new int[numContacts];
         }
 
-        public Contacts CreateContacts()
+        public ContactsNative CreateContacts()
         {
             if (!IsMemoryPinned)
             {
                 PinMemory();
             }
 
-            return new Contacts
+            return new ContactsNative
             {
                 mesh1d_indices = GetPinnedObjectPointer(mesh1dIndices),
                 mesh2d_indices = GetPinnedObjectPointer(mesh2dIndices),

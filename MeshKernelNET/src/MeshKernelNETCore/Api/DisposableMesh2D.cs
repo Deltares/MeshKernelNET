@@ -67,14 +67,14 @@ namespace MeshKernelNETCore.Api
             faceY = new double[numFaces];
         }
 
-        public Mesh2D CreateMesh2D()
+        public Mesh2DNative CreateMesh2D()
         {
             if (!IsMemoryPinned)
             {
                 PinMemory();
             }
 
-            return new Mesh2D
+            return new Mesh2DNative
             {
                 edge_nodes = GetPinnedObjectPointer(edgeNodes),
                 face_nodes = GetPinnedObjectPointer(faceNodes),

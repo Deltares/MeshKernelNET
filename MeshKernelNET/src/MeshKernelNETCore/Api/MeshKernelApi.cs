@@ -27,11 +27,11 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc />
-        public bool Mesh2dSetState(int meshKernelId, DisposableMesh2D disposableMesh2D)
+        public bool Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D)
         {
             var mesh2D = disposableMesh2D.CreateMesh2D();
 
-            var result = MeshKernelDll.Mesh2dSetState(meshKernelId, ref mesh2D);
+            var result = MeshKernelDll.Mesh2dSet(meshKernelId, ref mesh2D);
 
             return result == 0;
         }
@@ -39,18 +39,21 @@ namespace MeshKernelNETCore.Api
         /// <inheritdoc />
         public DisposableMesh2D Mesh2DGetDimensions(int meshKernelId)
         {
-            var newMesh2D = new Mesh2D();
+            var newMesh2D = new Mesh2DNative();
 
             MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
             var disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes, newMesh2D.num_edges, newMesh2D.num_faces, newMesh2D.num_face_nodes);
-            newMesh2D = disposableMesh2D.CreateMesh2D();
 
-            return CreateDisposableMesh2D(newMesh2D);
+            return disposableMesh2D;
         }
 
         public DisposableMesh2D Mesh2dGetData(int meshKernelId)
         {
-            var newMesh2D = new Mesh2D();
+            var newMesh2D = new Mesh2DNative();
+
+            MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
+            var disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes, newMesh2D.num_edges, newMesh2D.num_faces, newMesh2D.num_face_nodes);
+            newMesh2D = disposableMesh2D.CreateMesh2D();
 
             MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2D);
 
@@ -183,14 +186,14 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMakeMeshFromSamples(meshKernelId, ref geometryListNative) == 0;
         }
 
-        public bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGrid curvilinearGrid)
+        public bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative)
         {
-            return MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid) == 0;
+            return MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGridNative) == 0;
         }
 
-        public bool CurvilinearGetData(int meshKernelId, ref CurvilinearGrid curvilinearGrid)
+        public bool CurvilinearGetData(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative)
         {
-            return MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid) == 0;
+            return MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGridNative) == 0;
         }
 
         public bool Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, ref int numberOfPolygonVertices)
@@ -355,15 +358,9 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.GetInnerOuterSeparator();
         }
 
-        public void Dispose()
-        {
-            // Do nothing because no remoting is used
-        }
-
-        /// <inheritdoc />
         public DisposableCurvilinearGrid CurvilinearGridGetDimensions(int meshKernelId)
         {
-            var curvilinearGrid = new CurvilinearGrid();
+            var curvilinearGrid = new CurvilinearGridNative();
 
             MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
             var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_nodes, curvilinearGrid.num_edges);
@@ -374,48 +371,124 @@ namespace MeshKernelNETCore.Api
 
         public DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId)
         {
-            var curvilinearGrid = new CurvilinearGrid();
+            var curvilinearGrid = new CurvilinearGridNative();
 
             MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
 
             return CreateDisposableCurvilinearGrid(curvilinearGrid);
         }
 
-        private DisposableMesh2D CreateDisposableMesh2D(Mesh2D newMesh2D, bool addCellInformation = false)
+
+        public bool Mesh1dSet(int meshKernelId, DisposableMesh1D disposableMesh1D)
+        {
+            var mesh1D = disposableMesh1D.CreateMesh1D();
+
+            return MeshKernelDll.Mesh1dSet(meshKernelId, ref mesh1D) == 0;
+        }
+
+
+        /// <inheritdoc />
+        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
+        {
+            var geometryListNativeInputPolygon = polygons.CreateGeometryListNative();
+            return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
+        }
+
+        /// <inheritdoc />
+        public bool ContactsComputeMultiple(int meshKernelId, ref IntPtr oneDNodeMask)
+        {
+            return MeshKernelDll.ContactsComputeMultiple(meshKernelId, ref oneDNodeMask) == 0;
+        }
+
+        /// <inheritdoc />
+        public bool ContactsComputeWithPolygons(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
+        {
+            var geometryListNativeInputPolygon = polygons.CreateGeometryListNative();
+            return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, ref oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
+        }
+
+        /// <inheritdoc />
+        public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points)
+        {
+            var pointsNative = points.CreateGeometryListNative();
+            return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, ref oneDNodeMask, ref pointsNative) == 0;
+        }
+
+        public DisposableContacts ContactsGetDimensions(int meshKernelId)
+        {
+            var contacts = new ContactsNative();
+
+            MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
+            var disposableContacts = new DisposableContacts(contacts.num_contacts);
+
+            return disposableContacts;
+        }
+
+        public DisposableContacts ContactsGetData(int meshKernelId)
+        {
+            var contacts = new ContactsNative();
+
+            MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
+            var disposableContacts = new DisposableContacts(contacts.num_contacts);
+            contacts = disposableContacts.CreateContacts();
+
+            MeshKernelDll.ContactsGetData(meshKernelId, ref contacts);
+
+            return CreateDisposableContacts(contacts);
+        }
+
+        private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)
         {
             var disposableMesh2D = new DisposableMesh2D
             {
-                nodeX = newMesh2D.node_x.CreateValueArray<double>(newMesh2D.num_nodes),
-                nodeY = newMesh2D.node_y.CreateValueArray<double>(newMesh2D.num_nodes),
-                edgeNodes = newMesh2D.edge_nodes.CreateValueArray<int>(newMesh2D.num_edges * 2).ToArray(),
-                numEdges = newMesh2D.num_edges,
-                numNodes = newMesh2D.num_nodes
+                nodeX = newMesh2DNative.node_x.CreateValueArray<double>(newMesh2DNative.num_nodes),
+                nodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
+                edgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
+                numEdges = newMesh2DNative.num_edges,
+                numNodes = newMesh2DNative.num_nodes
             };
 
-            if (addCellInformation && newMesh2D.num_faces > 0)
+            if (addCellInformation && newMesh2DNative.num_faces > 0)
             {
-                disposableMesh2D.numFaces = newMesh2D.num_faces;
-                disposableMesh2D.nodesPerFace = newMesh2D.nodes_per_face.CreateValueArray<int>(newMesh2D.num_faces); ;
-                disposableMesh2D.faceNodes = newMesh2D.face_nodes.CreateValueArray<int>(newMesh2D.num_faces);
-                disposableMesh2D.faceX = newMesh2D.face_x.CreateValueArray<double>(newMesh2D.num_faces);
-                disposableMesh2D.faceY = newMesh2D.face_y.CreateValueArray<double>(newMesh2D.num_faces);
+                disposableMesh2D.numFaces = newMesh2DNative.num_faces;
+                disposableMesh2D.nodesPerFace = newMesh2DNative.nodes_per_face.CreateValueArray<int>(newMesh2DNative.num_faces); ;
+                disposableMesh2D.faceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(newMesh2DNative.num_faces);
+                disposableMesh2D.faceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
+                disposableMesh2D.faceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
             }
 
             return disposableMesh2D;
         }
 
-        private DisposableCurvilinearGrid CreateDisposableCurvilinearGrid(CurvilinearGrid curvilinearGrid)
+        private DisposableCurvilinearGrid CreateDisposableCurvilinearGrid(CurvilinearGridNative curvilinearGridNative)
         {
             var disposableCurvilinearGrid = new DisposableCurvilinearGrid
             {
-                nodeX = curvilinearGrid.node_x.CreateValueArray<double>(curvilinearGrid.num_nodes),
-                nodeY = curvilinearGrid.node_y.CreateValueArray<double>(curvilinearGrid.num_nodes),
-                edgeNodes = curvilinearGrid.edge_nodes.CreateValueArray<int>(curvilinearGrid.num_edges * 2).ToArray(),
-                numEdges = curvilinearGrid.num_edges,
-                numNodes = curvilinearGrid.num_nodes
+                nodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_nodes),
+                nodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_nodes),
+                edgeNodes = curvilinearGridNative.edge_nodes.CreateValueArray<int>(curvilinearGridNative.num_edges * 2).ToArray(),
+                numEdges = curvilinearGridNative.num_edges,
+                numNodes = curvilinearGridNative.num_nodes
             };
 
             return disposableCurvilinearGrid;
+        }
+
+        private DisposableContacts CreateDisposableContacts(ContactsNative contactsNative)
+        {
+            var disposableContacts = new DisposableContacts
+            {
+                mesh1dIndices = contactsNative.mesh1d_indices.CreateValueArray<int>(contactsNative.num_contacts),
+                mesh2dIndices = contactsNative.mesh2d_indices.CreateValueArray<int>(contactsNative.num_contacts),
+                numContacts = contactsNative.num_contacts
+            };
+
+            return disposableContacts;
+        }
+
+        public void Dispose()
+        {
+            // Do nothing because no remoting is used
         }
     }
 }

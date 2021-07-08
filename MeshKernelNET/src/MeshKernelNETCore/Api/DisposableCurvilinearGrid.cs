@@ -6,37 +6,26 @@ namespace MeshKernelNETCore.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableCurvilinearGrid : DisposableNativeObject<CurvilinearGridNative>
     {
-        [ProtoMember(1)] private int[] edgeNodes;
-        [ProtoMember(2)] private double[] nodeX;
-        [ProtoMember(3)] private double[] nodeY;
-        [ProtoMember(4)] private double[] edgeX;
-        [ProtoMember(5)] private double[] edgeY;
-        [ProtoMember(6)] private int numNodes;
-        [ProtoMember(7)] private int numEdges;
+        [ProtoMember(1)] private double[] nodeX;
+        [ProtoMember(2)] private double[] nodeY;
+        [ProtoMember(3)] private int numM;
+        [ProtoMember(4)] private int numN;
 
         public DisposableCurvilinearGrid() { }
 
-        public DisposableCurvilinearGrid(int nNodes, int nEdges)
+        public DisposableCurvilinearGrid(int nM, int nN)
         {
-            NumNodes = nNodes;
-            NumEdges = nEdges;
+            numM = nM;
+            numN = nN;
+            var NumNodes = numM * numN;
 
-            EdgeNodes = new int[NumEdges * 2];
             NodeX = new double[NumNodes];
             NodeY = new double[NumNodes];
-            EdgeX = new double[NumEdges];
-            EdgeY = new double[NumEdges];
         }
 
         ~DisposableCurvilinearGrid()
         {
             Dispose(false);
-        }
-
-        public int[] EdgeNodes
-        {
-            get { return edgeNodes; }
-            set { edgeNodes = value; }
         }
 
         public double[] NodeX
@@ -51,39 +40,24 @@ namespace MeshKernelNETCore.Api
             set { nodeY = value; }
         }
 
-        public double[] EdgeX
+        public int NumM
         {
-            get { return edgeX; }
-            set { edgeX = value; }
+            get { return numM; }
+            set { numM = value; }
         }
 
-        public double[] EdgeY
+        public int NumN
         {
-            get { return edgeY; }
-            set { edgeY = value; }
-        }
-
-        public int NumNodes
-        {
-            get { return numNodes; }
-            set { numNodes = value; }
-        }
-
-        public int NumEdges
-        {
-            get { return numEdges; }
-            set { numEdges = value; }
+            get { return numN; }
+            set { NumN = value; }
         }
 
         protected override void SetNativeObject(ref CurvilinearGridNative nativeObject)
         {
-            nativeObject.edge_nodes = GetPinnedObjectPointer(EdgeNodes);
             nativeObject.node_x = GetPinnedObjectPointer(NodeX);
             nativeObject.node_y = GetPinnedObjectPointer(NodeY);
-            nativeObject.edge_x = GetPinnedObjectPointer(EdgeX);
-            nativeObject.edge_y = GetPinnedObjectPointer(EdgeY);
-            nativeObject.num_nodes = NumNodes;
-            nativeObject.num_edges = NumEdges;
+            nativeObject.num_m = numM;
+            nativeObject.num_n = numN;
         }
     }
 }

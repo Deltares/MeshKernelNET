@@ -453,8 +453,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
                     Assert.NotNull(curvilinearGrid);
-                    var count = curvilinearGrid.NumEdges;
-                    Assert.AreEqual(24, count);
+                    Assert.AreEqual(4, curvilinearGrid.NumM);
 
                 }
                 finally
@@ -1138,8 +1137,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumEdges, 12);
-                    Assert.AreEqual(curvilinearGrid.NumNodes, 9);
+                    Assert.AreEqual(curvilinearGrid.NumM, 3);
+                    Assert.AreEqual(curvilinearGrid.NumN, 3);
                 }
                 finally
                 {
@@ -1216,8 +1215,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumEdges, 23);
-                    Assert.AreEqual(curvilinearGrid.NumNodes, 16);
+                    Assert.AreEqual(curvilinearGrid.NumM, 4);
+                    Assert.AreEqual(curvilinearGrid.NumN, 5);
                 }
                 finally
                 {

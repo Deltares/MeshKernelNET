@@ -289,10 +289,9 @@ namespace MeshKernelNETCore.Api
             var curvilinearGrid = new CurvilinearGridNative();
 
             MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
-            var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_nodes, curvilinearGrid.num_edges);
-            curvilinearGrid = disposableCurvilinearGrid.CreateNativeObject();
+            var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_m, curvilinearGrid.num_n);
 
-            return CreateDisposableCurvilinearGrid(curvilinearGrid);
+            return disposableCurvilinearGrid;
         }
 
         public DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId)
@@ -462,11 +461,10 @@ namespace MeshKernelNETCore.Api
         {
             var disposableCurvilinearGrid = new DisposableCurvilinearGrid
             {
-                NodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_nodes),
-                NodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_nodes),
-                EdgeNodes = curvilinearGridNative.edge_nodes.CreateValueArray<int>(curvilinearGridNative.num_edges * 2).ToArray(),
-                NumEdges = curvilinearGridNative.num_edges,
-                NumNodes = curvilinearGridNative.num_nodes
+                NodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
+                NodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
+                NumM = curvilinearGridNative.num_m,
+                NumN = curvilinearGridNative.num_n,
             };
 
             return disposableCurvilinearGrid;

@@ -8,11 +8,6 @@ namespace MeshKernelNETCore.Native
     public struct CurvilinearGridNative
     {
         /// <summary>
-        /// The nodes composing each mesh 2d edge
-        /// </summary>
-        public IntPtr edge_nodes;
-
-        /// <summary>
         /// The x-coordinates of network1d nodes
         /// </summary>
         public IntPtr node_x;
@@ -23,23 +18,13 @@ namespace MeshKernelNETCore.Native
         public IntPtr node_y;
 
         /// <summary>
-        /// The x-coordinates of the mesh edges middle points
+        /// The number of curvilinear grid nodes along m
         /// </summary>
-        public IntPtr edge_x;
+        public int num_m;
 
         /// <summary>
-        /// The y-coordinates of the mesh edges middle points
+        /// The number of curvilinear grid nodes along n
         /// </summary>
-        public IntPtr edge_y;
-
-        /// <summary>
-        /// The number of mesh nodes
-        /// </summary>
-        public int num_nodes;
-
-        /// <summary>
-        /// The number of edges
-        /// </summary>
-        public int num_edges;
+        public int num_n;
     }
 }

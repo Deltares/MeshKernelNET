@@ -489,6 +489,16 @@ namespace MeshKernelNETCore.Api
         bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points);
 
         /// <summary>
+        /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary (ggeo_make1D2DRiverLinks_dll)
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
+        /// <param name="polygons">The points selecting the faces to connect</param>
+        /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
+        /// <returns>Error code</returns>
+        bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius);
+
+        /// <summary>
         ///     Gets the double value used in the back-end library as separator and missing value
         /// </summary>
         /// <returns></returns>

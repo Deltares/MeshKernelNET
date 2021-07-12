@@ -393,6 +393,12 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative) == 0;
         }
 
+        public bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius)
+        {
+            var polygonsNative = polygons.CreateNativeObject();
+            return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius) == 0;
+        }
+
         public DisposableContacts ContactsGetDimensions(int meshKernelId)
         {
             var contacts = new ContactsNative();

@@ -49,7 +49,7 @@ namespace MeshKernelNETCore.Api
         public int NumN
         {
             get { return numN; }
-            set { NumN = value; }
+            set { numN = value; }
         }
 
         protected override void SetNativeObject(ref CurvilinearGridNative nativeObject)

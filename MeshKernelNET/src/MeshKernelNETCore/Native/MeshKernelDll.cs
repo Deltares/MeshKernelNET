@@ -15,7 +15,7 @@ namespace MeshKernelNETCore.Native
         static MeshKernelDll()
         {
             var dir = Path.GetDirectoryName(typeof(MeshKernelDll).Assembly.Location);
-            NativeLibrary.LoadNativeDll(MeshKernelDllName, Path.Combine(dir, "Lib"));
+            NativeLibrary.LoadNativeDll(MeshKernelDllName, Path.Combine(dir, "win-x64"));
         }
 
         #region State management

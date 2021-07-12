@@ -36,17 +36,6 @@ namespace MeshKernelNETCore.Api
             return result == 0;
         }
 
-        /// <inheritdoc />
-        public DisposableMesh2D Mesh2DGetDimensions(int meshKernelId)
-        {
-            var newMesh2D = new Mesh2DNative();
-
-            MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
-            var disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes, newMesh2D.num_edges, newMesh2D.num_faces, newMesh2D.num_face_nodes);
-
-            return disposableMesh2D;
-        }
-
         public DisposableMesh2D Mesh2dGetData(int meshKernelId)
         {
             var newMesh2D = new Mesh2DNative();
@@ -284,16 +273,6 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.CurvilinearConvertToMesh2D(meshKernelId) == 0;
         }
 
-        public DisposableCurvilinearGrid CurvilinearGridGetDimensions(int meshKernelId)
-        {
-            var curvilinearGrid = new CurvilinearGridNative();
-
-            MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
-            var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_m, curvilinearGrid.num_n);
-
-            return disposableCurvilinearGrid;
-        }
-
         public DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId)
         {
             var curvilinearGrid = new CurvilinearGridNative();
@@ -397,16 +376,6 @@ namespace MeshKernelNETCore.Api
         {
             var polygonsNative = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius) == 0;
-        }
-
-        public DisposableContacts ContactsGetDimensions(int meshKernelId)
-        {
-            var contacts = new ContactsNative();
-
-            MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
-            var disposableContacts = new DisposableContacts(contacts.num_contacts);
-
-            return disposableContacts;
         }
 
         public DisposableContacts ContactsGetData(int meshKernelId)

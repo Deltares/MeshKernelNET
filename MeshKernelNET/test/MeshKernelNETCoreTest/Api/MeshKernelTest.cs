@@ -98,7 +98,7 @@ namespace MeshKernelNETCoreTest.Api
 
                 GetTiming(stopWatch, "Get mesh state", () =>
                 {
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     var count = mesh2d.NodeX.Length;
 
                     Assert.AreEqual(numberOfVerticesBefore - 1, count);
@@ -144,7 +144,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dDeleteNode(id, 0));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     var count = mesh2d.NodeX.Length;
 
                     Assert.AreNotEqual(2, mesh.NumEdges);
@@ -196,7 +196,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
                     Assert.IsTrue(api.Mesh2dFlipEdges(id, true, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, geometryListIn, landBoundaries));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                     var count = mesh2d.NumEdges;
 
@@ -248,7 +248,7 @@ namespace MeshKernelNETCoreTest.Api
                     int newEdgeIndex = 0;
                     Assert.IsTrue(api.Mesh2dInsertEdge(id, 4, 1, ref newEdgeIndex));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                     var count = mesh2d.NumEdges;
 
@@ -298,7 +298,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dMergeTwoNodes(id, 0, 4));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                     var count = mesh2d.NumEdges;
 
@@ -354,7 +354,7 @@ namespace MeshKernelNETCoreTest.Api
                     var geometryList = new DisposableGeometryList();
                     Assert.IsTrue(api.Mesh2dMergeNodes(id, geometryList, 0.001));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                     var count = mesh2d.NumEdges;
 
@@ -408,7 +408,7 @@ namespace MeshKernelNETCoreTest.Api
                     var orthogonalizationParametersList = OrthogonalizationParameters.CreateDefault();
                     Assert.IsTrue(api.Mesh2dInitializeOrthogonalization(id, ProjectToLandBoundaryOptions.ToOriginalNetBoundary, orthogonalizationParametersList, polygon, landBoundaries));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                     var count = mesh2d.NumEdges;
 
@@ -451,7 +451,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
-                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    var curvilinearGrid = api.CurvilinearGridGetData(id);
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(4, curvilinearGrid.NumM);
 
@@ -542,7 +542,7 @@ namespace MeshKernelNETCoreTest.Api
                     curvilinearParameters.AttractionParameter = 0.0;
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromSplines(id, geometryListIn, curvilinearParameters));
 
-                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    var curvilinearGrid = api.CurvilinearGridGetData(id);
                     Assert.NotNull(curvilinearGrid);
 
                 }
@@ -599,7 +599,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id, ref geometryListIn,
                         ref curvilinearParameters, ref splinesToCurvilinearParameters));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                 }
                 finally
@@ -692,7 +692,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dMakeMeshFromPolygon(id, ref geometryListIn));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
 
                 }
@@ -749,7 +749,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dMakeMeshFromSamples(id, ref geometryListIn));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                 }
                 finally
@@ -788,7 +788,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dGetMeshBoundariesAsPolygons(id, ref geometryListIn));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
 
                 }
@@ -853,7 +853,7 @@ namespace MeshKernelNETCoreTest.Api
                         ref disposableGeometryListOut);
                     Assert.IsTrue(success);
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
 
                 }
@@ -920,7 +920,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.PolygonRefine(id, ref geometryListIn, firstIndex,
                         secondIndex, distance, ref geometryListOut));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                 }
                 finally
@@ -996,7 +996,7 @@ namespace MeshKernelNETCoreTest.Api
                     int minimumNumSamples = 1;
                     Assert.IsTrue(api.Mesh2dRefineBasedOnSamples(id, ref geometryListIn, relativeSearchRadius, minimumNumSamples, meshRefinementParameters));
 
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
 
                 }
@@ -1062,7 +1062,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, interpolationParameters));
 
                     //Assert
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
 
                 }
@@ -1133,7 +1133,7 @@ namespace MeshKernelNETCoreTest.Api
                     // Call
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true));
 
-                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    var curvilinearGrid = api.CurvilinearGridGetData(id);
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
@@ -1211,7 +1211,7 @@ namespace MeshKernelNETCoreTest.Api
                     // Call
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromTriangle(id, geometryListIn, 0, 3, 6));
 
-                    var curvilinearGrid = api.CurvilinearGridGetDimensions(id);
+                    var curvilinearGrid = api.CurvilinearGridGetData(id);
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
@@ -1266,7 +1266,7 @@ namespace MeshKernelNETCoreTest.Api
                     //Assert
                     Assert.LessOrEqual(xCoordinateOut, 1e-6);
                     Assert.LessOrEqual(yCoordinateOut, 1e-6);
-                    var mesh2d = api.Mesh2DGetDimensions(id);
+                    var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
                 }
                 finally

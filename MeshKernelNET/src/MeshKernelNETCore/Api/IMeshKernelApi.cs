@@ -31,12 +31,6 @@ namespace MeshKernelNETCore.Api
         /// <returns>If the operation succeeded</returns>
         bool Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D);
 
-        /// <summary>
-        ///     Gets the grid state as a <see cref="Mesh2DNative" /> structure excluding the cell information
-        /// </summary>
-        /// <param name="meshKernelId">Id of the grid state</param>
-        /// <returns><see cref="DisposableMesh2D" /> with the grid state</returns>
-        DisposableMesh2D Mesh2DGetDimensions(int meshKernelId);
 
         /// <summary>
         ///     Gets the grid state as a <see cref="Mesh2DNative" /> structure including the cell information

@@ -107,6 +107,21 @@ namespace MeshKernelNETCore.Helpers
             };
         }
 
+        internal static MeshRefinementParametersNative ToMeshRefinementParametersNative(this MeshRefinementParameters meshRefinementParameters)
+        {
+            return new MeshRefinementParametersNative
+            {
+                MaxNumRefinementIterations = meshRefinementParameters.MaxNumRefinementIterations,
+                RefineIntersected = meshRefinementParameters.RefineIntersected,
+                UseMassCenterWhenRefining = meshRefinementParameters.UseMassCenterWhenRefining,
+                MinFaceSize = meshRefinementParameters.MinFaceSize,
+                RefinementType = meshRefinementParameters.RefinementType,
+                ConnectHangingNodes = meshRefinementParameters.ConnectHangingNodes,
+                AccountForSamplesOutside = meshRefinementParameters.AccountForSamplesOutside
+
+            };
+        }
+
         /// <summary>
         /// Converts a multi-polygon into a <see cref="DisposableGeometryList"/>
         /// </summary>
@@ -157,7 +172,7 @@ namespace MeshKernelNETCore.Helpers
                     NumberOfCoordinates = xCoordinates.Count,
                     XCoordinates = xCoordinates.ToArray(),
                     YCoordinates = yCoordinates.ToArray(),
-                    ZCoordinates = zCoordinates.ToArray()
+                    Values = zCoordinates.ToArray()
                 };
             }
 
@@ -204,7 +219,7 @@ namespace MeshKernelNETCore.Helpers
                 NumberOfCoordinates = xCoordinates.Count,
                 XCoordinates = xCoordinates.ToArray(),
                 YCoordinates = yCoordinates.ToArray(),
-                ZCoordinates = zCoordinates.ToArray()
+                Values = zCoordinates.ToArray()
             };
         }
 
@@ -214,7 +229,7 @@ namespace MeshKernelNETCore.Helpers
             {
                 XCoordinates = new double[length],
                 YCoordinates = new double[length],
-                ZCoordinates = new double[length],
+                Values = new double[length],
                 GeometrySeparator = geometrySeparator,
                 InnerOuterSeparator = innerOuterSeparator,
                 NumberOfCoordinates = length

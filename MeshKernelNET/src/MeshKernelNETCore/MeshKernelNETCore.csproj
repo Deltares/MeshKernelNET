@@ -1,23 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<OutputPath>$(SolutionDir)\bin</OutputPath>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Deltares.MeshKernel" Version="0.10.0-GridEditorPlugin.34" />
-    <PackageReference Include="NetTopologySuite" Version="1.15.3" />
-    <PackageReference Include="protobuf-net" Version="2.4.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Deltares.MeshKernel" Version="1.0.0-dev.1290" />
+		<PackageReference Include="NetTopologySuite" Version="1.15.3" />
+		<PackageReference Include="protobuf-net" Version="2.4.6" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>MeshKernelNETCoreTest</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Api\" />
-  </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>MeshKernelNETCoreTest</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>

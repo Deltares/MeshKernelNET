@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using MeshKernelNETCore.Native;
 using ProtoBuf;
 
 namespace MeshKernelNETCore.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableGeometryList : IDisposable
+    public sealed class DisposableGeometryList : DisposableNativeObject<GeometryListNative>
     {
-        private readonly List<GCHandle> objectGarbageCollectHandles = new List<GCHandle>();
-
         [ProtoMember(1)] private double geometrySeparator;
         [ProtoMember(2)] private double innerOuterSeparator;
         [ProtoMember(3)] private int numberOfCoordinates;
         [ProtoMember(4)] private double[] xCoordinates;
         [ProtoMember(5)] private double[] yCoordinates;
-        [ProtoMember(6)] private double[] zCoordinates;
+        [ProtoMember(6)] private double[] values;
+
+        ~DisposableGeometryList()
+        {
+            Dispose(false);
+        }
 
         /// <summary>
         /// Separator used for separating multiple geometries
@@ -70,74 +70,23 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>
-        /// The z coordinates of the geometries
+        /// The values for the coordinates of the geometries
         /// </summary>
 
-        public double[] ZCoordinates
+        public double[] Values
         {
-            get { return zCoordinates; }
-            set { zCoordinates = value; }
+            get { return values; }
+            set { values = value; }
         }
-
-        private bool IsMemoryPinned
+        
+        protected override void SetNativeObject(ref GeometryListNative nativeObject)
         {
-            get { return objectGarbageCollectHandles.Count > 0; }
-        }
-
-        /// <summary>
-        /// Creates a <see cref="GeometryListNative"/> for the specified geometries
-        /// </summary>
-        /// <returns></returns>
-        public GeometryListNative CreateGeometryListNative()
-        {
-            if (!IsMemoryPinned)
-            {
-                PinMemory();
-            }
-
-            var lookup = objectGarbageCollectHandles.ToDictionary(h => h.Target, h => h);
-
-            return new GeometryListNative
-            {
-                xCoordinates = lookup[XCoordinates].AddrOfPinnedObject(),
-                yCoordinates = lookup[YCoordinates].AddrOfPinnedObject(),
-                zCoordinates = lookup[ZCoordinates].AddrOfPinnedObject(),
-                numberOfCoordinates = NumberOfCoordinates,
-                geometrySeperator = GeometrySeparator,
-                innerOuterSeperator = InnerOuterSeparator
-            };
-        }
-
-        public void Dispose()
-        {
-            UnPinMemory();
-        }
-
-        private void UnPinMemory()
-        {
-            foreach (var handle in objectGarbageCollectHandles)
-            {
-                handle.Free();
-            }
-
-            objectGarbageCollectHandles.Clear();
-        }
-
-        private void PinMemory()
-        {
-            // compensate for null arrays
-            XCoordinates = GetArray(XCoordinates);
-            YCoordinates = GetArray(YCoordinates);
-            ZCoordinates = GetArray(ZCoordinates);
-
-            objectGarbageCollectHandles.Add(GCHandle.Alloc(XCoordinates, GCHandleType.Pinned));
-            objectGarbageCollectHandles.Add(GCHandle.Alloc(YCoordinates, GCHandleType.Pinned));
-            objectGarbageCollectHandles.Add(GCHandle.Alloc(ZCoordinates, GCHandleType.Pinned));
-        }
-
-        private static T[] GetArray<T>(T[] array)
-        {
-            return array ?? new T[0];
+            nativeObject.xCoordinates = GetPinnedObjectPointer(XCoordinates);
+            nativeObject.yCoordinates = GetPinnedObjectPointer(YCoordinates);
+            nativeObject.zCoordinates = GetPinnedObjectPointer(Values);
+            nativeObject.numberOfCoordinates = NumberOfCoordinates;
+            nativeObject.geometrySeperator = GeometrySeparator;
+            nativeObject.innerOuterSeperator = InnerOuterSeparator;
         }
     }
 }

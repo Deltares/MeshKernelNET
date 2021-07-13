@@ -592,7 +592,7 @@ namespace MeshKernelNETCore.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
-        /// <param name="polygons">The points selecting the faces to connect</param>
+        /// <param name="polygons">The polygon selecting the faces to connect</param>
         /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_boundary", CallingConvention = CallingConvention.Cdecl)]

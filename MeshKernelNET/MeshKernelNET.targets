@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="MeshKernelNetPostBuild" AfterTargets="Build">
+    <ItemGroup>
+      <_FilesToCopyMeshKernel Include="$(MSBuildThisFileDirectory)..\..\content\native\**\*"/>
+    </ItemGroup>
+    
+    <Copy SourceFiles="@(_FilesToCopyMeshKernel)" DestinationFolder="$(OutDir)\win-x64\native\%(RecursiveDir)" SkipUnchangedFiles="true"/>
+  </Target>
+  
+  <Target Name="MeshKernelNetClean" AfterTargets="Clean">
+    <ItemGroup>
+      <_OriginalFilesMeshKernel Include="$(MSBuildThisFileDirectory)..\..\content\native\**\*"/>
+      <_FilesToCleanIONetCDF Include="$(OutDir)\win-x64\native\%(_OriginalFilesMeshKernel.RecursiveDir)%(_OriginalFilesMeshKernel.FileName)%(_OriginalFilesMeshKernel.Extension)"/>
+      
+    </ItemGroup>
+    
+    <Delete Files="@(_FilesToCleanIONetCDF)"/>    
+  </Target>
+</Project>

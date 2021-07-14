@@ -44,7 +44,6 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(native.GridBlockSize, makeGridParameters.GridBlockSize);
             Assert.AreEqual(native.OriginXCoordinate, makeGridParameters.OriginXCoordinate);
             Assert.AreEqual(native.OriginYCoordinate, makeGridParameters.OriginYCoordinate);
-            Assert.AreEqual(native.OriginZCoordinate, makeGridParameters.OriginZCoordinate);
             Assert.AreEqual(native.XGridBlockSize, makeGridParameters.XGridBlockSize);
             Assert.AreEqual(native.YGridBlockSize, makeGridParameters.YGridBlockSize);
         }

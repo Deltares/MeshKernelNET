@@ -31,16 +31,6 @@ namespace MeshKernelNETCore.Native
         public double GridBlockSize;
 
         /// <summary>
-        /// Interactor setting: line thickness in mm (8.0)
-        /// </summary>
-        public double LineThickness;
-
-        /// <summary>
-        /// Interactor setting: line thickness in mm (8.0)
-        /// </summary>
-        public double hSize;
-
-        /// <summary>
         /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
         /// </summary>
         public double OriginXCoordinate;
@@ -49,11 +39,6 @@ namespace MeshKernelNETCore.Native
         /// * The y coordinate of the origin, located at the bottom left corner (0.0)	 
         /// </summary>
         public double OriginYCoordinate;
-
-        /// <summary>
-        /// * The z coordinate of the origin, located at the bottom left corner (0.0)	 
-        /// </summary>
-        public double OriginZCoordinate;
 
         /// <summary>
         /// * The grid block size in x dimension, used only for squared grids (10.0) 

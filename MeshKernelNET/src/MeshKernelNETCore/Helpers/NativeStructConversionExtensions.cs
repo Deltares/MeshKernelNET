@@ -41,7 +41,6 @@ namespace MeshKernelNETCore.Helpers
                 GridBlockSize = makeGridParameters.GridBlockSize,
                 OriginXCoordinate = makeGridParameters.OriginXCoordinate,
                 OriginYCoordinate = makeGridParameters.OriginYCoordinate,
-                OriginZCoordinate = makeGridParameters.OriginZCoordinate,
                 XGridBlockSize = makeGridParameters.XGridBlockSize,
                 YGridBlockSize = makeGridParameters.YGridBlockSize
             };

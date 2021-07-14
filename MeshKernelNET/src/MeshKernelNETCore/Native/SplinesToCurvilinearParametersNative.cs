@@ -48,11 +48,6 @@
         public int CheckFrontCollisions { get; set; }
 
         /// <summary>
-        /// * Uniform grid size, netboundary to grid only (0.0)
-        /// </summary>
-        public double UniformGridSize { get; set; }
-
-        /// <summary>
         /// * Remove skinny triangles (1)
         /// </summary>
         public int RemoveSkinnyTriangles { get; set; }

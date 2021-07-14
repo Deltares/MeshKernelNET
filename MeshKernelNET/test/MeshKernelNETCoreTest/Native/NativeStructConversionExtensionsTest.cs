@@ -84,7 +84,6 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(parameters.GridsOnTopOfEachOtherTolerance, splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance);
             Assert.AreEqual(parameters.MinimumCosineOfCrossingAngles, splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles);
             Assert.AreEqual(parameters.CheckFrontCollisions, splinesToCurvilinearParameters.CheckFrontCollisions);
-            Assert.AreEqual(parameters.UniformGridSize, splinesToCurvilinearParameters.UniformGridSize);
             Assert.AreEqual(parameters.RemoveSkinnyTriangles, splinesToCurvilinearParameters.RemoveSkinnyTriangles);
 
         }
@@ -205,35 +204,6 @@ namespace MeshKernelNETCoreTest.Native
                 Assert.AreEqual(expectedXCoordinates[i], coordinateArray[i].X);
                 Assert.AreEqual(expectedYCoordinates[i], coordinateArray[i].Y);
             }
-        }
-
-        [Test]
-        public void GivenASampleRefineParameters_ToSampleRefineParametersNative_ShouldConvertToValidSampleRefineParametersNative()
-        {
-            //Arrange
-            var parameters = new SamplesRefineParameters
-            {
-                AccountForSamplesOutside = 1,
-                ConnectHangingNodes = 1,
-                DirectionalRefinement = 1,
-                MaximumTimeStepInCourantGrid = 1,
-                MinimumCellSize = 10,
-                RefinementType = 1,
-                SampleVectorDimension = 1
-            };
-
-            // Act
-
-            var nativeParameters = parameters.ToSampleRefineParametersNative();
-
-            // Assert
-            Assert.AreEqual(parameters.AccountForSamplesOutside, nativeParameters.AccountForSamplesOutside);
-            Assert.AreEqual(parameters.ConnectHangingNodes, nativeParameters.ConnectHangingNodes);
-            Assert.AreEqual(parameters.DirectionalRefinement, nativeParameters.DirectionalRefinement);
-            Assert.AreEqual(parameters.MaximumTimeStepInCourantGrid, nativeParameters.MaximumTimeStepInCourantGrid);
-            Assert.AreEqual(parameters.MinimumCellSize, nativeParameters.MinimumCellSize);
-            Assert.AreEqual(parameters.RefinementType, nativeParameters.RefinementType);
-            Assert.AreEqual(parameters.SampleVectorDimension, nativeParameters.SampleVectorDimension);
         }
     }
 }

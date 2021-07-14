@@ -19,14 +19,8 @@ namespace MeshKernelNETCore.Helpers
                 BoundaryIterations = orthogonalizationParameters.BoundaryIterations,
                 InnerIterations = orthogonalizationParameters.InnerIterations,
                 OrthogonalizationToSmoothingFactor = 0.975,
-                AtpfB = 1,
-                Circumormasscenter = 1,
-                Smoothorarea = 1.0,
-                AdaptMethod = 1,
-                AdaptBeta = 0,
-                AdaptNiterU = 0,
-                AdaptNiterG = 4,
-                OrthoPure = 0.5
+                OrthogonalizationToSmoothingFactorAtBoundary = 1,
+                ArealToAngleSmoothingFactor = 1.0
             };
         }
 
@@ -71,22 +65,7 @@ namespace MeshKernelNETCore.Helpers
                 GridsOnTopOfEachOtherTolerance = splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance,
                 MinimumCosineOfCrossingAngles = splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles,
                 CheckFrontCollisions = splinesToCurvilinearParameters.CheckFrontCollisions,
-                UniformGridSize = splinesToCurvilinearParameters.UniformGridSize,
                 RemoveSkinnyTriangles = splinesToCurvilinearParameters.RemoveSkinnyTriangles
-            };
-        }
-
-        internal static SampleRefineParametersNative ToSampleRefineParametersNative(this SamplesRefineParameters samplesRefineParameters)
-        {
-            return new SampleRefineParametersNative
-            {
-                SampleVectorDimension = samplesRefineParameters.SampleVectorDimension,
-                MinimumCellSize = samplesRefineParameters.MinimumCellSize,
-                DirectionalRefinement = samplesRefineParameters.DirectionalRefinement,
-                RefinementType = samplesRefineParameters.RefinementType,
-                ConnectHangingNodes = samplesRefineParameters.ConnectHangingNodes,
-                MaximumTimeStepInCourantGrid = samplesRefineParameters.MaximumTimeStepInCourantGrid,
-                AccountForSamplesOutside = samplesRefineParameters.AccountForSamplesOutside
             };
         }
 

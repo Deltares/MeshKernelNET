@@ -11,7 +11,8 @@ namespace MeshKernelNETCore.Api
             {
                 MaxNumRefinementIterations = 3,
                 RefineIntersected = 0,
-                RefinementType = 2
+                RefinementType = 2,
+                ConnectHangingNodes = 1
             };
         }
 

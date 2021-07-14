@@ -235,39 +235,5 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(parameters.RefinementType, nativeParameters.RefinementType);
             Assert.AreEqual(parameters.SampleVectorDimension, nativeParameters.SampleVectorDimension);
         }
-
-        [Test]
-        public void GivenAInterpolationParameters_ToInterpolationParametersNative_ShouldConvertToValidInterpolationParametersNative()
-        {
-            //Arrange
-            var parameters = new InterpolationParameters
-            {
-                InterpolationType = 1,
-                DisplayInterpolationProcess = 1,
-                MaxNumberOfRefinementIterations = 1,
-                AveragingMethod = 1,
-                MinimumNumberOfPoints = 1,
-                RelativeSearchRadius = 1,
-                InterpolateTo = 1,
-                RefineIntersected = false,
-                UseMassCenters = false,
-            };
-
-            // Act
-
-            var nativeParameters = parameters.ToInterpolationParametersNative();
-
-            // Assert
-
-            Assert.AreEqual(parameters.InterpolationType, nativeParameters.InterpolationType);
-            Assert.AreEqual(parameters.DisplayInterpolationProcess, nativeParameters.DisplayInterpolationProcess);
-            Assert.AreEqual(parameters.MaxNumberOfRefinementIterations, nativeParameters.MaxNumberOfRefinementIterations);
-            Assert.AreEqual(parameters.AveragingMethod, nativeParameters.AveragingMethod);
-            Assert.AreEqual(parameters.MinimumNumberOfPoints, nativeParameters.MinimumNumberOfPoints);
-            Assert.AreEqual(parameters.RelativeSearchRadius, nativeParameters.RelativeSearchRadius);
-            Assert.AreEqual(parameters.InterpolateTo, nativeParameters.InterpolateTo);
-            Assert.AreEqual(0, nativeParameters.RefineIntersected);
-            Assert.AreEqual(0, nativeParameters.UseMassCenterWhenRefining);
-        }
     }
 }

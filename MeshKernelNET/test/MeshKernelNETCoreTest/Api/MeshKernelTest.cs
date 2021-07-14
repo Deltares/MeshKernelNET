@@ -1058,8 +1058,8 @@ namespace MeshKernelNETCoreTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     //Call
-                    var interpolationParameters = InterpolationParameters.CreateDefault();
-                    Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, interpolationParameters));
+                    var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
+                    Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, meshRefinementParameters));
 
                     //Assert
                     var mesh2d = api.Mesh2dGetData(id);

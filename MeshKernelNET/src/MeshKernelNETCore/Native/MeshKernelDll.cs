@@ -388,10 +388,10 @@ namespace MeshKernelNETCore.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The closed polygon where to perform the refinement</param>
-        /// <param name="interpolationParametersNative">The interpolation parameters</param>
+        /// <param name="meshRefinementParametersNative">The settings for the mesh refinement algorithm</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dRefineBasedOnPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref InterpolationParametersNative interpolationParametersNative);
+        internal static extern int Mesh2dRefineBasedOnPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] ref MeshRefinementParametersNative meshRefinementParametersNative);
 
         #endregion
 
@@ -533,7 +533,6 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_move_node", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dMoveNode([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In] int nodeIndex);
-
 
         /// <summary>
         /// Selects points in polygons

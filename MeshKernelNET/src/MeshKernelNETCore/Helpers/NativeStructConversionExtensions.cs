@@ -76,22 +76,6 @@ namespace MeshKernelNETCore.Helpers
             };
         }
 
-        internal static InterpolationParametersNative ToInterpolationParametersNative(this InterpolationParameters interpolationParameters)
-        {
-            return new InterpolationParametersNative
-            {
-                InterpolationType = interpolationParameters.InterpolationType,
-                DisplayInterpolationProcess = interpolationParameters.DisplayInterpolationProcess,
-                MaxNumberOfRefinementIterations = interpolationParameters.MaxNumberOfRefinementIterations,
-                AveragingMethod = interpolationParameters.AveragingMethod,
-                MinimumNumberOfPoints = interpolationParameters.MinimumNumberOfPoints,
-                RelativeSearchRadius = interpolationParameters.RelativeSearchRadius,
-                InterpolateTo = interpolationParameters.InterpolateTo,
-                RefineIntersected = interpolationParameters.RefineIntersected == false ? 0 : 1,
-                UseMassCenterWhenRefining = interpolationParameters.UseMassCenters == false ? 0 : 1
-            };
-        }
-
         internal static SampleRefineParametersNative ToSampleRefineParametersNative(this SamplesRefineParameters samplesRefineParameters)
         {
             return new SampleRefineParametersNative

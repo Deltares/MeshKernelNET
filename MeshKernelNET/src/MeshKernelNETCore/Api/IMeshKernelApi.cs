@@ -176,10 +176,10 @@ namespace MeshKernelNETCore.Api
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListIn">The closed polygon where to perform the refinement</param>
-        /// <param name="interpolationParameters">The settings for the interpolation algorithm</param>
+        /// <param name="meshRefinementParameters">The settings for the mesh refinement algorithm</param>
         /// <returns></returns>
         bool Mesh2dRefineBasedOnPolygon(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn,
-            InterpolationParameters interpolationParameters);
+            MeshRefinementParameters meshRefinementParameters);
 
         /// <summary>
         ///     Get the edges orthogonality

@@ -203,7 +203,7 @@ namespace MeshKernelNETCore.Api
 
         public bool Mesh2dMoveNode(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex)
         {
-            return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, ref vertexIndex) == 0;
+            return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, vertexIndex) == 0;
         }
 
         public bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList disposableGeometryListIn)

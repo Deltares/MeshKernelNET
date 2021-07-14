@@ -509,7 +509,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="yCoordinate">y coordinate of the vertex</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_edge", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dDeleteEdge([In] int meshKernelId, [In] double xCoordinate, [In]  double yCoordinate);
+        internal static extern int Mesh2dDeleteEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate);
 
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="edgeIndex">The edge index</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_edge", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetEdge([In] int meshKernelId, [In]  double xCoordinate, [In]  double yCoordinate, [In, Out] ref int edgeIndex);
+        internal static extern int Mesh2dGetEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int edgeIndex);
 
         /// <summary>
         /// Function to move a selected node to a new position
@@ -532,7 +532,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="nodeIndex">The index of the mesh2d node to be moved</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_move_node", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMoveNode([In] int meshKernelId, [In]  double xCoordinate, [In]  double yCoordinate, [In, Out] ref int nodeIndex);
+        internal static extern int Mesh2dMoveNode([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In] int nodeIndex);
 
 
         /// <summary>

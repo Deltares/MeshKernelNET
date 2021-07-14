@@ -187,12 +187,12 @@ namespace MeshKernelNETCore.Api
 
         public bool Mesh2dDeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate)
         {
-            return MeshKernelDll.Mesh2dDeleteEdge(meshKernelId, ref xCoordinate, ref yCoordinate) == 0;
+            return MeshKernelDll.Mesh2dDeleteEdge(meshKernelId, xCoordinate, yCoordinate) == 0;
         }
 
         public bool Mesh2dGetEdge(int meshKernelId, double xCoordinate, double yCoordinate, ref int edgeIndex)
         {
-            return MeshKernelDll.Mesh2dGetEdge(meshKernelId, ref xCoordinate, ref yCoordinate, ref edgeIndex) == 0;
+            return MeshKernelDll.Mesh2dGetEdge(meshKernelId, xCoordinate, yCoordinate, ref edgeIndex) == 0;
         }
 
         public bool Mesh2dDelete(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut, int deletionOption, bool invertDeletion)
@@ -203,7 +203,7 @@ namespace MeshKernelNETCore.Api
 
         public bool Mesh2dMoveNode(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex)
         {
-            return MeshKernelDll.Mesh2dMoveNode(meshKernelId, ref xCoordinate, ref yCoordinate, ref vertexIndex) == 0;
+            return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, ref vertexIndex) == 0;
         }
 
         public bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList disposableGeometryListIn)

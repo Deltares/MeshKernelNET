@@ -427,7 +427,8 @@ namespace MeshKernelNETCore.Api
             {
                 disposableMesh2D.NumFaces = newMesh2DNative.num_faces;
                 disposableMesh2D.NodesPerFace = newMesh2DNative.nodes_per_face.CreateValueArray<int>(newMesh2DNative.num_faces);
-                disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(newMesh2DNative.num_faces);
+                int numFaceNodes = disposableMesh2D.NodesPerFace.Sum();
+                disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(numFaceNodes);
                 disposableMesh2D.FaceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
                 disposableMesh2D.FaceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
             }

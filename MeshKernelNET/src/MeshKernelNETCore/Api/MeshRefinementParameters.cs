@@ -13,7 +13,8 @@ namespace MeshKernelNETCore.Api
                 RefineIntersected = 0,
                 RefinementType = 2,
                 ConnectHangingNodes = 1,
-                UseMassCenterWhenRefining = 1
+                UseMassCenterWhenRefining = 1,
+                MinFaceSize = 0.5
             };
         }
 

@@ -5,11 +5,6 @@ namespace MeshKernelNETCore.Native
     [StructLayout(LayoutKind.Sequential)]
     public struct MakeGridParametersNative
     {
-        /// <summary>
-        /// * The type of grid to create : square = 0, wieber = 1, hexagonal type 1 = 2,  hexagonal type 2 = 3, triangular = 4 (0) 
-        /// </summary>  
-        public int GridType;
-
         /// <summary>   
         /// * The number of columns in x direction (3)
         /// </summary>

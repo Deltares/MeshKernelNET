@@ -369,6 +369,63 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
+        [Test]
+        public void Mesh2dTriangulationInterpolation()
+        {
+
+            // Before                          
+            // 0 ------- 1 ------- 2 ------- 3 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 4 ------- 5 ------- 6 ------- 7 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 8 ------- 9 ------ 10 ------ 11  
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            //12 ------ 13 ------ 14 ------ 15 
+            //
+            
+
+            // Setup
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var geometryList = new DisposableGeometryList
+                    {
+                        XCoordinates = new []{10.0, 110.0, 260.0},
+                        YCoordinates = new[] { 10.0, 210.0, 460.0 },
+                        Values = new[] { 10.0, 20.0, 30.0 },
+                        NumberOfCoordinates = 3,
+                        GeometrySeparator = api.GetSeparator(),
+                        InnerOuterSeparator = api.GetInnerOuterSeparator()
+                    };
+
+                    var resultGeometryList = api.Mesh2dTriangulationInterpolation(id, geometryList, MeshLocation.Faces);
+
+                    Assert.NotNull(resultGeometryList);
+                    Assert.AreEqual(3, resultGeometryList.NumberOfCoordinates);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
 
         [Test]
         public void Mesh2dInitializeOrthogonalizationThroughApi()

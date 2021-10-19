@@ -221,7 +221,7 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc/>
-        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
+        public DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
         {
             var resultListNative = new GeometryListNative();
             var samplesNative = samples.CreateNativeObject();

@@ -301,7 +301,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="samples">List of sample values</param>
         /// <param name="location">Location type to interpolate to</param>
         /// <returns></returns>
-        DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location);
+        DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location);
 
         /// <summary>
         ///     Make a new grid

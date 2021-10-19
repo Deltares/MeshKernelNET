@@ -208,7 +208,8 @@ namespace MeshKernelNETCore.Api
         {
             return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, vertexIndex) == 0;
         }
-
+        
+        /// <inheritdoc/>
         public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples)
         {
             var resultListNative = new GeometryListNative();
@@ -219,6 +220,7 @@ namespace MeshKernelNETCore.Api
             return resultListNative.CreateDisposableGeometryList();
         }
 
+        /// <inheritdoc/>
         public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
         {
             var resultListNative = new GeometryListNative();

@@ -641,9 +641,9 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_averaging_interpolation", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dAveragingInterpolation(int meshKernelId, [In] ref GeometryListNative samples, int locationType, int averagingMethodType, double relativeSearchSize, UInt64 minNumSamples, [In, Out] ref GeometryListNative results);
-        
+
         /// <summary>
-        /// Sets the meshkernel::Mesh1D state
+        /// Interpolates the supplied values to the provided grid using triangulation
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="mesh1d">The mesh1d</param>

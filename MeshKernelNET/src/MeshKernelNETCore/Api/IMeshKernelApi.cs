@@ -283,6 +283,27 @@ namespace MeshKernelNETCore.Api
         bool Mesh2dMoveNode(int meshKernelId, double xCoordinate, double yCoordinate, int vertexIndex);
 
         /// <summary>
+        /// Interpolates the supplied values to the provided grid using averaging
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="samples">List of sample values</param>
+        /// <param name="location">Location type to interpolate to</param>
+        /// <param name="method">Type of averaging to do</param>
+        /// <param name="searchRadius">The search radius to use</param>
+        /// <param name="minimumNumberOfSamples">Minimum number of samples needed</param>
+        /// <returns></returns>
+        DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples);
+
+        /// <summary>
+        /// Interpolates the supplied values to the provided grid using triangulation
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="samples">List of sample values</param>
+        /// <param name="location">Location type to interpolate to</param>
+        /// <returns></returns>
+        DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location);
+
+        /// <summary>
         ///     Make a new grid
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

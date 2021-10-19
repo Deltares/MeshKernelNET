@@ -209,6 +209,26 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, vertexIndex) == 0;
         }
 
+        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples)
+        {
+            var resultListNative = new GeometryListNative();
+            var samplesNative = samples.CreateNativeObject();
+
+            MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId, ref samplesNative, (int) location, (int) method, searchRadius, Convert.ToUInt64(minimumNumberOfSamples), ref resultListNative);
+
+            return resultListNative.CreateDisposableGeometryList();
+        }
+
+        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
+        {
+            var resultListNative = new GeometryListNative();
+            var samplesNative = samples.CreateNativeObject();
+
+            MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, (int)location,ref resultListNative);
+
+            return resultListNative.CreateDisposableGeometryList();
+        }
+
         public bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList disposableGeometryListIn)
         {
             var makeGridParametersNative =

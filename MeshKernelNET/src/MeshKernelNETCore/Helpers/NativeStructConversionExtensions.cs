@@ -301,6 +301,19 @@ namespace MeshKernelNETCore.Helpers
             return disposableContacts;
         }
 
+        internal static DisposableGeometryList CreateDisposableGeometryList(this GeometryListNative geometryListNative)
+        {
+            return new DisposableGeometryList
+            {
+                GeometrySeparator = geometryListNative.geometrySeperator,
+                InnerOuterSeparator = geometryListNative.innerOuterSeperator,
+                NumberOfCoordinates = geometryListNative.numberOfCoordinates,
+                XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(geometryListNative.numberOfCoordinates),
+                YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(geometryListNative.numberOfCoordinates),
+                Values = geometryListNative.zCoordinates.CreateValueArray<double>(geometryListNative.numberOfCoordinates)
+            };
+        }
+
         private static void AddCoordinatesToArrays(Coordinate[] interiorRingCoordinates,
             ICollection<double> xCoordinates,
             ICollection<double> yCoordinates,

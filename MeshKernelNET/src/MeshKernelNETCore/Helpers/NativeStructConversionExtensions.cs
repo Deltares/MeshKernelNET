@@ -252,6 +252,55 @@ namespace MeshKernelNETCore.Helpers
             return features;
         }
 
+        internal static DisposableMesh2D CreateDisposableMesh2D(this Mesh2DNative newMesh2DNative, bool addCellInformation = false)
+        {
+            var disposableMesh2D = new DisposableMesh2D
+            {
+                NodeX = newMesh2DNative.node_x.CreateValueArray<double>(newMesh2DNative.num_nodes),
+                NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
+                EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
+                NumEdges = newMesh2DNative.num_edges,
+                NumNodes = newMesh2DNative.num_nodes
+            };
+
+            if (addCellInformation && newMesh2DNative.num_faces > 0)
+            {
+                disposableMesh2D.NumFaces = newMesh2DNative.num_faces;
+                disposableMesh2D.NodesPerFace = newMesh2DNative.nodes_per_face.CreateValueArray<int>(newMesh2DNative.num_faces);
+                int numFaceNodes = disposableMesh2D.NodesPerFace.Sum();
+                disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(numFaceNodes);
+                disposableMesh2D.FaceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
+                disposableMesh2D.FaceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
+            }
+
+            return disposableMesh2D;
+        }
+
+        internal static DisposableCurvilinearGrid CreateDisposableCurvilinearGrid(this CurvilinearGridNative curvilinearGridNative)
+        {
+            var disposableCurvilinearGrid = new DisposableCurvilinearGrid
+            {
+                NumM = curvilinearGridNative.num_m,
+                NumN = curvilinearGridNative.num_n,
+                NodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
+                NodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
+            };
+
+            return disposableCurvilinearGrid;
+        }
+
+        internal static DisposableContacts CreateDisposableContacts(this ContactsNative contactsNative)
+        {
+            var disposableContacts = new DisposableContacts
+            {
+                Mesh1dIndices = contactsNative.mesh1d_indices.CreateValueArray<int>(contactsNative.num_contacts),
+                Mesh2dIndices = contactsNative.mesh2d_indices.CreateValueArray<int>(contactsNative.num_contacts),
+                NumContacts = contactsNative.num_contacts
+            };
+
+            return disposableContacts;
+        }
+
         private static void AddCoordinatesToArrays(Coordinate[] interiorRingCoordinates,
             ICollection<double> xCoordinates,
             ICollection<double> yCoordinates,

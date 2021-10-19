@@ -618,6 +618,31 @@ namespace MeshKernelNETCore.Native
         #endregion
 
         /// <summary>
+        /// Interpolates the supplied values to the provided grid using triangulation
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="samples">List of sample values</param>
+        /// <param name="locationType">Location type to interpolate to</param>
+        /// <param name="results">Interpolated values list</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_triangulation_interpolation", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dTriangulationInterpolation(int meshKernelId, [In] ref GeometryListNative samples, int locationType, [In, Out] ref GeometryListNative results);
+
+        /// <summary>
+        /// Interpolates the supplied values to the provided grid using averaging
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="samples">List of sample values</param>
+        /// <param name="locationType">Location type to interpolate to</param>
+        /// <param name="averagingMethodType">Type of averaging to do</param>
+        /// <param name="relativeSearchSize">The search radius to use</param>
+        /// <param name="minNumSamples">Minimum number of samples needed</param>
+        /// <param name="results">Interpolated values list</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_averaging_interpolation", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dAveragingInterpolation(int meshKernelId, [In] ref GeometryListNative samples, int locationType, int averagingMethodType, double relativeSearchSize, UInt64 minNumSamples, [In, Out] ref GeometryListNative results);
+        
+        /// <summary>
         /// Sets the meshkernel::Mesh1D state
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -625,5 +650,6 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh1d_set", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh1dSet(int meshKernelId, [In] ref Mesh1DNative mesh1d);
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using MeshKernelNETCore.Helpers;
 using MeshKernelNETCore.Native;
 
@@ -46,7 +47,7 @@ namespace MeshKernelNETCore.Api
 
             MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2D);
 
-            return CreateDisposableMesh2D(newMesh2D, true);
+            return newMesh2D.CreateDisposableMesh2D(true);
         }
 
         /// <inheritdoc />
@@ -145,6 +146,7 @@ namespace MeshKernelNETCore.Api
             var geometryListNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dGetMeshBoundariesAsPolygons(meshKernelId, ref geometryListNative) == 0;
         }
+
         public bool Mesh2dRefineBasedOnSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, MeshRefinementParameters meshRefinementParameters)
         {
             var disposableGeometryListInNative = disposableGeometryListIn.CreateNativeObject();
@@ -180,6 +182,7 @@ namespace MeshKernelNETCore.Api
         {
             return MeshKernelDll.Mesh2dGetNodeIndex(meshKernelId, xCoordinateIn, yCoordinateIn, searchRadius, ref vertexIndex) == 0;
         }
+
         public bool Mesh2dGetClosestNode(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius, ref double xCoordinateOut, ref double yCoordinateOut)
         {
             return MeshKernelDll.Mesh2dGetClosestNode(meshKernelId, xCoordinateIn, yCoordinateIn, searchRadius, ref xCoordinateOut, ref yCoordinateOut) == 0;
@@ -256,8 +259,7 @@ namespace MeshKernelNETCore.Api
                 secondNode,
                 thirdNode) == 0;
         }
-
-
+        
         public bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative)
         {
             return MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGridNative) == 0;
@@ -282,7 +284,7 @@ namespace MeshKernelNETCore.Api
 
             MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
 
-            return CreateDisposableCurvilinearGrid(curvilinearGrid);
+            return curvilinearGrid.CreateDisposableCurvilinearGrid();
         }
 
         public bool GetSplines(DisposableGeometryList disposableGeometryListIn, ref DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices)
@@ -297,8 +299,7 @@ namespace MeshKernelNETCore.Api
             disposableGeometryListOut.NumberOfCoordinates = geometryListOut.numberOfCoordinates;
             return true;
         }
-
-
+        
         public bool PolygonCountOffset(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
         {
             var geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
@@ -391,7 +392,7 @@ namespace MeshKernelNETCore.Api
 
             MeshKernelDll.ContactsGetData(meshKernelId, ref contacts);
 
-            return CreateDisposableContacts(contacts);
+            return contacts.CreateDisposableContacts();
         }
 
         public double GetSeparator()
@@ -410,55 +411,6 @@ namespace MeshKernelNETCore.Api
         {
             var mesh1D = disposableMesh1D.CreateNativeObject();
             return MeshKernelDll.Mesh1dSet(meshKernelId, ref mesh1D) == 0;
-        }
-
-        private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)
-        {
-            var disposableMesh2D = new DisposableMesh2D
-            {
-                NodeX = newMesh2DNative.node_x.CreateValueArray<double>(newMesh2DNative.num_nodes),
-                NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
-                EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
-                NumEdges = newMesh2DNative.num_edges,
-                NumNodes = newMesh2DNative.num_nodes
-            };
-
-            if (addCellInformation && newMesh2DNative.num_faces > 0)
-            {
-                disposableMesh2D.NumFaces = newMesh2DNative.num_faces;
-                disposableMesh2D.NodesPerFace = newMesh2DNative.nodes_per_face.CreateValueArray<int>(newMesh2DNative.num_faces);
-                int numFaceNodes = disposableMesh2D.NodesPerFace.Sum();
-                disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(numFaceNodes);
-                disposableMesh2D.FaceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
-                disposableMesh2D.FaceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
-            }
-
-            return disposableMesh2D;
-        }
-
-        private DisposableCurvilinearGrid CreateDisposableCurvilinearGrid(CurvilinearGridNative curvilinearGridNative)
-        {
-            var disposableCurvilinearGrid = new DisposableCurvilinearGrid
-            {
-                NumM = curvilinearGridNative.num_m,
-                NumN = curvilinearGridNative.num_n,
-                NodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
-                NodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
-            };
-
-            return disposableCurvilinearGrid;
-        }
-
-        private DisposableContacts CreateDisposableContacts(ContactsNative contactsNative)
-        {
-            var disposableContacts = new DisposableContacts
-            {
-                Mesh1dIndices = contactsNative.mesh1d_indices.CreateValueArray<int>(contactsNative.num_contacts),
-                Mesh2dIndices = contactsNative.mesh2d_indices.CreateValueArray<int>(contactsNative.num_contacts),
-                NumContacts = contactsNative.num_contacts
-            };
-
-            return disposableContacts;
         }
 
         public void Dispose()

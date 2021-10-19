@@ -815,7 +815,7 @@ namespace MeshKernelNETCoreTest.Api
                     var geometryListIn = new DisposableGeometryList();
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 16;
+                    geometryListIn.NumberOfCoordinates = 4;
 
                     geometryListIn.XCoordinates = new[]
                     {
@@ -846,15 +846,12 @@ namespace MeshKernelNETCoreTest.Api
                     bool innerOffsetedPolygon = false;
                     Assert.IsTrue(api.PolygonCountOffset(id, ref geometryListIn, innerOffsetedPolygon,
                         distance, ref numberOfPolygonVertices));
-                    Assert.AreEqual(16, numberOfPolygonVertices);
+                    Assert.AreEqual(4, numberOfPolygonVertices);
 
                     var disposableGeometryListOut = new DisposableGeometryList();
                     bool success = api.PolygonGetOffset(id, ref geometryListIn, innerOffsetedPolygon, distance,
                         ref disposableGeometryListOut);
                     Assert.IsTrue(success);
-
-                    var mesh2d = api.Mesh2dGetData(id);
-                    Assert.NotNull(mesh2d);
 
                 }
                 finally

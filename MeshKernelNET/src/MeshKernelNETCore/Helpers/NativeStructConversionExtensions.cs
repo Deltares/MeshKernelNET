@@ -28,7 +28,6 @@ namespace MeshKernelNETCore.Helpers
         {
             return new MakeGridParametersNative
             {
-                GridType = (int)makeGridParameters.GridType,
                 NumberOfColumns = makeGridParameters.NumberOfColumns,
                 NumberOfRows = makeGridParameters.NumberOfRows,
                 GridAngle = makeGridParameters.GridAngle,

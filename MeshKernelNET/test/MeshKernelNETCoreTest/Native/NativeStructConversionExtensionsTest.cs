@@ -37,7 +37,6 @@ namespace MeshKernelNETCoreTest.Native
             var native = makeGridParameters.ToMakeGridParametersNative();
 
             // Assert
-            Assert.AreEqual(native.GridType, (int)makeGridParameters.GridType);
             Assert.AreEqual(native.NumberOfColumns, makeGridParameters.NumberOfColumns);
             Assert.AreEqual(native.NumberOfRows, makeGridParameters.NumberOfRows);
             Assert.AreEqual(native.GridAngle, makeGridParameters.GridAngle);

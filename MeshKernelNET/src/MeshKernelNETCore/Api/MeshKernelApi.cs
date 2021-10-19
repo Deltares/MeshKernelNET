@@ -208,25 +208,42 @@ namespace MeshKernelNETCore.Api
         {
             return MeshKernelDll.Mesh2dMoveNode(meshKernelId, xCoordinate, yCoordinate, vertexIndex) == 0;
         }
-        
-        /// <inheritdoc/>
-        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples)
-        {
-            var resultListNative = new GeometryListNative();
-            var samplesNative = samples.CreateNativeObject();
 
-            MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId, ref samplesNative, (int) location, (int) method, searchRadius, Convert.ToUInt64(minimumNumberOfSamples), ref resultListNative);
+        /// <inheritdoc/>
+        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples, int numLocations)
+        {
+            var resultList = new DisposableGeometryList
+            {
+                XCoordinates = new double[numLocations],
+                YCoordinates = new double[numLocations],
+                Values = new double[numLocations],
+                NumberOfCoordinates = numLocations,
+            };
+
+            var samplesNative = samples.CreateNativeObject();
+            var resultListNative = resultList.CreateNativeObject();
+
+            MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId, ref samplesNative, (int)location, (int)method, searchRadius, Convert.ToUInt64(minimumNumberOfSamples), ref resultListNative);
 
             return resultListNative.CreateDisposableGeometryList();
         }
 
         /// <inheritdoc/>
-        public DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
+        public DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, int numLocations)
         {
-            var resultListNative = new GeometryListNative();
             var samplesNative = samples.CreateNativeObject();
 
-            MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, (int)location,ref resultListNative);
+            var resultList = new DisposableGeometryList
+            {
+                XCoordinates = new double[numLocations],
+                YCoordinates = new double[numLocations],
+                Values = new double[numLocations],
+                NumberOfCoordinates = numLocations,
+            };
+
+            var resultListNative = resultList.CreateNativeObject();
+
+            MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, (int)location, ref resultListNative);
 
             return resultListNative.CreateDisposableGeometryList();
         }
@@ -281,7 +298,7 @@ namespace MeshKernelNETCore.Api
                 secondNode,
                 thirdNode) == 0;
         }
-        
+
         public bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative)
         {
             return MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGridNative) == 0;
@@ -321,7 +338,7 @@ namespace MeshKernelNETCore.Api
             disposableGeometryListOut.NumberOfCoordinates = geometryListOut.numberOfCoordinates;
             return true;
         }
-        
+
         public bool PolygonCountOffset(int meshKernelId, ref DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
         {
             var geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();

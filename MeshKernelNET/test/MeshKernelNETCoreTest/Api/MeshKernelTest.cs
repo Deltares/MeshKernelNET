@@ -391,7 +391,7 @@ namespace MeshKernelNETCoreTest.Api
             // |         |         |         | 
             //12 ------ 13 ------ 14 ------ 15 
             //
-            
+
 
             // Setup
             using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
@@ -402,10 +402,11 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    var mesh_with_faces = api.Mesh2dGetData(id);
 
                     var geometryList = new DisposableGeometryList
                     {
-                        XCoordinates = new []{10.0, 110.0, 260.0},
+                        XCoordinates = new[] { 10.0, 110.0, 260.0 },
                         YCoordinates = new[] { 10.0, 210.0, 460.0 },
                         Values = new[] { 10.0, 20.0, 30.0 },
                         NumberOfCoordinates = 3,
@@ -413,10 +414,10 @@ namespace MeshKernelNETCoreTest.Api
                         InnerOuterSeparator = api.GetInnerOuterSeparator()
                     };
 
-                    var resultGeometryList = api.Mesh2dTriangulationInterpolation(id, geometryList, MeshLocation.Faces);
+                    var resultGeometryList = api.Mesh2dTriangulationInterpolation(id, geometryList, MeshLocation.Faces, mesh_with_faces.NumFaces);
 
                     Assert.NotNull(resultGeometryList);
-                    Assert.AreEqual(3, resultGeometryList.NumberOfCoordinates);
+                    Assert.AreEqual(9, resultGeometryList.NumberOfCoordinates);
                 }
                 finally
                 {

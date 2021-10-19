@@ -291,8 +291,9 @@ namespace MeshKernelNETCore.Api
         /// <param name="method">Type of averaging to do</param>
         /// <param name="searchRadius">The search radius to use</param>
         /// <param name="minimumNumberOfSamples">Minimum number of samples needed</param>
+        /// <param name="numLocations">The number of locations</param>
         /// <returns></returns>
-        DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples);
+        DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples, int numLocations);
 
         /// <summary>
         /// Interpolates the supplied values to the provided grid using triangulation
@@ -300,8 +301,9 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="samples">List of sample values</param>
         /// <param name="location">Location type to interpolate to</param>
+        /// <param name="numLocations">The number of locations</param>
         /// <returns></returns>
-        DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location);
+        DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, int numLocations);
 
         /// <summary>
         ///     Make a new grid

@@ -184,7 +184,7 @@ namespace MeshKernelNETCore.Helpers
             };
         }
 
-        public static DisposableGeometryList CreateEmptyDisposableGeometryList(int length, double geometrySeparator, double innerOuterSeparator)
+        public static DisposableGeometryList CreateEmptyDisposableGeometryList(this int length, double geometrySeparator, double innerOuterSeparator)
         {
             return new DisposableGeometryList
             {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNETCore.Api;
 using NUnit.Framework;
@@ -370,28 +372,58 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void Mesh2dTriangulationInterpolation()
+        [TestCase(MeshLocation.Faces, new []
         {
-
-            // Before                          
-            // 0 ------- 1 ------- 2 ------- 3 
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            // 4 ------- 5 ------- 6 ------- 7 
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            // 8 ------- 9 ------ 10 ------ 11  
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            // |         |         |         | 
-            //12 ------ 13 ------ 14 ------ 15 
+            -999.0,   10.0,   10.0, 
+            -999.0, -999.0,   10.0, 
+            -999.0, -999.0, -999.0
+        })]
+        [TestCase(MeshLocation.Nodes, new[]
+        {
+            -999.0, -999.0, -999.0, -999.0, 
+            -999.0, -999.0, 10.0, 10.0, 
+            -999.0, -999.0, -999.0, 10.0,
+            -999.0, -999.0, -999.0, 10.0
+        })]
+        [TestCase(MeshLocation.Edges, new[]
+        {
+            -999.0,-999.0,  10.0,  10.0,
+            -999.0,-999.0,-999.0,  10.0,
+            -999.0,-999.0,-999.0,  10.0,
+            -999.0,-999.0,-999.0,-999.0,
+            -999.0,  10.0,-999.0,-999.0,
+              10.0,-999.0,-999.0,-999.0
+        })]
+        public void Mesh2dTriangulationInterpolation(MeshLocation location, double[] expectedResult)
+        {
+            //      X                           X
             //
-
+            // 3 ------- 7 ------ 11 ------- 15 600
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 2 ------- 6 ------- 10 ------ 14 400
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |    X    |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 1 ------- 5 ------- 9 ------- 13 200
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         |  
+            // |         |         |         | 
+            // |         |         |         |  
+            // 0 ------- 4 ------- 8 ------- 12 X 0
+            // 0        100       200       300    
 
             // Setup
             using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
@@ -402,22 +434,21 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
-                    var mesh_with_faces = api.Mesh2dGetData(id);
 
                     var geometryList = new DisposableGeometryList
                     {
-                        XCoordinates = new[] { 10.0, 110.0, 260.0 },
-                        YCoordinates = new[] { 10.0, 210.0, 460.0 },
-                        Values = new[] { 10.0, 20.0, 30.0 },
+                        XCoordinates = new[] { 50.0, 50.0, 350.0, 350.0 },
+                        YCoordinates = new[] { 300.0, 650.0, 650.0, 0 },
+                        Values = new[] { 10.0, 10.0, 10.0, 10.0 },
                         NumberOfCoordinates = 3,
                         GeometrySeparator = api.GetSeparator(),
                         InnerOuterSeparator = api.GetInnerOuterSeparator()
                     };
 
-                    var resultGeometryList = api.Mesh2dTriangulationInterpolation(id, geometryList, MeshLocation.Faces, mesh_with_faces.NumFaces);
+                    var resultGeometryList = api.Mesh2dTriangulationInterpolation(id, geometryList, location);
 
                     Assert.NotNull(resultGeometryList);
-                    Assert.AreEqual(9, resultGeometryList.NumberOfCoordinates);
+                    Assert.AreEqual(expectedResult, resultGeometryList.Values);
                 }
                 finally
                 {
@@ -426,7 +457,93 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
+        [Test]
+        [TestCase(MeshLocation.Faces, new[]
+        {
+            10.0,10.0,20.0,
+            10.0,10.0,20.0,
+            10.0,10.0,10.0
+            
+        })]
+        [TestCase(MeshLocation.Nodes, new[]
+        {
+            10.0,10.0,10.0,20.0,
+            10.0,10.0,10.0,20.0,
+            10.0,10.0,10.0,20.0,
+            10.0,10.0,10.0,10.0
+        })]
+        [TestCase(MeshLocation.Edges, new[]
+        {
+            10.0,10.0,10.0,20.0,
+            10.0,10.0,10.0,20.0,
+            10.0,10.0,10.0,15.0,
+            10.0,10.0,15.0,10.0,
+            10.0,15.0,10.0,10.0,
+            15.0,10.0,10.0,10.0
+        })]
+        public void Mesh2dAveragingInterpolation(MeshLocation location, double[] expectedResult)
+        {
+            //      X                           X
+            //
+            // 3 ------- 7 ------ 11 ------- 15 600
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 2 ------- 6 ------- 10 ------ 14 400
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |    X    |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // 1 ------- 5 ------- 9 ------- 13 200
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         | 
+            // |         |         |         |  
+            // |         |         |         | 
+            // |         |         |         |  
+            // 0 ------- 4 ------- 8 ------- 12 X 0
+            // 0        100       200       300    
 
+            // Setup
+            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var geometryList = new DisposableGeometryList
+                    {
+                        XCoordinates = new[] { 50.0, 50.0, 350.0, 350.0 },
+                        YCoordinates = new[] { 300.0, 650.0, 650.0, 0 },
+                        Values = new[] { 10.0, 20.0, 10.0, 30.0 },
+                        NumberOfCoordinates = 3,
+                        GeometrySeparator = api.GetSeparator(),
+                        InnerOuterSeparator = api.GetInnerOuterSeparator()
+                    };
+
+                    var resultGeometryList = api.Mesh2dAveragingInterpolation(id, geometryList, location, AveragingMethod.ClosestPoint,100, 1);
+
+                    Assert.NotNull(resultGeometryList);
+                    Console.WriteLine(string.Join(',', resultGeometryList.Values.Select(c => c.ToString("N1", CultureInfo.InvariantCulture))));
+                    Assert.AreEqual(expectedResult, resultGeometryList.Values);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
 
         [Test]
         public void Mesh2dInitializeOrthogonalizationThroughApi()

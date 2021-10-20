@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using MeshKernelNETCore.Helpers;
 using MeshKernelNETCore.Native;
 
@@ -210,42 +208,35 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc/>
-        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples, int numLocations)
+        public DisposableGeometryList Mesh2dAveragingInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, AveragingMethod method, double searchRadius, int minimumNumberOfSamples)
         {
-            var resultList = new DisposableGeometryList
-            {
-                XCoordinates = new double[numLocations],
-                YCoordinates = new double[numLocations],
-                Values = new double[numLocations],
-                NumberOfCoordinates = numLocations,
-            };
-
             var samplesNative = samples.CreateNativeObject();
-            var resultListNative = resultList.CreateNativeObject();
+            var numberOfLocations = GetNumberOfLocations(meshKernelId, location);
 
-            MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId, ref samplesNative, (int)location, (int)method, searchRadius, Convert.ToUInt64(minimumNumberOfSamples), ref resultListNative);
+            using (var resultList = numberOfLocations.CreateEmptyDisposableGeometryList(GetSeparator(), GetInnerOuterSeparator()))
+            {
+                var resultListNative = resultList.CreateNativeObject();
 
-            return resultListNative.CreateDisposableGeometryList();
+                MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId, ref samplesNative, (int)location, (int)method, searchRadius, Convert.ToUInt64(minimumNumberOfSamples), ref resultListNative);
+
+                return resultListNative.CreateDisposableGeometryList();
+            }
         }
 
         /// <inheritdoc/>
-        public DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location, int numLocations)
+        public DisposableGeometryList Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, MeshLocation location)
         {
             var samplesNative = samples.CreateNativeObject();
+            var numberOfLocations = GetNumberOfLocations(meshKernelId, location);
 
-            var resultList = new DisposableGeometryList
+            using (var resultList = numberOfLocations.CreateEmptyDisposableGeometryList(GetSeparator(), GetInnerOuterSeparator()))
             {
-                XCoordinates = new double[numLocations],
-                YCoordinates = new double[numLocations],
-                Values = new double[numLocations],
-                NumberOfCoordinates = numLocations,
-            };
+                var resultListNative = resultList.CreateNativeObject();
 
-            var resultListNative = resultList.CreateNativeObject();
+                MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, (int)location, ref resultListNative);
 
-            MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, (int)location, ref resultListNative);
-
-            return resultListNative.CreateDisposableGeometryList();
+                return resultListNative.CreateDisposableGeometryList();
+            }
         }
 
         public bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList disposableGeometryListIn)
@@ -455,6 +446,26 @@ namespace MeshKernelNETCore.Api
         public void Dispose()
         {
             // Do nothing because no remoting is used
+        }
+
+        private static int GetNumberOfLocations(int meshKernelId, MeshLocation location)
+        {
+            var mesh = new Mesh2DNative();
+
+            MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref mesh);
+
+            switch (location)
+            {
+                case MeshLocation.Faces:
+                    return mesh.num_faces;
+                case MeshLocation.Nodes:
+                    return mesh.num_nodes;
+                case MeshLocation.Edges:
+                    return mesh.num_edges;
+                case MeshLocation.None:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(location), location, "Location not specified");
+            }
         }
     }
 }

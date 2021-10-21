@@ -271,6 +271,7 @@ namespace MeshKernelNETCore.Helpers
                 disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(numFaceNodes);
                 disposableMesh2D.FaceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
                 disposableMesh2D.FaceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
+                disposableMesh2D.NumFaceNodes = disposableMesh2D.NodesPerFace.Max();
             }
 
             return disposableMesh2D;

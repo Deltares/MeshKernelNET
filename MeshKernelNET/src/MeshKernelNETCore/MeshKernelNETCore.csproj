@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Deltares.MeshKernel" Version="1.0.0-dev.1340" />
+		<PackageReference Include="Deltares.MeshKernel" Version="1.0.0.32-SIGNED" />
 		<PackageReference Include="NetTopologySuite" Version="1.15.3" />
 		<PackageReference Include="protobuf-net" Version="2.4.6" />
 	</ItemGroup>

@@ -10,7 +10,6 @@
     <description>This is a package containing a managed dll wrapping around the native dll of MeshKernel. This native dll is a library containing functionality to generate and edit 1D, 2D meshes.</description>
     <copyright>Deltares</copyright>
     <dependencies>
-      <dependency id="ProtoBufRemote" version="1.0.11"/>
       <dependency id="NetTopologySuite" version="1.15.0"/>
     </dependencies>
   </metadata>

@@ -1540,15 +1540,12 @@ namespace MeshKernelNETCoreTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
                     geometryListIn.GeometrySeparator = api.GetSeparator();
 
-
-                    int inside = 1;
-                    var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, inside);
+                    var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1);
                     Assert.AreEqual(selectedVertices.Length, 4);
                 }
                 finally
                 {
                     api.DeallocateState(id);
-
                 }
             }
         }

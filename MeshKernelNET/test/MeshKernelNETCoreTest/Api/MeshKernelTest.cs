@@ -1519,5 +1519,35 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
+        [Test]
+        public void GetSelectedVerticesInPolygonThroughAPI()
+        {
+            using (var mesh = GenerateRegularGrid(4, 4, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var geometryListIn = new DisposableGeometryList();
+
+                    geometryListIn.XCoordinates = new[] {  1.5, 1.5, 3.5,  3.5,  1.5 };
+                    geometryListIn.YCoordinates = new[] { -1.5, 1.5, 1.5, -1.5, -1.5 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+                    geometryListIn.GeometrySeparator = api.GetSeparator();
+
+                    var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1);
+                    Assert.AreEqual(selectedVertices.Length, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
     }
 }

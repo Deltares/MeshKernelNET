@@ -587,7 +587,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="selectedVerticesPtr">The selected vertices nodes</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetSelectedVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In, Out] ref IntPtr selectedVerticesPtr);
+        internal static extern int GetSelectedVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In, Out] IntPtr selectedVerticesPtr);
 
     }
 }

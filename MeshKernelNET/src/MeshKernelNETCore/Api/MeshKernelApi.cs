@@ -334,7 +334,7 @@ namespace MeshKernelNETCore.Api
             int numberOfMeshVertices = -1;
             MeshKernelDll.CountVerticesInPolygon(meshKernelId, ref geometryListNativeIn, inside, ref numberOfMeshVertices);
             IntPtr selectedVerticesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * numberOfMeshVertices);
-            MeshKernelDll.GetSelectedVerticesInPolygon(meshKernelId, ref geometryListNativeIn, inside, ref selectedVerticesPtr);
+            MeshKernelDll.GetSelectedVerticesInPolygon(meshKernelId, ref geometryListNativeIn, inside, selectedVerticesPtr);
             int[] selectedVertices = new int[numberOfMeshVertices];
             Marshal.Copy(selectedVerticesPtr, selectedVertices, 0, numberOfMeshVertices);
             return selectedVertices;

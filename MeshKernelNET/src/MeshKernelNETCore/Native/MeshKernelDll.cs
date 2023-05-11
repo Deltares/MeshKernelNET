@@ -289,6 +289,16 @@ namespace MeshKernelNETCore.Native
         internal static extern int Mesh2dMergeTwoNodes([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex);
 
         /// <summary>
+        /// Gets the selected mesh node indexes
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListIn">The input polygons</param>
+        /// <param name="selectedVerticesPtr">The selected vertices nodes</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetSelectedVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In,Out] IntPtr selectedVerticesPtr);
+
+        /// <summary>
         /// Counts the number of selected mesh node indexes
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
@@ -579,15 +589,6 @@ namespace MeshKernelNETCore.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_inner_outer_separator", CallingConvention = CallingConvention.Cdecl)]
         internal static extern double GetInnerOuterSeparator();
 
-        /// <summary>
-        /// Gets the selected mesh node indexes
-        /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="geometryListIn">The input polygons</param>
-        /// <param name="selectedVerticesPtr">The selected vertices nodes</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetSelectedVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In, Out] ref IntPtr selectedVerticesPtr);
-
+        
     }
 }

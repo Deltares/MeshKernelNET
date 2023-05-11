@@ -470,7 +470,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListIn">The input polygons</param>
         /// <param name="numberOfMeshVertices">The number of selected nodes</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_count_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_count_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CountVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In, Out] ref int numberOfMeshVertices);
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryListIn">The input polygons</param>
         /// <param name="selectedVerticesPtr">The selected vertices nodes</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_nodes_in_polygons", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetSelectedVerticesInPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int inside, [In, Out] ref IntPtr selectedVerticesPtr);
 
         /// <summary>

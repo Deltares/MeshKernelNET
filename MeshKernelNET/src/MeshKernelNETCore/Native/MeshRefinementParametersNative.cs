@@ -53,6 +53,6 @@
         /// <summary>
         /// Directional refinement, cannot be used when the number of smoothing iterations is larger than 0
         /// </summary>
-        public double DirectionalRefinement { get; set; }
+        public int DirectionalRefinement { get; set; }
     }
 }

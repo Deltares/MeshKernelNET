@@ -18,9 +18,9 @@ namespace MeshKernelNETCore.Helpers
                 OuterIterations = orthogonalizationParameters.OuterIterations,
                 BoundaryIterations = orthogonalizationParameters.BoundaryIterations,
                 InnerIterations = orthogonalizationParameters.InnerIterations,
-                OrthogonalizationToSmoothingFactor = 0.975,
-                OrthogonalizationToSmoothingFactorAtBoundary = 1,
-                ArealToAngleSmoothingFactor = 1.0
+                OrthogonalizationToSmoothingFactor = orthogonalizationParameters.OrthogonalizationToSmoothingFactor,
+                OrthogonalizationToSmoothingFactorAtBoundary = orthogonalizationParameters.OrthogonalizationToSmoothingFactorAtBoundary,
+                ArealToAngleSmoothingFactor = orthogonalizationParameters.ArealToAngleSmoothingFactor
             };
         }
 

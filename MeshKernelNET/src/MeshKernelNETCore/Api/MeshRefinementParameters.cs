@@ -9,12 +9,16 @@ namespace MeshKernelNETCore.Api
         {
             return new MeshRefinementParameters
             {
-                MaxNumRefinementIterations = 3,
+                MaxNumRefinementIterations = 10,
                 RefineIntersected = 0,
+                UseMassCenterWhenRefining = 1,
+                MinEdgeSize = 0.5,
                 RefinementType = 2,
                 ConnectHangingNodes = 1,
-                UseMassCenterWhenRefining = 1,
-                MinFaceSize = 0.5
+                AccountForSamplesOutside = 0,
+                SmoothingIterations = 5,
+                MaxCourantTime = 120.0,
+                DirectionalRefinement = 0
             };
         }
 
@@ -37,10 +41,10 @@ namespace MeshKernelNETCore.Api
         public int UseMassCenterWhenRefining { get; set; }
 
         /// <summary>
-        /// Minimum cell size
+        /// Minimum edge size
         /// </summary>
         [ProtoMember(4)]
-        public double MinFaceSize { get; set; }
+        public double MinEdgeSize { get; set; }
 
         /// <summary>
         /// Refinement criterion type
@@ -59,5 +63,23 @@ namespace MeshKernelNETCore.Api
         /// </summary>
         [ProtoMember(7)]
         public int AccountForSamplesOutside { get; set; }
+
+        /// <summary>
+        /// The number of smoothing iterations
+        /// </summary>
+        [ProtoMember(8)]
+        public int SmoothingIterations { get; set; }
+
+        /// <summary>
+        /// Maximum courant time in seconds
+        /// </summary>
+        [ProtoMember(9)]
+        public double MaxCourantTime { get; set; }
+
+        /// <summary>
+        /// Directional refinement, cannot be used when the number of smoothing iterations is larger than 0
+        /// </summary>
+        [ProtoMember(10)]
+        public int DirectionalRefinement { get; set; }
     }
 }

@@ -75,11 +75,13 @@ namespace MeshKernelNETCore.Helpers
                 MaxNumRefinementIterations = meshRefinementParameters.MaxNumRefinementIterations,
                 RefineIntersected = meshRefinementParameters.RefineIntersected,
                 UseMassCenterWhenRefining = meshRefinementParameters.UseMassCenterWhenRefining,
-                MinFaceSize = meshRefinementParameters.MinFaceSize,
+                MinEdgeSize = meshRefinementParameters.MinEdgeSize,
                 RefinementType = meshRefinementParameters.RefinementType,
                 ConnectHangingNodes = meshRefinementParameters.ConnectHangingNodes,
-                AccountForSamplesOutside = meshRefinementParameters.AccountForSamplesOutside
-
+                AccountForSamplesOutside = meshRefinementParameters.AccountForSamplesOutside,
+                SmoothingIterations = meshRefinementParameters.SmoothingIterations,
+                MaxCourantTime = meshRefinementParameters.MaxCourantTime,
+                DirectionalRefinement = meshRefinementParameters.DirectionalRefinement
             };
         }
 

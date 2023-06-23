@@ -7,15 +7,17 @@ namespace MeshKernelNETCore.Api
     [ProtoContract(AsReferenceDefault = true)]
     public class MakeGridParameters : INotifyPropertyChanged
     {
-        private double yGridBlockSize;
-        private double xGridBlockSize;
-        private double originZCoordinate;
-        private double originYCoordinate;
-        private double originXCoordinate;
-        private double gridBlockSize;
-        private double gridAngle;
         private int numberOfRows;
         private int numberOfColumns;
+        private double gridAngle;
+        private double originXCoordinate;
+        private double originYCoordinate;
+        private double xGridBlockSize;
+        private double yGridBlockSize;
+        private double upperRightXCoordinnate;
+        private double upperRightYCoordinnate;
+
+
         private GridTypeOptions gridType;
 
         public static MakeGridParameters CreateDefault()
@@ -23,15 +25,15 @@ namespace MeshKernelNETCore.Api
             return new MakeGridParameters
             {
                 GridType = GridTypeOptions.Square,
-                NumberOfColumns = 3,
-                NumberOfRows = 3,
+                NumberOfColumns = 0,
+                NumberOfRows = 0,
                 GridAngle = 0.0,
-                GridBlockSize = 10.0,
                 OriginXCoordinate = 0.0,
                 OriginYCoordinate = 0.0,
-                OriginZCoordinate = 0.0,
-                XGridBlockSize = 10.0,
-                YGridBlockSize = 10.0
+                XGridBlockSize = 0.0,
+                YGridBlockSize = 0.0,
+                UpperRightXCoordinate = 0.0,
+                UpperRightYCoordinate = 0.0
             };
         }
 
@@ -50,7 +52,7 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>   
-        /// * The number of columns in x direction (3)
+        /// * The number of columns in x direction (0)
         /// </summary>
         [ProtoMember(2)]
         public int NumberOfColumns
@@ -64,7 +66,7 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>
-        /// * The number of columns in y direction (3)
+        /// * The number of columns in y direction (0)
         /// </summary>
         [ProtoMember(3)]
         public int NumberOfRows
@@ -92,23 +94,9 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>
-        /// * The grid block size, used in x and y direction (50.0)
-        /// </summary>
-        [ProtoMember(5)]
-        public double GridBlockSize
-        {
-            get { return gridBlockSize; }
-            set
-            {
-                gridBlockSize = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
         /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
         /// </summary>
-        [ProtoMember(6)]
+        [ProtoMember(5)]
         public double OriginXCoordinate
         {
             get { return originXCoordinate; }
@@ -122,7 +110,7 @@ namespace MeshKernelNETCore.Api
         /// <summary>
         /// * The y coordinate of the origin, located at the bottom left corner (0.0)	 
         /// </summary>
-        [ProtoMember(7)]
+        [ProtoMember(6)]
         public double OriginYCoordinate
         {
             get { return originYCoordinate; }
@@ -134,23 +122,9 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>
-        /// * The z coordinate of the origin, located at the bottom left corner (0.0)	 
+        /// * The grid block size in x dimension, used only for squared grids (0.0) 
         /// </summary>
-        [ProtoMember(8)]
-        public double OriginZCoordinate
-        {
-            get { return originZCoordinate; }
-            set
-            {
-                originZCoordinate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// * The grid block size in x dimension, used only for squared grids (10.0) 
-        /// </summary>
-        [ProtoMember(9)]
+        [ProtoMember(7)]
         public double XGridBlockSize
         {
             get { return xGridBlockSize; }
@@ -162,15 +136,43 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <summary>
-        /// * The grid block size in y dimension, used only for squared grids (10.0) 
+        /// * The grid block size in y dimension, used only for squared grids (0.0) 
         /// </summary>
-        [ProtoMember(10)]
+        [ProtoMember(8)]
         public double YGridBlockSize
         {
             get { return yGridBlockSize; }
             set
             {
                 yGridBlockSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// *  The x coordinate of the upper right corner (0.0) 
+        /// </summary>
+        [ProtoMember(9)]
+        public double UpperRightXCoordinate
+        {
+            get { return upperRightXCoordinnate; }
+            set
+            {
+                upperRightXCoordinnate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// *  The x coordinate of the upper right corner (0.0) 
+        /// </summary>
+        [ProtoMember(10)]
+        public double UpperRightYCoordinate
+        {
+            get { return upperRightYCoordinnate; }
+            set
+            {
+                upperRightYCoordinnate = value;
                 OnPropertyChanged();
             }
         }

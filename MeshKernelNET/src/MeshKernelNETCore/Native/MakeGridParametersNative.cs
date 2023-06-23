@@ -6,12 +6,12 @@ namespace MeshKernelNETCore.Native
     public struct MakeGridParametersNative
     {
         /// <summary>   
-        /// * The number of columns in x direction (3)
+        /// * The number of columns in x direction (0)
         /// </summary>
         public int NumberOfColumns;
 
         /// <summary>
-        /// * The number of columns in y direction (3)
+        /// * The number of columns in y direction (0)
         /// </summary>
         public int NumberOfRows;
 
@@ -19,11 +19,6 @@ namespace MeshKernelNETCore.Native
         /// * The grid angle (0.0)
         /// </summary>
         public double GridAngle;
-
-        /// <summary>
-        /// * The grid block size, used in x and y direction (50.0)
-        /// </summary>
-        public double GridBlockSize;
 
         /// <summary>
         /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
@@ -36,7 +31,7 @@ namespace MeshKernelNETCore.Native
         public double OriginYCoordinate;
 
         /// <summary>
-        /// * The grid block size in x dimension, used only for squared grids (10.0) 
+        /// * The grid block size in x dimension, used only for squared grids (0.0) 
         /// </summary>
         public double XGridBlockSize;
 
@@ -44,5 +39,15 @@ namespace MeshKernelNETCore.Native
         /// * The grid block size in y dimension, used only for squared grids (10.0) 
         /// </summary>
         public double YGridBlockSize;
+
+        /// <summary>
+        /// * The x coordinate of the upper right corner (0.0) 
+        /// </summary>
+        public double UpperRightXCoordinate;
+
+        // <summary>
+        /// * The y coordinate of the upper right corner (0.0) 
+        /// </summary>
+        public double UpperRightYCoordinate;
     }
 }

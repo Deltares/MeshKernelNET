@@ -40,11 +40,12 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(native.NumberOfColumns, makeGridParameters.NumberOfColumns);
             Assert.AreEqual(native.NumberOfRows, makeGridParameters.NumberOfRows);
             Assert.AreEqual(native.GridAngle, makeGridParameters.GridAngle);
-            Assert.AreEqual(native.GridBlockSize, makeGridParameters.GridBlockSize);
             Assert.AreEqual(native.OriginXCoordinate, makeGridParameters.OriginXCoordinate);
             Assert.AreEqual(native.OriginYCoordinate, makeGridParameters.OriginYCoordinate);
             Assert.AreEqual(native.XGridBlockSize, makeGridParameters.XGridBlockSize);
             Assert.AreEqual(native.YGridBlockSize, makeGridParameters.YGridBlockSize);
+            Assert.AreEqual(native.UpperRightXCoordinate, makeGridParameters.UpperRightXCoordinate);
+            Assert.AreEqual(native.UpperRightYCoordinate, makeGridParameters.UpperRightYCoordinate);
         }
 
         [Test]

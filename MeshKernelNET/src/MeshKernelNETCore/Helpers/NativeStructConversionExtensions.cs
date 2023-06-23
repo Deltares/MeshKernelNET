@@ -31,11 +31,12 @@ namespace MeshKernelNETCore.Helpers
                 NumberOfColumns = makeGridParameters.NumberOfColumns,
                 NumberOfRows = makeGridParameters.NumberOfRows,
                 GridAngle = makeGridParameters.GridAngle,
-                GridBlockSize = makeGridParameters.GridBlockSize,
                 OriginXCoordinate = makeGridParameters.OriginXCoordinate,
                 OriginYCoordinate = makeGridParameters.OriginYCoordinate,
                 XGridBlockSize = makeGridParameters.XGridBlockSize,
-                YGridBlockSize = makeGridParameters.YGridBlockSize
+                YGridBlockSize = makeGridParameters.YGridBlockSize,
+                UpperRightXCoordinate = makeGridParameters.UpperRightXCoordinate,
+                UpperRightYCoordinate = makeGridParameters.UpperRightYCoordinate,
             };
         }
 

@@ -442,12 +442,12 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.NumberOfColumns = 3;
                     makeGridParameters.NumberOfRows = 3;
                     makeGridParameters.GridAngle = 0.0;
-                    makeGridParameters.GridBlockSize = 0.0;
                     makeGridParameters.OriginXCoordinate = 0.0;
                     makeGridParameters.OriginYCoordinate = 0.0;
-                    makeGridParameters.OriginZCoordinate = 0.0;
                     makeGridParameters.XGridBlockSize = 0.0;
                     makeGridParameters.YGridBlockSize = 0.0;
+                    makeGridParameters.UpperRightXCoordinate = 0.0;
+                    makeGridParameters.UpperRightYCoordinate = 0.0;
 
                     Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 

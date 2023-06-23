@@ -19,7 +19,8 @@ namespace MeshKernelNETCore.Api
                 AccountForSamplesOutside = false,
                 SmoothingIterations = 5,
                 MaxCourantTime = 120.0,
-                DirectionalRefinement = 0            };
+                DirectionalRefinement = false
+            };
         }
 
         /// <summary>
@@ -80,6 +81,6 @@ namespace MeshKernelNETCore.Api
         /// Directional refinement, cannot be used when the number of smoothing iterations is larger than 0
         /// </summary>
         [ProtoMember(10)]
-        public int DirectionalRefinement { get; set; }
+        public bool DirectionalRefinement { get; set; }
     }
 }

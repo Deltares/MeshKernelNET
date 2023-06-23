@@ -593,7 +593,7 @@ namespace MeshKernelNETCoreTest.Api
                     curvilinearParameters.MRefinement = 40;
                     curvilinearParameters.NRefinement = 10;
                     var splinesToCurvilinearParameters = SplinesToCurvilinearParameters.CreateDefault();
-                    splinesToCurvilinearParameters.GrowGridOutside = 0;
+                    splinesToCurvilinearParameters.GrowGridOutside = false;
 
 
                     Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id, ref geometryListIn,

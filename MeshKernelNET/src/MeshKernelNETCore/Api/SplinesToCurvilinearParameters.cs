@@ -11,15 +11,15 @@ namespace MeshKernelNETCore.Api
             {
                 AspectRatio = 0.1,
                 AspectRatioGrowFactor = 1.1,
-                AverageWidth = 500.0,
-                CurvatureAdaptedGridSpacing = 1,
-                GrowGridOutside = 1,
+                AverageWidth = 0.005,
+                CurvatureAdaptedGridSpacing = true,
+                GrowGridOutside = true,
                 MaximumNumberOfGridCellsInTheUniformPart = 5,
                 GridsOnTopOfEachOtherTolerance = 0.0001,
                 MinimumCosineOfCrossingAngles = 0.95,
-                CheckFrontCollisions = 0,
+                CheckFrontCollisions = false,
                 UniformGridSize = 0.0,
-                RemoveSkinnyTriangles = 1,
+                RemoveSkinnyTriangles = true,
             };
         }
 
@@ -45,13 +45,13 @@ namespace MeshKernelNETCore.Api
         /// * Curvature adapted grid spacing, 1 or not 0 (1)
         /// </summary>
         [ProtoMember(4)]
-        public int CurvatureAdaptedGridSpacing { get; set; }
+        public bool CurvatureAdaptedGridSpacing { get; set; }
 
         /// <summary>
         /// * Grow the grid outside the prescribed grid height (1)
         /// </summary>
         [ProtoMember(5)]
-        public int GrowGridOutside { get; set; }
+        public bool GrowGridOutside { get; set; }
 
         /// <summary>
         /// * Maximum number of layers in the uniform part (5)
@@ -75,7 +75,7 @@ namespace MeshKernelNETCore.Api
         /// * Check for collisions with other parts of the front, 1 or not 0 (0)
         /// </summary>
         [ProtoMember(9)]
-        public int CheckFrontCollisions { get; set; }
+        public bool CheckFrontCollisions { get; set; }
 
         /// <summary>
         /// * Uniform grid size, netboundary to grid only (0.0)
@@ -87,6 +87,6 @@ namespace MeshKernelNETCore.Api
         /// * Remove skinny triangles (1)
         /// </summary>
         [ProtoMember(11)]
-        public int RemoveSkinnyTriangles { get; set; }
+        public bool RemoveSkinnyTriangles { get; set; }
     }
 }

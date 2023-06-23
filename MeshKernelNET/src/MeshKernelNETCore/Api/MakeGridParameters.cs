@@ -26,7 +26,7 @@ namespace MeshKernelNETCore.Api
                 NumberOfColumns = 3,
                 NumberOfRows = 3,
                 GridAngle = 0.0,
-                GridBlockSize = 0.0,
+                GridBlockSize = 10.0,
                 OriginXCoordinate = 0.0,
                 OriginYCoordinate = 0.0,
                 OriginZCoordinate = 0.0,

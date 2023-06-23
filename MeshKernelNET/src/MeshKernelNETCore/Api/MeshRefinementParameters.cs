@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using System.Xml.Linq;
 
 namespace MeshKernelNETCore.Api
 {
@@ -10,16 +11,15 @@ namespace MeshKernelNETCore.Api
             return new MeshRefinementParameters
             {
                 MaxNumRefinementIterations = 10,
-                RefineIntersected = 0,
-                UseMassCenterWhenRefining = 1,
+                RefineIntersected = false,
+                UseMassCenterWhenRefining = true,
                 MinEdgeSize = 0.5,
                 RefinementType = 2,
-                ConnectHangingNodes = 1,
-                AccountForSamplesOutside = 0,
+                ConnectHangingNodes = true,
+                AccountForSamplesOutside = false,
                 SmoothingIterations = 5,
                 MaxCourantTime = 120.0,
-                DirectionalRefinement = 0
-            };
+                DirectionalRefinement = 0            };
         }
 
         /// <summary>
@@ -32,13 +32,13 @@ namespace MeshKernelNETCore.Api
         /// Whether to compute faces intersected by polygon (yes=1/no=0)
         /// </summary>
         [ProtoMember(2)]
-        public int RefineIntersected { get; set; }
+        public bool RefineIntersected { get; set; }
 
         /// <summary>
         /// Whether to use the mass center when splitting a face in the refinement process (yes=1/no=0)
         /// </summary>
         [ProtoMember(3)]
-        public int UseMassCenterWhenRefining { get; set; }
+        public bool UseMassCenterWhenRefining { get; set; }
 
         /// <summary>
         /// Minimum edge size
@@ -56,13 +56,13 @@ namespace MeshKernelNETCore.Api
         /// Connect hanging nodes at the end of the iteration, 1 yes or 0 no
         /// </summary>
         [ProtoMember(6)]
-        public int ConnectHangingNodes { get; set; }
+        public bool ConnectHangingNodes { get; set; }
 
         /// <summary>
         /// Take samples outside face into account , 1 yes 0 no
         /// </summary>
         [ProtoMember(7)]
-        public int AccountForSamplesOutside { get; set; }
+        public bool AccountForSamplesOutside { get; set; }
 
         /// <summary>
         /// The number of smoothing iterations

@@ -1319,7 +1319,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     var geometryListIn = new DisposableGeometryList();
-                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+                    double projectionFactor = 0.0;
+                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn, projectionFactor));
 
                     var contacts = api.ContactsGetData(id);
                     Assert.Greater(contacts.NumContacts, 0);

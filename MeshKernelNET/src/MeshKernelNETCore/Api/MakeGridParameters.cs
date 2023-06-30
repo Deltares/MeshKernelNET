@@ -25,13 +25,13 @@ namespace MeshKernelNETCore.Api
             return new MakeGridParameters
             {
                 GridType = GridTypeOptions.Square,
-                NumberOfColumns = 0,
-                NumberOfRows = 0,
+                NumberOfColumns = 3,
+                NumberOfRows = 3,
                 GridAngle = 0.0,
                 OriginXCoordinate = 0.0,
                 OriginYCoordinate = 0.0,
-                XGridBlockSize = 0.0,
-                YGridBlockSize = 0.0,
+                XGridBlockSize = 10.0,
+                YGridBlockSize = 10.0,
                 UpperRightXCoordinate = 0.0,
                 UpperRightYCoordinate = 0.0
             };

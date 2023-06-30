@@ -44,8 +44,8 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(native.OriginYCoordinate, makeGridParameters.OriginYCoordinate);
             Assert.AreEqual(native.XGridBlockSize, makeGridParameters.XGridBlockSize);
             Assert.AreEqual(native.YGridBlockSize, makeGridParameters.YGridBlockSize);
-            Assert.AreEqual(native.UpperRightXCoordinate, makeGridParameters.UpperRightXCoordinate);
-            Assert.AreEqual(native.UpperRightYCoordinate, makeGridParameters.UpperRightYCoordinate);
+            Assert.AreEqual(native.UpperRightCornerXCoordinate, makeGridParameters.UpperRightCornerXCoordinate);
+            Assert.AreEqual(native.UpperRightCornerYCoordinate, makeGridParameters.UpperRightCornerYCoordinate);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(parameters.AspectRatio, splinesToCurvilinearParameters.AspectRatio);
             Assert.AreEqual(parameters.AspectRatioGrowFactor, splinesToCurvilinearParameters.AspectRatioGrowFactor);
             Assert.AreEqual(parameters.AverageWidth, splinesToCurvilinearParameters.AverageWidth);
-            Assert.AreEqual(parameters.CurvatureAdaptedGridSpacing, splinesToCurvilinearParameters.CurvatureAdapetedGridSpacing);
+            Assert.AreEqual(parameters.CurvatureAdaptedGridSpacing, splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing);
             Assert.AreEqual(parameters.GrowGridOutside, splinesToCurvilinearParameters.GrowGridOutside);
             Assert.AreEqual(parameters.MaximumNumberOfGridCellsInTheUniformPart, splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart);
             Assert.AreEqual(parameters.GridsOnTopOfEachOtherTolerance, splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance);

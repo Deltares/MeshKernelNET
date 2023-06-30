@@ -14,8 +14,8 @@ namespace MeshKernelNETCore.Api
         private double originYCoordinate;
         private double xGridBlockSize;
         private double yGridBlockSize;
-        private double upperRightXCoordinnate;
-        private double upperRightYCoordinnate;
+        private double upperRightCornerXCoordinate;
+        private double upperRightCornerYCoordinate;
 
 
         private GridTypeOptions gridType;
@@ -32,8 +32,8 @@ namespace MeshKernelNETCore.Api
                 OriginYCoordinate = 0.0,
                 XGridBlockSize = 10.0,
                 YGridBlockSize = 10.0,
-                UpperRightXCoordinate = 0.0,
-                UpperRightYCoordinate = 0.0
+                UpperRightCornerXCoordinate = 0.0,
+                UpperRightCornerYCoordinate = 0.0
             };
         }
 
@@ -153,12 +153,12 @@ namespace MeshKernelNETCore.Api
         /// *  The x coordinate of the upper right corner (0.0) 
         /// </summary>
         [ProtoMember(9)]
-        public double UpperRightXCoordinate
+        public double UpperRightCornerXCoordinate
         {
-            get { return upperRightXCoordinnate; }
+            get { return upperRightCornerXCoordinate; }
             set
             {
-                upperRightXCoordinnate = value;
+                upperRightCornerXCoordinate = value;
                 OnPropertyChanged();
             }
         }
@@ -167,12 +167,12 @@ namespace MeshKernelNETCore.Api
         /// *  The x coordinate of the upper right corner (0.0) 
         /// </summary>
         [ProtoMember(10)]
-        public double UpperRightYCoordinate
+        public double UpperRightCornerYCoordinate
         {
-            get { return upperRightYCoordinnate; }
+            get { return upperRightCornerYCoordinate; }
             set
             {
-                upperRightYCoordinnate = value;
+                upperRightCornerYCoordinate = value;
                 OnPropertyChanged();
             }
         }

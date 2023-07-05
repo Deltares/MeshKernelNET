@@ -13,14 +13,14 @@
         public double AspectRatioGrowFactor { get; set; }
 
         /// <summary>
-        /// * Average mesh width on center spline (0.005)
+        /// * Average mesh width on center spline (500.0)
         /// </summary>
         public double AverageWidth { get; set; }
 
         /// <summary>
         /// * Curvature adapted grid spacing, 1 or not 0 (1)
         /// </summary>
-        public int CurvatureAdapetedGridSpacing { get; set; }
+        public int CurvatureAdaptedGridSpacing { get; set; }
 
         /// <summary>
         /// * Grow the grid outside the prescribed grid height (1)

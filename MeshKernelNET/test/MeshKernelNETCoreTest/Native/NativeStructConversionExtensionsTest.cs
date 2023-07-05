@@ -40,11 +40,12 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(native.NumberOfColumns, makeGridParameters.NumberOfColumns);
             Assert.AreEqual(native.NumberOfRows, makeGridParameters.NumberOfRows);
             Assert.AreEqual(native.GridAngle, makeGridParameters.GridAngle);
-            Assert.AreEqual(native.GridBlockSize, makeGridParameters.GridBlockSize);
             Assert.AreEqual(native.OriginXCoordinate, makeGridParameters.OriginXCoordinate);
             Assert.AreEqual(native.OriginYCoordinate, makeGridParameters.OriginYCoordinate);
             Assert.AreEqual(native.XGridBlockSize, makeGridParameters.XGridBlockSize);
             Assert.AreEqual(native.YGridBlockSize, makeGridParameters.YGridBlockSize);
+            Assert.AreEqual(native.UpperRightCornerXCoordinate, makeGridParameters.UpperRightCornerXCoordinate);
+            Assert.AreEqual(native.UpperRightCornerYCoordinate, makeGridParameters.UpperRightCornerYCoordinate);
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(parameters.AspectRatio, splinesToCurvilinearParameters.AspectRatio);
             Assert.AreEqual(parameters.AspectRatioGrowFactor, splinesToCurvilinearParameters.AspectRatioGrowFactor);
             Assert.AreEqual(parameters.AverageWidth, splinesToCurvilinearParameters.AverageWidth);
-            Assert.AreEqual(parameters.CurvatureAdaptedGridSpacing, splinesToCurvilinearParameters.CurvatureAdapetedGridSpacing);
+            Assert.AreEqual(parameters.CurvatureAdaptedGridSpacing, splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing);
             Assert.AreEqual(parameters.GrowGridOutside, splinesToCurvilinearParameters.GrowGridOutside);
             Assert.AreEqual(parameters.MaximumNumberOfGridCellsInTheUniformPart, splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart);
             Assert.AreEqual(parameters.GridsOnTopOfEachOtherTolerance, splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance);

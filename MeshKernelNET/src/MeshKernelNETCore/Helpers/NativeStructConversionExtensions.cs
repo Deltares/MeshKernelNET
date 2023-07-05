@@ -18,9 +18,9 @@ namespace MeshKernelNETCore.Helpers
                 OuterIterations = orthogonalizationParameters.OuterIterations,
                 BoundaryIterations = orthogonalizationParameters.BoundaryIterations,
                 InnerIterations = orthogonalizationParameters.InnerIterations,
-                OrthogonalizationToSmoothingFactor = 0.975,
-                OrthogonalizationToSmoothingFactorAtBoundary = 1,
-                ArealToAngleSmoothingFactor = 1.0
+                OrthogonalizationToSmoothingFactor = orthogonalizationParameters.OrthogonalizationToSmoothingFactor,
+                OrthogonalizationToSmoothingFactorAtBoundary = orthogonalizationParameters.OrthogonalizationToSmoothingFactorAtBoundary,
+                ArealToAngleSmoothingFactor = orthogonalizationParameters.ArealToAngleSmoothingFactor
             };
         }
 
@@ -31,11 +31,12 @@ namespace MeshKernelNETCore.Helpers
                 NumberOfColumns = makeGridParameters.NumberOfColumns,
                 NumberOfRows = makeGridParameters.NumberOfRows,
                 GridAngle = makeGridParameters.GridAngle,
-                GridBlockSize = makeGridParameters.GridBlockSize,
                 OriginXCoordinate = makeGridParameters.OriginXCoordinate,
                 OriginYCoordinate = makeGridParameters.OriginYCoordinate,
                 XGridBlockSize = makeGridParameters.XGridBlockSize,
-                YGridBlockSize = makeGridParameters.YGridBlockSize
+                YGridBlockSize = makeGridParameters.YGridBlockSize,
+                UpperRightCornerXCoordinate = makeGridParameters.UpperRightCornerXCoordinate,
+                UpperRightCornerYCoordinate = makeGridParameters.UpperRightCornerYCoordinate,
             };
         }
 
@@ -58,13 +59,13 @@ namespace MeshKernelNETCore.Helpers
                 AspectRatio = splinesToCurvilinearParameters.AspectRatio,
                 AspectRatioGrowFactor = splinesToCurvilinearParameters.AspectRatioGrowFactor,
                 AverageWidth = splinesToCurvilinearParameters.AverageWidth,
-                CurvatureAdapetedGridSpacing = splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing,
-                GrowGridOutside = splinesToCurvilinearParameters.GrowGridOutside,
+                CurvatureAdaptedGridSpacing = Convert.ToInt32(splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing),
+                GrowGridOutside = Convert.ToInt32(splinesToCurvilinearParameters.GrowGridOutside),
                 MaximumNumberOfGridCellsInTheUniformPart = splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart,
                 GridsOnTopOfEachOtherTolerance = splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance,
                 MinimumCosineOfCrossingAngles = splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles,
-                CheckFrontCollisions = splinesToCurvilinearParameters.CheckFrontCollisions,
-                RemoveSkinnyTriangles = splinesToCurvilinearParameters.RemoveSkinnyTriangles
+                CheckFrontCollisions = Convert.ToInt32(splinesToCurvilinearParameters.CheckFrontCollisions),
+                RemoveSkinnyTriangles = Convert.ToInt32(splinesToCurvilinearParameters.RemoveSkinnyTriangles)
             };
         }
 
@@ -73,13 +74,15 @@ namespace MeshKernelNETCore.Helpers
             return new MeshRefinementParametersNative
             {
                 MaxNumRefinementIterations = meshRefinementParameters.MaxNumRefinementIterations,
-                RefineIntersected = meshRefinementParameters.RefineIntersected,
-                UseMassCenterWhenRefining = meshRefinementParameters.UseMassCenterWhenRefining,
-                MinFaceSize = meshRefinementParameters.MinFaceSize,
+                RefineIntersected = Convert.ToInt32(meshRefinementParameters.RefineIntersected),
+                UseMassCenterWhenRefining = Convert.ToInt32(meshRefinementParameters.UseMassCenterWhenRefining),
+                MinEdgeSize = meshRefinementParameters.MinEdgeSize,
                 RefinementType = meshRefinementParameters.RefinementType,
-                ConnectHangingNodes = meshRefinementParameters.ConnectHangingNodes,
-                AccountForSamplesOutside = meshRefinementParameters.AccountForSamplesOutside
-
+                ConnectHangingNodes = Convert.ToInt32(meshRefinementParameters.ConnectHangingNodes),
+                AccountForSamplesOutside = Convert.ToInt32(meshRefinementParameters.AccountForSamplesOutside),
+                SmoothingIterations = meshRefinementParameters.SmoothingIterations,
+                MaxCourantTime = meshRefinementParameters.MaxCourantTime,
+                DirectionalRefinement = Convert.ToInt32(meshRefinementParameters.DirectionalRefinement)
             };
         }
 

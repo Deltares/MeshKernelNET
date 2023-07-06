@@ -349,10 +349,10 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc />
-        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
+        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double projectionFactor)
         {
             var geometryListNativeInputPolygon = polygons.CreateNativeObject();
-            return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
+            return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon, projectionFactor) == 0;
         }
 
         /// <inheritdoc />

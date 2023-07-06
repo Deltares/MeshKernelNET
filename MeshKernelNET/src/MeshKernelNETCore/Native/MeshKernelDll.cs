@@ -457,9 +457,10 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = connect node, 0 = do not connect)</param>
         /// <param name="polygons">The polygons selecting the area where the 1d-2d contacts will be generated</param>
+        /// <param name="projectionFactor">The projection factor used for generating the contacts when 1d nodes are not inside the 2d mesh</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_contacts_compute_single", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ContactsComputeSingle([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative polygons);
+        internal static extern int ContactsComputeSingle([In] int meshKernelId, [In] IntPtr oneDNodeMask, [In] ref GeometryListNative polygons, [In] double projectionFactor);
 
         /// <summary>
         /// Computes 1d-2d contacts, where a single 1d node is connected to multiple 2d face circumcenters (ggeo_make1D2Dembeddedlinks_dll)

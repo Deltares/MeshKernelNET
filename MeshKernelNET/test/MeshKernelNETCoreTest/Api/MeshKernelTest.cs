@@ -444,8 +444,8 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.GridAngle = 0.0;
                     makeGridParameters.OriginXCoordinate = 0.0;
                     makeGridParameters.OriginYCoordinate = 0.0;
-                    makeGridParameters.XGridBlockSize = 0.0;
-                    makeGridParameters.YGridBlockSize = 0.0;
+                    makeGridParameters.XGridBlockSize = 10.0;
+                    makeGridParameters.YGridBlockSize = 10.0;
                     makeGridParameters.UpperRightCornerXCoordinate = 0.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
@@ -1319,7 +1319,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     var geometryListIn = new DisposableGeometryList();
-                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+                    double projectionFactor = 0.0;
+                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn, projectionFactor));
 
                     var contacts = api.ContactsGetData(id);
                     Assert.Greater(contacts.NumContacts, 0);

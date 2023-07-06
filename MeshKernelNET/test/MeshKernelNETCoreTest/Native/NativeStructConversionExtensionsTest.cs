@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GeoAPI.Geometries;
 using MeshKernelNETCore.Api;
@@ -78,13 +79,13 @@ namespace MeshKernelNETCoreTest.Native
             Assert.AreEqual(parameters.AspectRatio, splinesToCurvilinearParameters.AspectRatio);
             Assert.AreEqual(parameters.AspectRatioGrowFactor, splinesToCurvilinearParameters.AspectRatioGrowFactor);
             Assert.AreEqual(parameters.AverageWidth, splinesToCurvilinearParameters.AverageWidth);
-            Assert.AreEqual(parameters.CurvatureAdaptedGridSpacing, splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing);
-            Assert.AreEqual(parameters.GrowGridOutside, splinesToCurvilinearParameters.GrowGridOutside);
+            Assert.AreEqual(Convert.ToInt32(parameters.CurvatureAdaptedGridSpacing), splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing);
+            Assert.AreEqual(Convert.ToInt32(parameters.GrowGridOutside), splinesToCurvilinearParameters.GrowGridOutside);
             Assert.AreEqual(parameters.MaximumNumberOfGridCellsInTheUniformPart, splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart);
             Assert.AreEqual(parameters.GridsOnTopOfEachOtherTolerance, splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance);
             Assert.AreEqual(parameters.MinimumCosineOfCrossingAngles, splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles);
-            Assert.AreEqual(parameters.CheckFrontCollisions, splinesToCurvilinearParameters.CheckFrontCollisions);
-            Assert.AreEqual(parameters.RemoveSkinnyTriangles, splinesToCurvilinearParameters.RemoveSkinnyTriangles);
+            Assert.AreEqual(Convert.ToInt32(parameters.CheckFrontCollisions), splinesToCurvilinearParameters.CheckFrontCollisions);
+            Assert.AreEqual(Convert.ToInt32(parameters.RemoveSkinnyTriangles), splinesToCurvilinearParameters.RemoveSkinnyTriangles);
 
         }
 

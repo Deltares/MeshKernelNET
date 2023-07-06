@@ -444,8 +444,8 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.GridAngle = 0.0;
                     makeGridParameters.OriginXCoordinate = 0.0;
                     makeGridParameters.OriginYCoordinate = 0.0;
-                    makeGridParameters.XGridBlockSize = 0.0;
-                    makeGridParameters.YGridBlockSize = 0.0;
+                    makeGridParameters.XGridBlockSize = 10.0;
+                    makeGridParameters.YGridBlockSize = 10.0;
                     makeGridParameters.UpperRightCornerXCoordinate = 0.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 

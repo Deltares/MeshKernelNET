@@ -11,7 +11,7 @@ namespace MeshKernelNETCore.Api
             {
                 AspectRatio = 0.1,
                 AspectRatioGrowFactor = 1.1,
-                AverageWidth = 0.005,
+                AverageWidth = 500.0,
                 CurvatureAdaptedGridSpacing = true,
                 GrowGridOutside = true,
                 MaximumNumberOfGridCellsInTheUniformPart = 5,

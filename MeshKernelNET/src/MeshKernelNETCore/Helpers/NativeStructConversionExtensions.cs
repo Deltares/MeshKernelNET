@@ -35,8 +35,8 @@ namespace MeshKernelNETCore.Helpers
                 OriginYCoordinate = makeGridParameters.OriginYCoordinate,
                 XGridBlockSize = makeGridParameters.XGridBlockSize,
                 YGridBlockSize = makeGridParameters.YGridBlockSize,
-                UpperRightXCoordinate = makeGridParameters.UpperRightXCoordinate,
-                UpperRightYCoordinate = makeGridParameters.UpperRightYCoordinate,
+                UpperRightCornerXCoordinate = makeGridParameters.UpperRightCornerXCoordinate,
+                UpperRightCornerYCoordinate = makeGridParameters.UpperRightCornerYCoordinate,
             };
         }
 
@@ -59,7 +59,7 @@ namespace MeshKernelNETCore.Helpers
                 AspectRatio = splinesToCurvilinearParameters.AspectRatio,
                 AspectRatioGrowFactor = splinesToCurvilinearParameters.AspectRatioGrowFactor,
                 AverageWidth = splinesToCurvilinearParameters.AverageWidth,
-                CurvatureAdapetedGridSpacing = Convert.ToInt32(splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing),
+                CurvatureAdaptedGridSpacing = Convert.ToInt32(splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing),
                 GrowGridOutside = Convert.ToInt32(splinesToCurvilinearParameters.GrowGridOutside),
                 MaximumNumberOfGridCellsInTheUniformPart = splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart,
                 GridsOnTopOfEachOtherTolerance = splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance,

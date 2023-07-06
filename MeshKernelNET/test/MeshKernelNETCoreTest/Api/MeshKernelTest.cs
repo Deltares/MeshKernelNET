@@ -446,8 +446,8 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.OriginYCoordinate = 0.0;
                     makeGridParameters.XGridBlockSize = 0.0;
                     makeGridParameters.YGridBlockSize = 0.0;
-                    makeGridParameters.UpperRightXCoordinate = 0.0;
-                    makeGridParameters.UpperRightYCoordinate = 0.0;
+                    makeGridParameters.UpperRightCornerXCoordinate = 0.0;
+                    makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
                     Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
@@ -1535,7 +1535,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometryListIn = new DisposableGeometryList();
 
-                    geometryListIn.XCoordinates = new[] {  1.5, 1.5, 3.5,  3.5,  1.5 };
+                    geometryListIn.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
                     geometryListIn.YCoordinates = new[] { -1.5, 1.5, 1.5, -1.5, -1.5 };
                     geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;

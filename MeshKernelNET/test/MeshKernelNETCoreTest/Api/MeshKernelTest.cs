@@ -1243,7 +1243,7 @@ namespace MeshKernelNETCoreTest.Api
                     //Call
                     double xCoordinateOut = 0.0;
                     double yCoordinateOut = 0.0;
-                    Assert.IsTrue(api.Mesh2dGetClosestNode(id, -5.0, -5.0, 10.0, 0.0, 0.0, 1100.0, 1100.0, ref xCoordinateOut, ref yCoordinateOut));
+                    Assert.IsTrue(api.Mesh2dGetClosestNode(id, -5.0, -5.0, 10.0, 0.0, 0.0, 1000.0, 1000.0, ref xCoordinateOut, ref yCoordinateOut));
 
                     //Assert
                     Assert.LessOrEqual(xCoordinateOut, 1e-6);
@@ -1277,12 +1277,80 @@ namespace MeshKernelNETCoreTest.Api
 
                     //Call
                     int nodeIndex = -1;
-                    Assert.IsTrue(api.Mesh2dGetNodeIndex(id, -5.0, -5.0, 10.0, 0.0, 0.0, 1100.0, 1100.0, ref nodeIndex));
+                    Assert.IsTrue(api.Mesh2dGetNodeIndex(id, -5.0, -5.0, 10.0, 0.0, 0.0, 1000.0, 1000.0, ref nodeIndex));
 
                     //Assert
                     Assert.AreEqual(nodeIndex, 0);
                     var mesh2d = api.Mesh2dGetData(id);
                     Assert.NotNull(mesh2d);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dDeleteEdgeThroughAPI()
+        {
+            //Setup
+
+            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var geometryListIn = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    var numEdges = mesh.NumEdges;
+
+                    //Call
+                    Assert.IsTrue(api.Mesh2dDeleteEdge(id, 50.0, 0.0, 0.0, 0.0, 100.0, 100.0));
+
+                    //Assert
+                    var mesh2d = api.Mesh2dGetData(id);
+                    Assert.NotNull(mesh2d);
+                    Assert.AreEqual(mesh2d.NumEdges, numEdges - 1);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dGetEdgeThroughAPI()
+        {
+            //Setup
+
+            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var geometryListIn = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    var numEdges = mesh.NumEdges;
+
+                    //Call
+                    int edgeIndex = -1;
+                    Assert.IsTrue(api.Mesh2dGetEdge(id, 50.0, 0.0, 0.0, 0.0, 100.0, 100.0, ref edgeIndex));
+
+                    //Assert
+                    Assert.AreEqual(edgeIndex, 0);
+                    var mesh2d = api.Mesh2dGetData(id);
+                    Assert.NotNull(mesh2d);
+
                 }
                 finally
                 {

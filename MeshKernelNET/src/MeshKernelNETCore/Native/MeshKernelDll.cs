@@ -199,12 +199,16 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
         /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="searchRadius">The radii where to search for mesh nodes</param>
         /// <param name="xCoordinateOut">The x coordinate of the found Mesh2DNative node</param>
         /// <param name="yCoordinateOut">The y coordinate of the found Mesh2DNative node</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_closest_node", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int Mesh2dGetClosestNode([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref double xCoordinateOut, [In, Out] ref double yCoordinateOut);
+        public static extern int Mesh2dGetClosestNode([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In] double xLowerLeftBoundingBox, [In] double yLowerLeftBoundingBox, [In] double xUpperRightBoundingBox, [In] double yUpperRightBoundingBox, [In, Out] ref double xCoordinateOut, [In, Out] ref double yCoordinateOut);
 
         /// <summary>
         /// Make a triangular grid in a polygon
@@ -345,9 +349,13 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="xCoordinate">x coordinate of the vertex</param>
         /// <param name="yCoordinate">y coordinate of the vertex</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_edge", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dDeleteEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate);
+        internal static extern int Mesh2dDeleteEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In] double xLowerLeftBoundingBox, [In] double yLowerLeftBoundingBox, [In] double xUpperRightBoundingBox, [In] double yUpperRightBoundingBox);
 
         /// <summary>
         /// Deletes the closest mesh edge within the search radius from the input point
@@ -355,10 +363,14 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="xCoordinate">x coordinate of the vertex</param>
         /// <param name="yCoordinate">y coordinate of the vertex</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="edgeIndex">The edge index</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_edge", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int edgeIndex);
+        internal static extern int Mesh2dGetEdge([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In] double xLowerLeftBoundingBox, [In] double yLowerLeftBoundingBox, [In] double xUpperRightBoundingBox, [In] double yUpperRightBoundingBox, [In, Out] ref int edgeIndex);
 
         /// <summary>
         /// Get the offsetted polygon
@@ -412,10 +424,14 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListIn">The input point coordinates</param>
         /// <param name="searchRadius">the radius where to search for the vertex</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="vertexIndex">the index of the closest vertex</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_node_index", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int Mesh2dGetNodeIndex([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In, Out] ref int vertexIndex);
+        public static extern int Mesh2dGetNodeIndex([In] int meshKernelId, [In] double xCoordinateIn, [In] double yCoordinateIn, [In] double searchRadius, [In] double xLowerLeftBoundingBox, [In] double yLowerLeftBoundingBox, [In] double xUpperRightBoundingBox, [In] double yUpperRightBoundingBox, [In, Out] ref int vertexIndex);
 
         /// <summary>
         /// Deletes a mesh in a polygon using several options

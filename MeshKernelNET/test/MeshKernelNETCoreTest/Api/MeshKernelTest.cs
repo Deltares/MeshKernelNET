@@ -442,12 +442,12 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.NumberOfColumns = 3;
                     makeGridParameters.NumberOfRows = 3;
                     makeGridParameters.GridAngle = 0.0;
-                    makeGridParameters.GridBlockSize = 0.0;
                     makeGridParameters.OriginXCoordinate = 0.0;
                     makeGridParameters.OriginYCoordinate = 0.0;
-                    makeGridParameters.OriginZCoordinate = 0.0;
-                    makeGridParameters.XGridBlockSize = 0.0;
-                    makeGridParameters.YGridBlockSize = 0.0;
+                    makeGridParameters.XGridBlockSize = 10.0;
+                    makeGridParameters.YGridBlockSize = 10.0;
+                    makeGridParameters.UpperRightCornerXCoordinate = 0.0;
+                    makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
                     Assert.IsTrue(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
@@ -593,7 +593,7 @@ namespace MeshKernelNETCoreTest.Api
                     curvilinearParameters.MRefinement = 40;
                     curvilinearParameters.NRefinement = 10;
                     var splinesToCurvilinearParameters = SplinesToCurvilinearParameters.CreateDefault();
-                    splinesToCurvilinearParameters.GrowGridOutside = 0;
+                    splinesToCurvilinearParameters.GrowGridOutside = false;
 
 
                     Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id, ref geometryListIn,
@@ -1319,7 +1319,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     var geometryListIn = new DisposableGeometryList();
-                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn));
+                    double projectionFactor = 0.0;
+                    Assert.IsTrue(api.ContactsComputeSingle(id, ref onedNodeMaskPinnedAddress, ref geometryListIn, projectionFactor));
 
                     var contacts = api.ContactsGetData(id);
                     Assert.Greater(contacts.NumContacts, 0);
@@ -1534,7 +1535,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometryListIn = new DisposableGeometryList();
 
-                    geometryListIn.XCoordinates = new[] {  1.5, 1.5, 3.5,  3.5,  1.5 };
+                    geometryListIn.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
                     geometryListIn.YCoordinates = new[] { -1.5, 1.5, 1.5, -1.5, -1.5 };
                     geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;

@@ -21,9 +21,9 @@
         public int UseMassCenterWhenRefining { get; set; }
 
         /// <summary>
-        /// Minimum cell size
+        /// Minimum edge size
         /// </summary>
-        public double MinFaceSize { get; set; }
+        public double MinEdgeSize { get; set; }
 
         /// <summary>
         /// Refinement criterion type
@@ -39,5 +39,20 @@
         /// Take samples outside face into account , 1 yes 0 no
         /// </summary>
         public int AccountForSamplesOutside { get; set; }
+
+        /// <summary>
+        /// The number of smoothing iterations
+        /// </summary>
+        public int SmoothingIterations { get; set; }
+
+        /// <summary>
+        /// Maximum courant time in seconds
+        /// </summary>
+        public double MaxCourantTime { get; set; }
+
+        /// <summary>
+        /// Directional refinement, cannot be used when the number of smoothing iterations is larger than 0
+        /// </summary>
+        public int DirectionalRefinement { get; set; }
     }
 }

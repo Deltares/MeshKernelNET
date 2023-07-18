@@ -21,11 +21,6 @@ namespace MeshKernelNETCore.Native
         public double GridAngle;
 
         /// <summary>
-        /// * The grid block size, used in x and y direction (50.0)
-        /// </summary>
-        public double GridBlockSize;
-
-        /// <summary>
         /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
         /// </summary>
         public double OriginXCoordinate;
@@ -44,5 +39,15 @@ namespace MeshKernelNETCore.Native
         /// * The grid block size in y dimension, used only for squared grids (10.0) 
         /// </summary>
         public double YGridBlockSize;
+
+        /// <summary>
+        /// * The x coordinate of the upper right corner (0.0) 
+        /// </summary>
+        public double UpperRightCornerXCoordinate;
+
+        /// <summary>
+        /// * The y coordinate of the upper right corner (0.0) 
+        /// </summary>
+        public double UpperRightCornerYCoordinate;
     }
 }

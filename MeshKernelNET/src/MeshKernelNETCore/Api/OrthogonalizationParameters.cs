@@ -9,10 +9,12 @@ namespace MeshKernelNETCore.Api
         {
             return new OrthogonalizationParameters
             {
-                OuterIterations = 1,
+                OuterIterations = 2,
                 BoundaryIterations = 25,
                 InnerIterations = 25,
-                OrthogonalizationToSmoothingFactor = 0.975
+                OrthogonalizationToSmoothingFactor = 0.975,
+                OrthogonalizationToSmoothingFactorAtBoundary = 1.0,
+                ArealToAngleSmoothingFactor = 1.0,
             };
         }
 

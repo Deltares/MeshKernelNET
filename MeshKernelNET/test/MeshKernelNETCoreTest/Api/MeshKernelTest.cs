@@ -1265,7 +1265,6 @@ namespace MeshKernelNETCoreTest.Api
             //Setup
 
             using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
-            using (var geometryListIn = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1298,7 +1297,6 @@ namespace MeshKernelNETCoreTest.Api
             //Setup
 
             using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
-            using (var geometryListIn = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1331,7 +1329,6 @@ namespace MeshKernelNETCoreTest.Api
             //Setup
 
             using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
-            using (var geometryListIn = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
             {
                 var id = 0;

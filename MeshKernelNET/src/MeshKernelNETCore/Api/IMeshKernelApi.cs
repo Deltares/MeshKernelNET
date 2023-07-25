@@ -224,10 +224,15 @@ namespace MeshKernelNETCore.Api
         /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
         /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
         /// <param name="searchRadius">the radius where to search for the vertex</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="vertexIndex">the index of the closest vertex</param>
         /// <returns>true if a vertex has been found</returns>
         bool Mesh2dGetNodeIndex(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius,
-            ref int vertexIndex);
+            double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox,
+            double yUpperRightBoundingBox, ref int vertexIndex);
 
         /// <summary>
         /// Get the coordinates of the closest existing vertex
@@ -236,11 +241,16 @@ namespace MeshKernelNETCore.Api
         /// <param name="xCoordinateIn">The x coordinate of the node to insert</param>
         /// <param name="yCoordinateIn">The y coordinate of the node to insert</param>
         /// <param name="searchRadius">The radii where to search for mesh nodes</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="xCoordinateOut">The found x coordinate</param>
         /// <param name="yCoordinateOut">The found y coordinate</param>
         /// <returns></returns>
         bool Mesh2dGetClosestNode(int meshKernelId, double xCoordinateIn, double yCoordinateIn, double searchRadius,
-            ref double xCoordinateOut, ref double yCoordinateOut);
+            double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox,
+            double yUpperRightBoundingBox, ref double xCoordinateOut, ref double yCoordinateOut);
 
         /// <summary>
         ///     Deletes the closest mesh edge within the search radius from the input point
@@ -248,8 +258,13 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
-        bool Mesh2dDeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate);
+        bool Mesh2dDeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate, double xLowerLeftBoundingBox,
+            double yLowerLeftBoundingBox, double xUpperRightBoundingBox, double yUpperRightBoundingBox);
 
         /// <summary>
         ///     Finds the closest edge within the search radius from the input point
@@ -257,9 +272,15 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="xLowerLeftBoundingBox">The x coordinate of the lower left corner of the bounding box</param>
+        /// <param name="yLowerLeftBoundingBox">The y coordinate of the lower left corner of the bounding box</param>
+        /// <param name="xUpperRightBoundingBox">The x coordinate of the upper right corner of the bounding box</param>
+        /// <param name="yUpperRightBoundingBox">The y coordinate of the upper right corner of the bounding box</param>
         /// <param name="edgeIndex">The index of the found edge</param>
         /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
-        bool Mesh2dGetEdge(int meshKernelId, double xCoordinate, double yCoordinate, ref int edgeIndex);
+        bool Mesh2dGetEdge(int meshKernelId, double xCoordinate, double yCoordinate, double xLowerLeftBoundingBox,
+            double yLowerLeftBoundingBox, double xUpperRightBoundingBox, double yUpperRightBoundingBox,
+            ref int edgeIndex);
 
         /// <summary>
         ///     Deletes a mesh in a polygon using several options

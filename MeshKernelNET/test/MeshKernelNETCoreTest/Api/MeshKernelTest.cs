@@ -65,6 +65,28 @@ namespace MeshKernelNETCoreTest.Api
             return result;
         }
 
+        public static DisposableCurvilinearGrid GenerateCurvilinearGrid(
+            double cellWidth = 10.0,
+            double cellHeight = 10.0,
+            int numbOfRows = 3,
+            int numbOfColumns = 3)
+        {
+            var result = new DisposableCurvilinearGrid(numbOfRows, numbOfColumns);
+
+            int nodeIndex = 0;
+            for (int i = 0; i < result.NumM; ++i)
+            {
+                for (int j = 0; j < result.NumN; ++j)
+                {
+                    result.NodeX[nodeIndex] =  i * cellWidth;
+                    result.NodeY[nodeIndex] =  j * cellHeight;
+                    nodeIndex++;
+                }
+            }
+
+            return result;
+        }
+
         private static void GetTiming(Stopwatch stopwatch, string actionName, Action action)
         {
             stopwatch.Restart();
@@ -1633,5 +1655,42 @@ namespace MeshKernelNETCoreTest.Api
                 }
             }
         }
+
+        // New tests
+
+        [Test]
+        public void CurvilinearDeleteNodehroughAPI()
+        {
+            using (var grid = GenerateCurvilinearGrid(4, 4, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    var geometryListIn = new DisposableGeometryList();
+
+                    geometryListIn.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
+                    geometryListIn.YCoordinates = new[] { -1.5, 1.5, 1.5, -1.5, -1.5 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+                    geometryListIn.GeometrySeparator = api.GetSeparator();
+
+                    var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1);
+                    Assert.AreEqual(selectedVertices.Length, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+
     }
+
 }

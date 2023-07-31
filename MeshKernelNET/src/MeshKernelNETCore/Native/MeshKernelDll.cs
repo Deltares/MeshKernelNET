@@ -418,7 +418,15 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_refresh_orthogonal_grid_from_splines", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearRefresOrthogonalGridFromSplines([In] int meshKernelId);
+        internal static extern int CurvilinearRefreshOrthogonalGridFromSplines([In] int meshKernelId);
+
+        /// <summary>
+        /// Sets the curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_set", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearSet([In] int meshKernelId, [In] ref CurvilinearGridNative grid);
 
         /// <summary>
         /// Defines a block on the curvilinear where the shifting is distributed
@@ -598,7 +606,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="error_message">The pointer to the latest error message</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_error", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetError([In,Out] ref char error_message);
+        internal static extern int GetError([In,Out] IntPtr error_message);
 
         /// <summary>
         /// Gets an int indicating the faces location type
@@ -676,7 +684,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="version">The version string</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_version", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetVersion([In, Out] ref IntPtr version);
+        internal static extern int GetVersion([In, Out] IntPtr version);
 
         /// <summary>
         /// Gets the Mesh1D data
@@ -946,7 +954,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="edges">Pointer to memory where the indices of the hanging edges will be stored</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_hanging_edges", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetHangingEdges([In] int meshKernelId, [In,Out] ref IntPtr edges);
+        internal static extern int Mesh2dGetHangingEdges([In] int meshKernelId, [In,Out] IntPtr edges);
 
         /// <summary>
         /// Retrives the mesh boundary polygon

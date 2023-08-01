@@ -20,41 +20,41 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// X coordinate of the grid origin (lower left corner)
         /// </summary>
-        double x_origin;
+        public double origin_x;
 
         /// <summary>
         /// Y coordinate of the grid origin (lower left corner)
         /// </summary>
-        double y_origin;
+        public double origin_y;
 
         /// <summary>
         /// Constant grid cell size
         /// </summary>
-        double cell_size;
+        public double cell_size;
 
         /// <summary>
         /// If not nullptr, coordinates for non-uniform grid spacing in x direction
         /// </summary>
-        IntPtr x_coordinates;
+        public IntPtr coordinates_x;
 
         /// <summary>
         /// If not nullptr, coordinates for non-uniform grid spacing in y direction
         /// </summary>
-        IntPtr y_coordinates;
+        public IntPtr coordinates_y;
 
         /// <summary>
         /// Sample values
         /// </summary>
-        IntPtr values;
+        public IntPtr values;
 
         /// <summary>
         /// X coordinate of the upper right
         /// </summary>
-        double x_upper_right;
+        public double upper_right_x;
 
         /// <summary>
         /// Y coordinate of the upper right
         /// </summary>
-        double y_upper_right;
+        public double upper_right_y;
     }
 }

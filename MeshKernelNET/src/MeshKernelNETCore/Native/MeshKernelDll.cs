@@ -1118,14 +1118,14 @@ namespace MeshKernelNETCore.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_intersections_from_polyline", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dIntersectionsFromPolyline([In] int meshKernelId, 
                                                                    [In] ref GeometryListNative boundaryPolyLine,
-                                                                   [In, Out] ref IntPtr edgeNodes,
-                                                                   [In, Out] ref IntPtr edgeIndex,
-                                                                   [In, Out] ref IntPtr edgeDistances,
-                                                                   [In, Out] ref IntPtr segmentDistances,
-                                                                   [In, Out] ref IntPtr segmentIndexes,
-                                                                   [In, Out] ref IntPtr faceIndexes,
-                                                                   [In, Out] ref IntPtr faceNumEdges,
-                                                                   [In, Out] ref IntPtr faceEdgeIndex);
+                                                                   [In, Out] IntPtr edgeNodes,
+                                                                   [In, Out] IntPtr edgeIndex,
+                                                                   [In, Out] IntPtr edgeDistances,
+                                                                   [In, Out] IntPtr segmentDistances,
+                                                                   [In, Out] IntPtr segmentIndexes,
+                                                                   [In, Out] IntPtr faceIndexes,
+                                                                   [In, Out] IntPtr faceNumEdges,
+                                                                   [In, Out] IntPtr faceEdgeIndex);
 
         /// <summary>
         /// Make a triangular grid in a polygon

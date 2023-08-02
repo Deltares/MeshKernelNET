@@ -345,7 +345,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="thirdNode">The third node</param>
         /// <param name="useFourthSide">Use (true/false) the fourth polygon side to compute the curvilinear grid</param>
         /// <returns>If the operation succeeded</returns>
-        bool CurvilinearComputeTransfiniteFromPolygon(int meshKernelId, DisposableGeometryList geometryList,
+        bool CurvilinearComputeTransfiniteFromPolygon(int meshKernelId, ref DisposableGeometryList geometryList,
             int firstNode, int secondNode, int thirdNode, bool useFourthSide);
 
 
@@ -361,8 +361,11 @@ namespace MeshKernelNETCore.Api
         /// <param name="thirdNode">
         ///     The third node<</param>
         /// <returns>If the operation succeeded</returns>
-        bool CurvilinearComputeTransfiniteFromTriangle(int meshKernelId, DisposableGeometryList geometryList,
-            int firstNode, int secondNode, int thirdNode);
+        bool CurvilinearComputeTransfiniteFromTriangle(int meshKernelId, 
+                                                       ref DisposableGeometryList geometryList,
+                                                       int firstNode, 
+                                                       int secondNode, 
+                                                       int thirdNode);
 
         /// <summary>
         ///     Converts a curvilinear mesh to an unstructured mesh
@@ -372,21 +375,12 @@ namespace MeshKernelNETCore.Api
         bool CurvilinearConvertToMesh2D(int meshKernelId);
 
         /// <summary>
-        ///     Gets the curvilinear grid dimensions as a CurvilinearGridNative struct
+        ///     Gets the curvilinear data and returns a DisposableCurvilinearGrid
         /// </summary>
-        /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="curvilinearGridNative">The structure containing the dimensions of the curvilinear grid</param>
-        /// <returns>Error code</returns>
-        bool CurvilinearGetDimensions(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative);
-
-        /// <summary>
-        ///     Gets the curvilinear grid data as a CurvilinearGridNative struct
-        /// </summary>
-        /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="curvilinearGridNative">The structure containing the curvilinear grid arrays</param>
-        /// <returns>Error code</returns>
-        bool CurvilinearGetData(int meshKernelId, ref CurvilinearGridNative curvilinearGridNative);
-
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <returns><see cref="DisposableCurvilinearGrid" /> The disposable curvilinear grid</returns>
+        DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId);
+        
         /// <summary>
         ///     Get spline intermediate points
         /// </summary>

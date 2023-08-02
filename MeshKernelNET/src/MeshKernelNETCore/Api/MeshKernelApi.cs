@@ -20,8 +20,53 @@ namespace MeshKernelNETCore.Api
             return meshKernelId;
         }
 
-        public bool CurvilinearComputeTransfiniteFromSplines(int meshKernelId, DisposableGeometryList disposableGeometryListIn,
-            CurvilinearParameters curvilinearParameters)
+        public bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius)
+        {
+            var polygonsNative = polygons.CreateNativeObject();
+            return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius) == 0;
+        }
+
+        /// <inheritdoc />
+        public bool ContactsComputeMultiple(int meshKernelId, ref IntPtr oneDNodeMask)
+        {
+            return MeshKernelDll.ContactsComputeMultiple(meshKernelId, oneDNodeMask) == 0;
+        }
+        /// <inheritdoc />
+        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double projectionFactor)
+        {
+            var geometryListNativeInputPolygon = polygons.CreateNativeObject();
+            return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon, projectionFactor) == 0;
+        }
+        /// <inheritdoc />
+        public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points)
+        {
+            var pointsNative = points.CreateNativeObject();
+            return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative) == 0;
+        }
+
+        /// <inheritdoc />
+        public bool ContactsComputeWithPolygons(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
+        {
+            var geometryListNativeInputPolygon = polygons.CreateNativeObject();
+            return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
+        }
+
+        public DisposableContacts ContactsGetData(int meshKernelId)
+        {
+            var contacts = new ContactsNative();
+
+            MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
+            var disposableContacts = new DisposableContacts(contacts.num_contacts);
+            contacts = disposableContacts.CreateNativeObject();
+
+            MeshKernelDll.ContactsGetData(meshKernelId, ref contacts);
+
+            return CreateDisposableContacts(contacts);
+        }
+        
+        public bool CurvilinearComputeTransfiniteFromSplines(int meshKernelId, 
+                                                             DisposableGeometryList disposableGeometryListIn,
+                                                             CurvilinearParameters curvilinearParameters)
         {
             var geometryListIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -29,9 +74,9 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId, 
-            ref DisposableGeometryList disposableGeometryListIn,
-            ref CurvilinearParameters curvilinearParameters, 
-            ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
+                                                                ref DisposableGeometryList disposableGeometryListIn,
+                                                                ref CurvilinearParameters curvilinearParameters, 
+                                                                ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
             var geometryListNative = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -40,8 +85,12 @@ namespace MeshKernelNETCore.Api
                 ref curvilinearParametersNative, ref splinesToCurvilinearParametersNative) == 0;
         }
 
-        public bool CurvilinearComputeTransfiniteFromPolygon(int meshKernelId, ref DisposableGeometryList geometryList, int firstNode,
-            int secondNode, int thirdNode, bool useFourthSide)
+        public bool CurvilinearComputeTransfiniteFromPolygon(int meshKernelId, 
+                                                             ref DisposableGeometryList geometryList, 
+                                                             int firstNode,
+                                                             int secondNode, 
+                                                             int thirdNode, 
+                                                             bool useFourthSide)
         {
 
             var geometryListNative = geometryList.CreateNativeObject();
@@ -53,8 +102,11 @@ namespace MeshKernelNETCore.Api
                 useFourthSide) == 0;
         }
 
-        public bool CurvilinearComputeTransfiniteFromTriangle(int meshKernelId, ref DisposableGeometryList geometryList, int firstNode,
-            int secondNode, int thirdNode)
+        public bool CurvilinearComputeTransfiniteFromTriangle(int meshKernelId, 
+                                                              ref DisposableGeometryList geometryList, 
+                                                              int firstNode,
+                                                              int secondNode, 
+                                                              int thirdNode)
         {
             var geometryListNative = geometryList.CreateNativeObject();
             return MeshKernelDll.CurvilinearComputeTransfiniteFromTriangle(meshKernelId,
@@ -64,15 +116,65 @@ namespace MeshKernelNETCore.Api
                 thirdNode) == 0;
         }
 
+        public bool CurvilinearConvertToMesh2D(int meshKernelId)
+        {
+            return MeshKernelDll.CurvilinearConvertToMesh2D(meshKernelId) == 0;
+        }
+
+        public bool CurvilinearDeleteNode(int meshKernelId, double xPointCoordinate, double yPointCoordinate)
+        {
+            return MeshKernelDll.CurvilinearDeleteNode(meshKernelId, xPointCoordinate, yPointCoordinate) == 0;
+        }
+
+        public bool CurvilinearDeleteOrthogonalGridFromSplines(int meshKernelId)
+        {
+            return MeshKernelDll.CurvilinearDeleteOrthogonalGridFromSplines(meshKernelId) == 0;
+        }
+
+        public bool CurvilinearDerefine(int meshKernelId,
+                                        double xLowerLeftCorner,
+                                        double yLowerLeftCorner,
+                                        double xUpperRightCorner,
+                                        double yUpperRightCorner)
+        {
+            return MeshKernelDll.CurvilinearDerefine(meshKernelId,
+                                                     xLowerLeftCorner,
+                                                     yLowerLeftCorner,
+                                                     xUpperRightCorner,
+                                                     yUpperRightCorner) == 0;
+        }
+
+        public bool CurvilinearFinalizeLineShift(int meshKernelId)
+        {
+            return MeshKernelDll.CurvilinearFinalizeLineShift(meshKernelId) == 0;
+        }
+
+        public bool CurvilinearFinalizeOrthogonalize(int meshKernelId)
+        {
+            return MeshKernelDll.CurvilinearFinalizeOrthogonalize(meshKernelId) == 0;
+        }
+
+        public DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId)
+        {
+            var curvilinearGrid = new CurvilinearGridNative();
+            MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
+            var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_m, curvilinearGrid.num_n);
+            curvilinearGrid = disposableCurvilinearGrid.CreateNativeObject();
+
+            MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
+
+            return CreateDisposableCurvilinearGrid(curvilinearGrid);
+        }
+
         public bool CurvilinearInitializeLineShift(int meshKernelId)
         {
             return MeshKernelDll.CurvilinearInitializeLineShift(meshKernelId) == 0;
         }
 
         public bool CurvilinearInitializeOrthogonalGridFromSplines(int meshKernelId, 
-            ref DisposableGeometryList disposableGeometryListIn,
-            ref CurvilinearParameters curvilinearParameters,
-            ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
+                                                                   ref DisposableGeometryList disposableGeometryListIn,
+                                                                   ref CurvilinearParameters curvilinearParameters,
+                                                                   ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
             var geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative =  curvilinearParameters.ToCurvilinearParametersNative();
@@ -84,7 +186,7 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool CurvilinearInitializeOrthogonalize(int meshKernelId,
-            ref OrthogonalizationParameters orthogonalizationParameters)
+                                                       ref OrthogonalizationParameters orthogonalizationParameters)
         {
             var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
             return MeshKernelDll.CurvilinearInitializeOrthogonalize(meshKernelId, ref orthogonalizationParametersNative) == 0;
@@ -143,7 +245,9 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.CurvilinearLineShift(meshKernelId) == 0;
         }
 
-        public bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList disposableGeometryListIn)
+        public bool CurvilinearMakeUniform(int meshKernelId, 
+                                           MakeGridParameters makeGridParameters, 
+                                           DisposableGeometryList disposableGeometryListIn)
         {
             var makeGridParametersNative =
                 makeGridParameters.ToMakeGridParametersNative();
@@ -189,13 +293,12 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.CurvilinearRefine(meshKernelId, xLowerLeftCorner, yLowerLeftCorner, xUpperRightCorner, yUpperRightCorner, refinement) == 0;
         }
 
-
         public bool CurvilinearRefreshOrthogonalGridFromSplines(int meshKernelId)
         {
             return MeshKernelDll.CurvilinearRefreshOrthogonalGridFromSplines(meshKernelId) == 0;
         }
 
-        public bool CurvilinearSet(int meshKernelId, ref DisposableCurvilinearGrid grid)
+        public bool CurvilinearSet(int meshKernelId, DisposableCurvilinearGrid grid)
         {
             var gridNative = grid.CreateNativeObject();
             return MeshKernelDll.CurvilinearSet(meshKernelId, ref gridNative) == 0;
@@ -638,7 +741,7 @@ namespace MeshKernelNETCore.Api
         }
         
         public bool Mesh2dIntersectionsFromPolyline(int meshKernelId,
-                                                    ref DisposableCurvilinearGrid boundaryPolyLine,
+                                                    ref DisposableGeometryList boundaryPolyLine,
                                                     ref IntPtr edgeNodes,
                                                     ref IntPtr edgeIndex,
                                                     ref IntPtr edgeDistances,
@@ -823,148 +926,6 @@ namespace MeshKernelNETCore.Api
             var geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             var geometryListNativeOut = disposableGeometryListOut.CreateNativeObject();
             return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut) == 0;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public DisposableCurvilinearGrid CurvilinearGetData(int meshKernelId)
-        {
-
-            var grid = new CurvilinearGridNative();
-
-            MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref grid);
-            var disposableMesh2D = new DisposableCurvilinearGrid(grid.num_m, grid.num_n);
-            grid = disposableMesh2D.CreateNativeObject();
-
-            MeshKernelDll.CurvilinearGetData(meshKernelId, ref grid);
-
-            return CreateDisposableCurvilinearGrid(grid);
-        }
-
-
-        public bool CurvilinearConvertToMesh2D(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearConvertToMesh2D(meshKernelId) == 0;
-        }
-
-        public bool CurvilinearDeleteNode(int meshKernelId, double xPointCoordinate, double yPointCoordinate)
-        {
-            return MeshKernelDll.CurvilinearDeleteNode(meshKernelId,  xPointCoordinate,  yPointCoordinate) == 0;
-        }
-
-        public bool CurvilinearDeleteOrthogonalGridFromSplines(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearDeleteOrthogonalGridFromSplines(meshKernelId) == 0;
-        }
-
-        public bool CurvilinearDerefine(int meshKernelId,
-                                        double xLowerLeftCorner,
-                                        double yLowerLeftCorner,
-                                        double xUpperRightCorner,
-                                        double yUpperRightCorner)
-        {
-            return MeshKernelDll.CurvilinearDerefine(meshKernelId, 
-                                                     xLowerLeftCorner, 
-                                                     yLowerLeftCorner,
-                                                     xUpperRightCorner,
-                                                     yUpperRightCorner) == 0;
-        }
-
-        public bool CurvilinearFinalizeLineShift(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearFinalizeLineShift(meshKernelId) == 0;
-        }
-
-        public bool CurvilinearFinalizeOrthogonalize(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearFinalizeOrthogonalize(meshKernelId) == 0;
-        }
-
-        public DisposableCurvilinearGrid CurvilinearGridGetData(int meshKernelId)
-        {
-            var curvilinearGrid = new CurvilinearGridNative();
-            MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
-            var disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_m, curvilinearGrid.num_n);
-            curvilinearGrid = disposableCurvilinearGrid.CreateNativeObject();
-
-            MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
-
-            return CreateDisposableCurvilinearGrid(curvilinearGrid);
-        }
-
-        /// <inheritdoc />
-        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double projectionFactor)
-        {
-            var geometryListNativeInputPolygon = polygons.CreateNativeObject();
-            return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon, projectionFactor) == 0;
-        }
-
-        /// <inheritdoc />
-        public bool ContactsComputeMultiple(int meshKernelId, ref IntPtr oneDNodeMask)
-        {
-            return MeshKernelDll.ContactsComputeMultiple(meshKernelId, oneDNodeMask) == 0;
-        }
-
-        /// <inheritdoc />
-        public bool ContactsComputeWithPolygons(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons)
-        {
-            var geometryListNativeInputPolygon = polygons.CreateNativeObject();
-            return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon) == 0;
-        }
-
-        /// <inheritdoc />
-        public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points)
-        {
-            var pointsNative = points.CreateNativeObject();
-            return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative) == 0;
-        }
-
-        public bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius)
-        {
-            var polygonsNative = polygons.CreateNativeObject();
-            return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius) == 0;
-        }
-
-        public DisposableContacts ContactsGetData(int meshKernelId)
-        {
-            var contacts = new ContactsNative();
-
-            MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
-            var disposableContacts = new DisposableContacts(contacts.num_contacts);
-            contacts = disposableContacts.CreateNativeObject();
-
-            MeshKernelDll.ContactsGetData(meshKernelId, ref contacts);
-
-            return CreateDisposableContacts(contacts);
         }
 
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using GeoAPI.CoordinateSystems;
 using MeshKernelNETCore.Api;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ namespace MeshKernelNETCoreTest.Api
     [Category("MeshKernelNETTests")]
     public class MeshKernelTest
     {
-        public static DisposableMesh2D GenerateRegularGrid(
+        public static DisposableMesh2D CreateMesh2D(
             int numbOfCellsHorizontal,
             int numbOfCellsVertical,
             double cellWidth,
@@ -65,11 +66,11 @@ namespace MeshKernelNETCoreTest.Api
             return result;
         }
 
-        public static DisposableCurvilinearGrid GenerateCurvilinearGrid(
-            double cellWidth = 10.0,
-            double cellHeight = 10.0,
+        public static DisposableCurvilinearGrid CreateCurvilinearGrid(
             int numbOfRows = 3,
-            int numbOfColumns = 3)
+            int numbOfColumns = 3,
+            double cellWidth = 1.0,
+            double cellHeight = 1.0)
         {
             var result = new DisposableCurvilinearGrid(numbOfRows, numbOfColumns);
 
@@ -103,7 +104,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
-            using (var mesh = GenerateRegularGrid(100, 100, 100, 200))
+            using (var mesh = CreateMesh2D(100, 100, 100, 200))
             {
                 var stopWatch = new Stopwatch();
                 var numberOfVerticesBefore = mesh.NumNodes;
@@ -153,7 +154,7 @@ namespace MeshKernelNETCoreTest.Api
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -204,7 +205,7 @@ namespace MeshKernelNETCoreTest.Api
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var geometryListIn = new DisposableGeometryList())
             using (var landBoundaries = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
@@ -256,7 +257,7 @@ namespace MeshKernelNETCoreTest.Api
             //12 ------ 13 ------ 14 ------ 15                 2 ------ 13 ------ 14 ------ 15
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -307,7 +308,7 @@ namespace MeshKernelNETCoreTest.Api
             //12 ------ 13 ------ 14 ------ 15                 11 ------ 12 ------ 13 ------ 14
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -362,7 +363,7 @@ namespace MeshKernelNETCoreTest.Api
             // In this case no small edges are present, so no edges shall be removed.
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -414,7 +415,7 @@ namespace MeshKernelNETCoreTest.Api
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
 
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var polygon = new DisposableGeometryList())
             using (var landBoundaries = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
@@ -517,7 +518,7 @@ namespace MeshKernelNETCoreTest.Api
         public void CurvilinearComputeTransfiniteFromSplinesThroughAPI()
         {
             // Setup
-            using (var mesh = GenerateRegularGrid(0, 0, 100, 200))
+            using (var mesh = CreateMesh2D(0, 0, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -786,7 +787,7 @@ namespace MeshKernelNETCoreTest.Api
         public void Mesh2dGetMeshBoundariesAsPolygonsThroughAPI()
         {
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -955,7 +956,7 @@ namespace MeshKernelNETCoreTest.Api
         public void Mesh2dRefineBasedOnSamplesThroughAPI()
         {
             // Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1033,7 +1034,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
-            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var mesh = CreateMesh2D(11, 11, 100, 100))
             {
                 var id = 0;
                 try
@@ -1251,7 +1252,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             //Setup
 
-            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var mesh = CreateMesh2D(11, 11, 100, 100))
             using (var geometryListIn = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
             {
@@ -1286,7 +1287,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             //Setup
 
-            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var mesh = CreateMesh2D(11, 11, 100, 100))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1318,7 +1319,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             //Setup
 
-            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var mesh = CreateMesh2D(11, 11, 100, 100))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1350,7 +1351,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             //Setup
 
-            using (var mesh = GenerateRegularGrid(11, 11, 100, 100))
+            using (var mesh = CreateMesh2D(11, 11, 100, 100))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1383,7 +1384,7 @@ namespace MeshKernelNETCoreTest.Api
         public void ContactsComputeSingleContactsThroughAPI()
         {
             //Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh = CreateMesh2D(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
             {
@@ -1442,7 +1443,7 @@ namespace MeshKernelNETCoreTest.Api
         public void ContactsComputeMultipleThroughAPI()
         {
             //Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh = CreateMesh2D(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
             {
@@ -1499,7 +1500,7 @@ namespace MeshKernelNETCoreTest.Api
         public void ContactsComputeWithPolygonsThroughAPI()
         {
             //Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh = CreateMesh2D(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
             {
@@ -1564,7 +1565,7 @@ namespace MeshKernelNETCoreTest.Api
         public void ContactsComputeWithPointsThroughAPI()
         {
             //Setup
-            using (var mesh = GenerateRegularGrid(4, 4, 10, 10))
+            using (var mesh = CreateMesh2D(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
             {
@@ -1628,7 +1629,7 @@ namespace MeshKernelNETCoreTest.Api
         [Test]
         public void GetSelectedVerticesInPolygonThroughAPI()
         {
-            using (var mesh = GenerateRegularGrid(4, 4, 1, 1))
+            using (var mesh = CreateMesh2D(4, 4, 1, 1))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -1646,7 +1647,8 @@ namespace MeshKernelNETCoreTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
                     geometryListIn.GeometrySeparator = api.GetSeparator();
 
-                    var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1);
+                    var selectedVertices = Array.Empty<int>(); 
+                    Assert.IsTrue(api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1, ref selectedVertices));
                     Assert.AreEqual(selectedVertices.Length, 4);
                 }
                 finally
@@ -1656,38 +1658,835 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
-        // New tests
 
-        //[Test]
-        //public void CurvilinearDeleteNodehroughAPI()
-        //{
-        //    using (var grid = GenerateCurvilinearGrid(4, 4, 1, 1))
-        //    using (var api = new MeshKernelApi())
-        //    {
-        //        var id = 0;
-        //        try
-        //        {
-        //            id = api.AllocateState(0);
+        [Test]
+        public void CurvilinearDeleteNodehroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
 
-        //            Assert.IsTrue(api.CurvilinearSet(id, grid));
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+                    Assert.IsTrue(api.CurvilinearDeleteNode(id, 5.0, 5.0));
 
-        //            var geometryListIn = new DisposableGeometryList();
+                    var gridOut = api.CurvilinearGridGetData(id);
 
-        //            geometryListIn.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
-        //            geometryListIn.YCoordinates = new[] { -1.5, 1.5, 1.5, -1.5, -1.5 };
-        //            geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-        //            geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
-        //            geometryListIn.GeometrySeparator = api.GetSeparator();
+                    Assert.AreEqual(gridOut.NodeX[24], -999.0);
+                    Assert.AreEqual(gridOut.NodeX[24], -999.0);
 
-        //            var selectedVertices = api.GetSelectedVerticesInPolygon(id, ref geometryListIn, 1);
-        //            Assert.AreEqual(selectedVertices.Length, 4);
-        //        }
-        //        finally
-        //        {
-        //            api.DeallocateState(id);
-        //        }
-        //    }
-        //}
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void CurvilinearComputeOrthogonalGridFromSplinesIterativeThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+
+                    id = api.AllocateState(0);
+
+                    var geometryListIn = new DisposableGeometryList();
+                    var geometrySeparator = api.GetSeparator();
+                    geometryListIn.GeometrySeparator = geometrySeparator;
+                    geometryListIn.NumberOfCoordinates = 6;
+
+                    geometryListIn.XCoordinates = new[]
+                    {
+                            1.175014E+02, 3.755030E+02, 7.730054E+02, geometrySeparator,
+                            4.100089E+01, 3.410027E+02
+                        };
+
+                    geometryListIn.YCoordinates = new[]
+                    {
+                            2.437587E+01, 3.266289E+02, 4.563802E+02, geometrySeparator,
+                            2.388780E+02, 2.137584E+01
+                        };
+
+                    geometryListIn.Values = new[]
+                    {
+                            0.0, 0.0, 0.0, geometrySeparator,
+                            0.0, 0.0, geometrySeparator
+                        };
+
+                    var curvilinearParameters = new CurvilinearParameters();
+                    curvilinearParameters.MRefinement = 40;
+                    curvilinearParameters.NRefinement = 10;
+                    var splinesToCurvilinearParameters = SplinesToCurvilinearParameters.CreateDefault();
+                    splinesToCurvilinearParameters.GrowGridOutside = false;
+
+
+                    api.CurvilinearInitializeOrthogonalGridFromSplines(id, 
+                        ref geometryListIn,
+                        ref curvilinearParameters, 
+                        ref splinesToCurvilinearParameters);
+
+                    int numLayers = 3;
+                    for (int i = 1; i < numLayers; i++)
+                    {
+                        Assert.IsTrue(api.CurvilinearIterateOrthogonalGridFromSplines(id, i));
+                    }
+
+                    Assert.IsTrue(api.CurvilinearDeleteOrthogonalGridFromSplines(id));
+                    
+                    Assert.IsTrue(api.CurvilinearComputeOrthogonalGridFromSplines(id,
+                                                                                  ref geometryListIn,
+                                                                                  ref curvilinearParameters, 
+                                                                                  ref splinesToCurvilinearParameters));
+
+                    var gridOut = api.CurvilinearGridGetData(id);
+
+                    Assert.NotNull(gridOut);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearDerefineThroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    // Execute
+                    Assert.IsTrue(api.CurvilinearDerefine(id, 10.0, 20.0, 30.0, 20.0));
+
+                    // Assert
+                    var gridOut = api.CurvilinearGridGetData(id);
+
+                    Assert.NotNull(gridOut);
+                    Assert.AreEqual(gridOut.NumM, 4);
+                    Assert.AreEqual(gridOut.NumN, 5);
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearLineShiftThroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    // Execute
+                    Assert.IsTrue(api.CurvilinearInitializeLineShift(id));
+                    Assert.IsTrue(api.CurvilinearSetLineLineShift(id, 0.0, 0.0, 0.0, 30.0));
+                    Assert.IsTrue(api.CurvilinearSetBlockLineShift(id, 0.0, 0.0, 30.0, 30.0));
+                    Assert.IsTrue(api.CurvilinearMoveNodeLineShift(id, 0.0, 0.0, -10.0, 0.0));
+                    Assert.IsTrue(api.CurvilinearFinalizeLineShift(id));
+
+                    // Assert
+                    var gridOut = api.CurvilinearGridGetData(id);
+
+                    Assert.NotNull(gridOut);
+                    Assert.AreEqual(gridOut.NumM, 4);
+                    Assert.AreEqual(gridOut.NumN, 5);
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearOrthogonalizeThroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    // Execute
+                    var orthogonalizationParameters = new OrthogonalizationParameters();
+                    Assert.IsTrue(api.CurvilinearInitializeOrthogonalize(id, ref orthogonalizationParameters));
+                    Assert.IsTrue(api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0) );
+
+                    // Assert
+                    var gridOut = api.CurvilinearGridGetData(id);
+                    Assert.NotNull(gridOut);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+       
+        [Test]
+        public void CurvilinearSmoothingThroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    // Execute
+                    Assert.IsTrue(api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
+
+                    // Assert
+                    var gridOut = api.CurvilinearGridGetData(id);
+                    Assert.NotNull(gridOut);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void CurvilinearSmoothingDirectionalThroughAPI()
+        {
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.CurvilinearSet(id, grid));
+
+                    // Execute
+                    Assert.IsTrue(api.CurvilinearSmoothingDirectional(id, 
+                                                                      10, 
+                                                                      10.0, 
+                                                                      0.0, 
+                                                                      10.0, 
+                                                                      30.0, 
+                                                                      10.0, 
+                                                                      0.0,  
+                                                                      30.0, 
+                                                                      0.0));
+
+                    // Assert
+                    var gridOut = api.CurvilinearGridGetData(id);
+                    Assert.NotNull(gridOut);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodClosestPointThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {                
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodClosestPoint(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);   
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodInverseDistanceWeightingThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodInverseDistanceWeighting(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodMaxThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodMax(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodMinThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodMin(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodMinAbsoluteValueThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodMinAbsoluteValue(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);
+            }
+        }
+
+        [Test]
+        public void GetAveragingMethodSimpleAveragingThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int method = -1;
+                Assert.IsTrue(api.GetAveragingMethodSimpleAveraging(ref method));
+
+                // Assert
+                Assert.AreEqual(method, 1);
+            }
+        }
+
+        [Test]
+        public void GetEdgesLocationTypeThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int locationType = -1;
+                Assert.IsTrue(api.GetEdgesLocationType(ref locationType));
+
+                // Assert
+                Assert.AreEqual(locationType, 1);
+            }
+        }
+
+        [Test]
+        public void GetError()
+        {
+            
+            using (var api = new MeshKernelApi())
+            using (var disposableMesh1D = api.Mesh1dGetData(0))
+            {
+                var id = 1;
+                try
+                {
+                    // Assert
+                    Assert.Null(disposableMesh1D);
+                    string errorMessage="";
+                    Assert.True(api.GetError(ref errorMessage));
+                    Assert.True(errorMessage.Length > 0);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void GetFacesLocationTypeThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int locationType = -1;
+                Assert.IsTrue(api.GetFacesLocationType(ref locationType));
+
+                // Assert
+                Assert.AreEqual(locationType, 1);
+            }
+        }
+
+        [Test]
+        public void GetGeometryErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int invalidIndex = -1;
+                int type = -1;
+                Assert.IsTrue(api.GetGeometryError(ref invalidIndex, ref type));
+
+                // Assert
+                Assert.AreEqual(invalidIndex, 1);
+                Assert.AreEqual(type, 1);
+            }
+        }
+
+        [Test]
+        public void GetNodesLocationTypeThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int type = -1;
+                Assert.IsTrue(api.GetNodesLocationType(ref type));
+
+                // Assert
+                Assert.AreEqual(type, 1);
+            }
+        }
+
+        [Test]
+        public void GetProjectionThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                var id = 1;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    // Execute
+                    int projection = -1;
+                    Assert.IsTrue(api.GetProjection(id, ref projection));
+
+                    // Assert
+                    Assert.AreEqual(projection, 1);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void GetProjectionCartesianThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int projection = -1;
+                Assert.IsTrue(api.GetProjectionCartesian(ref projection));
+
+                // Assert
+                Assert.AreEqual(projection, 1);
+            }
+        }
+
+        [Test]
+        public void GetProjectionSphericalThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int projection = -1;
+                Assert.IsTrue(api.GetProjectionSpherical(ref projection));
+
+                // Assert
+                Assert.AreEqual(projection, 1);
+            }
+        }
+
+        [Test]
+        public void GetProjectionSphericalAccurateThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int projection = -1;
+                Assert.IsTrue(api.GetProjectionSphericalAccurate(ref projection));
+
+                // Assert
+                Assert.AreEqual(projection, 1);
+            }
+        }
+
+        [Test]
+        public void GetVersionThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                string version = "";
+                Assert.IsTrue(api.GetVersion(ref version));
+
+                // Assert
+                Assert.IsTrue(version.Length > 0);
+            }
+        }
+
+
+        [Test]
+        public void Mesh1dGetDataThroughAPI()
+        {
+
+            using (var api = new MeshKernelApi())
+            using (var disposableMesh1D = new DisposableMesh1D(2, 1) )
+            {
+                var id = 1;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    disposableMesh1D.NodeX = new[] { 0.0, 1.0};
+                    disposableMesh1D.NodeY = new[] { 0.0, 1.0 };
+                    disposableMesh1D.EdgeNodes = new[] { 0, 1 };
+
+                    Assert.True(api.Mesh1dSet(id, disposableMesh1D));
+
+                    var mesh1dData = api.Mesh1dGetData(id);
+
+                    Assert.NotNull(mesh1dData);
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dAveragingInterpolationThroughAPI()
+        {
+
+            using (var api = new MeshKernelApi())
+            using (var disposableMesh2D = CreateMesh2D(2, 3, 1, 1))
+            using (var samples = new DisposableGeometryList())
+            using (var results = new DisposableGeometryList())
+            {
+                var id = 1;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    results.XCoordinates = new double [disposableMesh2D.NumNodes];
+                    results.YCoordinates = new double[disposableMesh2D.NumNodes];
+                    results.Values = new double[disposableMesh2D.NumNodes];
+                    results.NumberOfCoordinates = disposableMesh2D.NumNodes;
+
+                    samples.XCoordinates = new[] { 1.0, 2.0, 3.0, 1.0 };
+                    samples.YCoordinates = new[] { 1.0, 3.0, 2.0, 4.0 };
+                    samples.Values = new [] { 3.0, 10, 4.0, 5.0 };
+                    samples.NumberOfCoordinates = 4;
+
+                    int locationType = 1;
+                    int averagingMethodType = 1;
+                    double relativeSearchSize = 1.01;
+
+                    Assert.True(api.Mesh2dAveragingInterpolation(id, 
+                                                                 samples,
+                                                                 locationType,
+                                                                 averagingMethodType,
+                                                                 relativeSearchSize,
+                                                                 0,
+                                                                 results));
+
+                    Assert.AreEqual(results.Values[0], 1.0);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dComputeOrthogonalizationThroughApi()
+        {
+            // Setup
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var polygon = new DisposableGeometryList())
+            using (var landBoundaries = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var orthogonalizationParametersList = OrthogonalizationParameters.CreateDefault();
+
+                    Assert.IsTrue(api.Mesh2dComputeOrthogonalization(id, 
+                                                                     ProjectToLandBoundaryOptions.ToOriginalNetBoundary, 
+                                                                     orthogonalizationParametersList, 
+                                                                     polygon, 
+                                                                     landBoundaries));
+
+                    var mesh2d = api.Mesh2dGetData(id);
+
+                    Assert.NotNull(mesh2d);
+
+                    mesh2d.Dispose();
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dGetHangingEdgesThroughApi()
+        {
+            // Setup
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var hangingEdges = Array.Empty<int>();
+                    Assert.IsTrue(api.Mesh2dGetHangingEdges(id, ref hangingEdges));
+
+                    Assert.Equals(hangingEdges.Length, 0);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dGetSmallFlowEdgeCentersThroughApi()
+        {
+            // Setup
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var disposableGeometryList = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+                    
+                    //
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    int numEdges = -1;
+                    double smallFlowEdgesLengthThreshold = 1000.0;
+                    int numSmallFlowEdges = -1;
+
+                    Assert.IsTrue(api.Mesh2dCountSmallFlowEdgeCenters(id, smallFlowEdgesLengthThreshold, ref numSmallFlowEdges));
+
+                    disposableGeometryList.XCoordinates = new double[numSmallFlowEdges];
+                    disposableGeometryList.YCoordinates = new double[numSmallFlowEdges];
+                    disposableGeometryList.NumberOfCoordinates = numSmallFlowEdges;
+
+                    Assert.IsTrue(api.Mesh2dGetSmallFlowEdgeCenters(id, smallFlowEdgesLengthThreshold, disposableGeometryList));
+
+                    Assert.Equals(disposableGeometryList.XCoordinates.Length, 0);
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dDeleteHangingEdgesThroughApi()
+        {
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    Assert.IsTrue(api.Mesh2dDeleteHangingEdges(id));
+
+                    var mesh2d = api.Mesh2dGetData(id);
+
+                    Assert.Equals(mesh2d.NumEdges, 10);
+
+                    mesh2d.Dispose();
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dDeleteSmallFlowEdgesAndSmallTrianglesThroughApi()
+        {
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    double smallFlowEdgesLengthThreshold = 10.0;
+                    double minFractionalAreaTriangles = 0.01;
+
+                    Assert.IsTrue(api.Mesh2dDeleteSmallFlowEdgesAndSmallTriangles(id, smallFlowEdgesLengthThreshold, minFractionalAreaTriangles));
+
+                    var mesh2d = api.Mesh2dGetData(id);
+
+                    Assert.Equals(mesh2d.NumEdges, 10);
+
+                    mesh2d.Dispose();
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dGetObtuseTrianglesMassCentersThroughApi()
+        {
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            using (var disposableGeometryList = new DisposableGeometryList())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    int numObtuseTriangles = -1;
+                    Assert.IsTrue(api.Mesh2dCountObtuseTriangles(id, ref numObtuseTriangles));
+
+                    disposableGeometryList.XCoordinates = new double[numObtuseTriangles];
+                    disposableGeometryList.XCoordinates = new double[numObtuseTriangles];
+                    disposableGeometryList.NumberOfCoordinates = numObtuseTriangles;
+
+                    Assert.IsTrue(api.Mesh2dGetObtuseTrianglesMassCenters(id, disposableGeometryList));
+
+                    Assert.Equals(disposableGeometryList.XCoordinates.Length, 0);
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dIntersectionsFromPolylineThroughApi()
+        {
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            using (var disposableGeometryList = new DisposableGeometryList())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+
+                    var mesh2d = api.Mesh2dGetData(id);
+
+                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6 };
+                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5 };
+                    disposableGeometryList.NumberOfCoordinates = 2;
+
+                    var edgeNodes = Array.Empty<int>();
+                    var edgeIndex = Array.Empty<int>();
+                    var edgeDistances = Array.Empty<double>();
+                    var segmentDistances = Array.Empty<double>();
+                    var segmentIndexes = Array.Empty<int>();
+                    var faceIndexes = Array.Empty<int>();
+                    var faceNumEdges = Array.Empty<int>();
+                    var faceEdgeIndex = Array.Empty<int>();
+
+                    Assert.IsTrue(api.Mesh2dIntersectionsFromPolyline(id,
+                                                                      disposableGeometryList,
+                                                                      ref edgeNodes,
+                                                                      ref edgeIndex,
+                                                                      ref edgeDistances,
+                                                                      ref segmentDistances,
+                                                                      ref segmentIndexes,
+                                                                      ref faceIndexes,
+                                                                      ref faceNumEdges,
+                                                                      ref faceEdgeIndex));
+
+                    Assert.Equals(disposableGeometryList.XCoordinates.Length, 0);
+
+                    mesh2d.Dispose();
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
 
 
 

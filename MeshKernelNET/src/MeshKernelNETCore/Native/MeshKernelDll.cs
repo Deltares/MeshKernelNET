@@ -1323,7 +1323,16 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_network1d_set", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Network1dSet([In] int meshKernelId, [In] ref GeometryListNative polylines);
-        
+
+        /// <summary>
+        /// Convert network chainages to mesh1d nodes and edges
+        /// </summary>
+        /// <param name="meshKernelId"> The meshKernelId The id of the mesh state
+        /// <param name="minFaceSize"> The minFaceSize The minimum face size below which two nodes will be merged
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_network1d_to_mesh1d", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Network1dToMesh1d(int meshKernelId, double minFaceSize);
+
         /// <summary>
         /// Get the number of vertices of the offsetted polygon 
         /// </summary>

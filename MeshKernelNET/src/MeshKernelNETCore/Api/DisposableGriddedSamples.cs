@@ -28,9 +28,6 @@ namespace MeshKernelNETCore.Api
             originY = orgY;
             upperRightX = upperRX;
             upperRightY = upperRY;
-
-            coordinatesX = new double[numX];
-            coordinatesY = new double[numY];
             values = new double[numX * numY];
         }
 

@@ -66,8 +66,8 @@ namespace MeshKernelNETCore.Api
         }
         
         public bool CurvilinearComputeTransfiniteFromSplines(int meshKernelId, 
-                                                             DisposableGeometryList disposableGeometryListIn,
-                                                             CurvilinearParameters curvilinearParameters)
+                                                             ref DisposableGeometryList disposableGeometryListIn,
+                                                             ref CurvilinearParameters curvilinearParameters)
         {
             var geometryListIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -75,7 +75,7 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId, 
-                                                                DisposableGeometryList disposableGeometryListIn,
+                                                                ref DisposableGeometryList disposableGeometryListIn,
                                                                 ref CurvilinearParameters curvilinearParameters, 
                                                                 ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
@@ -260,8 +260,8 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool CurvilinearMakeUniform(int meshKernelId, 
-                                           MakeGridParameters makeGridParameters, 
-                                           DisposableGeometryList disposableGeometryListIn)
+                                           ref MakeGridParameters makeGridParameters, 
+                                           ref DisposableGeometryList disposableGeometryListIn)
         {
             var makeGridParametersNative =
                 makeGridParameters.ToMakeGridParametersNative();
@@ -437,16 +437,13 @@ namespace MeshKernelNETCore.Api
 
         public bool GetError(ref string errorMessage)
         {
-            int bufferSize = 512;
-            var errorMessagePtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * bufferSize);
+            var bufferSize = 512;
+            var errorMessagePtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(char)) * bufferSize);
             if (MeshKernelDll.GetError(errorMessagePtr) != 0)
             {
                 return false;
             }
-
-            var messageBuffer = new char[bufferSize];
-            Marshal.Copy(errorMessagePtr, messageBuffer, 0, bufferSize);
-            errorMessage = new string(messageBuffer);
+            errorMessage = Marshal.PtrToStringAnsi(errorMessagePtr);
             Marshal.FreeCoTaskMem(errorMessagePtr);
 
             return true;
@@ -501,16 +498,13 @@ namespace MeshKernelNETCore.Api
 
         public bool GetVersion(ref string version)
         {
-            int bufferSize = 64;
-            var versionPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * bufferSize);
+            var bufferSize = 64;
+            var versionPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(char)) * bufferSize);
             if (MeshKernelDll.GetVersion(versionPtr) != 0)
             {
                 return false;
             }
-
-            var versionBuffer = new char[bufferSize];
-            Marshal.Copy(versionPtr, versionBuffer, 0, bufferSize);
-            version = new string(versionBuffer);
+            version = Marshal.PtrToStringAnsi(versionPtr);
             Marshal.FreeCoTaskMem(versionPtr);
 
             return true;
@@ -547,12 +541,12 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool Mesh2dAveragingInterpolation(int meshKernelId, 
-                                                 DisposableGeometryList samples,
+                                                 in DisposableGeometryList samples,
                                                  int locationType,
                                                  int averagingMethodType,
                                                  double relativeSearchSize,
                                                  int minNumSamples,
-                                                 DisposableGeometryList results)
+                                                 ref DisposableGeometryList results)
         {
             var samplesNative = samples.CreateNativeObject();
             var resultsNative = results.CreateNativeObject();
@@ -574,8 +568,8 @@ namespace MeshKernelNETCore.Api
         public bool Mesh2dComputeOrthogonalization(int meshKernelId, 
                                                    ProjectToLandBoundaryOptions projectToLandBoundaryOption,
                                                    OrthogonalizationParameters orthogonalizationParameters,
-                                                   DisposableGeometryList geometryListPolygon,
-                                                   DisposableGeometryList geometryListLandBoundaries)
+                                                   ref DisposableGeometryList geometryListPolygon,
+                                                   ref DisposableGeometryList geometryListLandBoundaries)
         {
             var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
 
@@ -791,9 +785,9 @@ namespace MeshKernelNETCore.Api
             return true;
         }
 
-        public bool Mesh2dGetObtuseTrianglesMassCenters(int meshKernelId, DisposableGeometryList disposableGeometryList)
+        public bool Mesh2dGetObtuseTrianglesMassCenters(int meshKernelId, ref DisposableGeometryList disposableGeometryList)
         {
-            var disposableGeometryListNative = disposableGeometryList?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
+            var disposableGeometryListNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dGetObtuseTrianglesMassCenters(meshKernelId, ref disposableGeometryListNative) == 0;
         }
 
@@ -808,9 +802,9 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dCountObtuseTriangles(meshKernelId, ref numObtuseTriangles) == 0;
         }
 
-        public bool Mesh2dGetSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesThreshold, DisposableGeometryList disposableGeometryList)
+        public bool Mesh2dGetSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesThreshold, ref DisposableGeometryList disposableGeometryList)
         {
-            var geometryListNativeIn = disposableGeometryList?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
+            var geometryListNativeIn = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dGetSmallFlowEdgeCenters(meshKernelId, smallFlowEdgesThreshold, ref geometryListNativeIn) == 0;
         }
 
@@ -851,7 +845,7 @@ namespace MeshKernelNETCore.Api
         }
         
         public bool Mesh2dIntersectionsFromPolyline(int meshKernelId, 
-                                                    DisposableGeometryList boundaryPolyLine,
+                                                    ref DisposableGeometryList boundaryPolyLine,
                                                     ref int[] edgeNodes, 
                                                     ref int[] edgeIndex,
                                                     ref double[] edgeDistances,
@@ -942,18 +936,17 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMakeMeshFromSamples(meshKernelId, ref geometryListNative) == 0;
         }
 
-        public bool Mesh2dMakeUniform(int meshKernelId, ref MakeGridParameters makeGridParameters, DisposableGeometryList geometryList)
+        public bool Mesh2dMakeUniform(int meshKernelId, ref MakeGridParameters makeGridParameters, ref DisposableGeometryList geometryList)
         {
             var geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.Mesh2dMakeUniform(meshKernelId, ref makeGridParametersNative, ref geometryListNative) == 0;
         }
 
-        public bool Mesh2dMakeUniformOnExtension(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList geometryList)
+        public bool Mesh2dMakeUniformOnExtension(int meshKernelId, ref MakeGridParameters makeGridParameters)
         {
-            var geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeUniformOnExtension(meshKernelId, ref makeGridParametersNative, ref geometryListNative) == 0;
+            return MeshKernelDll.Mesh2dMakeUniformOnExtension(meshKernelId, ref makeGridParametersNative) == 0;
         }
 
         /// <inheritdoc />
@@ -980,8 +973,8 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                                      DisposableGriddedSamples griddedSamples, 
-                                                      MeshRefinementParameters meshRefinementParameters, 
+                                                      ref DisposableGriddedSamples griddedSamples, 
+                                                      ref MeshRefinementParameters meshRefinementParameters, 
                                                       bool useNodalRefinement)
         {
             var griddedSamplesNative = griddedSamples.CreateNativeObject();

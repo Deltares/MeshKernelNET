@@ -603,10 +603,10 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets a pointer to error message
         /// </summary>
-        /// <param name="error_message">The pointer to the latest error message</param>
+        /// <param name="message">The pointer to the latest error message</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_error", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetError([In,Out] IntPtr error_message);
+        internal static extern int GetError([In, Out] IntPtr message);
 
         /// <summary>
         /// Gets an int indicating the faces location type
@@ -1166,8 +1166,7 @@ namespace MeshKernelNETCore.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform_on_extension", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dMakeUniformOnExtension([In] int meshKernelId, 
-                                                                [In] ref MakeGridParametersNative makeGridParameters, 
-                                                                [In] ref GeometryListNative geometryListNative);
+                                                                [In] ref MakeGridParametersNative makeGridParameters);
 
         /// <summary>
         /// Merges vertices within a distance of 0.001 m, effectively removing small edges 

@@ -311,8 +311,8 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <param name="disposableGeometryListIn"></param>
         /// <returns>Error code</returns>
-        bool CurvilinearMakeUniform(int meshKernelId, MakeGridParameters makeGridParameters,
-            DisposableGeometryList disposableGeometryListIn);
+        bool CurvilinearMakeUniform(int meshKernelId, ref MakeGridParameters makeGridParameters,
+            ref DisposableGeometryList disposableGeometryListIn);
 
         /// <summary>
         ///     Make curvilinear grid from splines
@@ -321,8 +321,9 @@ namespace MeshKernelNETCore.Api
         /// <param name="disposableGeometryListIn">The corner vertices of the splines</param>
         /// <param name="curvilinearParameters">The parameters for the generation of the curvilinear grid</param>
         /// <returns>Error code</returns>
-        bool CurvilinearComputeTransfiniteFromSplines(int meshKernelId, DisposableGeometryList disposableGeometryListIn,
-            CurvilinearParameters curvilinearParameters);
+        bool CurvilinearComputeTransfiniteFromSplines(int meshKernelId, 
+            ref DisposableGeometryList disposableGeometryListIn,
+            ref CurvilinearParameters curvilinearParameters);
 
         /// <summary>
         ///     Make curvilinear grid from splines with advancing front.
@@ -333,7 +334,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="splinesToCurvilinearParameters">The parameters of the advancing front algorithm</param>
         /// <returns>If the operation succeeded</returns>
         bool CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId,
-            DisposableGeometryList disposableGeometryListIn, 
+            ref DisposableGeometryList disposableGeometryListIn, 
             ref CurvilinearParameters curvilinearParameters,
             ref SplinesToCurvilinearParameters splinesToCurvilinearParameters);
 

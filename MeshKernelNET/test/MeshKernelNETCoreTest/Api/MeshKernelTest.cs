@@ -1127,12 +1127,13 @@ namespace MeshKernelNETCoreTest.Api
 
                     //Call
                     var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
+                    meshRefinementParameters.MaxNumRefinementIterations = 2;
+                    meshRefinementParameters.RefineIntersected = false;
                     Assert.IsTrue(api.Mesh2dRefineBasedOnPolygon(id, ref geometryListIn, meshRefinementParameters));
 
                     //Assert
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
                     mesh2D.Dispose();
 
                 }
@@ -1204,8 +1205,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.CurvilinearComputeTransfiniteFromPolygon(id, ref geometryListIn, 0, 2, 4, true));
 
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
@@ -1329,8 +1329,8 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.LessOrEqual(xCoordinateOut, 1e-6);
                     Assert.LessOrEqual(yCoordinateOut, 1e-6);
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
+
                     mesh2D.Dispose();
                 }
                 finally
@@ -1364,8 +1364,7 @@ namespace MeshKernelNETCoreTest.Api
                     //Assert
                     Assert.AreEqual(nodeIndex, 0);
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
                     mesh2D.Dispose();
                 }
                 finally
@@ -1397,8 +1396,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     //Assert
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
+
                     Assert.AreEqual(mesh2D.NumEdges, numEdges - 1);
                     mesh2D.Dispose();
                 }
@@ -1433,8 +1432,8 @@ namespace MeshKernelNETCoreTest.Api
                     //Assert
                     Assert.AreEqual(edgeIndex, 0);
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
+
                     mesh2D.Dispose();
 
                 }
@@ -1745,8 +1744,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
                     Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
 
@@ -1826,8 +1824,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
+
                     Assert.AreEqual(curvilinearGrid.NumM, 3);
                     Assert.AreEqual(curvilinearGrid.NumN, 7);
 
@@ -1859,8 +1857,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(curvilinearGrid.NumM, 4);
@@ -1899,8 +1896,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(curvilinearGrid.NumM, 5);
@@ -1970,8 +1966,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     curvilinearGrid.Dispose();
                 }
@@ -2011,8 +2006,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     var curvilinearGrid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.CurvilinearGridGetData(id, out curvilinearGrid));
+
                     Assert.AreEqual(curvilinearGrid.NumM, 5);
 
                     curvilinearGrid.Dispose();
@@ -2285,9 +2280,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.True(api.Mesh1dSet(id, inDisposableMesh1D));
 
-                    bool success = api.Mesh1dGetData(id, out var outDisposableMesh1D);
-                    Assert.IsTrue(success);
-                    
+                    Assert.IsTrue(api.Mesh1dGetData(id, out var outDisposableMesh1D));
+
                     Assert.AreEqual(inDisposableMesh1D.NumEdges, outDisposableMesh1D.NumEdges);
                     Assert.AreEqual(inDisposableMesh1D.NumNodes, outDisposableMesh1D.NumNodes);
 
@@ -2571,8 +2565,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id,out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id,out mesh2D));
 
                     var disposableGeometryList = new DisposableGeometryList();
                     disposableGeometryList.XCoordinates = new[] { 0.6, 0.6 };
@@ -2767,8 +2760,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
 
                     var mesh2D = new DisposableMesh2D();
-                    var success = api.Mesh2dGetData(id, out mesh2D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
                     var samples = new DisposableGeometryList();
                     samples.XCoordinates = new[] { 1.0, 2.0, 3.0, 1.0 };
@@ -2831,8 +2823,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Network1dToMesh1d(id, minFaceSize));
 
                     var mesh1D = new DisposableMesh1D();
-                    var success = api.Mesh1dGetData(id, out mesh1D);
-                    Assert.IsTrue(success);
+                    Assert.IsTrue(api.Mesh1dGetData(id, out mesh1D));
 
                     Assert.AreEqual(mesh1D.NumNodes, 6);
                     Assert.AreEqual(mesh1D.NumEdges, 4);

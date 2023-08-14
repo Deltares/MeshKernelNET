@@ -2411,7 +2411,7 @@ namespace MeshKernelNETCoreTest.Api
                     var hangingEdges = Array.Empty<int>();
                     Assert.IsTrue(api.Mesh2dGetHangingEdges(id, ref hangingEdges));
 
-                    Assert.Equals(hangingEdges.Length, 0);
+                    Assert.AreEqual(hangingEdges.Length, 0);
                 }
                 finally
                 {
@@ -2754,9 +2754,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
-            using (var samples = new DisposableGeometryList())
-            using(var results = new DisposableGeometryList())
-            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var mesh = CreateMesh2D(3, 3, 1, 1))
             {
                 var id = 0;
                 try
@@ -2772,18 +2770,27 @@ namespace MeshKernelNETCoreTest.Api
                     var success = api.Mesh2dGetData(id, out mesh2D);
                     Assert.IsTrue(success);
 
-                    results.XCoordinates = new double [mesh.NumNodes];
-                    results.YCoordinates = new double [mesh.NumNodes]; 
+                    var samples = new DisposableGeometryList();
+                    samples.XCoordinates = new[] { 1.0, 2.0, 3.0, 1.0 };
+                    samples.YCoordinates = new[] { 1.0, 3.0, 2.0, 4.0 };
+                    samples.Values = new[] { 3.0, 10, 4.0, 5.0 };
+                    samples.NumberOfCoordinates = 4;
+
+                    var results = new DisposableGeometryList();
+                    results.XCoordinates = mesh2D.NodeX;
+                    results.YCoordinates = mesh2D.NodeY;
                     results.Values = new double [mesh.NumNodes];
+                    results.NumberOfCoordinates = mesh.NumNodes;
 
                     // Execute
-                    Assert.IsTrue(api.Mesh2dTriangulationInterpolation(id, samples, locationType, results));
-
+                    Assert.IsTrue(api.Mesh2dTriangulationInterpolation(id, ref samples, locationType, ref results));
 
                     // Assert
-                    Assert.AreEqual(results.Values[0], 10);
+                    Assert.AreEqual(results.Values[4], 3);
 
                     mesh2D.Dispose();
+                    samples.Dispose();
+                    results.Dispose();
                 }
                 finally
                 {
@@ -2811,11 +2818,12 @@ namespace MeshKernelNETCoreTest.Api
                     var separator = api.GetSeparator();
                     network1d.XCoordinates = new[] { 0.0, 10.0, 20.0, separator, 10.0, 10.0, 10.0};
                     network1d.YCoordinates = new[] { 0.0, 0.0, 0.0, separator, -10.0, 0.0, 10.0};
+                    network1d.GeometrySeparator =  separator;
                     network1d.NumberOfCoordinates = 7;
 
                     Assert.IsTrue(api.Network1dSet(id, network1d));
 
-                    var fixedChainages = new[]{ 5.0, separator, 5.0 };
+                    double [] fixedChainages ={ 5.0, separator, 5.0 };
                     double minFaceSize = 0.01;
                     double fixedChainagesOffset = 10.0;
 
@@ -2828,7 +2836,6 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(mesh1D.NumNodes, 6);
                     Assert.AreEqual(mesh1D.NumEdges, 4);
-
                     mesh1D.Dispose();
                 }
                 finally
@@ -2837,6 +2844,8 @@ namespace MeshKernelNETCoreTest.Api
                 }
             }
         }
+
+
 
     }
 

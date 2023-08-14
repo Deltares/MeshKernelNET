@@ -1299,9 +1299,9 @@ namespace MeshKernelNETCore.Native
         /// <param name="fixedChainagesOffset">The offset to use for fixed chainages</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_network1d_compute_fixed_chainages", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Network1dComputeFixedChainages([In] int meshKernelId, 
-                                                                  [In] ref IntPtr fixedChainages, 
-                                                                  [In] double sizeFixedChainages, 
+        internal static extern int Network1dComputeFixedChainages([In] int meshKernelId,
+                                                                  [In] IntPtr fixedChainages, 
+                                                                  [In] int sizeFixedChainages, 
                                                                   [In] double minFaceSize, 
                                                                   [In] double fixedChainagesOffset);
 

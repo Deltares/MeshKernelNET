@@ -720,6 +720,11 @@ namespace MeshKernelNETCore.Api
                 return false;
             }
 
+            if (numberOfHangingEdges <= 0)
+            {
+                return true;
+            }
+
             IntPtr hangingVerticesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * numberOfHangingEdges);
             if (MeshKernelDll.Mesh2dGetHangingEdges(meshKernelId, hangingVerticesPtr) != 0)
             {
@@ -1022,7 +1027,7 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.GetInnerOuterSeparator();
         }
 
-        public bool Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, int locationType, DisposableGeometryList results)
+        public bool Mesh2dTriangulationInterpolation(int meshKernelId, ref DisposableGeometryList samples, int locationType, ref DisposableGeometryList results)
         {
             if (samples.NumberOfCoordinates <= 0)
             {
@@ -1039,7 +1044,8 @@ namespace MeshKernelNETCore.Api
 
             int numFixedChainages = fixedChainages.Length;
             IntPtr fixedChainagesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * numFixedChainages);
-            bool succcess =  MeshKernelDll.Network1dComputeFixedChainages(meshKernelId, ref fixedChainagesPtr, numFixedChainages, minFaceSize, fixedChainagesOffset)==0;
+            Marshal.Copy(fixedChainages, 0, fixedChainagesPtr, numFixedChainages);
+            bool succcess =  MeshKernelDll.Network1dComputeFixedChainages(meshKernelId, fixedChainagesPtr, numFixedChainages, minFaceSize, fixedChainagesOffset)==0;
             Marshal.FreeCoTaskMem(fixedChainagesPtr);
             return succcess;
         }

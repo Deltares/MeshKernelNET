@@ -21,7 +21,7 @@ namespace MeshKernelNETCore.Api
             return meshKernelId;
         }
 
-        public bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius)
+        public bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList polygons, double searchRadius)
         {
             var polygonsNative = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius) == 0;
@@ -33,13 +33,13 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.ContactsComputeMultiple(meshKernelId, oneDNodeMask) == 0;
         }
         /// <inheritdoc />
-        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double projectionFactor)
+        public bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList polygons, double projectionFactor)
         {
             var geometryListNativeInputPolygon = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon, projectionFactor) == 0;
         }
         /// <inheritdoc />
-        public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points)
+        public bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList points)
         {
             var pointsNative = points.CreateNativeObject();
             return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative) == 0;
@@ -187,8 +187,8 @@ namespace MeshKernelNETCore.Api
 
         public bool CurvilinearInitializeOrthogonalGridFromSplines(int meshKernelId, 
                                                                    DisposableGeometryList disposableGeometryListIn,
-                                                                   ref CurvilinearParameters curvilinearParameters,
-                                                                   ref SplinesToCurvilinearParameters splinesToCurvilinearParameters)
+                                                                   in CurvilinearParameters curvilinearParameters,
+                                                                   in SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
             var geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative =  curvilinearParameters.ToCurvilinearParametersNative();
@@ -200,7 +200,7 @@ namespace MeshKernelNETCore.Api
         }
 
         public bool CurvilinearInitializeOrthogonalize(int meshKernelId,
-                                                       ref OrthogonalizationParameters orthogonalizationParameters)
+                                                       in OrthogonalizationParameters orthogonalizationParameters)
         {
             var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
             return MeshKernelDll.CurvilinearInitializeOrthogonalize(meshKernelId, ref orthogonalizationParametersNative) == 0;
@@ -325,6 +325,19 @@ namespace MeshKernelNETCore.Api
                                                  double yUpperRightCorner)
         {
             return MeshKernelDll.CurvilinearSetBlockLineShift(meshKernelId,
+                xLowerLeftCorner,
+                yLowerLeftCorner,
+                xUpperRightCorner,
+                yUpperRightCorner) == 0;
+        }
+
+        public bool CurvilinearSetBlockOrthogonalize(int meshKernelId,
+            double xLowerLeftCorner,
+            double yLowerLeftCorner,
+            double xUpperRightCorner,
+            double yUpperRightCorner)
+        {
+            return MeshKernelDll.CurvilinearSetBlockOrthogonalize(meshKernelId,
                 xLowerLeftCorner,
                 yLowerLeftCorner,
                 xUpperRightCorner,
@@ -1006,7 +1019,7 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc />
-        public bool Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D)
+        public bool Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)
         {
             var mesh2D = disposableMesh2D.CreateNativeObject();
 

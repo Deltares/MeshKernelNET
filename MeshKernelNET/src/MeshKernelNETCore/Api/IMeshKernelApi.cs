@@ -29,8 +29,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableMesh2D">Grid state as <see cref="DisposableMesh2D" /> object</param>
         /// <returns>If the operation succeeded</returns>
-        bool Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D);
-
+        bool Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D);
 
         /// <summary>
         ///     Gets the grid state as a <see cref="Mesh2DNative" /> structure including the cell information
@@ -474,7 +473,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="polygons">The polygons selecting the area where the 1d-2d contacts will be generated</param>
         /// <param name="projectionFactor">The projection factor used for generating the contacts when 1d nodes are not inside the 2d mesh</param>
         /// <returns>Error code</returns>
-        bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double projectionFactor);
+        bool ContactsComputeSingle(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList polygons, double projectionFactor);
 
         /// <summary>
         /// Computes 1d-2d contacts, where a single 1d node is connected to multiple 2d faces circumcenters (ggeo_make1D2Dembeddedlinks_dll)
@@ -500,7 +499,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="oneDNodeMask">The mask to apply to 1d nodes (1 = generate a connection, 0 = do not generate a connection)</param>
         /// <param name="points">The points selecting the faces to connect</param>
         /// <returns>Error code</returns>
-        bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList points);
+        bool ContactsComputeWithPoints(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList points);
 
         /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary (ggeo_make1D2DRiverLinks_dll)
@@ -510,7 +509,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="polygons">The points selecting the faces to connect</param>
         /// <param name="searchRadius">The radius used for searching neighboring faces, if equal to doubleMissingValue, the search radius will be calculated internally</param>
         /// <returns>Error code</returns>
-        bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, ref DisposableGeometryList polygons, double searchRadius);
+        bool ContactsComputeBoundary(int meshKernelId, ref IntPtr oneDNodeMask, in DisposableGeometryList polygons, double searchRadius);
 
         /// <summary>
         ///     Gets the double value used in the back-end library as separator and missing value

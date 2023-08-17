@@ -862,6 +862,14 @@ namespace MeshKernelNETCore.Api
         bool Mesh2dGetSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesThreshold, out DisposableGeometryList result);
 
         /// <summary>
+        /// Gets the smoothness, expressed as the ratio between the values of two neighboring faces areas.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="disposableGeometryListOut">The smoothness values of each edge</param>
+        /// <returns>Error code</returns>
+        bool Mesh2dGetSmoothness(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
+
+        /// <summary>
         ///     Orthogonalization initialization
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

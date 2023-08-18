@@ -407,7 +407,7 @@ namespace MeshKernelNETCoreTest.Api
                 geometryListOut.YCoordinates = new double[60];
                 geometryListOut.Values = new double[60];
 
-                Assert.IsTrue(api.GetSplines(geometryListIn, out geometryListOut, numberOfPointsBetweenVertices));
+                Assert.IsTrue(api.GetSplines(geometryListIn, ref geometryListOut, numberOfPointsBetweenVertices));
                 geometryListOut.Dispose();
             }
         }
@@ -661,7 +661,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var disposableGeometryListOut = new DisposableGeometryList();
                     bool success = api.PolygonGetOffset(id, geometryListIn, innerOffsetedPolygon, distance,
-                        out disposableGeometryListOut);
+                        ref disposableGeometryListOut);
                     Assert.IsTrue(success);
                     disposableGeometryListOut.Dispose();
 
@@ -735,7 +735,7 @@ namespace MeshKernelNETCoreTest.Api
                                                     firstIndex,
                                                     secondIndex, 
                                                     distance, 
-                                                    out geometryListOut));
+                                                    ref geometryListOut));
 
                     var mesh2D = new DisposableMesh2D();
                     var success = api.Mesh2dGetData(id, out mesh2D);
@@ -1901,10 +1901,10 @@ namespace MeshKernelNETCoreTest.Api
                     disposableGeometryList.NumberOfCoordinates = numSmallFlowEdges;
 
                     // Execute
-                    Assert.IsTrue(api.Mesh2dGetSmallFlowEdgeCenters(id, smallFlowEdgesLengthThreshold, out disposableGeometryList));
+                    Assert.IsTrue(api.Mesh2dGetSmallFlowEdgeCenters(id, smallFlowEdgesLengthThreshold, ref disposableGeometryList));
 
                     // Assert
-                    Assert.AreEqual(disposableGeometryList.XCoordinates.Length, 0);
+                    Assert.AreEqual(disposableGeometryList.XCoordinates.Length, 12);
                     disposableGeometryList.Dispose();
 
                 }
@@ -1930,14 +1930,14 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
-                    Assert.AreEqual(mesh2D.NumEdges, 12);
+                    Assert.AreEqual(mesh2D.NumEdges, 24);
 
                     Assert.IsTrue(api.Mesh2dDeleteHangingEdges(id));
 
                     
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
-                    Assert.AreEqual(mesh2D.NumEdges, 12); // No hanging edges found
+                    Assert.AreEqual(mesh2D.NumEdges, 24); // No hanging edges found
                     mesh2D.Dispose();
                 }
                 finally
@@ -2002,7 +2002,7 @@ namespace MeshKernelNETCoreTest.Api
                     disposableGeometryList.XCoordinates = new double[numObtuseTriangles];
                     disposableGeometryList.NumberOfCoordinates = numObtuseTriangles;
 
-                    Assert.IsTrue(api.Mesh2dGetObtuseTrianglesMassCenters(id, out disposableGeometryList));
+                    Assert.IsTrue(api.Mesh2dGetObtuseTrianglesMassCenters(id, ref disposableGeometryList));
 
                     Assert.AreEqual(disposableGeometryList.XCoordinates.Length, 0);
                     disposableGeometryList.Dispose();

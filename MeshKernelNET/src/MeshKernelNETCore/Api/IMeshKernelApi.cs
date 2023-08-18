@@ -568,7 +568,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="numberOfPointsBetweenVertices">The number of spline vertices between the corners points</param>
         /// <returns>Error code</returns>
         bool GetSplines(in DisposableGeometryList disposableGeometryListIn,
-            out DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices);
+            ref DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices);
 
         /// <summary>
         /// Gets the version string
@@ -834,7 +834,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="result">The result of the block to orthogonalize</param>
         /// <returns>Error code</returns>
-        bool Mesh2dGetObtuseTrianglesMassCenters(int meshKernelId, out DisposableGeometryList result);
+        bool Mesh2dGetObtuseTrianglesMassCenters(int meshKernelId, ref DisposableGeometryList result);
 
         /// <summary>
         ///     Get the edges orthogonality
@@ -842,7 +842,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListOut">In Values field the orthogonality values are stored</param>
         /// <returns>If the operation succeeded</returns>
-        bool Mesh2dGetOrthogonality(int meshKernelId, out DisposableGeometryList disposableGeometryListOut);
+        bool Mesh2dGetOrthogonality(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
         /// Counts the number of polygon nodes contained in the mesh boundary polygons computed in function `mkernel_mesh2d_get_mesh_boundaries_as_polygons`
@@ -859,7 +859,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="smallFlowEdgesThreshold">The smallFlowEdgesThreshold of the block to orthogonalize</param>
         /// <param name="result">The result of the block to orthogonalize</param>
         /// <returns>Error code</returns>
-        bool Mesh2dGetSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesThreshold, out DisposableGeometryList result);
+        bool Mesh2dGetSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesThreshold, ref DisposableGeometryList result);
 
         /// <summary>
         /// Gets the smoothness, expressed as the ratio between the values of two neighboring faces areas.
@@ -1148,7 +1148,7 @@ namespace MeshKernelNETCore.Api
         bool GetPointsInPolygon(int meshKernelId, 
             in DisposableGeometryList inputPolygon,
             in DisposableGeometryList inputPoints, 
-            out DisposableGeometryList selectedPoints);
+            ref DisposableGeometryList selectedPoints);
 
         /// <summary>
         ///     Get the offsetted polygon
@@ -1162,7 +1162,7 @@ namespace MeshKernelNETCore.Api
         bool PolygonGetOffset(int meshKernelId, 
                               in DisposableGeometryList disposableGeometryListIn, 
                               bool innerPolygon,
-                              double distance, out DisposableGeometryList disposableGeometryListOut);
+                              double distance, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
         ///     Gets the refined polygon
@@ -1175,7 +1175,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="disposableGeometryListOut">The refined polygon</param>
         /// <returns>If the operation succeeded</returns>
         bool PolygonRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
-            int secondIndex, double distance, out DisposableGeometryList disposableGeometryListOut);
+            int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut);
 
     }
 }

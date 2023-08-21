@@ -963,8 +963,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 3);
-                    Assert.AreEqual(curvilinearGrid.NumN, 3);
+                    Assert.AreEqual(3, curvilinearGrid.NumM);
+                    Assert.AreEqual(3, curvilinearGrid.NumN);
 
                     curvilinearGrid.Dispose();
                 }
@@ -1044,8 +1044,8 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 4);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
+                    Assert.AreEqual(4, curvilinearGrid.NumM);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
 
                     curvilinearGrid.Dispose();
                 }
@@ -1373,7 +1373,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.ContactsGetData(id, out contacts));
 
                     // Only one contact is generated, because only one polygon is present 
-                    Assert.AreEqual(contacts.NumContacts, 1);
+                    Assert.AreEqual(1, contacts.NumContacts);
                 }
                 finally
                 {
@@ -1440,7 +1440,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.ContactsGetData(id, out contacts));
 
                     // Four contacts are generated, one for each point
-                    Assert.AreEqual(contacts.NumContacts, 4);
+                    Assert.AreEqual(4, contacts.NumContacts);
                 }
                 finally
                 {
@@ -1472,7 +1472,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var selectedVertices = Array.Empty<int>(); 
                     Assert.IsTrue(api.GetSelectedVerticesInPolygon(id, geometryListIn, 1, ref selectedVertices));
-                    Assert.AreEqual(selectedVertices.Length, 4);
+                    Assert.AreEqual(4, selectedVertices.Length);
                 }
                 finally
                 {
@@ -1491,7 +1491,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodClosestPoint(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 2);   
+                Assert.AreEqual(2, method);   
             }
         }
 
@@ -1505,7 +1505,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodInverseDistanceWeighting(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 5);
+                Assert.AreEqual(5, method);
             }
         }
 
@@ -1519,7 +1519,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodMax(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 3);
+                Assert.AreEqual(3, method);
             }
         }
 
@@ -1533,7 +1533,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodMin(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 4);
+                Assert.AreEqual(4, method);
             }
         }
 
@@ -1547,7 +1547,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodMinAbsoluteValue(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 6);
+                Assert.AreEqual(6, method);
             }
         }
 
@@ -1561,7 +1561,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetAveragingMethodSimpleAveraging(ref method));
 
                 // Assert
-                Assert.AreEqual(method, 1);
+                Assert.AreEqual(1, method);
             }
         }
 
@@ -1575,7 +1575,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetEdgesLocationType(ref locationType));
 
                 // Assert
-                Assert.AreEqual(locationType, 2);
+                Assert.AreEqual(2, locationType);
             }
         }
 
@@ -1609,7 +1609,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetFacesLocationType(ref locationType));
 
                 // Assert
-                Assert.AreEqual(locationType, 0);
+                Assert.AreEqual(0, locationType);
             }
         }
 
@@ -1624,8 +1624,8 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetGeometryError(ref invalidIndex, ref type));
 
                 // Assert
-                Assert.AreEqual(invalidIndex, 0);
-                Assert.AreEqual(type, 3);
+                Assert.AreEqual(0, invalidIndex);
+                Assert.AreEqual(3, type);
             }
         }
 
@@ -1639,7 +1639,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetNodesLocationType(ref type));
 
                 // Assert
-                Assert.AreEqual(type, 1);
+                Assert.AreEqual(1, type);
             }
         }
 
@@ -1658,7 +1658,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.GetProjection(id, ref projection));
 
                     // Assert
-                    Assert.AreEqual(projection, 0);
+                    Assert.AreEqual(0, projection);
                 }
                 finally
                 {
@@ -1677,7 +1677,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetProjectionCartesian(ref projection));
 
                 // Assert
-                Assert.AreEqual(projection, 0);
+                Assert.AreEqual(0, projection);
             }
         }
 
@@ -1691,7 +1691,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetProjectionSpherical(ref projection));
 
                 // Assert
-                Assert.AreEqual(projection, 1);
+                Assert.AreEqual(1, projection);
             }
         }
 
@@ -1705,7 +1705,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetProjectionSphericalAccurate(ref projection));
 
                 // Assert
-                Assert.AreEqual(projection, 2);
+                Assert.AreEqual(2, projection);
             }
         }
 
@@ -1719,7 +1719,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetVersion(out version));
 
                 // Assert
-                Assert.AreEqual(version.Length, 7);
+                Assert.AreEqual(7, version.Length);
             }
         }
 
@@ -1796,7 +1796,7 @@ namespace MeshKernelNETCoreTest.Api
                                                                  0,
                                                                  ref results));
 
-                    Assert.AreEqual(results.Values[4], 3.0);
+                    Assert.AreEqual(3.0, results.Values[4]);
                     results.Dispose();
                     samples.Dispose();
                 }
@@ -1834,7 +1834,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var mesh2D = new DisposableMesh2D();
                     Assert.True(api.Mesh2dGetData(id, out mesh2D));
-                    Assert.AreEqual(mesh2D.NumNodes, 16);
+                    Assert.AreEqual(16, mesh2D.NumNodes);
 
                     mesh2D.Dispose();
                     polygon.Dispose();
@@ -1866,7 +1866,7 @@ namespace MeshKernelNETCoreTest.Api
                     var hangingEdges = Array.Empty<int>();
                     Assert.IsTrue(api.Mesh2dGetHangingEdges(id, out hangingEdges));
 
-                    Assert.AreEqual(hangingEdges.Length, 0);
+                    Assert.AreEqual(0, hangingEdges.Length);
                 }
                 finally
                 {
@@ -1904,7 +1904,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dGetSmallFlowEdgeCenters(id, smallFlowEdgesLengthThreshold, ref disposableGeometryList));
 
                     // Assert
-                    Assert.AreEqual(disposableGeometryList.XCoordinates.Length, 12);
+                    Assert.AreEqual(12, disposableGeometryList.XCoordinates.Length);
                     disposableGeometryList.Dispose();
 
                 }
@@ -1930,14 +1930,14 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dSet(id, mesh));
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
-                    Assert.AreEqual(mesh2D.NumEdges, 24);
+                    Assert.AreEqual(24, mesh2D.NumEdges);
 
                     Assert.IsTrue(api.Mesh2dDeleteHangingEdges(id));
 
                     
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
-                    Assert.AreEqual(mesh2D.NumEdges, 24); // No hanging edges found
+                    Assert.AreEqual(24, mesh2D.NumEdges); // No hanging edges found
                     mesh2D.Dispose();
                 }
                 finally
@@ -1970,7 +1970,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
-                    Assert.AreEqual(mesh2D.NumEdges, 12);
+                    Assert.AreEqual(12, mesh2D.NumEdges);
 
                     mesh2D.Dispose();
                 }
@@ -2004,7 +2004,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.IsTrue(api.Mesh2dGetObtuseTrianglesMassCenters(id, ref disposableGeometryList));
 
-                    Assert.AreEqual(disposableGeometryList.XCoordinates.Length, 0);
+                    Assert.AreEqual(0, disposableGeometryList.XCoordinates.Length);
                     disposableGeometryList.Dispose();
 
                 }
@@ -2057,14 +2057,14 @@ namespace MeshKernelNETCoreTest.Api
                                                                       ref faceNumEdges,
                                                                       ref faceEdgeIndex));
 
-                    Assert.AreEqual(segmentIndexes[0], 0);
-                    Assert.AreEqual(segmentIndexes[1], 0);
+                    Assert.AreEqual(0, segmentIndexes[0]);
+                    Assert.AreEqual(0, segmentIndexes[1]);
 
-                    Assert.AreEqual(segmentDistances[0], 0.25);
-                    Assert.AreEqual(segmentDistances[1], 0.75);
+                    Assert.AreEqual(0.25, segmentDistances[0]);
+                    Assert.AreEqual(0.75, segmentDistances[1]);
 
-                    Assert.AreEqual(faceIndexes[0], 6);
-                    Assert.AreEqual(faceIndexes[1], 3);
+                    Assert.AreEqual(6, faceIndexes[0]);
+                    Assert.AreEqual(3, faceIndexes[1]);
 
                     mesh2D.Dispose();
 
@@ -2148,7 +2148,7 @@ namespace MeshKernelNETCoreTest.Api
                     var mesh2D = new DisposableMesh2D();
                     Assert.IsTrue(api.Mesh2dGetData(id, out mesh2D));
 
-                    Assert.AreEqual(mesh2D.NumNodes,121);
+                    Assert.AreEqual(121, mesh2D.NumNodes);
 
                     mesh2D.Dispose();
 
@@ -2214,7 +2214,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     // Assert
                     Assert.NotNull(meshOut);
-                    Assert.AreEqual(meshOut.NumNodes, 16);
+                    Assert.AreEqual(16, meshOut.NumNodes);
 
                     meshOut.Dispose();
                     griddedSamples.Dispose();
@@ -2263,7 +2263,7 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Mesh2dTriangulationInterpolation(id, samples, locationType, ref results));
 
                     // Assert
-                    Assert.AreEqual(results.Values[4], 3);
+                    Assert.AreEqual(3, results.Values[4]);
 
                     mesh2D.Dispose();
                     samples.Dispose();
@@ -2292,7 +2292,7 @@ namespace MeshKernelNETCoreTest.Api
                     int numHangingEdges = -1;
                     Assert.IsTrue(api.Mesh2dCountHangingEdges(id, ref numHangingEdges));
         
-                    Assert.AreEqual(numHangingEdges, 0);
+                    Assert.AreEqual(0, numHangingEdges);
                 }
                 finally
                 {

@@ -1,5 +1,4 @@
-﻿using System;
-using MeshKernelNETCore.Native;
+﻿using MeshKernelNETCore.Native;
 using ProtoBuf;
 
 namespace MeshKernelNETCore.Api

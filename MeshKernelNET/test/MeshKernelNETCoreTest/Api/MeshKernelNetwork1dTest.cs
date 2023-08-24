@@ -15,6 +15,7 @@ namespace MeshKernelNETCoreTest.Api
             using (var network1d = new DisposableGeometryList())
             {
                 var id = 0;
+                var mesh1D = new DisposableMesh1D();
                 try
                 {
                     id = api.AllocateState(0);
@@ -34,16 +35,15 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.IsTrue(api.Network1dComputeFixedChainages(id, fixedChainages,  minFaceSize, fixedChainagesOffset));
                     Assert.IsTrue(api.Network1dToMesh1d(id, minFaceSize));
 
-                    var mesh1D = new DisposableMesh1D();
                     Assert.IsTrue(api.Mesh1dGetData(id, out mesh1D));
 
                     Assert.AreEqual(mesh1D.NumNodes, 6);
                     Assert.AreEqual(mesh1D.NumEdges, 4);
-                    mesh1D.Dispose();
                 }
                 finally
                 {
                     api.DeallocateState(id);
+                    mesh1D.Dispose();
                 }
             }
         }
@@ -56,7 +56,8 @@ namespace MeshKernelNETCoreTest.Api
             using (var network1d = new DisposableGeometryList())
             {
                  var id = 0;
-                 try
+                 var mesh1D = new DisposableMesh1D();
+                try
                  {
                      id = api.AllocateState(0);
                  
@@ -73,19 +74,16 @@ namespace MeshKernelNETCoreTest.Api
                  
                      Assert.IsTrue(api.Network1dComputeOffsettedChainages(id, fixedChainagesOffset));
                      Assert.IsTrue(api.Network1dToMesh1d(id, minFaceSize));
-                 
-                     var mesh1D = new DisposableMesh1D();
                      Assert.IsTrue(api.Mesh1dGetData(id, out mesh1D));
                  
                      Assert.AreEqual(mesh1D.NumEdges, 40);
                      Assert.AreEqual(mesh1D.NumNodes, 41);
-                     
-                     mesh1D.Dispose();
                  }
                  finally
                  {
                      api.DeallocateState(id);
-                 }
+                     mesh1D.Dispose();
+                }
             }
         }
 

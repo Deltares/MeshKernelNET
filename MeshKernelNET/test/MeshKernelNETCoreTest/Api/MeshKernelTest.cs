@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using MeshKernelNETCore.Api;
 using NUnit.Framework;
@@ -8,7 +7,7 @@ using static MeshKernelNETCoreTest.Api.TestUtilityFunctions;
 namespace MeshKernelNETCoreTest.Api
 {
     [TestFixture]
-    [Category("MeshKernelNETTests")]
+    [Category("MeshKernelNETMesh2DTests")]
     public class MeshKernelTest
     {
         [Test]

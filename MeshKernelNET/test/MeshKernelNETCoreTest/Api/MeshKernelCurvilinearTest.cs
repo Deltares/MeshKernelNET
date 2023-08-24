@@ -266,7 +266,6 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     api.DeallocateState(id);
                     curvilinearGrid.Dispose();
-
                 }
             }
         }

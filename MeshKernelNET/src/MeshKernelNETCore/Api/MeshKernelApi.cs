@@ -959,7 +959,7 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMakeMeshFromPolygon(meshKernelId, ref geometryListNative) == 0;
         }
 
-        public bool Mesh2dMakeMeshFromSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryList)
+        public bool Mesh2dMakeMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList)
         {
             var geometryListNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dMakeMeshFromSamples(meshKernelId, ref geometryListNative) == 0;

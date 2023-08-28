@@ -944,7 +944,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The samples where to triangulate</param>
         /// <returns>If the operation succeeded</returns>
-        bool Mesh2dMakeMeshFromSamples(int meshKernelId, ref DisposableGeometryList disposableGeometryList);
+        bool Mesh2dMakeMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList);
 
         /// <summary>
         /// Makes uniform meshes from a series of polygons

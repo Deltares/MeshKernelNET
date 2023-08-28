@@ -465,6 +465,7 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
+            using (var geometryListIn = new DisposableGeometryList())
             {
                 var id = 0;
                 var mesh2D = new DisposableMesh2D();
@@ -472,7 +473,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    var geometryListIn = new DisposableGeometryList();
+
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
                     geometryListIn.NumberOfCoordinates = 5;
@@ -504,7 +505,7 @@ namespace MeshKernelNETCoreTest.Api
                             0.0
                         };
 
-                    Assert.IsTrue(api.Mesh2dMakeMeshFromSamples(id, ref geometryListIn));
+                    Assert.IsTrue(api.Mesh2dMakeMeshFromSamples(id, geometryListIn));
 
                     var success = api.Mesh2dGetData(id, out mesh2D);
                     Assert.True(success);

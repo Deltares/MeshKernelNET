@@ -737,7 +737,7 @@ namespace MeshKernelNETCore.Api
         ///     The land boundaries to account for when flipping the edges(num_coordinates = 0 for no land boundaries)
         ///     <returns>If the operation succeeded</returns>
         bool Mesh2dFlipEdges(int meshKernelId, bool isTriangulationRequired,
-            ProjectToLandBoundaryOptions projectToLandBoundaryOption, DisposableGeometryList selectingPolygon,
+            ProjectToLandBoundaryOptions projectToLandBoundaryOption, in DisposableGeometryList selectingPolygon,
             DisposableGeometryList landBoundaries);
 
         /// <summary>

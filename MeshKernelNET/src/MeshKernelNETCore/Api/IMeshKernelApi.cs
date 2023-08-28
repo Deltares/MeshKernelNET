@@ -738,7 +738,7 @@ namespace MeshKernelNETCore.Api
         ///     <returns>If the operation succeeded</returns>
         bool Mesh2dFlipEdges(int meshKernelId, bool isTriangulationRequired,
             ProjectToLandBoundaryOptions projectToLandBoundaryOption, in DisposableGeometryList selectingPolygon,
-            DisposableGeometryList landBoundaries);
+            in DisposableGeometryList landBoundaries);
 
         /// <summary>
         /// Get the coordinates of the closest existing vertex

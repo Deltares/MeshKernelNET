@@ -7,19 +7,21 @@ namespace MeshKernelNETCore.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>
     {
-        [ProtoMember(1)] private int[] edgeNodes;
-        [ProtoMember(2)] private int[] faceNodes;
-        [ProtoMember(3)] private int[] nodesPerFace;
-        [ProtoMember(4)] private double[] nodeX;
-        [ProtoMember(5)] private double[] nodeY;
-        [ProtoMember(6)] private double[] edgeX;
-        [ProtoMember(7)] private double[] edgeY;
-        [ProtoMember(8)] private double[] faceX;
-        [ProtoMember(9)] private double[] faceY;
-        [ProtoMember(10)] private int numNodes;
-        [ProtoMember(11)] private int numEdges;
-        [ProtoMember(12)] private int numFaces;
-        [ProtoMember(13)] private int numFaceNodes;
+        [ProtoMember(1)] private int[] edgeFaces;
+        [ProtoMember(2)] private int[] edgeNodes;
+        [ProtoMember(3)] private int[] faceEdges;
+        [ProtoMember(4)] private int[] faceNodes;
+        [ProtoMember(5)] private int[] nodesPerFace;
+        [ProtoMember(6)] private double[] nodeX;
+        [ProtoMember(7)] private double[] nodeY;
+        [ProtoMember(8)] private double[] edgeX;
+        [ProtoMember(9)] private double[] edgeY;
+        [ProtoMember(10)] private double[] faceX;
+        [ProtoMember(11)] private double[] faceY;
+        [ProtoMember(12)] private int numNodes;
+        [ProtoMember(13)] private int numEdges;
+        [ProtoMember(14)] private int numFaces;
+        [ProtoMember(15)] private int numFaceNodes;
 
         public DisposableMesh2D() { }
 
@@ -30,7 +32,9 @@ namespace MeshKernelNETCore.Api
             NumFaces = nFaces;
             NumFaceNodes = nFaceNodes;
 
+            EdgeFaces = new int[NumEdges * 2];
             EdgeNodes = new int[NumEdges * 2];
+            FaceEdges = new int[NumFaceNodes];
             FaceNodes = new int[NumFaceNodes];
             NodesPerFace = new int[NumFaces];
             NodeX = new double[NumNodes];
@@ -46,10 +50,22 @@ namespace MeshKernelNETCore.Api
             Dispose(false);
         }
 
+        public int[] EdgeFaces
+        {
+            get { return edgeFaces; }
+            set { edgeFaces = value; }
+        }
+
         public int[] EdgeNodes
         {
             get { return edgeNodes; }
             set { edgeNodes = value; }
+        }
+
+        public int[] FaceEdges
+        {
+            get { return faceEdges; }
+            set { faceEdges = value; }
         }
 
         public int[] FaceNodes

@@ -142,7 +142,9 @@ namespace MeshKernelNETCore.Api
 
         protected override void SetNativeObject(ref Mesh2DNative nativeObject)
         {
+            nativeObject.edge_faces = GetPinnedObjectPointer(EdgeFaces);
             nativeObject.edge_nodes = GetPinnedObjectPointer(EdgeNodes);
+            nativeObject.face_edges = GetPinnedObjectPointer(FaceEdges);
             nativeObject.face_nodes = GetPinnedObjectPointer(FaceNodes);
             nativeObject.nodes_per_face = GetPinnedObjectPointer(NodesPerFace);
             nativeObject.node_x = GetPinnedObjectPointer(NodeX);

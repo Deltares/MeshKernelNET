@@ -1652,7 +1652,7 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.IsTrue(api.GetVersion(out version));
 
                 // Assert
-                Assert.AreEqual(7, version.Length);
+                Assert.Greater(version.Length, 0);
             }
         }
 

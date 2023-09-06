@@ -11,9 +11,19 @@ namespace MeshKernelNETCore.Native
     public struct Mesh2DNative
     {
         /// <summary>
+        /// The left and right face indices of each face
+        /// </summary>
+        public IntPtr edge_faces;
+
+        /// <summary>
         /// The nodes composing each mesh 2d edge
         /// </summary>
         public IntPtr edge_nodes;
+
+        /// <summary>
+        /// The edges composing each face
+        /// </summary>
+        public IntPtr face_edges;
 
         /// <summary>
         /// The nodes composing each mesh 2d face

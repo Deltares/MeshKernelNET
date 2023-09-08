@@ -49,7 +49,6 @@ namespace MeshKernelNETCore.Helpers
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
             private static extern int GetDllDirectory(int nBufferLength, StringBuilder lpPathName);
-
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             private static extern void SetDllDirectory(string lpPathName);
 

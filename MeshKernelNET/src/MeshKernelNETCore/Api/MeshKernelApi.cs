@@ -473,6 +473,11 @@ namespace MeshKernelNETCore.Api
             return exitCode;
         }
 
+        public int CheckErrorIsGeometric(ref bool errorIsGeometric)
+        {
+            return MeshKernelDll.CheckErrorIsGeometric(ref errorIsGeometric);
+        }
+
         public int GetFacesLocationType(ref int type)
         {
             return MeshKernelDll.GetFacesLocationType(ref type);

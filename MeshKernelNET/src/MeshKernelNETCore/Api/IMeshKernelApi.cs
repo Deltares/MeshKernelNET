@@ -505,9 +505,17 @@ namespace MeshKernelNETCore.Api
         /// <summary>
         /// Gets a pointer to error message
         /// </summary>
-        /// <param name="message">The pointer to the latest error message</param>
+        /// <param name="errorMessage">The pointer to the latest error message</param>
         /// <returns>Error code</returns>
         int GetError(out string errorMessage);
+
+
+        /// <summary>
+        /// Determines if an error is geometric
+        /// </summary>
+        /// <param name="errorIsGeometric">True if error is geometric, false otherwise</param> 
+        /// <returns>Error code</returns>
+        int CheckErrorIsGeometric(ref bool errorIsGeometric);
 
         /// <summary>
         /// Gets an int indicating the faces location type

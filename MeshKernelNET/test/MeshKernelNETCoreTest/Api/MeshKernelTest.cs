@@ -1519,6 +1519,20 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
+        public void CheckErrorIsGeometricThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                var errorIsGeometric = false;
+                api.CheckErrorIsGeometric(ref errorIsGeometric);
+
+                // Assert
+                Assert.IsFalse(errorIsGeometric);
+            }
+        }
+
+        [Test]
         public void GetGeometryErrorThroughAPI()
         {
             using (var api = new MeshKernelApi())

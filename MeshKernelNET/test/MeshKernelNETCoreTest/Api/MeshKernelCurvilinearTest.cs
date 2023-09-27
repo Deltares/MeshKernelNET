@@ -180,12 +180,6 @@ namespace MeshKernelNETCoreTest.Api
 
                     geometryListIn.Dispose();
                 }
-                catch (Exception e)
-                {
-                    api.GetError(out string errorMessage);
-                    Console.WriteLine(errorMessage);
-                    Console.WriteLine(e.ToString());
-                }
                 finally
                 {
                     api.DeallocateState(id);
@@ -663,12 +657,6 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual(5, curvilinearGrid.NumN);
                     Assert.AreEqual(5, curvilinearGrid.NumM);
-                }
-                catch (Exception e)
-                {
-                    api.GetError(out string errorMessage);
-                    Console.WriteLine(errorMessage);
-                    Console.WriteLine(e.ToString());
                 }
                 finally
                 {

@@ -473,6 +473,56 @@ namespace MeshKernelNETCore.Api
             return exitCode;
         }
 
+        public int GetExitCodeSuccess(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeSuccess(ref exitCode);
+        }
+
+        public int GetExitCodeMeshKernelError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeMeshKernelError(ref exitCode);
+        }
+
+        public int GetExitCodeNotImplementedError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeNotImplementedError(ref exitCode);
+        }
+
+        public int GetExitCodeAlgorithmError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeAlgorithmError(ref exitCode);
+        }
+
+        public int GetExitCodeConstraintError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeConstraintError(ref exitCode);
+        }
+
+        public int GetExitCodeMeshGeometryError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeMeshGeometryError(ref exitCode);
+        }
+
+        public int GetExitCodeLinearAlgebraError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeLinearAlgebraError(ref exitCode);
+        }
+
+        public int GetExitCodeRangeError(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeRangeError(ref exitCode);
+        }
+
+        public int GetExitCodeStdLibException(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeStdLibException(ref exitCode);
+        }
+
+        public int GetExitCodeUnknownException(ref int exitCode)
+        {
+            return MeshKernelDll.GetExitCodeUnknownException(ref exitCode);
+        }
+
         public int CheckErrorIsGeometric(ref bool errorIsGeometric)
         {
             return MeshKernelDll.CheckErrorIsGeometric(ref errorIsGeometric);

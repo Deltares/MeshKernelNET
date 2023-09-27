@@ -56,10 +56,9 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerXCoordinate = 0.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
-                    Assert.AreEqual(api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList), 0);
+                    Assert.AreEqual(0, api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.AreEqual(4, curvilinearGrid.NumM);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.AreEqual(4, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -117,9 +116,8 @@ namespace MeshKernelNETCoreTest.Api
                     curvilinearParameters.SmoothingIterations = 10;
                     curvilinearParameters.SmoothingParameter = 0.5;
                     curvilinearParameters.AttractionParameter = 0.0;
-                    Assert.AreEqual(api.CurvilinearComputeTransfiniteFromSplines(id, geometryListIn, curvilinearParameters), 0);
-                    var success = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.AreEqual(success, 0);
+                    Assert.AreEqual(0, api.CurvilinearComputeTransfiniteFromSplines(id, geometryListIn, curvilinearParameters));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                 }
                 finally
                 {
@@ -174,10 +172,10 @@ namespace MeshKernelNETCoreTest.Api
                     splinesToCurvilinearParameters.GrowGridOutside = false;
 
 
-                    Assert.AreEqual(api.CurvilinearComputeOrthogonalGridFromSplines(id, geometryListIn,
-                         curvilinearParameters, splinesToCurvilinearParameters), 0);
+                    Assert.AreEqual(0, api.CurvilinearComputeOrthogonalGridFromSplines(id, geometryListIn,
+                         curvilinearParameters, splinesToCurvilinearParameters));
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     geometryListIn.Dispose();
                 }
@@ -246,12 +244,11 @@ namespace MeshKernelNETCoreTest.Api
                         };
 
                     // Call
-                    Assert.AreEqual(api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true), 0);
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    // Assert a valid mesh is produced
+                    Assert.AreEqual(0, api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));                    // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 3);
-                    Assert.AreEqual(curvilinearGrid.NumN, 3);
+                    Assert.AreEqual(3, curvilinearGrid.NumM);
+                    Assert.AreEqual(3, curvilinearGrid.NumN);
 
                 }
                 finally
@@ -324,13 +321,12 @@ namespace MeshKernelNETCoreTest.Api
                         };
 
                     // Call
-                    Assert.AreEqual(api.CurvilinearComputeTransfiniteFromTriangle(id, geometryListIn, 0, 3, 6), 0);
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearComputeTransfiniteFromTriangle(id, geometryListIn, 0, 3, 6));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 4);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
+                    Assert.AreEqual(4, curvilinearGrid.NumM);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
                 }
                 finally
                 {
@@ -352,12 +348,10 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     // Setup
                     id = api.AllocateState(0);
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-                    // Execute
-                    Assert.AreEqual(api.CurvilinearDeleteNode(id, 5.0, 5.0), 0);
-                    // Assert
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0); Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
-                    Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));                    // Execute
+                    Assert.AreEqual(0, api.CurvilinearDeleteNode(id, 5.0, 5.0));                    // Assert
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
+                    Assert.AreEqual(-999.0, curvilinearGrid.NodeX[24]);
                 }
                 finally
                 {
@@ -422,15 +416,15 @@ namespace MeshKernelNETCoreTest.Api
                     int numLayers = 3;
                     for (int i = 1; i < numLayers; i++)
                     {
-                        Assert.AreEqual(api.CurvilinearIterateOrthogonalGridFromSplines(id, i), 0); Assert.AreEqual(api.CurvilinearRefreshOrthogonalGridFromSplines(id), 0);
+                        Assert.AreEqual(0, api.CurvilinearIterateOrthogonalGridFromSplines(id, i), 0);
+                        Assert.AreEqual(0, api.CurvilinearRefreshOrthogonalGridFromSplines(id));
                     }
 
-                    Assert.AreEqual(api.CurvilinearDeleteOrthogonalGridFromSplines(id), 0);
+                    Assert.AreEqual(0, api.CurvilinearDeleteOrthogonalGridFromSplines(id));
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.AreEqual(curvilinearGrid.NumM, 3);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.AreEqual(curvilinearGrid.NumM, 3);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
                 }
                 finally
                 {
@@ -453,16 +447,14 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearDerefine(id, 10.0, 20.0, 30.0, 20.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearDerefine(id, 10.0, 20.0, 30.0, 20.0));
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 4);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.NotNull(curvilinearGrid);
+                    Assert.AreEqual(4, curvilinearGrid.NumM);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
                 }
                 finally
                 {
@@ -485,20 +477,14 @@ namespace MeshKernelNETCoreTest.Api
                     // Prepare
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearInitializeLineShift(id), 0);
-                    Assert.AreEqual(api.CurvilinearSetLineLineShift(id, 0.0, 0.0, 0.0, 30.0), 0);
-                    Assert.AreEqual(api.CurvilinearSetBlockLineShift(id, 0.0, 0.0, 30.0, 30.0), 0);
-                    Assert.AreEqual(api.CurvilinearMoveNodeLineShift(id, 0.0, 0.0, -10.0, 0.0), 0);
-                    Assert.AreEqual(api.CurvilinearFinalizeLineShift(id), 0);
+                    Assert.AreEqual(0, api.CurvilinearInitializeLineShift(id)); Assert.AreEqual(0, api.CurvilinearSetLineLineShift(id, 0.0, 0.0, 0.0, 30.0)); Assert.AreEqual(0, api.CurvilinearSetBlockLineShift(id, 0.0, 0.0, 30.0, 30.0)); Assert.AreEqual(0, api.CurvilinearMoveNodeLineShift(id, 0.0, 0.0, -10.0, 0.0)); Assert.AreEqual(0, api.CurvilinearFinalizeLineShift(id));
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(curvilinearGrid.NumM, 5);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.NotNull(curvilinearGrid);
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
                 }
                 finally
                 {
@@ -521,12 +507,12 @@ namespace MeshKernelNETCoreTest.Api
                     // Prepare
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
                     var orthogonalizationParameters = new OrthogonalizationParameters();
-                    Assert.AreEqual(api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters), 0);
-                    Assert.AreEqual(api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0), 0); Assert.AreEqual(api.CurvilinearFinalizeOrthogonalize(id), 0);
+                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
+                    Assert.AreEqual(0, api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
 
                     // Assert
 
@@ -555,14 +541,13 @@ namespace MeshKernelNETCoreTest.Api
                     // Prepare
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
 
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                 }
                 finally
                 {
@@ -586,10 +571,9 @@ namespace MeshKernelNETCoreTest.Api
                     // Prepare
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearSmoothingDirectional(id,
+                    Assert.AreEqual(0, api.CurvilinearSmoothingDirectional(id,
                                                                       10,
                                                                       10.0,
                                                                       0.0,
@@ -598,12 +582,12 @@ namespace MeshKernelNETCoreTest.Api
                                                                       10.0,
                                                                       0.0,
                                                                       30.0,
-                                                                      0.0), 0);
+                                                                      0.0));
 
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.AreEqual(curvilinearGrid.NumM, 5);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -625,13 +609,13 @@ namespace MeshKernelNETCoreTest.Api
                 try
                 {
                     id = api.AllocateState(0);
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
-                    Assert.AreEqual(api.CurvilinearRefine(id, 10.0, 20.0, 20.0, 20.0, 10), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                    Assert.AreEqual(0, api.CurvilinearRefine(id, 10.0, 20.0, 20.0, 20.0, 10));
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(curvilinearGrid.NumN, 4);
-                    Assert.AreEqual(curvilinearGrid.NumM, 13);
+                    Assert.AreEqual(4, curvilinearGrid.NumN);
+                    Assert.AreEqual(13, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -655,16 +639,17 @@ namespace MeshKernelNETCoreTest.Api
                     // Prepare
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
                     var orthogonalizationParameters = new OrthogonalizationParameters();
-                    Assert.AreEqual(api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters), 0);
-                    Assert.AreEqual(api.CurvilinearSetBlockOrthogonalize(id, 0.0, 0.0, 30.0, 30.0), 0); Assert.AreEqual(api.CurvilinearFinalizeOrthogonalize(id), 0);
+                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
+                    Assert.AreEqual(0, api.CurvilinearSetBlockOrthogonalize(id, 0.0, 0.0, 30.0, 30.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
                     // Assert
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
-                    Assert.AreEqual(curvilinearGrid.NumM, 5);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -687,15 +672,15 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
 
                     // Execute
-                    Assert.AreEqual(api.CurvilinearMoveNode(id, 0.0, 0.0, -10.0, 0.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearMoveNode(id, 0.0, 0.0, -10.0, 0.0));
                     // Assert
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
-                    Assert.AreEqual(curvilinearGrid.NumM, 5);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
 
                 }
                 finally
@@ -728,10 +713,9 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerXCoordinate = 10.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 10.0;
 
-                    Assert.AreEqual(api.CurvilinearMakeUniformOnExtension(id, makeGridParameters), 0);
+                    Assert.AreEqual(0, api.CurvilinearMakeUniformOnExtension(id, makeGridParameters));
                     var grid = new DisposableCurvilinearGrid();
-                    var success = api.CurvilinearGridGetData(id, out grid);
-                    Assert.AreEqual(success, 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out grid));
                     Assert.AreEqual(6, grid.NumM);
                     Assert.AreEqual(11, grid.NumN);
                 }
@@ -755,14 +739,14 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearLineMirror(id, 1.2, 0.0, 0.0, 0.0, 50.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearLineMirror(id, 1.2, 0.0, 0.0, 0.0, 50.0));
                     // Assert
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
-                    Assert.AreEqual(curvilinearGrid.NumM, 6);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual(6, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -785,19 +769,19 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
 
-                    Assert.AreEqual(api.CurvilinearLineAttractionRepulsion(id,
+                    Assert.AreEqual(0, api.CurvilinearLineAttractionRepulsion(id,
                                                                          0.5,
                                                                          30.0, 0.0, 30.0, 50.0,
-                                                                         10.0, 20.0, 50.0, 20.0), 0);
+                                                                         10.0, 20.0, 50.0, 20.0));
 
 
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     // Assert
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
-                    Assert.AreEqual(curvilinearGrid.NumM, 5);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -819,14 +803,14 @@ namespace MeshKernelNETCoreTest.Api
                 try
                 {
                     id = api.AllocateState(0);
-                    Assert.AreEqual(api.CurvilinearSet(id, grid), 0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    Assert.AreEqual(api.CurvilinearInsertFace(id, -5.0, 5.0), 0);
+                    Assert.AreEqual(0, api.CurvilinearInsertFace(id, -5.0, 5.0));
                     // Assert
-                    Assert.AreEqual(api.CurvilinearGridGetData(id, out curvilinearGrid), 0);
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(curvilinearGrid.NumN, 5);
-                    Assert.AreEqual(curvilinearGrid.NumM, 6);
+                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual(6, curvilinearGrid.NumM);
                 }
                 finally
                 {

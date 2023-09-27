@@ -690,14 +690,6 @@ namespace MeshKernelNETCore.Native
         internal static extern int GetExitCodeUnknownException([In, Out] ref int exitCode);
 
         /// <summary>
-        /// Determines if an error is geometric
-        /// </summary>
-        /// <param name="errorIsGeometric">True if error is geometric, false otherwise</param> 
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_check_error_is_geometric", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CheckErrorIsGeometric([In, Out] ref bool errorIsGeometric);
-
-        /// <summary>
         /// Gets an int indicating the faces location type
         /// </summary>
         /// <param name="type">The int indicating the face location type</param>

@@ -578,14 +578,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="exitCode"></param>
         /// <returns>Error code</returns>
         int GetExitCodeUnknownException(ref int exitCode);
-        
-        /// <summary>
-        /// Determines if an error is geometric
-        /// </summary>
-        /// <param name="errorIsGeometric">True if error is geometric, false otherwise</param> 
-        /// <returns>Error code</returns>
-        int CheckErrorIsGeometric(ref bool errorIsGeometric);
-
+   
         /// <summary>
         /// Gets an int indicating the faces location type
         /// </summary>

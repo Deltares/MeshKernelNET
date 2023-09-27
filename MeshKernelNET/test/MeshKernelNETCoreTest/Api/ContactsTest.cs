@@ -172,9 +172,9 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
 
                     geometryListIn.GeometrySeparator = api.GetSeparator();
-                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
-                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0 };
-                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0, 5.0 };
+                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0, 5.0 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();

@@ -1,4 +1,5 @@
-﻿using MeshKernelNETCore.Api;
+﻿using System;
+using MeshKernelNETCore.Api;
 using NUnit.Framework;
 
 namespace MeshKernelNETCoreTest.Api
@@ -165,7 +166,7 @@ namespace MeshKernelNETCoreTest.Api
                             0.0, 0.0, geometrySeparator
                         };
 
-                    var curvilinearParameters = new CurvilinearParameters();
+                    var curvilinearParameters = CurvilinearParameters.CreateDefault();
                     curvilinearParameters.MRefinement = 40;
                     curvilinearParameters.NRefinement = 10;
                     var splinesToCurvilinearParameters = SplinesToCurvilinearParameters.CreateDefault();
@@ -178,6 +179,12 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     geometryListIn.Dispose();
+                }
+                catch (Exception e)
+                {
+                    api.GetError(out string errorMessage);
+                    Console.WriteLine(errorMessage);
+                    Console.WriteLine(e.ToString());
                 }
                 finally
                 {
@@ -202,50 +209,54 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 9;
+                    geometryListIn.NumberOfCoordinates = 10;
 
                     geometryListIn.XCoordinates = new[]
                     {
-                            273.502319,
-                            274.252319,
-                            275.002350,
-                            458.003479,
-                            719.005127,
-                            741.505249,
-                            710.755066,
-                            507.503784,
-                            305.002533
-                        };
+                        273.502319,
+                        274.252319,
+                        275.002350,
+                        458.003479,
+                        719.005127,
+                        741.505249,
+                        710.755066,
+                        507.503784,
+                        305.002533,
+                        273.502319
+                    };
 
                     geometryListIn.YCoordinates = new[]
                     {
-                            478.880432,
-                            325.128906,
-                            172.127350,
-                            157.127213,
-                            157.127213,
-                            328.128937,
-                            490.880554,
-                            494.630615,
-                            493.130615
-                        };
+                        478.880432,
+                        325.128906,
+                        172.127350,
+                        157.127213,
+                        157.127213,
+                        328.128937,
+                        490.880554,
+                        494.630615,
+                        493.130615,
+                        478.880432
+                    };
 
                     geometryListIn.Values = new[]
                     {
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        };
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    };
 
                     // Call
                     Assert.AreEqual(0, api.CurvilinearComputeTransfiniteFromPolygon(id, geometryListIn, 0, 2, 4, true));
-                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));                    // Assert a valid mesh is produced
+                    Assert.AreEqual(0,
+                        api.CurvilinearGridGetData(id, out curvilinearGrid)); // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(3, curvilinearGrid.NumM);
                     Assert.AreEqual(3, curvilinearGrid.NumN);
@@ -276,7 +287,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 10;
+                    geometryListIn.NumberOfCoordinates = 11;
 
                     geometryListIn.XCoordinates = new[]
                     {
@@ -289,7 +300,8 @@ namespace MeshKernelNETCoreTest.Api
                             593.416260,
                             558.643005,
                             526.733398,
-                            444.095703
+                            444.095703,
+                            444.504791
                         };
 
                     geometryListIn.YCoordinates = new[]
@@ -303,11 +315,13 @@ namespace MeshKernelNETCoreTest.Api
                             266.561584,
                             324.653687,
                             377.836578,
-                            436.746857
+                            436.746857,
+                            437.155945
                         };
 
                     geometryListIn.Values = new[]
                     {
+                            0.0,
                             0.0,
                             0.0,
                             0.0,
@@ -398,32 +412,31 @@ namespace MeshKernelNETCoreTest.Api
                             0.0, 0.0, geometrySeparator
                         };
 
-                    var curvilinearParameters = new CurvilinearParameters
-                    {
-                        MRefinement = 40,
-                        NRefinement = 10
-                    };
-
+                    var curvilinearParameters = CurvilinearParameters.CreateDefault();
+                    curvilinearParameters.MRefinement = 40;
+                    curvilinearParameters.NRefinement = 10;
+                    
                     var splinesToCurvilinearParameters = SplinesToCurvilinearParameters.CreateDefault();
                     splinesToCurvilinearParameters.GrowGridOutside = false;
 
                     // Execute
-                    api.CurvilinearInitializeOrthogonalGridFromSplines(id,
+                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalGridFromSplines(id,
                                                                        geometryListIn,
                                                                        curvilinearParameters,
-                                                                       splinesToCurvilinearParameters);
+                                                                       splinesToCurvilinearParameters));
 
                     int numLayers = 3;
                     for (int i = 1; i < numLayers; i++)
                     {
-                        Assert.AreEqual(0, api.CurvilinearIterateOrthogonalGridFromSplines(id, i), 0);
+                        Assert.AreEqual(0, api.CurvilinearIterateOrthogonalGridFromSplines(id, i));
                         Assert.AreEqual(0, api.CurvilinearRefreshOrthogonalGridFromSplines(id));
                     }
 
                     Assert.AreEqual(0, api.CurvilinearDeleteOrthogonalGridFromSplines(id));
-                    // Assert
 
-                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.AreEqual(curvilinearGrid.NumM, 3);
+                    // Assert
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); 
+                    Assert.AreEqual(3, curvilinearGrid.NumM);
                     Assert.AreEqual(5, curvilinearGrid.NumN);
                 }
                 finally
@@ -509,7 +522,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    var orthogonalizationParameters = new OrthogonalizationParameters();
+                    var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
                     Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
                     Assert.AreEqual(0, api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0), 0);
                     Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
@@ -641,7 +654,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
-                    var orthogonalizationParameters = new OrthogonalizationParameters();
+                    var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
                     Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
                     Assert.AreEqual(0, api.CurvilinearSetBlockOrthogonalize(id, 0.0, 0.0, 30.0, 30.0), 0);
                     Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
@@ -650,6 +663,12 @@ namespace MeshKernelNETCoreTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual(5, curvilinearGrid.NumN);
                     Assert.AreEqual(5, curvilinearGrid.NumM);
+                }
+                catch (Exception e)
+                {
+                    api.GetError(out string errorMessage);
+                    Console.WriteLine(errorMessage);
+                    Console.WriteLine(e.ToString());
                 }
                 finally
                 {

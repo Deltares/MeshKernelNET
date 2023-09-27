@@ -543,13 +543,14 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 4;
+                    geometryListIn.NumberOfCoordinates = 5;
 
                     geometryListIn.XCoordinates = new[]
                     {
                             0.0,
                             1.0,
                             1.0,
+                            0.0,
                             0.0
                     };
 
@@ -558,11 +559,13 @@ namespace MeshKernelNETCoreTest.Api
                             0.0,
                             0.0,
                             1.0,
-                            1.0
+                            1.0,
+                            0.0
                     };
 
                     geometryListIn.Values = new[]
                     {
+                            0.0,
                             0.0,
                             0.0,
                             0.0,
@@ -573,7 +576,7 @@ namespace MeshKernelNETCoreTest.Api
                     int numberOfPolygonVertices = -1;
                     bool innerOffsetedPolygon = false;
                     Assert.AreEqual(0, api.PolygonCountOffset(id, geometryListIn, innerOffsetedPolygon, distance, ref numberOfPolygonVertices));
-                    Assert.AreEqual(4, numberOfPolygonVertices);
+                    Assert.AreEqual(5, numberOfPolygonVertices);
                     Assert.AreEqual(0, api.PolygonGetOffset(id, geometryListIn, innerOffsetedPolygon, distance, ref disposableGeometryListOut));
                 }
                 finally
@@ -601,24 +604,27 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 3;
+                    geometryListIn.NumberOfCoordinates = 4;
 
                     geometryListIn.XCoordinates = new[]
                     {
                             76.251099,
                             498.503723,
-                            505.253784
+                            505.253784,
+                            76.251099
                     };
 
                     geometryListIn.YCoordinates = new[]
                     {
                             92.626556,
                             91.126541,
-                            490.130554
+                            490.130554,
+                            92.626556
                     };
 
                     geometryListIn.Values = new[]
                     {
+                            0.0,
                             0.0,
                             0.0,
                             0.0
@@ -815,7 +821,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 9;
+                    geometryListIn.NumberOfCoordinates = 10;
 
                     geometryListIn.XCoordinates = new[]
                     {
@@ -827,7 +833,8 @@ namespace MeshKernelNETCoreTest.Api
                             741.505249,
                             710.755066,
                             507.503784,
-                            305.002533
+                            305.002533,
+                            273.502319
                         };
 
                     geometryListIn.YCoordinates = new[]
@@ -840,11 +847,13 @@ namespace MeshKernelNETCoreTest.Api
                             328.128937,
                             490.880554,
                             494.630615,
-                            493.130615
+                            493.130615,
+                            478.880432
                         };
 
                     geometryListIn.Values = new[]
                     {
+                            0.0,
                             0.0,
                             0.0,
                             0.0,
@@ -889,7 +898,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     var geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
-                    geometryListIn.NumberOfCoordinates = 10;
+                    geometryListIn.NumberOfCoordinates = 11;
 
                     geometryListIn.XCoordinates = new[]
                     {
@@ -902,7 +911,8 @@ namespace MeshKernelNETCoreTest.Api
                             593.416260,
                             558.643005,
                             526.733398,
-                            444.095703
+                            444.095703,
+                            444.504791
                         };
 
                     geometryListIn.YCoordinates = new[]
@@ -916,11 +926,13 @@ namespace MeshKernelNETCoreTest.Api
                             266.561584,
                             324.653687,
                             377.836578,
-                            436.746857
+                            436.746857,
+                            437.155945
                         };
 
                     geometryListIn.Values = new[]
                     {
+                            0.0,
                             0.0,
                             0.0,
                             0.0,
@@ -1235,13 +1247,14 @@ namespace MeshKernelNETCoreTest.Api
                     mesh1d.NumEdges = 6;
                     Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
                     geometryListIn.GeometrySeparator = api.GetSeparator();
-                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
-                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0 };
+                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0, 5.0 };
+                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0, 5.0 };
                     geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.AreEqual(0, api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn)); Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
+                    Assert.AreEqual(0, api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn));
+                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
                     // Only one contact is generated, because only one polygon is present 
                     Assert.AreEqual(1, contacts.NumContacts);
                 }
@@ -1440,7 +1453,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void GetError()
+        public void GetErrorThroughAPI()
         {
             using (var api = new MeshKernelApi())
             {
@@ -1449,11 +1462,138 @@ namespace MeshKernelNETCoreTest.Api
                 Assert.AreNotEqual(api.Mesh1dGetData(0, out disposableMesh1D), 0);
 
                 // Execute
-                string errorMessage;
-                Assert.AreEqual(0, api.GetError(out errorMessage));
+                Assert.AreEqual(0, api.GetError(out string errorMessage));
                 Assert.True(errorMessage.Length > 0);
 
                 disposableMesh1D.Dispose();
+            }
+        }
+
+        [Test]
+        public void GetExitCodeSuccessThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeSuccess(ref exitCode));
+                // Assert
+                Assert.AreEqual(0, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeMeshKernelErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeMeshKernelError(ref exitCode));
+                // Assert
+                Assert.AreEqual(1, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeNotImplementedErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeNotImplementedError(ref exitCode));
+                // Assert
+                Assert.AreEqual(2, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeAlgorithmErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeAlgorithmError(ref exitCode));
+                // Assert
+                Assert.AreEqual(3, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeConstraintErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeConstraintError(ref exitCode));
+                // Assert
+                Assert.AreEqual(4, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeMeshGeometryErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeMeshGeometryError(ref exitCode));
+                // Assert
+                Assert.AreEqual(5, exitCode);
+            }
+        }
+        [Test]
+        public void GetExitCodeLinearAlgebraErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeLinearAlgebraError(ref exitCode));
+                // Assert
+                Assert.AreEqual(6, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeRangeErrorThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeRangeError(ref exitCode));
+                // Assert
+                Assert.AreEqual(7, exitCode);
+            }
+        }
+
+        [Test]
+        public void GetExitCodeStdLibExceptionThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeStdLibException(ref exitCode));
+                // Assert
+                Assert.AreEqual(8, exitCode);
+            }
+        }
+        [Test]
+        public void GetExitCodeUnknownExceptionThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int exitCode = -1;
+                Assert.AreEqual(0, api.GetExitCodeUnknownException(ref exitCode));
+                // Assert
+                Assert.AreEqual(9, exitCode);
             }
         }
 

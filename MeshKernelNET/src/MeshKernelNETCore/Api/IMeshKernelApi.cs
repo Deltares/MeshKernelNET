@@ -512,56 +512,56 @@ namespace MeshKernelNETCore.Api
         /// <summary>
         /// Gets the success exit code
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeSuccess(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type MeshKernelError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeMeshKernelError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type NotImplementedError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeNotImplementedError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type AlgorithmError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeAlgorithmError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type ConstraintError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeConstraintError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type MeshGeometryError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeMeshGeometryError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type LinearAlgebraError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeLinearAlgebraError(ref int exitCode);
 
         /// <summary>
         /// Gets the exit code of an exception of type RangeError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         int GetExitCodeRangeError(ref int exitCode);
 

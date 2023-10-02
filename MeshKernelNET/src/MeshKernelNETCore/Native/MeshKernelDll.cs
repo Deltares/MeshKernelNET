@@ -612,7 +612,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the success exit code
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_success", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeSuccess([In, Out] ref int exitCode);
@@ -620,7 +620,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type MeshKernelError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_meshkernel_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeMeshKernelError([In, Out] ref int exitCode);
@@ -628,7 +628,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type NotImplementedError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_not_implemented_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeNotImplementedError([In, Out] ref int exitCode);
@@ -636,7 +636,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type AlgorithmError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_algorithm_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeAlgorithmError([In, Out] ref int exitCode);
@@ -644,7 +644,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type ConstraintError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_constraint_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeConstraintError([In, Out] ref int exitCode);
@@ -652,7 +652,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type MeshGeometryError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_mesh_geometry_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeMeshGeometryError([In, Out] ref int exitCode);
@@ -660,7 +660,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type LinearAlgebraError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_linear_algebra_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeLinearAlgebraError([In, Out] ref int exitCode);
@@ -668,7 +668,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type RangeError
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_range_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeRangeError([In, Out] ref int exitCode);
@@ -676,7 +676,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type StdLibException
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_stdlib_exception", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeStdLibException([In, Out] ref int exitCode);
@@ -684,7 +684,7 @@ namespace MeshKernelNETCore.Native
         /// <summary>
         /// Gets the exit code of an exception of type UnknownException
         /// </summary>
-        /// <param name="exitCode"></param>
+        /// <param name="exitCode">The exit code</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_exit_code_unknown_exception", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetExitCodeUnknownException([In, Out] ref int exitCode);

@@ -587,7 +587,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="exitCode"></param>
         /// <returns>Error code</returns>
         int GetExitCodeUnknownException(ref int exitCode);
-
+   
         /// <summary>
         /// Gets an int indicating the faces location type
         /// </summary>

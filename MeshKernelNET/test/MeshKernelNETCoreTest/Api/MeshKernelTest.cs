@@ -2062,7 +2062,6 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.YGridBlockSize = 10.0;
 
                     Assert.AreEqual(0, api.Mesh2dMakeUniform(id, makeGridParameters));
-
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(16, mesh2d.NumNodes);

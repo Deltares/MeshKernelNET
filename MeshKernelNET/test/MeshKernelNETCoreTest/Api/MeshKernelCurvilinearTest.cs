@@ -68,7 +68,6 @@ namespace MeshKernelNETCoreTest.Api
                 }
             }
         }
-
         [Test]
         public void CurvilinearMakeUniformFromPolygonThroughAPIFails()
         {

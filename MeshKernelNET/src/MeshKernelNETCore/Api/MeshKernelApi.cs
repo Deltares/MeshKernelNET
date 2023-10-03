@@ -1018,11 +1018,17 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMakeMeshFromSamples(meshKernelId, ref geometryListNative);
         }
 
-        public int Mesh2dMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
+        public int Mesh2dMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters)
+        {
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            return MeshKernelDll.Mesh2dMakeUniform(meshKernelId, ref makeGridParametersNative);
+        }
+
+        public int Mesh2dMakeUniformFromPolygons(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
         {
             var geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeUniform(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeUniformFromPolygons(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
         }
 
         public int Mesh2dMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)

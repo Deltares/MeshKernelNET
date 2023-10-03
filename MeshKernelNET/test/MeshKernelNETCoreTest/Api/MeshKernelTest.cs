@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.ServiceModel.Channels;
 using MeshKernelNETCore.Api;
 using NUnit.Framework;
 using static MeshKernelNETCoreTest.Api.TestUtilityFunctions;
@@ -2042,7 +2043,6 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
-            using (var disposableGeometryList = new DisposableGeometryList())
             {
                 var id = 0;
                 var mesh2d = new DisposableMesh2D();
@@ -2061,11 +2061,92 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.XGridBlockSize = 10.0;
                     makeGridParameters.YGridBlockSize = 10.0;
 
-                    Assert.AreEqual(0, api.Mesh2dMakeUniform(id, makeGridParameters, disposableGeometryList));
+                    Assert.AreEqual(0, api.Mesh2dMakeUniform(id, makeGridParameters));
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(16, mesh2d.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dMakeUniformFromPolygonsThroughAPIFails()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridType = 0;
+                    makeGridParameters.NumberOfColumns = 3;
+                    makeGridParameters.NumberOfRows = 3;
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.OriginXCoordinate = 0.0;
+                    makeGridParameters.OriginYCoordinate = 0.0;
+                    makeGridParameters.XGridBlockSize = 10.0;
+                    makeGridParameters.YGridBlockSize = 10.0;
+
+                    // geometry list is empty, expect an algorithm error to be thrown in the backend
+                    var algorithmErrorExitCode = -1;
+                    api.GetExitCodeAlgorithmError(ref algorithmErrorExitCode);
+                    Assert.AreEqual(algorithmErrorExitCode,api.Mesh2dMakeUniformFromPolygons(id, makeGridParameters, polygon));
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dMakeUniformFromPolygonsThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.XGridBlockSize = 1.0;
+                    makeGridParameters.YGridBlockSize = 1.0;
+
+                    polygon.XCoordinates = new[] { 0.5, 2.5, 5.5, 3.5, 0.5 };
+                    polygon.YCoordinates = new[] { 2.5, 0.5, 3.0, 5.0, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    polygon.NumberOfCoordinates = 5;
+
+                    Assert.AreEqual(0, api.Mesh2dMakeUniformFromPolygons(id, makeGridParameters, polygon));
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.NotNull(mesh2d);
+                    Assert.AreEqual(9, mesh2d.NumNodes);
+                }
+                catch (Exception e)
+                {
+                    api.GetError(out string msg);
+                    Console.Write(msg);
                 }
                 finally
                 {

@@ -1227,23 +1227,32 @@ namespace MeshKernelNETCore.Native
         internal static extern int Mesh2dMakeMeshFromSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
 
         /// <summary>
+        /// Makes uniform meshes
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMakeUniform([In] int meshKernelId,
+                                                     [In] ref MakeGridParametersNative makeGridParameters);
+
+        /// <summary>
         /// Makes uniform meshes from a series of polygons
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeUniform([In] int meshKernelId,
-                                                     [In] ref MakeGridParametersNative makeGridParameters,
-                                                     [In] ref GeometryListNative geometryList);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform_from_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMakeUniformFromPolygons([In] int meshKernelId,
+            [In] ref MakeGridParametersNative makeGridParameters,
+            [In] ref GeometryListNative geometryList);
 
         /// <summary>
         /// Makes uniform mesh on a defined on an extension
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
-        /// <param name="geometryListNative">The polygons to account for</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform_on_extension", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dMakeUniformOnExtension([In] int meshKernelId,

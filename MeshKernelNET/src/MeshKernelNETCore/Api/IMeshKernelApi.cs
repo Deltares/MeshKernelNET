@@ -578,7 +578,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="exitCode"></param>
         /// <returns>Error code</returns>
         int GetExitCodeUnknownException(ref int exitCode);
-   
+
         /// <summary>
         /// Gets an int indicating the faces location type
         /// </summary>
@@ -1017,22 +1017,30 @@ namespace MeshKernelNETCore.Api
         int Mesh2dMakeMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList);
 
         /// <summary>
+        /// Makes uniform meshes
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
+        /// <returns>Error code</returns>
+        int Mesh2dMakeUniform(int meshKernelId,
+                               in MakeGridParameters makeGridParameters);
+
+        /// <summary>
         /// Makes uniform meshes from a series of polygons
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeUniform(int meshKernelId,
-                               in MakeGridParameters makeGridParameters,
-                               in DisposableGeometryList geometryList);
+        int Mesh2dMakeUniformFromPolygons(int meshKernelId,
+            in MakeGridParameters makeGridParameters,
+            in DisposableGeometryList geometryList);
 
         /// <summary>
         /// Makes uniform mesh on a defined on an extension
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
-        /// <param name="geometryListNative">The polygons to account for</param>
         /// <returns>Error code</returns>
         int Mesh2dMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
 

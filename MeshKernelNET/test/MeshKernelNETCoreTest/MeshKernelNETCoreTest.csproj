@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Deltares.MeshKernel" Version="2.0.0-dev.2191" />
+		<PackageReference Include="Deltares.MeshKernel" Version="2.0.0-dev.2198" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 		<PackageReference Include="NetTopologySuite" Version="1.15.0" />
 		<PackageReference Include="coverlet.collector" Version="3.0.2" />

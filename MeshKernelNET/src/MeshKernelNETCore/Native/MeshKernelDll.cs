@@ -351,8 +351,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <param name="geometryListNative">The polygon to account for</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform_from_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeUniformFromPolygons([In] int meshKernelId,
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform_from_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearMakeUniformFromPolygon([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParametersNative,
             [In] ref GeometryListNative geometryListNative);
 
@@ -1253,8 +1253,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform_from_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeUniformFromPolygons([In] int meshKernelId,
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_uniform_from_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMakeUniformFromPolygon([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParameters,
             [In] ref GeometryListNative geometryList);
 

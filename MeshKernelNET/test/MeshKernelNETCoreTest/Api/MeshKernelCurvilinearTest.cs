@@ -90,7 +90,7 @@ namespace MeshKernelNETCoreTest.Api
                     // geometry list is empty, expect an algorithm error to be thrown in the backend
                     var algorithmErrorExitCode = -1;
                     api.GetExitCodeAlgorithmError(ref algorithmErrorExitCode);
-                    Assert.AreEqual(algorithmErrorExitCode, api.CurvilinearMakeUniformFromPolygons(id, makeGridParameters, polygon));
+                    Assert.AreEqual(algorithmErrorExitCode, api.CurvilinearMakeUniformFromPolygon(id, makeGridParameters, polygon));
                 }
                 finally
                 {
@@ -124,7 +124,7 @@ namespace MeshKernelNETCoreTest.Api
                     polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     polygon.NumberOfCoordinates = 5;
 
-                    Assert.AreEqual(0, api.CurvilinearMakeUniformFromPolygons(id, makeGridParameters, polygon));
+                    Assert.AreEqual(0, api.CurvilinearMakeUniformFromPolygon(id, makeGridParameters, polygon));
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); 
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(11, curvilinearGrid.NumM);

@@ -272,7 +272,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <param name="disposableGeometryListIn"></param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeUniformFromPolygons(int meshKernelId,
+        int CurvilinearMakeUniformFromPolygon(int meshKernelId,
                                                in MakeGridParameters makeGridParameters,
                                                in DisposableGeometryList disposableGeometryListIn);
 
@@ -1041,7 +1041,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeUniformFromPolygons(int meshKernelId,
+        int Mesh2dMakeUniformFromPolygon(int meshKernelId,
             in MakeGridParameters makeGridParameters,
             in DisposableGeometryList geometryList);
 

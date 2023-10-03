@@ -25,7 +25,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     mesh1d.NodeX = new[]
                     {
@@ -51,14 +51,14 @@ namespace MeshKernelNETCoreTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     double projectionFactor = 0.0;
-                    Assert.IsTrue(api.ContactsComputeSingle(id, onedNodeMaskPinnedAddress, geometryListIn, projectionFactor));
+                    Assert.AreEqual(0, api.ContactsComputeSingle(id, onedNodeMaskPinnedAddress, geometryListIn, projectionFactor));
 
                     var contacts = new DisposableContacts();
-                    Assert.IsTrue(api.ContactsGetData(id, out contacts));
+                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
                     Assert.Greater(contacts.NumContacts, 0);
                 }
                 finally
@@ -84,7 +84,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     mesh1d.NodeX = new[]
                     {
@@ -110,13 +110,13 @@ namespace MeshKernelNETCoreTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.IsTrue(api.ContactsComputeMultiple(id, onedNodeMaskPinnedAddress));
+                    Assert.AreEqual(0, api.ContactsComputeMultiple(id, onedNodeMaskPinnedAddress));
 
                     var contacts = new DisposableContacts();
-                    Assert.IsTrue(api.ContactsGetData(id, out contacts));
+                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
                     Assert.Greater(contacts.NumContacts, 0);
                 }
                 finally
@@ -134,7 +134,7 @@ namespace MeshKernelNETCoreTest.Api
             using (var mesh = CreateMesh2D(4, 4, 10, 10))
             using (var mesh1d = new DisposableMesh1D())
             using (var api = new MeshKernelApi())
-            using(var geometryListIn = new DisposableGeometryList())
+            using (var geometryListIn = new DisposableGeometryList())
             {
                 var id = 0;
                 var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
@@ -143,7 +143,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     mesh1d.NodeX = new[]
                     {
@@ -169,22 +169,22 @@ namespace MeshKernelNETCoreTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
 
                     geometryListIn.GeometrySeparator = api.GetSeparator();
-                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
-                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0 };
-                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0, 5.0 };
+                    geometryListIn.YCoordinates = new[] { 5.0, 5.0, 25.0, 25.0, 5.0 };
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.IsTrue(api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn));
+                    Assert.AreEqual(0, api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn));
 
                     var contacts = new DisposableContacts();
-                    Assert.IsTrue(api.ContactsGetData(id, out contacts));
+                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
 
                     // Only one contact is generated, because only one polygon is present 
-                    Assert.AreEqual(contacts.NumContacts, 1);
+                    Assert.AreEqual(1, contacts.NumContacts);
                 }
                 finally
                 {
@@ -198,10 +198,10 @@ namespace MeshKernelNETCoreTest.Api
         public void ContactsComputeWithPointsThroughAPI()
         {
             //Setup
-            using(var mesh = CreateMesh2D(4, 4, 10, 10))
-            using(var mesh1d = new DisposableMesh1D())
-            using(var api = new MeshKernelApi())
-            using(var geometryListIn = new DisposableGeometryList())
+            using (var mesh = CreateMesh2D(4, 4, 10, 10))
+            using (var mesh1d = new DisposableMesh1D())
+            using (var api = new MeshKernelApi())
+            using (var geometryListIn = new DisposableGeometryList())
             {
                 var id = 0;
                 var onedNodeMask = new[] { 1, 1, 1, 1, 1, 1, 1 };
@@ -210,7 +210,7 @@ namespace MeshKernelNETCoreTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.IsTrue(api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     mesh1d.NodeX = new[]
                     {
@@ -236,7 +236,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.IsTrue(api.Mesh1dSet(id, mesh1d));
+                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
 
                     geometryListIn.GeometrySeparator = api.GetSeparator();
                     geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
@@ -245,13 +245,13 @@ namespace MeshKernelNETCoreTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     var onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.IsTrue(api.ContactsComputeWithPoints(id, onedNodeMaskPinnedAddress, geometryListIn));
+                    Assert.AreEqual(0, api.ContactsComputeWithPoints(id, onedNodeMaskPinnedAddress, geometryListIn));
 
                     var contacts = new DisposableContacts();
-                    Assert.IsTrue(api.ContactsGetData(id, out contacts));
+                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
 
                     // Four contacts are generated, one for each point
-                    Assert.AreEqual(contacts.NumContacts, 4);
+                    Assert.AreEqual(4, contacts.NumContacts);
                 }
                 finally
                 {

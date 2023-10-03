@@ -335,16 +335,26 @@ namespace MeshKernelNETCore.Native
         internal static extern int CurvilinearLineShift([In] int meshKernelId);
 
         /// <summary>
-        /// Make a new curvilinear mesh
+        /// Make a new uniform curvilinear mesh
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearMakeUniform([In] int meshKernelId,
+                                                          [In] ref MakeGridParametersNative makeGridParametersNative);
+
+        /// <summary>
+        /// Make a new uniform curvilinear mesh from polygons
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <param name="geometryListNative">The polygon to account for</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeUniform([In] int meshKernelId,
-                                                          [In] ref MakeGridParametersNative makeGridParametersNative,
-                                                          [In] ref GeometryListNative geometryListNative);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_uniform_from_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearMakeUniformFromPolygons([In] int meshKernelId,
+            [In] ref MakeGridParametersNative makeGridParametersNative,
+            [In] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Make a new curvilinear mesh

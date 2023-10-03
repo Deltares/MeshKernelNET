@@ -258,14 +258,23 @@ namespace MeshKernelNETCore.Api
         int CurvilinearLineShift(int meshKernelId);
 
         /// <summary>
-        ///     Make a new grid
+        /// Make a new uniform grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
+        /// <returns>Error code</returns>
+        int CurvilinearMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters);
+
+        /// <summary>
+        /// Make a new uniform grid from polygons
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <param name="disposableGeometryListIn"></param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters,
-            in DisposableGeometryList disposableGeometryListIn);
+        int CurvilinearMakeUniformFromPolygons(int meshKernelId,
+                                               in MakeGridParameters makeGridParameters,
+                                               in DisposableGeometryList disposableGeometryListIn);
 
         /// <summary>
         /// Make a new curvilinear mesh

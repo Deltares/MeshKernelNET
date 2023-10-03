@@ -269,21 +269,26 @@ namespace MeshKernelNETCore.Api
         }
 
         public int CurvilinearMakeUniform(int meshKernelId,
-                                           in MakeGridParameters makeGridParameters,
-                                           in DisposableGeometryList disposableGeometryListIn)
+                                           in MakeGridParameters makeGridParameters)
         {
-            var makeGridParametersNative =
-                makeGridParameters.ToMakeGridParametersNative();
-            var geometryListNative = disposableGeometryListIn.CreateNativeObject();
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            return MeshKernelDll.CurvilinearMakeUniform(meshKernelId, ref makeGridParametersNative);
+        }
 
-            return MeshKernelDll.CurvilinearMakeUniform(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
+        public int CurvilinearMakeUniformFromPolygons(int meshKernelId,
+            in MakeGridParameters makeGridParameters,
+            in DisposableGeometryList disposableGeometryListIn)
+        {
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            var geometryListNative = disposableGeometryListIn.CreateNativeObject();
+            return MeshKernelDll.CurvilinearMakeUniformFromPolygons(meshKernelId, 
+                                                                    ref makeGridParametersNative,
+                                                                    ref geometryListNative);
         }
 
         public int CurvilinearMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
         {
-            var makeGridParametersNative =
-                makeGridParameters.ToMakeGridParametersNative();
-
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.CurvilinearMakeUniformOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 

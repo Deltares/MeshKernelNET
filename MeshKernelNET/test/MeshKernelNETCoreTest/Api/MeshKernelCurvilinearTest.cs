@@ -35,7 +35,6 @@ namespace MeshKernelNETCoreTest.Api
         {
             // Setup
             using (var api = new MeshKernelApi())
-            using (var disposableGeometryList = new DisposableGeometryList())
             {
                 var id = 0;
                 var curvilinearGrid = new DisposableCurvilinearGrid();
@@ -57,9 +56,10 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerXCoordinate = 0.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
-                    Assert.AreEqual(0, api.CurvilinearMakeUniform(id, makeGridParameters, disposableGeometryList));
-
-                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); Assert.AreEqual(4, curvilinearGrid.NumM);
+                    Assert.AreEqual(0, api.CurvilinearMakeUniform(id, makeGridParameters));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.NotNull(curvilinearGrid);
+                    Assert.AreEqual(4, curvilinearGrid.NumM);
                 }
                 finally
                 {
@@ -69,6 +69,75 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
+        [Test]
+        public void CurvilinearMakeUniformFromPolygonThroughAPIFails()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                var curvilinearGrid = new DisposableCurvilinearGrid();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.XGridBlockSize = 1;
+                    makeGridParameters.YGridBlockSize = 1;
+
+                    // geometry list is empty, expect an algorithm error to be thrown in the backend
+                    var algorithmErrorExitCode = -1;
+                    api.GetExitCodeAlgorithmError(ref algorithmErrorExitCode);
+                    Assert.AreEqual(algorithmErrorExitCode, api.CurvilinearMakeUniformFromPolygons(id, makeGridParameters, polygon));
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    curvilinearGrid.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearMakeUniformFromPolygonThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                var curvilinearGrid = new DisposableCurvilinearGrid();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.XGridBlockSize = 1;
+                    makeGridParameters.YGridBlockSize = 1;
+
+                    polygon.XCoordinates = new[] { 0.5, 2.5, 5.5, 3.5, 0.5 };
+                    polygon.YCoordinates = new[] { 2.5, 0.5, 3.0, 5.0, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    polygon.NumberOfCoordinates = 5;
+
+                    Assert.AreEqual(0, api.CurvilinearMakeUniformFromPolygons(id, makeGridParameters, polygon));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); 
+                    Assert.NotNull(curvilinearGrid);
+                    Assert.AreEqual(11, curvilinearGrid.NumM);
+                    Assert.AreEqual(11, curvilinearGrid.NumN);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    curvilinearGrid.Dispose();
+                }
+            }
+        }
 
         [Test]
         public void CurvilinearComputeTransfiniteFromSplinesThroughAPI()

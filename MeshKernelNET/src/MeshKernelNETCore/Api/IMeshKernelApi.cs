@@ -263,7 +263,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeRectangular(int meshKernelId, in MakeGridParameters makeGridParameters);
+        int CurvilinearComputeRectangularGrid(int meshKernelId, in MakeGridParameters makeGridParameters);
 
         /// <summary>
         /// Make a new uniform grid from polygons
@@ -272,7 +272,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <param name="disposableGeometryListIn"></param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeRectangularFromPolygon(int meshKernelId,
+        int CurvilinearComputeRectangularGridFromPolygon(int meshKernelId,
                                                in MakeGridParameters makeGridParameters,
                                                in DisposableGeometryList disposableGeometryListIn);
 
@@ -282,7 +282,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeRectangularOnExtension(int meshKernelId, in MakeGridParameters makeGridParametersNative);
+        int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, in MakeGridParameters makeGridParametersNative);
 
         /// <summary>
         /// Moves a point of a curvilinear grid from one location to another

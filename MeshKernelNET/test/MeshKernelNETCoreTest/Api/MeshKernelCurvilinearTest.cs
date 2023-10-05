@@ -31,7 +31,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void CurvilinearMakeRectangularThroughAPI()
+        public void CurvilinearComputeRectangularGridThroughAPI()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -56,7 +56,7 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerXCoordinate = 0.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 0.0;
 
-                    Assert.AreEqual(0, api.CurvilinearMakeRectangular(id, makeGridParameters));
+                    Assert.AreEqual(0, api.CurvilinearComputeRectangularGrid(id, makeGridParameters));
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(4, curvilinearGrid.NumM);
@@ -69,7 +69,7 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
         [Test]
-        public void CurvilinearMakeRectangularFromPolygonThroughAPIFails()
+        public void CurvilinearComputeRectangularGridFromPolygonThroughAPIFails()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -90,7 +90,7 @@ namespace MeshKernelNETCoreTest.Api
                     // geometry list is empty, expect an algorithm error to be thrown in the backend
                     var algorithmErrorExitCode = -1;
                     api.GetExitCodeAlgorithmError(ref algorithmErrorExitCode);
-                    Assert.AreEqual(algorithmErrorExitCode, api.CurvilinearMakeRectangularFromPolygon(id, makeGridParameters, polygon));
+                    Assert.AreEqual(algorithmErrorExitCode, api.CurvilinearComputeRectangularGridFromPolygon(id, makeGridParameters, polygon));
                 }
                 finally
                 {
@@ -101,7 +101,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void CurvilinearMakeRectangularFromPolygonThroughAPI()
+        public void CurvilinearComputeRectangularGridFromPolygonThroughAPI()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -124,7 +124,7 @@ namespace MeshKernelNETCoreTest.Api
                     polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     polygon.NumberOfCoordinates = 5;
 
-                    Assert.AreEqual(0, api.CurvilinearMakeRectangularFromPolygon(id, makeGridParameters, polygon));
+                    Assert.AreEqual(0, api.CurvilinearComputeRectangularGridFromPolygon(id, makeGridParameters, polygon));
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid)); 
                     Assert.NotNull(curvilinearGrid);
                     Assert.AreEqual(11, curvilinearGrid.NumM);
@@ -767,7 +767,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void CurvilinearMakeRectangularOnExtensionThroughAPI()
+        public void CurvilinearComputeRectangularGridOnExtensionThroughAPI()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -788,7 +788,7 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerXCoordinate = 10.0;
                     makeGridParameters.UpperRightCornerYCoordinate = 10.0;
 
-                    Assert.AreEqual(0, api.CurvilinearMakeRectangularOnExtension(id, makeGridParameters));
+                    Assert.AreEqual(0, api.CurvilinearComputeRectangularGridOnExtension(id, makeGridParameters));
                     var grid = new DisposableCurvilinearGrid();
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out grid));
                     Assert.AreEqual(6, grid.NumM);

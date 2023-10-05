@@ -340,8 +340,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_rectangular_grid", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeRectangular([In] int meshKernelId,
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_rectangular_grid", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeRectangularGrid([In] int meshKernelId,
                                                           [In] ref MakeGridParametersNative makeGridParametersNative);
 
         /// <summary>
@@ -351,8 +351,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <param name="geometryListNative">The polygon to account for</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_rectangular_grid_from_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeRectangularFromPolygon([In] int meshKernelId,
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_rectangular_grid_from_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeRectangularGridFromPolygon([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParametersNative,
             [In] ref GeometryListNative geometryListNative);
 
@@ -362,8 +362,8 @@ namespace MeshKernelNETCore.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_make_rectangular_grid_on_extension", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearMakeRectangularOnExtension([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParametersNative);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_rectangular_grid_on_extension", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeRectangularGridOnExtension([In] int meshKernelId, [In] ref MakeGridParametersNative makeGridParametersNative);
 
         /// <summary>
         /// Moves a point of a curvilinear grid from one location to another
@@ -1237,7 +1237,7 @@ namespace MeshKernelNETCore.Native
         internal static extern int Mesh2dMakeTriangularMeshFromSamples([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
 
         /// <summary>
-        /// Makes a rectangular meshe
+        /// Makes a rectangular mesh
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
@@ -1247,7 +1247,7 @@ namespace MeshKernelNETCore.Native
             [In] ref MakeGridParametersNative makeGridParameters);
 
         /// <summary>
-        ///  Makes a rectangular meshe from a polygo
+        ///  Makes a rectangular mesh from a polygon
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>

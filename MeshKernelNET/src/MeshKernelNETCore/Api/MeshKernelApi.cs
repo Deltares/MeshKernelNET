@@ -268,28 +268,28 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.CurvilinearLineShift(meshKernelId);
         }
 
-        public int CurvilinearMakeRectangular(int meshKernelId,
+        public int CurvilinearComputeRectangularGrid(int meshKernelId,
                                            in MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.CurvilinearMakeRectangular(meshKernelId, ref makeGridParametersNative);
+            return MeshKernelDll.CurvilinearComputeRectangularGrid(meshKernelId, ref makeGridParametersNative);
         }
 
-        public int CurvilinearMakeRectangularFromPolygon(int meshKernelId,
+        public int CurvilinearComputeRectangularGridFromPolygon(int meshKernelId,
             in MakeGridParameters makeGridParameters,
             in DisposableGeometryList disposableGeometryListIn)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             var geometryListNative = disposableGeometryListIn.CreateNativeObject();
-            return MeshKernelDll.CurvilinearMakeRectangularFromPolygon(meshKernelId, 
+            return MeshKernelDll.CurvilinearComputeRectangularGridFromPolygon(meshKernelId, 
                                                                     ref makeGridParametersNative,
                                                                     ref geometryListNative);
         }
 
-        public int CurvilinearMakeRectangularOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.CurvilinearMakeRectangularOnExtension(meshKernelId, ref makeGridParametersNative);
+            return MeshKernelDll.CurvilinearComputeRectangularGridOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 
         public int CurvilinearMoveNode(int meshKernelId, double xFromPoint, double yFromPoint, double xToPoint, double yToPoint)

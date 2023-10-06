@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D13A0EA4-B77
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6E2D9D61-87C3-43CB-954F-D4D6D02BC6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshKernelNETCoreTest", "test\MeshKernelNETCoreTest\MeshKernelNETCoreTest.csproj", "{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshKernelNETTests", "test\MeshKernelNETTests\MeshKernelNETTests.csproj", "{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

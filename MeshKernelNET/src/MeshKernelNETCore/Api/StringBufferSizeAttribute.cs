@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MeshKernelNETCoreTest")]
+[assembly: InternalsVisibleTo("MeshKernelNETTests")]
 
 namespace MeshKernelNETCore.Api
 {

@@ -1243,7 +1243,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_rectangular_mesh", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeRectangular([In] int meshKernelId,
+        internal static extern int Mesh2dMakeRectangularMesh([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParameters);
 
         /// <summary>
@@ -1254,7 +1254,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_rectangular_mesh_from_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeRectangularFromPolygon([In] int meshKernelId,
+        internal static extern int Mesh2dMakeRectangularMeshFromPolygon([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParameters,
             [In] ref GeometryListNative geometryList);
 
@@ -1265,7 +1265,7 @@ namespace MeshKernelNETCore.Native
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_rectangular_mesh_on_extension", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeRectangularOnExtension([In] int meshKernelId,
+        internal static extern int Mesh2dMakeRectangularMeshOnExtension([In] int meshKernelId,
             [In] ref MakeGridParametersNative makeGridParameters);
 
         /// <summary>

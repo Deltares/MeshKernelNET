@@ -1023,23 +1023,23 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dMakeTriangularMeshFromSamples(meshKernelId, ref geometryListNative);
         }
 
-        public int Mesh2dMakeRectangular(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int Mesh2dMakeRectangularMesh(int meshKernelId, in MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeRectangular(meshKernelId, ref makeGridParametersNative);
+            return MeshKernelDll.Mesh2dMakeRectangularMesh(meshKernelId, ref makeGridParametersNative);
         }
 
-        public int Mesh2dMakeRectangularFromPolygon(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
+        public int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
         {
             var geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeRectangularFromPolygon(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeRectangularMeshFromPolygon(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
         }
 
-        public int Mesh2dMakeRectangularOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeRectangularOnExtension(meshKernelId, ref makeGridParametersNative);
+            return MeshKernelDll.Mesh2dMakeRectangularMeshOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 
         /// <inheritdoc />

@@ -1031,7 +1031,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeRectangular(int meshKernelId,
+        int Mesh2dMakeRectangularMesh(int meshKernelId,
                                in MakeGridParameters makeGridParameters);
 
         /// <summary>
@@ -1041,7 +1041,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeRectangularFromPolygon(int meshKernelId,
+        int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId,
             in MakeGridParameters makeGridParameters,
             in DisposableGeometryList geometryList);
 
@@ -1051,7 +1051,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeRectangularOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
+        int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
 
         /// <summary>
         ///     Merges vertices within a distance of 0.001 m, effectively removing small edges

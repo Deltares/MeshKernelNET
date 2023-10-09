@@ -2039,7 +2039,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void Mesh2dMakeRectangularThroughAPI()
+        public void Mesh2dMakeRectangularMeshThroughAPI()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -2061,7 +2061,7 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.XGridBlockSize = 10.0;
                     makeGridParameters.YGridBlockSize = 10.0;
 
-                    Assert.AreEqual(0, api.Mesh2dMakeRectangular(id, makeGridParameters));
+                    Assert.AreEqual(0, api.Mesh2dMakeRectangularMesh(id, makeGridParameters));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(16, mesh2d.NumNodes);
@@ -2075,7 +2075,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void Mesh2dMakeRectangularFromPolygonThroughAPIFails()
+        public void Mesh2dMakeRectangularMeshFromPolygonThroughAPIFails()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -2096,7 +2096,7 @@ namespace MeshKernelNETCoreTest.Api
                     // geometry list is empty, expect an algorithm error to be thrown in the backend
                     var algorithmErrorExitCode = -1;
                     api.GetExitCodeAlgorithmError(ref algorithmErrorExitCode);
-                    Assert.AreEqual(algorithmErrorExitCode,api.Mesh2dMakeRectangularFromPolygon(id, makeGridParameters, polygon));
+                    Assert.AreEqual(algorithmErrorExitCode,api.Mesh2dMakeRectangularMeshFromPolygon(id, makeGridParameters, polygon));
                 }
                 finally
                 {
@@ -2108,7 +2108,7 @@ namespace MeshKernelNETCoreTest.Api
 
 
         [Test]
-        public void Mesh2dMakeRectangularFromPolygonThroughAPI()
+        public void Mesh2dMakeRectangularMeshFromPolygonThroughAPI()
         {
             // Setup
             using (var api = new MeshKernelApi())
@@ -2131,7 +2131,7 @@ namespace MeshKernelNETCoreTest.Api
                     polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     polygon.NumberOfCoordinates = 5;
 
-                    Assert.AreEqual(0, api.Mesh2dMakeRectangularFromPolygon(id, makeGridParameters, polygon));
+                    Assert.AreEqual(0, api.Mesh2dMakeRectangularMeshFromPolygon(id, makeGridParameters, polygon));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(9, mesh2d.NumNodes);
@@ -2145,7 +2145,7 @@ namespace MeshKernelNETCoreTest.Api
         }
 
         [Test]
-        public void Mesh2dMakeRectangularOnExtensionThroughAPI()
+        public void Mesh2dMakeRectangularMeshOnExtensionThroughAPI()
         {
 
             using (var api = new MeshKernelApi())
@@ -2169,7 +2169,7 @@ namespace MeshKernelNETCoreTest.Api
                     makeGridParameters.UpperRightCornerYCoordinate = 100.0;
 
                     // Execute
-                    Assert.AreEqual(0, api.Mesh2dMakeRectangularOnExtension(id, makeGridParameters));
+                    Assert.AreEqual(0, api.Mesh2dMakeRectangularMeshOnExtension(id, makeGridParameters));
                     // Assert
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(121, mesh2D.NumNodes);

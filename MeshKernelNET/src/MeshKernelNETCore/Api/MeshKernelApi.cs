@@ -677,7 +677,7 @@ namespace MeshKernelNETCore.Api
         }
         public int Mesh2dDelete(int meshKernelId,
             in DisposableGeometryList disposableGeometryListOut,
-            DeleteMeshOptions deletionOption,
+            DeleteMeshInsidePolygonOptions deletionOption,
             bool invertDeletion)
         {
             var geometryListNativeIn = disposableGeometryListOut.CreateNativeObject();

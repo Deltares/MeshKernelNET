@@ -751,7 +751,7 @@ namespace MeshKernelNETCore.Api
         /// <returns>If the operation succeeded</returns>
         int Mesh2dDelete(int meshKernelId,
             in DisposableGeometryList disposableGeometryListOut,
-            DeleteMeshOptions deletionOption,
+            DeleteMeshInsidePolygonOptions deletionOption,
             bool invertDeletion);
 
         /// <summary>

@@ -268,23 +268,28 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.CurvilinearLineShift(meshKernelId);
         }
 
-        public int CurvilinearMakeUniform(int meshKernelId,
-                                           in MakeGridParameters makeGridParameters,
-                                           in DisposableGeometryList disposableGeometryListIn)
+        public int CurvilinearComputeRectangularGrid(int meshKernelId,
+                                           in MakeGridParameters makeGridParameters)
         {
-            var makeGridParametersNative =
-                makeGridParameters.ToMakeGridParametersNative();
-            var geometryListNative = disposableGeometryListIn.CreateNativeObject();
-
-            return MeshKernelDll.CurvilinearMakeUniform(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            return MeshKernelDll.CurvilinearComputeRectangularGrid(meshKernelId, ref makeGridParametersNative);
         }
 
-        public int CurvilinearMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int CurvilinearComputeRectangularGridFromPolygon(int meshKernelId,
+            in MakeGridParameters makeGridParameters,
+            in DisposableGeometryList disposableGeometryListIn)
         {
-            var makeGridParametersNative =
-                makeGridParameters.ToMakeGridParametersNative();
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            var geometryListNative = disposableGeometryListIn.CreateNativeObject();
+            return MeshKernelDll.CurvilinearComputeRectangularGridFromPolygon(meshKernelId, 
+                                                                    ref makeGridParametersNative,
+                                                                    ref geometryListNative);
+        }
 
-            return MeshKernelDll.CurvilinearMakeUniformOnExtension(meshKernelId, ref makeGridParametersNative);
+        public int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        {
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            return MeshKernelDll.CurvilinearComputeRectangularGridOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 
         public int CurvilinearMoveNode(int meshKernelId, double xFromPoint, double yFromPoint, double xToPoint, double yToPoint)
@@ -1006,29 +1011,35 @@ namespace MeshKernelNETCore.Api
             return successful;
         }
 
-        public int Mesh2dMakeMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList)
+        public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList)
         {
             var geometryListNative = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.Mesh2dMakeMeshFromPolygon(meshKernelId, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeTriangularMeshFromPolygon(meshKernelId, ref geometryListNative);
         }
 
-        public int Mesh2dMakeMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList)
+        public int Mesh2dMakeTriangularMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList)
         {
             var geometryListNative = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.Mesh2dMakeMeshFromSamples(meshKernelId, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeTriangularMeshFromSamples(meshKernelId, ref geometryListNative);
         }
 
-        public int Mesh2dMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
+        public int Mesh2dMakeRectangularMesh(int meshKernelId, in MakeGridParameters makeGridParameters)
+        {
+            var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
+            return MeshKernelDll.Mesh2dMakeRectangularMesh(meshKernelId, ref makeGridParametersNative);
+        }
+
+        public int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
         {
             var geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeUniform(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeRectangularMeshFromPolygon(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
         }
 
-        public int Mesh2dMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
-            return MeshKernelDll.Mesh2dMakeUniformOnExtension(meshKernelId, ref makeGridParametersNative);
+            return MeshKernelDll.Mesh2dMakeRectangularMeshOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 
         /// <inheritdoc />

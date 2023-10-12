@@ -258,14 +258,23 @@ namespace MeshKernelNETCore.Api
         int CurvilinearLineShift(int meshKernelId);
 
         /// <summary>
-        ///     Make a new grid
+        /// Make a new uniform grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeRectangularGrid(int meshKernelId, in MakeGridParameters makeGridParameters);
+
+        /// <summary>
+        /// Make a new uniform grid from polygons
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters </param>
         /// <param name="disposableGeometryListIn"></param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeUniform(int meshKernelId, in MakeGridParameters makeGridParameters,
-            in DisposableGeometryList disposableGeometryListIn);
+        int CurvilinearComputeRectangularGridFromPolygon(int meshKernelId,
+                                               in MakeGridParameters makeGridParameters,
+                                               in DisposableGeometryList disposableGeometryListIn);
 
         /// <summary>
         /// Make a new curvilinear mesh
@@ -273,7 +282,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="makeGridParametersNative">The structure containing the make grid parameters </param>
         /// <returns>Error code</returns>
-        int CurvilinearMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParametersNative);
+        int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, in MakeGridParameters makeGridParametersNative);
 
         /// <summary>
         /// Moves a point of a curvilinear grid from one location to another
@@ -1006,7 +1015,7 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The polygon where to triangulate</param>
         /// <returns>If the operation succeeded</returns>
-        int Mesh2dMakeMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList);
+        int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList);
 
         /// <summary>
         ///     Make a triangular grid from samples
@@ -1014,7 +1023,16 @@ namespace MeshKernelNETCore.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The samples where to triangulate</param>
         /// <returns>If the operation succeeded</returns>
-        int Mesh2dMakeMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList);
+        int Mesh2dMakeTriangularMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList);
+
+        /// <summary>
+        /// Makes uniform meshes
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
+        /// <returns>Error code</returns>
+        int Mesh2dMakeRectangularMesh(int meshKernelId,
+                               in MakeGridParameters makeGridParameters);
 
         /// <summary>
         /// Makes uniform meshes from a series of polygons
@@ -1023,18 +1041,17 @@ namespace MeshKernelNETCore.Api
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
         /// <param name="geometryList">The polygons to account for</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeUniform(int meshKernelId,
-                               in MakeGridParameters makeGridParameters,
-                               in DisposableGeometryList geometryList);
+        int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId,
+            in MakeGridParameters makeGridParameters,
+            in DisposableGeometryList geometryList);
 
         /// <summary>
-        /// Makes uniform mesh on a defined on an extension
+        /// Makes uniform mesh based on a defined on an extension
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="makeGridParameters">The structure containing the make grid parameters</param>
-        /// <param name="geometryListNative">The polygons to account for</param>
         /// <returns>Error code</returns>
-        int Mesh2dMakeUniformOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
+        int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
 
         /// <summary>
         ///     Merges vertices within a distance of 0.001 m, effectively removing small edges

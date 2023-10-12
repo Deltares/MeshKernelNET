@@ -676,7 +676,7 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dCountSmallFlowEdgeCenters(meshKernelId, smallFlowEdgesLengthThreshold, ref numSmallFlowEdges);
         }
         public int Mesh2dDelete(int meshKernelId,
-            ref DisposableGeometryList disposableGeometryListOut,
+            in DisposableGeometryList disposableGeometryListOut,
             DeleteMeshOptions deletionOption,
             bool invertDeletion)
         {

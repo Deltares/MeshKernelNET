@@ -985,29 +985,29 @@ namespace MeshKernelNETCore.Api
         int Mesh2dInsertNode(int meshKernelId, double xCoordinate, double yCoordinate, ref int vertexIndex);
 
         /// <summary>
-        /// Gets the edges intersected by a polyline, with additional information on the intersections
+        /// Gets the edges intersected by a polygon, with additional information on the intersections
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="boundaryPolyLine">An input polyline, defined as a series of points</param>
+        /// <param name="boundaryPolygon">An input polygon, defined as a series of points</param>
         /// <param name="edgeNodes">The indices of the intersected edge nodes. The first node of the edge is on the left (the virtual node), the second node of the edge is on the right (the inner node)</param>
         /// <param name="edgeIndex">For each intersected edge, the edge index</param>
         /// <param name="edgeDistances">For each intersection, the location of the intersection expressed as adimensional distance from the edge starting node</param>
-        /// <param name="segmentDistances">For each intersection, the location of the intersection expressed as adimensional distance from the polyline segment start</param>
+        /// <param name="segmentDistances">For each intersection, the location of the intersection expressed as adimensional distance from the polygon segment start</param>
         /// <param name="segmentIndexes">For each intersection, the segment index</param>
         /// <param name="faceIndexes">For each intersection, the face index</param>
         /// <param name="faceNumEdges">For each intersection, the number of intersections</param>
         /// <param name="faceEdgeIndex">For each intersection, the index of the intersected edge</param>
         /// <returns>Error code</returns>
-        int Mesh2dIntersectionsFromPolyline(int meshKernelId,
-                                             in DisposableGeometryList boundaryPolyLine,
-                                             ref int[] edgeNodes,
-                                             ref int[] edgeIndex,
-                                             ref double[] edgeDistances,
-                                             ref double[] segmentDistances,
-                                             ref int[] segmentIndexes,
-                                             ref int[] faceIndexes,
-                                             ref int[] faceNumEdges,
-                                             ref int[] faceEdgeIndex);
+        int Mesh2dIntersectionsFromPolygon(int meshKernelId,
+                                           in DisposableGeometryList boundaryPolygon,
+                                           ref int[] edgeNodes,
+                                           ref int[] edgeIndex,
+                                           ref double[] edgeDistances,
+                                           ref double[] segmentDistances,
+                                           ref int[] segmentIndexes,
+                                           ref int[] faceIndexes,
+                                           ref int[] faceNumEdges,
+                                           ref int[] faceEdgeIndex);
 
         /// <summary>
         ///     Make a triangular grid in a polygon

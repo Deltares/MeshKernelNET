@@ -2312,6 +2312,54 @@ namespace MeshKernelNETCoreTest.Api
             }
         }
 
+        [Test]
+        public void Mesh2dDeleteInsidePolygonAndIntersectedThroughApi()
+        {
+            //          Before                           After
+            //          30--31--32--33--34--35           30--31--32--33--34--35
+            //          |   |   |   |   |   |            |   |   |   |   |   |
+            //          24--25--26--27--28--29           24--25--26--27--28--29  
+            //          |   | * |   | * |   |            |   |           |   |
+            //          18--19--20--12--22--23           18--19          22--23
+            //          |   |   |   |   |   |            |   |           |   |
+            //          12--13--14--15--16--17           12--13          16--17
+            //          |   | * |   | * |   |            |   |           |   |
+            //          6---7---8---9---10--11           6---7---8---9---10--11
+            //          |   |   |   |   |   |            |   |   |   |   |   |
+            //          0---1---2---3---4---5            0---1---2---3---4---5
+            // nodes   6 * 6 = 36                        36 - 4  = 32
+            // edges   2 * 5 = 60                        60 - 12 = 48
+            // faces   5 * 5 = 25                        25 - (3 * 3) = 16
+
+            // Setup
+            using (var mesh = CreateMesh2D(5, 5, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                var polygon = new DisposableGeometryList();
+                try
+                {
+                    polygon.NumberOfCoordinates = 5;
+                    polygon.XCoordinates = new[] { 1.5, 3.5, 3.5, 1.5, 1.5 };
+                    polygon.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
+
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dDelete(id, ref polygon, 1, false));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreNotEqual(32, mesh.NumNodes);
+                    Assert.AreNotEqual(48, mesh.NumEdges);
+                    Assert.AreNotEqual(16, mesh.NumFaces);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
+
     }
 
 }

@@ -1983,7 +1983,7 @@ namespace MeshKernelNETCoreTest.Api
 
 
         [Test]
-        public void Mesh2dIntersectionsFromPolylineThroughApi()
+        public void Mesh2dIntersectionsFromPolygonThroughApi()
         {
             using (var mesh = CreateMesh2D(4, 4, 1.0, 1.0))
             using (var api = new MeshKernelApi())
@@ -1997,9 +1997,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
-                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6 };
-                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5 };
-                    disposableGeometryList.NumberOfCoordinates = 2;
+                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6, 1.6, 1.6, 0.6 };
+                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5, 0.5, 2.5, 2.5 };
+                    disposableGeometryList.NumberOfCoordinates = 5;
 
                     var edgeNodes = Array.Empty<int>();
                     var edgeIndex = Array.Empty<int>();
@@ -2010,16 +2010,16 @@ namespace MeshKernelNETCoreTest.Api
                     var faceNumEdges = Array.Empty<int>();
                     var faceEdgeIndex = Array.Empty<int>();
 
-                    Assert.AreEqual(0, api.Mesh2dIntersectionsFromPolyline(id,
-                                                                      disposableGeometryList,
-                                                                      ref edgeNodes,
-                                                                      ref edgeIndex,
-                                                                      ref edgeDistances,
-                                                                      ref segmentDistances,
-                                                                      ref segmentIndexes,
-                                                                      ref faceIndexes,
-                                                                      ref faceNumEdges,
-                                                                      ref faceEdgeIndex));
+                    Assert.AreEqual(0, api.Mesh2dIntersectionsFromPolygon(id,
+                        disposableGeometryList,
+                        ref edgeNodes,
+                        ref edgeIndex,
+                        ref edgeDistances,
+                        ref segmentDistances,
+                        ref segmentIndexes,
+                        ref faceIndexes,
+                        ref faceNumEdges,
+                        ref faceEdgeIndex));
 
                     Assert.AreEqual(0, segmentIndexes[0]);
                     Assert.AreEqual(0, segmentIndexes[1]);

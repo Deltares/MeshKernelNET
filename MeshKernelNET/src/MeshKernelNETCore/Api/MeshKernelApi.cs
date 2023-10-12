@@ -675,10 +675,16 @@ namespace MeshKernelNETCore.Api
         {
             return MeshKernelDll.Mesh2dCountSmallFlowEdgeCenters(meshKernelId, smallFlowEdgesLengthThreshold, ref numSmallFlowEdges);
         }
-        public int Mesh2dDelete(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut, int deletionOption, bool invertDeletion)
+        public int Mesh2dDelete(int meshKernelId,
+            ref DisposableGeometryList disposableGeometryListOut,
+            DeleteMeshOptions deletionOption,
+            bool invertDeletion)
         {
             var geometryListNativeIn = disposableGeometryListOut.CreateNativeObject();
-            return MeshKernelDll.Mesh2dDelete(meshKernelId, ref geometryListNativeIn, deletionOption, invertDeletion);
+            return MeshKernelDll.Mesh2dDelete(meshKernelId,
+                ref geometryListNativeIn,
+                Convert.ToInt32(deletionOption),
+                invertDeletion);
         }
         public int Mesh2dDeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate, double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox, double yUpperRightBoundingBox)
         {

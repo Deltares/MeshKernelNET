@@ -2346,7 +2346,10 @@ namespace MeshKernelNETCoreTest.Api
 
                     id = api.AllocateState(0);
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    Assert.AreEqual(0, api.Mesh2dDelete(id, ref polygon, 1, false));
+                    Assert.AreEqual(0, api.Mesh2dDelete(id,
+                        ref polygon,
+                        DeleteMeshOptions.InsideAndIntersected,
+                        false));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreNotEqual(32, mesh.NumNodes);
                     Assert.AreNotEqual(48, mesh.NumEdges);

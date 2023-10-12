@@ -749,7 +749,9 @@ namespace MeshKernelNETCore.Api
         /// <param name="deletionOption">The deletion option (to be detailed)</param>
         /// <param name="invertDeletion">Inverts the deletion of selected features</param>
         /// <returns>If the operation succeeded</returns>
-        int Mesh2dDelete(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut, int deletionOption,
+        int Mesh2dDelete(int meshKernelId,
+            ref DisposableGeometryList disposableGeometryListOut,
+            DeleteMeshOptions deletionOption,
             bool invertDeletion);
 
         /// <summary>

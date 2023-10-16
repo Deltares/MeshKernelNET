@@ -1983,7 +1983,7 @@ namespace MeshKernelNETCoreTest.Api
 
 
         [Test]
-        public void Mesh2dIntersectionsFromPolylineThroughApi()
+        public void Mesh2dIntersectionsFromPolygonThroughApi()
         {
             using (var mesh = CreateMesh2D(4, 4, 1.0, 1.0))
             using (var api = new MeshKernelApi())
@@ -1997,9 +1997,9 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
-                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6 };
-                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5 };
-                    disposableGeometryList.NumberOfCoordinates = 2;
+                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6, 1.6, 1.6, 0.6 };
+                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5, 0.5, 2.5, 2.5 };
+                    disposableGeometryList.NumberOfCoordinates = 5;
 
                     var edgeNodes = Array.Empty<int>();
                     var edgeIndex = Array.Empty<int>();
@@ -2010,16 +2010,16 @@ namespace MeshKernelNETCoreTest.Api
                     var faceNumEdges = Array.Empty<int>();
                     var faceEdgeIndex = Array.Empty<int>();
 
-                    Assert.AreEqual(0, api.Mesh2dIntersectionsFromPolyline(id,
-                                                                      disposableGeometryList,
-                                                                      ref edgeNodes,
-                                                                      ref edgeIndex,
-                                                                      ref edgeDistances,
-                                                                      ref segmentDistances,
-                                                                      ref segmentIndexes,
-                                                                      ref faceIndexes,
-                                                                      ref faceNumEdges,
-                                                                      ref faceEdgeIndex));
+                    Assert.AreEqual(0, api.Mesh2dIntersectionsFromPolygon(id,
+                        disposableGeometryList,
+                        ref edgeNodes,
+                        ref edgeIndex,
+                        ref edgeDistances,
+                        ref segmentDistances,
+                        ref segmentIndexes,
+                        ref faceIndexes,
+                        ref faceNumEdges,
+                        ref faceEdgeIndex));
 
                     Assert.AreEqual(0, segmentIndexes[0]);
                     Assert.AreEqual(0, segmentIndexes[1]);
@@ -2308,6 +2308,57 @@ namespace MeshKernelNETCoreTest.Api
                 finally
                 {
                     api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dDeleteInsidePolygonAndIntersectedThroughApi()
+        {
+            //          Before                           After
+            //          30--31--32--33--34--35           30--31--32--33--34--35
+            //          |   |   |   |   |   |            |   |   |   |   |   |
+            //          24--25--26--27--28--29           24--25--26--27--28--29  
+            //          |   | * |   | * |   |            |   |           |   |
+            //          18--19--20--12--22--23           18--19          22--23
+            //          |   |   |   |   |   |            |   |           |   |
+            //          12--13--14--15--16--17           12--13          16--17
+            //          |   | * |   | * |   |            |   |           |   |
+            //          6---7---8---9---10--11           6---7---8---9---10--11
+            //          |   |   |   |   |   |            |   |   |   |   |   |
+            //          0---1---2---3---4---5            0---1---2---3---4---5
+            // nodes   6 * 6 = 36                        36 - 4  = 32
+            // edges   2 * 5 = 60                        60 - 12 = 48
+            // faces   5 * 5 = 25                        25 - (3 * 3) = 16
+
+            // Setup
+            using (var mesh = CreateMesh2D(5, 5, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                var polygon = new DisposableGeometryList();
+                try
+                {
+                    polygon.NumberOfCoordinates = 5;
+                    polygon.XCoordinates = new[] { 1.5, 3.5, 3.5, 1.5, 1.5 };
+                    polygon.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
+
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dDelete(id,
+                        in polygon,
+                        DeleteMeshInsidePolygonOptions.Intersecting,
+                        false));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreNotEqual(32, mesh.NumNodes);
+                    Assert.AreNotEqual(48, mesh.NumEdges);
+                    Assert.AreNotEqual(16, mesh.NumFaces);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
                 }
             }
         }

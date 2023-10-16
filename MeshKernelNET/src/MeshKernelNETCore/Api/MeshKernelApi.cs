@@ -675,10 +675,16 @@ namespace MeshKernelNETCore.Api
         {
             return MeshKernelDll.Mesh2dCountSmallFlowEdgeCenters(meshKernelId, smallFlowEdgesLengthThreshold, ref numSmallFlowEdges);
         }
-        public int Mesh2dDelete(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut, int deletionOption, bool invertDeletion)
+        public int Mesh2dDelete(int meshKernelId,
+            in DisposableGeometryList disposableGeometryListOut,
+            DeleteMeshInsidePolygonOptions deletionOption,
+            bool invertDeletion)
         {
             var geometryListNativeIn = disposableGeometryListOut.CreateNativeObject();
-            return MeshKernelDll.Mesh2dDelete(meshKernelId, ref geometryListNativeIn, deletionOption, invertDeletion);
+            return MeshKernelDll.Mesh2dDelete(meshKernelId,
+                ref geometryListNativeIn,
+                Convert.ToInt32(deletionOption),
+                invertDeletion);
         }
         public int Mesh2dDeleteEdge(int meshKernelId, double xCoordinate, double yCoordinate, double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox, double yUpperRightBoundingBox)
         {
@@ -931,18 +937,18 @@ namespace MeshKernelNETCore.Api
             return MeshKernelDll.Mesh2dInsertNode(meshKernelId, xCoordinate, yCoordinate, ref vertexIndex);
         }
 
-        public int Mesh2dIntersectionsFromPolyline(int meshKernelId,
-                                                    in DisposableGeometryList boundaryPolyLine,
-                                                    ref int[] edgeNodes,
-                                                    ref int[] edgeIndex,
-                                                    ref double[] edgeDistances,
-                                                    ref double[] segmentDistances,
-                                                    ref int[] segmentIndexes,
-                                                    ref int[] faceIndexes,
-                                                    ref int[] faceNumEdges,
-                                                    ref int[] faceEdgeIndex)
+        public int Mesh2dIntersectionsFromPolygon(int meshKernelId,
+                                                  in DisposableGeometryList boundaryPolygon,
+                                                  ref int[] edgeNodes,
+                                                  ref int[] edgeIndex,
+                                                  ref double[] edgeDistances,
+                                                  ref double[] segmentDistances,
+                                                  ref int[] segmentIndexes,
+                                                  ref int[] faceIndexes,
+                                                  ref int[] faceNumEdges,
+                                                  ref int[] faceEdgeIndex)
         {
-            if (boundaryPolyLine.NumberOfCoordinates <= 0)
+            if (boundaryPolygon.NumberOfCoordinates <= 0)
             {
                 return 0;
             }
@@ -962,17 +968,17 @@ namespace MeshKernelNETCore.Api
             var faceEdgeIndexPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_faces);
 
 
-            var boundaryPolyLineNative = boundaryPolyLine.CreateNativeObject();
-            int successful = MeshKernelDll.Mesh2dIntersectionsFromPolyline(meshKernelId,
-                                                                             ref boundaryPolyLineNative,
-                                                                             edgeNodesPtr,
-                                                                             edgeIndexPtr,
-                                                                             edgeDistancesPtr,
-                                                                             segmentDistancesPtr,
-                                                                             segmentIndexesPtr,
-                                                                             faceIndexesPtr,
-                                                                             faceNumEdgesPtr,
-                                                                             faceEdgeIndexPtr);
+            var boundaryPolygoneNative = boundaryPolygon.CreateNativeObject();
+            int successful = MeshKernelDll.Mesh2dIntersectionsFromPolygon(meshKernelId,
+                                                                          ref boundaryPolygoneNative,
+                                                                          edgeNodesPtr,
+                                                                          edgeIndexPtr,
+                                                                          edgeDistancesPtr,
+                                                                          segmentDistancesPtr,
+                                                                          segmentIndexesPtr,
+                                                                          faceIndexesPtr,
+                                                                          faceNumEdgesPtr,
+                                                                          faceEdgeIndexPtr);
 
             edgeNodes = new int[newMesh2D.num_edges * 2];
             Marshal.Copy(edgeNodesPtr, edgeNodes, 0, edgeNodes.Length);

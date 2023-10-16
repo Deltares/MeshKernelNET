@@ -1193,30 +1193,30 @@ namespace MeshKernelNETCore.Native
         public static extern int Mesh2dInsertNode([In] int meshKernelId, [In] double xCoordinate, [In] double yCoordinate, [In, Out] ref int vertexIndex);
 
         /// <summary>
-        /// Gets the edges intersected by a polyline, with additional information on the intersections
+        /// Gets the edges intersected by a polygon, with additional information on the intersections
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="boundaryPolyLine">An input polyline, defined as a series of points</param>
+        /// <param name="boundaryPolygon">An input polygon, defined as a series of points</param>
         /// <param name="edgeNodes">The indices of the intersected edge nodes. The first node of the edge is on the left (the virtual node), the second node of the edge is on the right (the inner node)</param>
         /// <param name="edgeIndex">For each intersected edge, the edge index</param>
         /// <param name="edgeDistances">For each intersection, the location of the intersection expressed as adimensional distance from the edge starting node</param>
-        /// <param name="segmentDistances">For each intersection, the location of the intersection expressed as adimensional distance from the polyline segment start</param>
+        /// <param name="segmentDistances">For each intersection, the location of the intersection expressed as adimensional distance from the polygon segment start</param>
         /// <param name="segmentIndexes">For each intersection, the segment index</param>
         /// <param name="faceIndexes">For each intersection, the face index</param>
         /// <param name="faceNumEdges">For each intersection, the number of intersections</param>
         /// <param name="faceEdgeIndex">For each intersection, the index of the intersected edge</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_intersections_from_polyline", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dIntersectionsFromPolyline([In] int meshKernelId,
-                                                                   [In] ref GeometryListNative boundaryPolyLine,
-                                                                   [In, Out] IntPtr edgeNodes,
-                                                                   [In, Out] IntPtr edgeIndex,
-                                                                   [In, Out] IntPtr edgeDistances,
-                                                                   [In, Out] IntPtr segmentDistances,
-                                                                   [In, Out] IntPtr segmentIndexes,
-                                                                   [In, Out] IntPtr faceIndexes,
-                                                                   [In, Out] IntPtr faceNumEdges,
-                                                                   [In, Out] IntPtr faceEdgeIndex);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_intersections_from_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dIntersectionsFromPolygon([In] int meshKernelId,
+                                                                  [In] ref GeometryListNative boundaryPolygon,
+                                                                  [In, Out] IntPtr edgeNodes,
+                                                                  [In, Out] IntPtr edgeIndex,
+                                                                  [In, Out] IntPtr edgeDistances,
+                                                                  [In, Out] IntPtr segmentDistances,
+                                                                  [In, Out] IntPtr segmentIndexes,
+                                                                  [In, Out] IntPtr faceIndexes,
+                                                                  [In, Out] IntPtr faceNumEdges,
+                                                                  [In, Out] IntPtr faceEdgeIndex);
 
         /// <summary>
         /// Make a triangular grid in a polygon

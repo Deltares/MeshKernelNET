@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using MeshKernelNETCore.Native;
+using MeshKernelNET.Native;
 
-namespace MeshKernelNETCore.Api
+namespace MeshKernelNET.Api
 {
     public interface IMeshKernelApi : IDisposable
     {

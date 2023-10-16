@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.ServiceModel.Channels;
-using MeshKernelNETCore.Api;
+using MeshKernelNET.Api;
 using NUnit.Framework;
-using static MeshKernelNETCoreTest.Api.TestUtilityFunctions;
+using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
-namespace MeshKernelNETCoreTest.Api
+namespace MeshKernelNETTest.Api
 {
     [TestFixture]
     [Category("MeshKernelNETMesh2DTests")]

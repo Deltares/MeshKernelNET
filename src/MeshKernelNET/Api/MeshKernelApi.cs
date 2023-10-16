@@ -2,10 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
-using MeshKernelNETCore.Helpers;
-using MeshKernelNETCore.Native;
+using MeshKernelNET.Helpers;
+using MeshKernelNET.Native;
 
-namespace MeshKernelNETCore.Api
+namespace MeshKernelNET.Api
 {
     [ExcludeFromCodeCoverage]
     // Excluded because it is tested through the MeshKernelApiRemote

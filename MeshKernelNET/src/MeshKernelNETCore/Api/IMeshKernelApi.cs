@@ -1056,14 +1056,23 @@ namespace MeshKernelNETCore.Api
         int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters);
 
         /// <summary>
+        /// Merges vertices, effectively removing small edges. The merging distance is computed internally based on the minimum edge size.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
+        ///     The distance below which two nodes will be merged
+        ///     <returns>If the operation succeeded</returns>
+        int Mesh2dMergeNodes(int meshKernelId, in DisposableGeometryList disposableGeometryList);
+
+        /// <summary>
         ///     Merges vertices within a distance of 0.001 m, effectively removing small edges
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The polygon where to perform the operation</param>
-        /// <param name="mergingDistance">
+        /// <param name="mergingDistance">The distance below which two nodes will be merged</param>
         ///     The distance below which two nodes will be merged
         ///     <returns>If the operation succeeded</returns>
-        int Mesh2dMergeNodes(int meshKernelId, in DisposableGeometryList disposableGeometryList, double mergingDistance);
+        int Mesh2dMergeNodesWithMergingDistance(int meshKernelId, in DisposableGeometryList disposableGeometryList, double mergingDistance);
 
         /// <summary>
         ///     Merges vertex

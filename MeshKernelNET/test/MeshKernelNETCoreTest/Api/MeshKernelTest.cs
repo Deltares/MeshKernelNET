@@ -232,6 +232,60 @@ namespace MeshKernelNETCoreTest.Api
             // |         |         |         |                 |         |         |         |
             //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
             //
+            // Merges vertices, effectively removing small edges.
+            // In this case no small edges are present, so no edges shall be removed.
+
+            // Setup
+            using (var mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2D = new DisposableMesh2D();
+                try
+                {
+                    var numberOfEdgesBefore = mesh.NumEdges;
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    var geometryList = new DisposableGeometryList();
+                    Assert.AreEqual(0, api.Mesh2dMergeNodes(id, geometryList));
+
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreNotEqual(2, mesh2D.NumEdges);
+                    Assert.AreEqual(numberOfEdgesBefore, mesh2D.NumEdges);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D.Dispose();
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dMergeNodesWithMergeDistanceThroughApi()
+        {
+
+            // Before                                          After
+            // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // 4 ------- 5 ------- 6 ------- 7                 4 ------- 5 ------- 6 ------- 7
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11 
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |   
+            // |         |         |         |                 |         |         |         |
+            //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
+            //
             // Merges vertices within a distance of 0.001 m, effectively removing small edges.
             // In this case no small edges are present, so no edges shall be removed.
 
@@ -248,7 +302,7 @@ namespace MeshKernelNETCoreTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     var geometryList = new DisposableGeometryList();
-                    Assert.AreEqual(0, api.Mesh2dMergeNodes(id, geometryList, 0.001));
+                    Assert.AreEqual(0, api.Mesh2dMergeNodesWithMergingDistance(id, geometryList, 0.001));
 
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));

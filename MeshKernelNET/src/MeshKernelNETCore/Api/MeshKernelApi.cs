@@ -1049,10 +1049,18 @@ namespace MeshKernelNETCore.Api
         }
 
         /// <inheritdoc />
-        public int Mesh2dMergeNodes(int meshKernelId, in DisposableGeometryList disposableGeometryList, double mergingDistance)
+        public int Mesh2dMergeNodes(int meshKernelId, in DisposableGeometryList disposableGeometryList)
         {
             var geometryList = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.Mesh2dMergeNodes(meshKernelId, ref geometryList, mergingDistance);
+            return MeshKernelDll.Mesh2dMergeNodes(meshKernelId, ref geometryList);
+        }
+
+
+        /// <inheritdoc />
+        public int Mesh2dMergeNodesWithMergingDistance(int meshKernelId, in DisposableGeometryList disposableGeometryList, double mergingDistance)
+        {
+            var geometryList = disposableGeometryList.CreateNativeObject();
+            return MeshKernelDll.Mesh2dMergeNodesWithMergingDistance(meshKernelId, ref geometryList, mergingDistance);
         }
 
         /// <inheritdoc />

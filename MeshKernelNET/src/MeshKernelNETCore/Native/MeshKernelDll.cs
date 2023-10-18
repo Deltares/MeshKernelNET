@@ -1269,14 +1269,23 @@ namespace MeshKernelNETCore.Native
             [In] ref MakeGridParametersNative makeGridParameters);
 
         /// <summary>
-        /// Merges vertices within a distance of 0.001 m, effectively removing small edges 
+        /// Merges vertices, effectively removing small edges. The merging distance is computed internally based on the minimum edge size.
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="geometryListNative">The polygon where to perform the operation</param>
-        /// <param name="mergingDistance">The distance below which two nodes will be merged</param>
+        /// <param name="geometryListNative">The polygon where to perform the operation. If empty the operation is performed over the entire mesh</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_nodes", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMergeNodes([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] double mergingDistance);
+        internal static extern int Mesh2dMergeNodes([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+
+        /// <summary>
+        /// Merges vertices within a defined distance in a polygon, effectively removing small edges 
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListNative">The polygon where to perform the operation. If empty the operation is performed over the entire mesh</param>
+        /// <param name="mergingDistance">The distance below which two nodes will be merged</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_merge_nodes_with_merging_distance", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMergeNodesWithMergingDistance([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] double mergingDistance);
 
         /// <summary>
         /// Merges vertex <param name="startVertexIndex"/> to <param name="endVertexIndex"/>

@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # Jetbrains Rider IDE 
 .idea/
+MeshKernelNET/D-HYDRO.DotSettings
+.vscode

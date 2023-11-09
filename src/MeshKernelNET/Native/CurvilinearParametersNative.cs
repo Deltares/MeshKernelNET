@@ -6,12 +6,12 @@ namespace MeshKernelNET.Native
     public struct CurvilinearParametersNative
     {
         /// <summary>
-        /// *M-refinement factor for regular grid generation (2000) 
+        /// *M-refinement factor for regular grid generation (2000)
         /// </summary>
         public int MRefinement;
 
         /// <summary>
-        /// *N-refinement factor for regular grid generation (40) 
+        /// *N-refinement factor for regular grid generation (40)
         /// </summary>
         public int NRefinement;
 

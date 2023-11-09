@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Helpers;
 
@@ -11,7 +12,7 @@ namespace MeshKernelNET.Api
     /// </summary>
     public abstract class DisposableNativeObject<TNative> : IDisposable where TNative : new()
     {
-        private readonly Dictionary<object,GCHandle> objectGarbageCollectHandles = new Dictionary<object, GCHandle>();
+        private readonly Dictionary<object, GCHandle> objectGarbageCollectHandles = new Dictionary<object, GCHandle>();
         private bool disposed;
 
         /// <summary>
@@ -72,12 +73,16 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Disposes resources
         /// </summary>
-        /// <param name="disposing">Boolean indicating that the call is called from the dispose method
-        /// not the destructor</param>
+        /// <param name="disposing">
+        /// Boolean indicating that the call is called from the dispose method
+        /// not the destructor
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposed)
+            {
                 return;
+            }
 
             ReleaseUnmanagedResources();
 
@@ -89,13 +94,13 @@ namespace MeshKernelNET.Api
         /// </summary>
         private void PinMemory()
         {
-            var arrayProperties = GetType().GetProperties().Where(f => f.PropertyType.IsArray);
-            
+            IEnumerable<PropertyInfo> arrayProperties = GetType().GetProperties().Where(f => f.PropertyType.IsArray);
+
             // force initialization
-            foreach (var arrayProperty in arrayProperties)
+            foreach (PropertyInfo arrayProperty in arrayProperties)
             {
-                var elementType = arrayProperty.PropertyType.GetElementType();
-                var objectToPin = arrayProperty.GetValue(this);
+                Type elementType = arrayProperty.PropertyType.GetElementType();
+                object objectToPin = arrayProperty.GetValue(this);
 
                 if (objectToPin == null)
                 {
@@ -105,10 +110,13 @@ namespace MeshKernelNET.Api
 
                 if (elementType == typeof(string))
                 {
-                    var bufferSize = GetType().GetBufferSize(arrayProperty.Name);
-                    if (bufferSize == 0) continue;
+                    int bufferSize = GetType().GetBufferSize(arrayProperty.Name);
+                    if (bufferSize == 0)
+                    {
+                        continue;
+                    }
 
-                    var bytes = ((string[])objectToPin).GetFlattenedAsciiCodedStringArray(bufferSize);
+                    byte[] bytes = ((string[])objectToPin).GetFlattenedAsciiCodedStringArray(bufferSize);
                     AddObjectToPin(bytes, objectToPin);
                 }
                 else
@@ -120,7 +128,7 @@ namespace MeshKernelNET.Api
 
         private void UnPinMemory()
         {
-            foreach (var valuePair in objectGarbageCollectHandles)
+            foreach (KeyValuePair<object, GCHandle> valuePair in objectGarbageCollectHandles)
             {
                 valuePair.Value.Free();
             }
@@ -130,7 +138,7 @@ namespace MeshKernelNET.Api
 
         private void AddObjectToPin(object objectToPin, object lookupObject = null)
         {
-            var key = lookupObject ?? objectToPin;
+            object key = lookupObject ?? objectToPin;
             objectGarbageCollectHandles.Add(key, GCHandle.Alloc(objectToPin, GCHandleType.Pinned));
         }
 

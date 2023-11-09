@@ -12,18 +12,18 @@ namespace MeshKernelNET.Helpers
 
         public static byte[] GetFlattenedAsciiCodedStringArray(this string[] strings, int bufferSize)
         {
-            var flattenedAsciiCodedStringArray = string.Join("", strings.Select(s => s.ToFixedLengthString(bufferSize)));
+            string flattenedAsciiCodedStringArray = string.Join("", strings.Select(s => s.ToFixedLengthString(bufferSize)));
 
             return Encoding.Convert(Encoding.Unicode, Encoding.ASCII,
-                Encoding.Unicode.GetBytes(flattenedAsciiCodedStringArray));
+                                    Encoding.Unicode.GetBytes(flattenedAsciiCodedStringArray));
         }
 
         public static string[] GetStringArrayFromFlattenedAsciiCodedStringArray(this byte[] byteArray, int bufferSize)
         {
-            var asciiString = Encoding.ASCII.GetString(byteArray);
-            var blokSize = byteArray.Length / bufferSize;
-            var strings = Enumerable.Range(0, bufferSize)
-                .Select(i => asciiString.Substring(i * blokSize, blokSize)).ToArray();
+            string asciiString = Encoding.ASCII.GetString(byteArray);
+            int blokSize = byteArray.Length / bufferSize;
+            string[] strings = Enumerable.Range(0, bufferSize)
+                                         .Select(i => asciiString.Substring(i * blokSize, blokSize)).ToArray();
 
             return strings.ConvertFixedLengthArray();
         }
@@ -32,7 +32,7 @@ namespace MeshKernelNET.Helpers
         {
             for (var index = 0; index < strings.Length; index++)
             {
-                strings[index] = strings[index].ToFixedLengthString(bufferSize); 
+                strings[index] = strings[index].ToFixedLengthString(bufferSize);
             }
 
             return strings;
@@ -45,9 +45,9 @@ namespace MeshKernelNET.Helpers
                 return new string(FillChar, bufferSize);
             }
 
-            return s.Length > bufferSize 
-                ? s.Substring(0, bufferSize) // truncate
-                : s.PadRight(bufferSize, FillChar); // pad
+            return s.Length > bufferSize
+                       ? s.Substring(0, bufferSize)        // truncate
+                       : s.PadRight(bufferSize, FillChar); // pad
         }
 
         public static string[] ConvertFixedLengthArray(this string[] strings)

@@ -32,5 +32,4 @@ namespace MeshKernelNET.Native
         /// </summary>
         public int num_edges;
     }
-
-} // namespace meshkernelapi
+}

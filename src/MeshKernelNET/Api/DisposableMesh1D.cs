@@ -6,13 +6,24 @@ namespace MeshKernelNET.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableMesh1D : DisposableNativeObject<Mesh1DNative>
     {
-        [ProtoMember(1)] private int[] edgeNodes;
-        [ProtoMember(2)] private double[] nodeX;
-        [ProtoMember(3)] private double[] nodeY;
-        [ProtoMember(4)] private int numNodes;
-        [ProtoMember(5)] private int numEdges;
+        [ProtoMember(1)]
+        private int[] edgeNodes;
 
-        public DisposableMesh1D() { }
+        [ProtoMember(2)]
+        private double[] nodeX;
+
+        [ProtoMember(3)]
+        private double[] nodeY;
+
+        [ProtoMember(4)]
+        private int numNodes;
+
+        [ProtoMember(5)]
+        private int numEdges;
+
+        public DisposableMesh1D()
+        {
+        }
 
         public DisposableMesh1D(int nNodes, int nEdges)
         {

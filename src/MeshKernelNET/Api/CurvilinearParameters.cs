@@ -18,13 +18,13 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// *M-refinement factor for regular grid generation (2000) 
+        /// *M-refinement factor for regular grid generation (2000)
         /// </summary>
         [ProtoMember(1)]
         public int MRefinement { get; set; }
 
         /// <summary>
-        /// *N-refinement factor for regular grid generation (40) 
+        /// *N-refinement factor for regular grid generation (40)
         /// </summary>
         [ProtoMember(2)]
         public int NRefinement { get; set; }
@@ -46,6 +46,5 @@ namespace MeshKernelNET.Api
         /// </summary>
         [ProtoMember(5)]
         public double AttractionParameter { get; set; }
-
     }
 }

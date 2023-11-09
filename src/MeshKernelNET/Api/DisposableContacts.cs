@@ -6,11 +6,18 @@ namespace MeshKernelNET.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableContacts : DisposableNativeObject<ContactsNative>
     {
-        [ProtoMember(1)] private int[] mesh1dIndices;
-        [ProtoMember(2)] private int[] mesh2dIndices;
-        [ProtoMember(3)] private int numContacts;
+        [ProtoMember(1)]
+        private int[] mesh1dIndices;
 
-        public DisposableContacts() { }
+        [ProtoMember(2)]
+        private int[] mesh2dIndices;
+
+        [ProtoMember(3)]
+        private int numContacts;
+
+        public DisposableContacts()
+        {
+        }
 
         public DisposableContacts(int nContacts)
         {

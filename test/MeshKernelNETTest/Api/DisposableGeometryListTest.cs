@@ -1,5 +1,6 @@
 ﻿using System;
 using MeshKernelNET.Api;
+using MeshKernelNET.Native;
 using NUnit.Framework;
 
 namespace MeshKernelNETTest.Api
@@ -13,9 +14,9 @@ namespace MeshKernelNETTest.Api
             //Arrange
             var list = new DisposableGeometryList
             {
-                XCoordinates = new[] {0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
-                YCoordinates = new[] {0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
-                Values = new[] {0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
+                XCoordinates = new[] { 0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
+                YCoordinates = new[] { 0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
+                Values = new[] { 0.0, 1.0, 2.0, -999.0, 0.0, 1.0, 2.0 },
                 NumberOfCoordinates = 7,
                 GeometrySeparator = -999.0
             };
@@ -23,7 +24,7 @@ namespace MeshKernelNETTest.Api
             using (list)
             {
                 // Act
-                var nativeGeometryList = list.CreateNativeObject();
+                GeometryListNative nativeGeometryList = list.CreateNativeObject();
 
                 // Assert
 

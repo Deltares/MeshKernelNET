@@ -3,27 +3,57 @@ using ProtoBuf;
 
 namespace MeshKernelNET.Api
 {
-
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>
     {
-        [ProtoMember(1)] private int[] edgeFaces;
-        [ProtoMember(2)] private int[] edgeNodes;
-        [ProtoMember(3)] private int[] faceEdges;
-        [ProtoMember(4)] private int[] faceNodes;
-        [ProtoMember(5)] private int[] nodesPerFace;
-        [ProtoMember(6)] private double[] nodeX;
-        [ProtoMember(7)] private double[] nodeY;
-        [ProtoMember(8)] private double[] edgeX;
-        [ProtoMember(9)] private double[] edgeY;
-        [ProtoMember(10)] private double[] faceX;
-        [ProtoMember(11)] private double[] faceY;
-        [ProtoMember(12)] private int numNodes;
-        [ProtoMember(13)] private int numEdges;
-        [ProtoMember(14)] private int numFaces;
-        [ProtoMember(15)] private int numFaceNodes;
+        [ProtoMember(1)]
+        private int[] edgeFaces;
 
-        public DisposableMesh2D() { }
+        [ProtoMember(2)]
+        private int[] edgeNodes;
+
+        [ProtoMember(3)]
+        private int[] faceEdges;
+
+        [ProtoMember(4)]
+        private int[] faceNodes;
+
+        [ProtoMember(5)]
+        private int[] nodesPerFace;
+
+        [ProtoMember(6)]
+        private double[] nodeX;
+
+        [ProtoMember(7)]
+        private double[] nodeY;
+
+        [ProtoMember(8)]
+        private double[] edgeX;
+
+        [ProtoMember(9)]
+        private double[] edgeY;
+
+        [ProtoMember(10)]
+        private double[] faceX;
+
+        [ProtoMember(11)]
+        private double[] faceY;
+
+        [ProtoMember(12)]
+        private int numNodes;
+
+        [ProtoMember(13)]
+        private int numEdges;
+
+        [ProtoMember(14)]
+        private int numFaces;
+
+        [ProtoMember(15)]
+        private int numFaceNodes;
+
+        public DisposableMesh2D()
+        {
+        }
 
         public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
         {
@@ -159,5 +189,4 @@ namespace MeshKernelNET.Api
             nativeObject.num_face_nodes = NumFaceNodes;
         }
     }
-
 }

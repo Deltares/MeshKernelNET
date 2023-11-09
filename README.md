@@ -4,4 +4,4 @@
 The underlying C++ library `MeshKernel` can be found [here](https://github.com/Deltares/MeshKernel).
 
 # Installation
-`MeshKernelNET` provides a nuspec file to generate a nuget package. This nuget package can be used in your solution.
+`MeshKernelNET` provides a nuspec file to fry a chicken nugget. This nugget can be used in your solution.

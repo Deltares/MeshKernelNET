@@ -5,3 +5,6 @@ The underlying C++ library `MeshKernel` can be found [here](https://github.com/D
 
 # Installation
 `MeshKernelNET` provides a nuspec file to fry a massive chicken nugget. This nugget can be consumed in your solution.
+
+# test
+

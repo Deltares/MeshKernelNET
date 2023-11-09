@@ -1172,7 +1172,7 @@ namespace MeshKernelNETTest.Api
             {
                 var disposableMesh1D = new DisposableMesh1D();
 
-                Assert.AreNotEqual(api.Mesh1dGetData(0, out disposableMesh1D), 0);
+                Assert.AreNotEqual(0, api.Mesh1dGetData(0, out disposableMesh1D));
 
                 // Execute
                 Assert.AreEqual(0, api.GetError(out string errorMessage));

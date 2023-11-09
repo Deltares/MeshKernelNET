@@ -315,7 +315,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));            // Execute
                     Assert.AreEqual(0, api.CurvilinearDeleteNode(id, 5.0, 5.0)); // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
-                    Assert.AreEqual(curvilinearGrid.NodeX[24], -999.0);
+                    Assert.AreEqual(-999.0, curvilinearGrid.NodeX[24]);
                     Assert.AreEqual(-999.0, curvilinearGrid.NodeX[24]);
                 }
                 finally

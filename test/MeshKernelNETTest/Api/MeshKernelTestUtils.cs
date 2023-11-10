@@ -16,30 +16,30 @@ namespace MeshKernelNETTest.Api
         {
             var result = new DisposableMesh2D();
 
-            int[,] indicesValues = new int[numbOfCellsHorizontal, numbOfCellsVertical];
+            var indicesValues = new int[numbOfCellsHorizontal, numbOfCellsVertical];
             result.NodeX = new double[numbOfCellsHorizontal * numbOfCellsVertical];
             result.NodeY = new double[numbOfCellsHorizontal * numbOfCellsVertical];
             result.NumNodes = numbOfCellsHorizontal * numbOfCellsVertical;
 
-            int nodeIndex = 0;
-            for (int i = 0; i < numbOfCellsHorizontal; ++i)
+            var nodeIndex = 0;
+            for (var i = 0; i < numbOfCellsHorizontal; ++i)
             {
-                for (int j = 0; j < numbOfCellsVertical; ++j)
+                for (var j = 0; j < numbOfCellsVertical; ++j)
                 {
-                    indicesValues[i, j] = i * numbOfCellsVertical + j;
-                    result.NodeX[nodeIndex] = xOffset + i * cellWidth;
-                    result.NodeY[nodeIndex] = yOffset + j * cellHeight;
+                    indicesValues[i, j] = (i * numbOfCellsVertical) + j;
+                    result.NodeX[nodeIndex] = xOffset + (i * cellWidth);
+                    result.NodeY[nodeIndex] = yOffset + (j * cellHeight);
                     nodeIndex++;
                 }
             }
 
-            result.NumEdges = (numbOfCellsHorizontal - 1) * numbOfCellsVertical +
-                              numbOfCellsHorizontal * (numbOfCellsVertical - 1);
+            result.NumEdges = ((numbOfCellsHorizontal - 1) * numbOfCellsVertical) +
+                              (numbOfCellsHorizontal * (numbOfCellsVertical - 1));
             result.EdgeNodes = new int[result.NumEdges * 2];
-            int edgeIndex = 0;
-            for (int i = 0; i < numbOfCellsHorizontal - 1; ++i)
+            var edgeIndex = 0;
+            for (var i = 0; i < numbOfCellsHorizontal - 1; ++i)
             {
-                for (int j = 0; j < numbOfCellsVertical; ++j)
+                for (var j = 0; j < numbOfCellsVertical; ++j)
                 {
                     result.EdgeNodes[edgeIndex] = indicesValues[i, j];
                     edgeIndex++;
@@ -48,9 +48,9 @@ namespace MeshKernelNETTest.Api
                 }
             }
 
-            for (int i = 0; i < numbOfCellsHorizontal; ++i)
+            for (var i = 0; i < numbOfCellsHorizontal; ++i)
             {
-                for (int j = 0; j < numbOfCellsVertical - 1; ++j)
+                for (var j = 0; j < numbOfCellsVertical - 1; ++j)
                 {
                     result.EdgeNodes[edgeIndex] = indicesValues[i, j + 1];
                     edgeIndex++;
@@ -70,10 +70,10 @@ namespace MeshKernelNETTest.Api
         {
             var result = new DisposableCurvilinearGrid(numbOfRows, numbOfColumns);
 
-            int nodeIndex = 0;
-            for (int i = 0; i < result.NumM; ++i)
+            var nodeIndex = 0;
+            for (var i = 0; i < result.NumM; ++i)
             {
-                for (int j = 0; j < result.NumN; ++j)
+                for (var j = 0; j < result.NumN; ++j)
                 {
                     result.NodeX[nodeIndex] = i * cellWidth;
                     result.NodeY[nodeIndex] = j * cellHeight;

@@ -6,18 +6,27 @@ namespace MeshKernelNET.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableCurvilinearGrid : DisposableNativeObject<CurvilinearGridNative>
     {
-        [ProtoMember(1)] private double[] nodeX;
-        [ProtoMember(2)] private double[] nodeY;
-        [ProtoMember(3)] private int numM;
-        [ProtoMember(4)] private int numN;
+        [ProtoMember(1)]
+        private double[] nodeX;
 
-        public DisposableCurvilinearGrid() { }
+        [ProtoMember(2)]
+        private double[] nodeY;
+
+        [ProtoMember(3)]
+        private int numM;
+
+        [ProtoMember(4)]
+        private int numN;
+
+        public DisposableCurvilinearGrid()
+        {
+        }
 
         public DisposableCurvilinearGrid(int nM, int nN)
         {
             numM = nM;
             numN = nN;
-            var NumNodes = numM * numN;
+            int NumNodes = numM * numN;
 
             NodeX = new double[NumNodes];
             NodeY = new double[NumNodes];

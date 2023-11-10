@@ -5,7 +5,7 @@ namespace MeshKernelNET.Native
     [StructLayout(LayoutKind.Sequential)]
     public struct MakeGridParametersNative
     {
-        /// <summary>   
+        /// <summary>
         /// * The number of columns in x direction (3)
         /// </summary>
         public int NumberOfColumns;
@@ -21,32 +21,32 @@ namespace MeshKernelNET.Native
         public double GridAngle;
 
         /// <summary>
-        /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
+        /// * The x coordinate of the origin, located at the bottom left corner (0.0)
         /// </summary>
         public double OriginXCoordinate;
 
         /// <summary>
-        /// * The y coordinate of the origin, located at the bottom left corner (0.0)	 
+        /// * The y coordinate of the origin, located at the bottom left corner (0.0)
         /// </summary>
         public double OriginYCoordinate;
 
         /// <summary>
-        /// * The grid block size in x dimension, used only for squared grids (10.0) 
+        /// * The grid block size in x dimension, used only for squared grids (10.0)
         /// </summary>
         public double XGridBlockSize;
 
         /// <summary>
-        /// * The grid block size in y dimension, used only for squared grids (10.0) 
+        /// * The grid block size in y dimension, used only for squared grids (10.0)
         /// </summary>
         public double YGridBlockSize;
 
         /// <summary>
-        /// * The x coordinate of the upper right corner (0.0) 
+        /// * The x coordinate of the upper right corner (0.0)
         /// </summary>
         public double UpperRightCornerXCoordinate;
 
         /// <summary>
-        /// * The y coordinate of the upper right corner (0.0) 
+        /// * The y coordinate of the upper right corner (0.0)
         /// </summary>
         public double UpperRightCornerYCoordinate;
     }

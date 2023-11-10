@@ -3,22 +3,42 @@ using ProtoBuf;
 
 namespace MeshKernelNET.Api
 {
-
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableGriddedSamples : DisposableNativeObject<GriddedSamplesNative>
     {
-        [ProtoMember(1)]  private int numX;
-        [ProtoMember(2)]  private int numY;
-        [ProtoMember(3)]  private double originX;
-        [ProtoMember(4)]  private double originY;
-        [ProtoMember(5)]  private double cellSize;
-        [ProtoMember(6)]  private double[] coordinatesX;
-        [ProtoMember(7)]  private double[] coordinatesY;
-        [ProtoMember(8)]  private double[] values;
-        [ProtoMember(9)]  private double upperRightX;
-        [ProtoMember(10)] private double upperRightY;
+        [ProtoMember(1)]
+        private int numX;
 
-        public DisposableGriddedSamples() { }
+        [ProtoMember(2)]
+        private int numY;
+
+        [ProtoMember(3)]
+        private double originX;
+
+        [ProtoMember(4)]
+        private double originY;
+
+        [ProtoMember(5)]
+        private double cellSize;
+
+        [ProtoMember(6)]
+        private double[] coordinatesX;
+
+        [ProtoMember(7)]
+        private double[] coordinatesY;
+
+        [ProtoMember(8)]
+        private double[] values;
+
+        [ProtoMember(9)]
+        private double upperRightX;
+
+        [ProtoMember(10)]
+        private double upperRightY;
+
+        public DisposableGriddedSamples()
+        {
+        }
 
         public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double upperRX, double upperRY)
         {

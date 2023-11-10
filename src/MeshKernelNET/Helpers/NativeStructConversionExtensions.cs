@@ -10,7 +10,6 @@ namespace MeshKernelNET.Helpers
 {
     public static class NativeStructConversionExtensions
     {
-
         internal static OrthogonalizationParametersNative ToOrthogonalizationParametersNative(this OrthogonalizationParameters orthogonalizationParameters)
         {
             return new OrthogonalizationParametersNative
@@ -108,12 +107,9 @@ namespace MeshKernelNET.Helpers
 
         public static DisposableGeometryList ToDisposableGeometryList(this IList<Coordinate> pointValues, double geometrySeparator, double innerOuterSeparator)
         {
-            return DisposableGeometryListFromGeometries(new IGeometry[]
-            {
-                new LineString(pointValues.Select(v => new Coordinate(v.X, v.Y, v.Z)).ToArray())
-            },
-            geometrySeparator,
-            innerOuterSeparator);
+            return DisposableGeometryListFromGeometries(new IGeometry[] { new LineString(pointValues.Select(v => new Coordinate(v.X, v.Y, v.Z)).ToArray()) },
+                                                        geometrySeparator,
+                                                        innerOuterSeparator);
         }
 
         /// <summary>
@@ -140,16 +136,19 @@ namespace MeshKernelNET.Helpers
                 };
             }
 
-            var coordinateArrays = new[] { xCoordinates, yCoordinates, zCoordinates };
+            List<double>[] coordinateArrays = new[] { xCoordinates, yCoordinates, zCoordinates };
 
-            for (int i = 0; i < geometries.Count; i++)
+            for (var i = 0; i < geometries.Count; i++)
             {
-                var geometry = geometries[i];
-                if (geometry == null) continue;
+                IGeometry geometry = geometries[i];
+                if (geometry == null)
+                {
+                    continue;
+                }
 
                 if (i != 0)
                 {
-                    foreach (var coordinateArray in coordinateArrays)
+                    foreach (List<double> coordinateArray in coordinateArrays)
                     {
                         coordinateArray.Add(geometrySeparator);
                     }
@@ -159,14 +158,14 @@ namespace MeshKernelNET.Helpers
                 {
                     AddCoordinatesToArrays(polygon.ExteriorRing.Coordinates, xCoordinates, yCoordinates, zCoordinates);
 
-                    for (int j = 0; j < polygon.InteriorRings.Length; j++)
+                    for (var j = 0; j < polygon.InteriorRings.Length; j++)
                     {
-                        foreach (var coordinateArray in coordinateArrays)
+                        foreach (List<double> coordinateArray in coordinateArrays)
                         {
                             coordinateArray.Add(innerOuterSeparator);
                         }
 
-                        var interiorRing = polygon.InteriorRings[j];
+                        ILineString interiorRing = polygon.InteriorRings[j];
                         AddCoordinatesToArrays(interiorRing.Coordinates, xCoordinates, yCoordinates, zCoordinates);
                     }
                 }
@@ -205,19 +204,21 @@ namespace MeshKernelNET.Helpers
             var features = new List<IPolygon>();
 
             if (disposableGeometryList == null)
+            {
                 return features;
+            }
 
-            var innerOuterSeparator = -998.0;
-            var geometrySeparator = disposableGeometryList.GeometrySeparator;
+            double innerOuterSeparator = -998.0;
+            double geometrySeparator = disposableGeometryList.GeometrySeparator;
 
             var coordinatesOuter = new List<Coordinate>();
             var coordinatesInner = new List<List<Coordinate>>();
-            var currentCoordinateList = coordinatesOuter;
+            List<Coordinate> currentCoordinateList = coordinatesOuter;
 
-            for (int i = 0; i < disposableGeometryList.NumberOfCoordinates; i++)
+            for (var i = 0; i < disposableGeometryList.NumberOfCoordinates; i++)
             {
-                var xCoordinate = disposableGeometryList.XCoordinates[i];
-                var yCoordinate = disposableGeometryList.YCoordinates[i];
+                double xCoordinate = disposableGeometryList.XCoordinates[i];
+                double yCoordinate = disposableGeometryList.YCoordinates[i];
 
                 if (Math.Abs(xCoordinate - innerOuterSeparator) < 1e-10)
                 {
@@ -236,9 +237,9 @@ namespace MeshKernelNET.Helpers
 
                     // create polygon
                     var shell = new LinearRing(coordinatesOuter.ToArray());
-                    var linearRings = coordinatesInner
-                        .Select(c => (ILinearRing)new LinearRing(c.ToArray()))
-                        .ToArray();
+                    ILinearRing[] linearRings = coordinatesInner
+                                                .Select(c => (ILinearRing)new LinearRing(c.ToArray()))
+                                                .ToArray();
 
                     var polygon = new Polygon(shell, linearRings);
                     features.Add(polygon);
@@ -248,7 +249,6 @@ namespace MeshKernelNET.Helpers
                     continue;
                 }
 
-
                 currentCoordinateList.Add(new Coordinate(xCoordinate, yCoordinate));
             }
 
@@ -256,13 +256,13 @@ namespace MeshKernelNET.Helpers
         }
 
         private static void AddCoordinatesToArrays(Coordinate[] interiorRingCoordinates,
-            ICollection<double> xCoordinates,
-            ICollection<double> yCoordinates,
-            ICollection<double> zCoordinates)
+                                                   ICollection<double> xCoordinates,
+                                                   ICollection<double> yCoordinates,
+                                                   ICollection<double> zCoordinates)
         {
             for (var index = 0; index < interiorRingCoordinates.Length; index++)
             {
-                var coordinate = interiorRingCoordinates[index];
+                Coordinate coordinate = interiorRingCoordinates[index];
                 xCoordinates.Add(coordinate.X);
                 yCoordinates.Add(coordinate.Y);
                 zCoordinates.Add(double.IsNaN(coordinate.Z) ? 0.0 : coordinate.Z);

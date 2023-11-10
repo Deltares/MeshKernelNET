@@ -17,7 +17,6 @@ namespace MeshKernelNET.Api
         private double upperRightCornerXCoordinate;
         private double upperRightCornerYCoordinate;
 
-
         private GridTypeOptions gridType;
 
         public static MakeGridParameters CreateDefault()
@@ -38,7 +37,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// * The type of grid to create : square = 0, wieber = 1, hexagonal type 1 = 2,  hexagonal type 2 = 3, triangular = 4 (0) 
+        /// * The type of grid to create : square = 0, wieber = 1, hexagonal type 1 = 2,  hexagonal type 2 = 3, triangular = 4 (0)
         /// </summary>
         [ProtoMember(1)]
         public GridTypeOptions GridType
@@ -51,7 +50,7 @@ namespace MeshKernelNET.Api
             }
         }
 
-        /// <summary>   
+        /// <summary>
         /// * The number of columns in x direction (0)
         /// </summary>
         [ProtoMember(2)]
@@ -94,7 +93,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// * The x coordinate of the origin, located at the bottom left corner (0.0)	 
+        /// * The x coordinate of the origin, located at the bottom left corner (0.0)
         /// </summary>
         [ProtoMember(5)]
         public double OriginXCoordinate
@@ -108,7 +107,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// * The y coordinate of the origin, located at the bottom left corner (0.0)	 
+        /// * The y coordinate of the origin, located at the bottom left corner (0.0)
         /// </summary>
         [ProtoMember(6)]
         public double OriginYCoordinate
@@ -122,7 +121,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// * The grid block size in x dimension, used only for squared grids (0.0) 
+        /// * The grid block size in x dimension, used only for squared grids (0.0)
         /// </summary>
         [ProtoMember(7)]
         public double XGridBlockSize
@@ -136,7 +135,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// * The grid block size in y dimension, used only for squared grids (0.0) 
+        /// * The grid block size in y dimension, used only for squared grids (0.0)
         /// </summary>
         [ProtoMember(8)]
         public double YGridBlockSize
@@ -150,7 +149,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// *  The x coordinate of the upper right corner (0.0) 
+        /// *  The x coordinate of the upper right corner (0.0)
         /// </summary>
         [ProtoMember(9)]
         public double UpperRightCornerXCoordinate
@@ -164,7 +163,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <summary>
-        /// *  The x coordinate of the upper right corner (0.0) 
+        /// *  The x coordinate of the upper right corner (0.0)
         /// </summary>
         [ProtoMember(10)]
         public double UpperRightCornerYCoordinate

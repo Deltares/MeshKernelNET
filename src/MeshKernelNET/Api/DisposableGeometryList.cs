@@ -6,12 +6,23 @@ namespace MeshKernelNET.Api
     [ProtoContract(AsReferenceDefault = true)]
     public sealed class DisposableGeometryList : DisposableNativeObject<GeometryListNative>
     {
-        [ProtoMember(1)] private double geometrySeparator;
-        [ProtoMember(2)] private double innerOuterSeparator;
-        [ProtoMember(3)] private int numberOfCoordinates;
-        [ProtoMember(4)] private double[] xCoordinates;
-        [ProtoMember(5)] private double[] yCoordinates;
-        [ProtoMember(6)] private double[] values;
+        [ProtoMember(1)]
+        private double geometrySeparator;
+
+        [ProtoMember(2)]
+        private double innerOuterSeparator;
+
+        [ProtoMember(3)]
+        private int numberOfCoordinates;
+
+        [ProtoMember(4)]
+        private double[] xCoordinates;
+
+        [ProtoMember(5)]
+        private double[] yCoordinates;
+
+        [ProtoMember(6)]
+        private double[] values;
 
         ~DisposableGeometryList()
         {
@@ -77,7 +88,7 @@ namespace MeshKernelNET.Api
             get { return values; }
             set { values = value; }
         }
-        
+
         protected override void SetNativeObject(ref GeometryListNative nativeObject)
         {
             nativeObject.xCoordinates = GetPinnedObjectPointer(XCoordinates);

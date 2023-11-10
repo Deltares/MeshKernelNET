@@ -19,11 +19,11 @@ namespace MeshKernelNET.Helpers
             }
             else if (typeof(T) == typeof(string))
             {
-                var totalByteSize = size * stringSize;
+                int totalByteSize = size * stringSize;
                 var byteArray = new byte[totalByteSize];
 
                 Marshal.Copy(pointer, byteArray, 0, totalByteSize);
-                
+
                 byteArray.GetStringArrayFromFlattenedAsciiCodedStringArray(size).CopyTo(array, 0);
             }
             else

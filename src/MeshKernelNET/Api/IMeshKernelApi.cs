@@ -743,6 +743,17 @@ namespace MeshKernelNET.Api
                                            in DisposableGeometryList geometryListLandBoundaries);
 
         /// <summary>
+        /// Converts the projection of a mesh2d
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="projection">The new projection for the mesh</param>
+        /// <param name="zone">The UTM zone and information string</param>
+        /// <returns>Error code</returns>
+        int Mesh2dConvertProjection([In] int meshKernelId,
+                                    [In] ProjectionOptions projection,
+                                    [In] string zone);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

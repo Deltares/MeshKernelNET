@@ -1544,6 +1544,47 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void Mesh2dConvertProjectionThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshFinal = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Set the zone string
+                    const string zone = "+proj=utm +lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+
+                    // The mesh projection is initially cartesian, convert to spherical
+                    Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone));
+                    int projection = -1;
+                    Assert.AreEqual(0, api.GetProjection(id, ref projection));
+                    Assert.AreEqual(ProjectionOptions.Spherical, (ProjectionOptions)projection);
+
+                    // Round trip, convert back to cartesian
+                    Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Cartesian, zone));
+                    Assert.AreEqual(0, api.GetProjection(id, ref projection));
+                    Assert.AreEqual(ProjectionOptions.Cartesian, (ProjectionOptions)projection);
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshFinal));
+
+                    Assert.AreEqual(mesh, meshFinal);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshFinal.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void Mesh2dGetHangingEdgesThroughApi()
         {
             // Setup

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31402.337
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeshKernelNET", "src\MeshKernelNET\MeshKernelNET.csproj", "{BC6B4877-9099-4959-AB56-BE28538FB539}"
 EndProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D13A0EA4-B77
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6E2D9D61-87C3-43CB-954F-D4D6D02BC6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshKernelNETTest", "test\MeshKernelNETTest\MeshKernelNETTest.csproj", "{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeshKernelNETTest", "test\MeshKernelNETTest\MeshKernelNETTest.csproj", "{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

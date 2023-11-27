@@ -1551,6 +1551,7 @@ namespace MeshKernelNETTest.Api
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
+                var meshInitial = new DisposableMesh2D();
                 var meshFinal = new DisposableMesh2D();
                 try
                 {
@@ -1558,27 +1559,60 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
-                    // Set the zone string
-                    const string zone = "+proj=utm +lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
 
-                    // The mesh projection is initially cartesian, convert to spherical
-                    Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone));
-                    int projection = -1;
-                    Assert.AreEqual(0, api.GetProjection(id, ref projection));
-                    Assert.AreEqual(ProjectionOptions.Spherical, (ProjectionOptions)projection);
+                    {
+                        // Set the zone string
+                        const string zone = "+proj=utm +lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
 
-                    // Round trip, convert back to cartesian
-                    Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Cartesian, zone));
-                    Assert.AreEqual(0, api.GetProjection(id, ref projection));
-                    Assert.AreEqual(ProjectionOptions.Cartesian, (ProjectionOptions)projection);
+                        // The mesh projection is initially cartesian, convert to spherical
+                        Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone));
+                        int projection = -1;
+                        Assert.AreEqual(0, api.GetProjection(id, ref projection));
+                        Assert.AreEqual(ProjectionOptions.Spherical, (ProjectionOptions)projection);
 
+                        // Round trip, convert back to cartesian
+                        Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Cartesian, zone));
+                        Assert.AreEqual(0, api.GetProjection(id, ref projection));
+                        Assert.AreEqual(ProjectionOptions.Cartesian, (ProjectionOptions)projection);
+                    }
+
+                    // Get data of final mesh
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshFinal));
+                    Assert.IsNotNull(meshFinal);
 
-                    Assert.AreEqual(mesh, meshFinal);
+                    // Compare meshes the initial and final meshes
+
+                    // First comparison: all array sizes must be equal
+                    Assert.AreEqual(meshInitial.NumNodes, meshFinal.NumNodes);
+                    Assert.AreEqual(meshInitial.NumFaces, meshFinal.NumFaces);
+                    Assert.AreEqual(meshInitial.NumEdges, meshFinal.NumEdges);
+                    Assert.AreEqual(meshInitial.NumFaceNodes, meshFinal.NumFaceNodes);
+
+                    // Second comparison: all integer arrays must be equal
+                    Assert.AreEqual(meshInitial.EdgeFaces, meshFinal.EdgeFaces);
+                    Assert.AreEqual(meshInitial.EdgeNodes, meshFinal.EdgeNodes);
+                    Assert.AreEqual(meshInitial.FaceEdges, meshFinal.FaceEdges);
+                    Assert.AreEqual(meshInitial.FaceNodes, meshFinal.FaceNodes);
+                    Assert.AreEqual(meshInitial.NodesPerFace, meshFinal.NodesPerFace);
+
+                    // Third comparison: all double arrays must be equal within a tolerance
+                    {
+                        const double tolerance = 1.0e-6;
+                        Assert.That(meshInitial.NodeX, Is.EqualTo(meshFinal.NodeX).Within(tolerance));
+                        Assert.That(meshInitial.NodeY, Is.EqualTo(meshFinal.NodeY).Within(tolerance));
+                        Assert.That(meshInitial.EdgeX, Is.EqualTo(meshFinal.EdgeX).Within(tolerance));
+                        Assert.That(meshInitial.EdgeY, Is.EqualTo(meshFinal.EdgeY).Within(tolerance));
+                        Assert.That(meshInitial.FaceX, Is.EqualTo(meshFinal.FaceX).Within(tolerance));
+                        Assert.That(meshInitial.FaceY, Is.EqualTo(meshFinal.FaceY).Within(tolerance));
+                    }
                 }
                 finally
                 {
                     api.DeallocateState(id);
+                    meshInitial.Dispose();
                     meshFinal.Dispose();
                 }
             }

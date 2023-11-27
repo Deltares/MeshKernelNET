@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
+using NetTopologySuite.Algorithm;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
@@ -622,6 +624,93 @@ namespace MeshKernelNETTest.Api
                 {
                     api.DeallocateState(id);
                     mesh2D.Dispose();
+                }
+            }
+        }
+
+        static double[,] Rotate([In] ref double[,] points, [In] ref double[] centre, [In] double angle)
+        {
+            if (points.GetLength(0) <= 0 || points.GetLength(1) != 2)
+            {
+                throw new ArgumentException("points is not correctly dimensioned");
+            }
+
+            if (centre.Length != 2)
+            {
+                throw new ArgumentException("size of centre must be exactly 2");
+            }
+
+            double[,] rotatedPoints = new double[points.GetLength(0), 2];
+
+            Console.Write(">>> size = " + points.GetLength(0).ToString());
+
+            double angleRad = angle * 180.0 / Math.PI;
+            double angleCos = Math.Cos(angleRad);
+            double angleSin = Math.Sin(angleRad);
+
+            for (int i = 0; i < points.GetLength(0); i++)
+            {
+                double offsetX = points[i, 0] - centre[0];
+                double offsetY = points[i, 1] - centre[1];
+                rotatedPoints[i, 0] = centre[0] + angleCos * offsetX - angleSin * offsetY;
+                rotatedPoints[i, 1] = centre[1] + angleSin * offsetX + angleCos * offsetY;
+            }
+
+            return rotatedPoints;
+        }
+
+
+        [Test]
+        public void Mesh2dRotateThroughAPI()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshInitial = new DisposableMesh2D();
+                var meshRotated = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, meshInitial));
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
+
+                    var rotationCentre = new[] { 1.0, 5.0 };
+                    const double rotationAngle = 45.0;
+                    Assert.AreEqual(0, api.Mesh2dRotate(id,
+                                                        rotationCentre[0],
+                                                        rotationCentre[1],
+                                                        rotationAngle));
+
+                    // Get data of rotated mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshRotated));
+                    Assert.IsNotNull(meshRotated);
+
+                    double[,] nodes = new double[meshInitial.NumNodes, 2];
+                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    {
+                        nodes[i, 0] = meshInitial.NodeX[i];
+                        nodes[i, 1] = meshInitial.NodeY[i];
+                    }
+
+                    double[,] rotatedNodes = Rotate(ref nodes, ref rotationCentre, rotationAngle);
+
+                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    {
+                        Assert.AreEqual(rotatedNodes[i, 0], meshRotated.NodeX[i]);
+                        Assert.AreEqual(rotatedNodes[i, 1], meshRotated.NodeY[i]);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshInitial.Dispose();
+                    meshRotated.Dispose();
                 }
             }
         }

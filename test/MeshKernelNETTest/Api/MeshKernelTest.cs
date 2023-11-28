@@ -705,7 +705,7 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dRotateThroughAPI()
         {
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 1, 2))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -721,7 +721,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
                     Assert.IsNotNull(meshInitial);
 
-                    var rotationCentre = new[] { 1.0, 5.0 };
+                    double[] rotationCentre = new[] { 1.0, 5.0 };
                     const double rotationAngle = 45.0;
                     Assert.AreEqual(0, api.Mesh2dRotate(id,
                                                         rotationCentre[0],
@@ -749,6 +749,82 @@ namespace MeshKernelNETTest.Api
                     api.DeallocateState(id);
                     meshInitial.Dispose();
                     meshRotated.Dispose();
+                }
+            }
+        }
+
+        private static double[,] TranslateNodes([In] double[] nodesX,
+                                                [In] double[] nodesY,
+                                                [In] double[] translation)
+        {
+            if (nodesX.Length <= 0 || nodesX.Length != nodesY.Length)
+            {
+                throw new ArgumentException("NodesX and NodesY must not be empty and must be of equal size.");
+            }
+
+            if (translation.Length != 2)
+            {
+                throw new ArgumentException("The size of translation must be exactly 2.");
+            }
+
+            double[,] translatedNodes = new double[nodesX.Length, 2];
+
+            for (int i = 0; i < nodesX.Length; i++)
+            {
+
+                translatedNodes[i, 0] = nodesX[i] + translation[0];
+                translatedNodes[i, 1] = nodesY[i] + translation[1];
+            }
+
+            return translatedNodes;
+        }
+
+        [Test]
+        public void Mesh2dTranslateThroughAPI()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 1, 2))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshInitial = new DisposableMesh2D();
+                var meshTranslated = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
+
+                    double[] translation = new[] { 1.0, 5.0 };
+                    Assert.AreEqual(0, api.Mesh2dTranslate(id,
+                                                           translation[0],
+                                                           translation[1]));
+
+                    // Get data of rotated mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshTranslated));
+                    Assert.IsNotNull(meshTranslated);
+
+
+                    // Compute expected nodes
+                    double[,] expectedNodes = TranslateNodes(meshInitial.NodeX, meshInitial.NodeY, translation);
+
+                    // Expected and actual values must be equal within a tolerance
+                    const double tolerance = 1.0e-6;
+                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    {
+                        Assert.AreEqual(expectedNodes[i, 0], meshTranslated.NodeX[i], tolerance);
+                        Assert.AreEqual(expectedNodes[i, 1], meshTranslated.NodeY[i], tolerance);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshInitial.Dispose();
+                    meshTranslated.Dispose();
                 }
             }
         }

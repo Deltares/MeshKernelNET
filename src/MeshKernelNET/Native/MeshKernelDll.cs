@@ -1439,7 +1439,7 @@ namespace MeshKernelNET.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="centreX">>X-coordinate of the centre of rotation</param>
         /// <param name="centreY">Y-coordinate of the centre of rotation></param>
-        /// <param name="angle">Angle of rotation</param>
+        /// <param name="angle">Angle of rotation in degrees</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_rotate", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dRotate([In] int meshKernelId,

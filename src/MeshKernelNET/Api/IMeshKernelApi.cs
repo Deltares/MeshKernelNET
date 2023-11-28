@@ -1181,7 +1181,7 @@ namespace MeshKernelNET.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="centreX">X-coordinate of the centre of rotation</param>
         /// <param name="centreY">Y-coordinate of the centre of rotation</param>
-        /// <param name="angle">Angle of rotation</param>
+        /// <param name="angle">Angle of rotation in degrees</param>
         /// <returns>Error code</returns>
         int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle);
 

@@ -1181,7 +1181,7 @@ namespace MeshKernelNET.Api
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListIn">The input samples</param>
-        /// <param name="interpolationParameters">The settings for the interpolation algorithm</param>
+        /// <param name="interpolationParameters">tThe settings for the interpolation algorithm</param>
         /// <param name="samplesRefineParameters">The settings for the interpolation related to samples</param>
         /// <returns>If the operation succeeded</returns>
         int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList disposableGeometryListIn,

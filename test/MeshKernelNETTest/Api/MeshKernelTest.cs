@@ -1573,6 +1573,14 @@ namespace MeshKernelNETTest.Api
                         Assert.AreEqual(0, api.GetProjection(id, ref projection));
                         Assert.AreEqual(ProjectionOptions.Spherical, (ProjectionOptions)projection);
 
+                        // Get data of final mesh
+                        Assert.AreEqual(0, api.Mesh2dGetData(id, out meshFinal));
+                        Assert.IsNotNull(meshFinal);
+
+                        // It must be different than the initial mesh
+                        Assert.AreNotEqual(meshInitial.NodeX, meshFinal.NodeX);
+                        Assert.AreNotEqual(meshInitial.NodeY, meshFinal.NodeY);
+
                         // Round trip, convert back to cartesian
                         Assert.AreEqual(0, api.Mesh2dConvertProjection(id, ProjectionOptions.Cartesian, zone));
                         Assert.AreEqual(0, api.GetProjection(id, ref projection));
@@ -1614,6 +1622,59 @@ namespace MeshKernelNETTest.Api
                     api.DeallocateState(id);
                     meshInitial.Dispose();
                     meshFinal.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dConvertProjectionThroughApiFails()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshInitial = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
+
+                    {
+
+                        int expectedExitCode = -1;
+                        api.GetExitCodeStdLibException(ref expectedExitCode);
+
+                        // Missing projection key-value pair in string
+                        string zone = "+lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+                        int exitCode = api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone);
+                        Assert.AreEqual(expectedExitCode, exitCode);
+
+                        // Missing projection value pair in string
+                        zone = "+proj= +lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+                        exitCode = api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone);
+                        Assert.AreEqual(expectedExitCode, exitCode);
+
+                        // Use invalid projection value in string
+                        zone = "+proj=ratm +lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+                        exitCode = api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone);
+                        Assert.AreEqual(expectedExitCode, exitCode);
+
+                        // Use invalid zone value in string
+                        zone = "+proj=utm +lat_1=0.5 +lat_2=2 +n=0.5 +zone=666";
+                        exitCode = api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone);
+                        Assert.AreEqual(expectedExitCode, exitCode);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshInitial.Dispose();
                 }
             }
         }

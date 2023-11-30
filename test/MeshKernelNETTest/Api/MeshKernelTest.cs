@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
+using NetTopologySuite.Algorithm;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
@@ -664,6 +666,165 @@ namespace MeshKernelNETTest.Api
                 {
                     api.DeallocateState(id);
                     mesh2D.Dispose();
+                }
+            }
+        }
+        private static double[,] RotateNodes([In] double[] nodesX,
+                                             [In] double[] nodesY,
+                                             [In] double[] centre,
+                                             [In] double angle)
+        {
+            if (nodesX.Length <= 0 || nodesX.Length != nodesY.Length)
+            {
+                throw new ArgumentException("NodesX and NodesY must not be empty and must be of equal size.");
+            }
+
+            if (centre.Length != 2)
+            {
+                throw new ArgumentException("The size of centre must be exactly 2.");
+            }
+
+            double[,] rotatedNodes = new double[nodesX.Length, 2];
+
+            double angleRad = angle * Math.PI / 180.0;
+            double angleCos = Math.Cos(angleRad);
+            double angleSin = Math.Sin(angleRad);
+
+            for (int i = 0; i < nodesX.Length; i++)
+            {
+                double offsetX = nodesX[i] - centre[0];
+                double offsetY = nodesY[i] - centre[1];
+                rotatedNodes[i, 0] = centre[0] + angleCos * offsetX - angleSin * offsetY;
+                rotatedNodes[i, 1] = centre[1] + angleSin * offsetX + angleCos * offsetY;
+            }
+
+            return rotatedNodes;
+        }
+
+        [Test]
+        public void Mesh2dRotateThroughAPI()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 1, 2))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshInitial = new DisposableMesh2D();
+                var meshRotated = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
+
+                    double[] rotationCentre = new[] { 1.0, 5.0 };
+                    const double rotationAngle = 45.0;
+                    Assert.AreEqual(0, api.Mesh2dRotate(id,
+                                                        rotationCentre[0],
+                                                        rotationCentre[1],
+                                                        rotationAngle));
+
+                    // Get data of rotated mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshRotated));
+                    Assert.IsNotNull(meshRotated);
+
+
+                    // Compute expected nodes
+                    double[,] expectedNodes = RotateNodes(meshInitial.NodeX, meshInitial.NodeY, rotationCentre, rotationAngle);
+
+                    // Expected and actual values must be equal within a tolerance
+                    const double tolerance = 1.0e-6;
+                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    {
+                        Assert.AreEqual(expectedNodes[i, 0], meshRotated.NodeX[i], tolerance);
+                        Assert.AreEqual(expectedNodes[i, 1], meshRotated.NodeY[i], tolerance);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshInitial.Dispose();
+                    meshRotated.Dispose();
+                }
+            }
+        }
+
+        private static double[,] TranslateNodes([In] double[] nodesX,
+                                                [In] double[] nodesY,
+                                                [In] double[] translation)
+        {
+            if (nodesX.Length <= 0 || nodesX.Length != nodesY.Length)
+            {
+                throw new ArgumentException("NodesX and NodesY must not be empty and must be of equal size.");
+            }
+
+            if (translation.Length != 2)
+            {
+                throw new ArgumentException("The size of translation must be exactly 2.");
+            }
+
+            double[,] translatedNodes = new double[nodesX.Length, 2];
+
+            for (int i = 0; i < nodesX.Length; i++)
+            {
+
+                translatedNodes[i, 0] = nodesX[i] + translation[0];
+                translatedNodes[i, 1] = nodesY[i] + translation[1];
+            }
+
+            return translatedNodes;
+        }
+
+        [Test]
+        public void Mesh2dTranslateThroughAPI()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 1, 2))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshInitial = new DisposableMesh2D();
+                var meshTranslated = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.IsNotNull(meshInitial);
+
+                    double[] translation = new[] { 1.0, 5.0 };
+                    Assert.AreEqual(0, api.Mesh2dTranslate(id,
+                                                           translation[0],
+                                                           translation[1]));
+
+                    // Get data of rotated mesh
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshTranslated));
+                    Assert.IsNotNull(meshTranslated);
+
+
+                    // Compute expected nodes
+                    double[,] expectedNodes = TranslateNodes(meshInitial.NodeX, meshInitial.NodeY, translation);
+
+                    // Expected and actual values must be equal within a tolerance
+                    const double tolerance = 1.0e-6;
+                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    {
+                        Assert.AreEqual(expectedNodes[i, 0], meshTranslated.NodeX[i], tolerance);
+                        Assert.AreEqual(expectedNodes[i, 1], meshTranslated.NodeY[i], tolerance);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshInitial.Dispose();
+                    meshTranslated.Dispose();
                 }
             }
         }

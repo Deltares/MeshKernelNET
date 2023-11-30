@@ -1118,6 +1118,19 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative);
         }
 
+
+
+        public int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle)
+        {
+            return MeshKernelDll.Mesh2dRotate(meshKernelId, centreX, centreY, angle);
+        }
+
+        public int Mesh2dTranslate(int meshKernelId, double translationX, double translationY)
+        {
+            return MeshKernelDll.Mesh2dTranslate(meshKernelId, translationX, translationY);
+        }
+
+
         /// <inheritdoc/>
         public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)
         {

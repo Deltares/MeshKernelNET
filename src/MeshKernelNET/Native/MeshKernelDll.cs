@@ -1446,6 +1446,32 @@ namespace MeshKernelNET.Native
                                                               [In] ref MeshRefinementParametersNative meshRefinementParameters);
 
         /// <summary>
+        /// Rotates a mesh2d about a given point by a given angle
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="centreX">>X-coordinate of the centre of rotation</param>
+        /// <param name="centreY">Y-coordinate of the centre of rotation></param>
+        /// <param name="angle">Angle of rotation in degrees</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_rotate", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dRotate([In] int meshKernelId,
+                                                [In] double centreX,
+                                                [In] double centreY,
+                                                [In] double angle);
+
+        /// <summary>
+        /// Translates a mesh2d
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="translationX">X-component of the translation vector</param>
+        /// <param name="translationY">Y-component of the translation vector</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_translate", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dTranslate([In] int meshKernelId,
+                                                [In] double translationX,
+                                                [In] double translationY);
+
+        /// <summary>
         /// Synchronize provided mesh (
         /// <param name="meshGeometryDimensions"/>
         /// and

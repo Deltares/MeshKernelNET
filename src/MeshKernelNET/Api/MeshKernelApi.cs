@@ -661,6 +661,15 @@ namespace MeshKernelNET.Api
                                                                 ref geometryListLandBoundariesNative);
         }
 
+        public int Mesh2dConvertProjection([In] int meshKernelId,
+                                           [In] ProjectionOptions projection,
+                                           [In] string zone)
+        {
+            return MeshKernelDll.Mesh2dConvertProjection(meshKernelId,
+                                                         (int)projection,
+                                                         zone);
+        }
+
         public int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges)
         {
             return MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numEdges);
@@ -802,7 +811,7 @@ namespace MeshKernelNET.Api
         public int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges)
         {
             int numberOfHangingEdges = -1;
-            hangingEdges = new int[] {};
+            hangingEdges = new int[] { };
             int exitCode = MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numberOfHangingEdges);
             if (exitCode != 0)
             {

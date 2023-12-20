@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Deltares.MeshKernel" Version="3.0.1.2477-dev" />
-        <PackageReference Include="DHYDRO.SharedConfigurations" Version="1.0.0.27" />
-        <PackageReference Include="NetTopologySuite" Version="1.15.0" />
-        <PackageReference Include="protobuf-net" Version="2.4.6" />
+        <PackageReference Include="Deltares.MeshKernel" />
+        <PackageReference Include="DHYDRO.SharedConfigurations" />
+        <PackageReference Include="NetTopologySuite" />
+        <PackageReference Include="protobuf-net" />
     </ItemGroup>
 
     <ItemGroup>

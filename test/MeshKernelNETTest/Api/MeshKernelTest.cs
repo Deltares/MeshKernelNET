@@ -2363,5 +2363,33 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+        [Test]
+        public void Mesh2dMakeGlobaThroughApi()
+        {
+            // Generates a mesh in spherical coordinates around the globe
+
+            // Setup
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                try
+                {
+                    int projectionType = 1;
+                    id = api.AllocateState(projectionType);
+                    Assert.AreEqual(0, api.Mesh2dMakeGlobal(id, 19,25));
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(1200, mesh2d.NumEdges);
+                    Assert.AreEqual(629, mesh2d.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
     }
 }

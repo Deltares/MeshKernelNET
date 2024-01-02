@@ -128,7 +128,7 @@ namespace MeshKernelNET.Native
         /// Computes the smoothness of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="direction">The direction in which to compute the smoothness (0 for m direction, 1 for n direction)</param>
         /// <param name="smoothness">The grid smoothness values in the selected direction</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_smoothness", CallingConvention = CallingConvention.Cdecl)]

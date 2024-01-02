@@ -107,7 +107,7 @@ namespace MeshKernelNET.Api
         /// Computes the smoothness of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="direction">The direction in which to compute the smoothness (0 for m direction, 1 for n direction)</param>
         /// <param name="smoothness">The grid smoothness values in the selected direction</param>
         /// <returns>Error code</returns>
         int CurvilinearComputeSmoothness(int meshKernelId, int direction, ref double[] smoothness);

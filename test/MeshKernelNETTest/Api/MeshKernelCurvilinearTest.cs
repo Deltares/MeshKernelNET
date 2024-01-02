@@ -1,4 +1,5 @@
-﻿using MeshKernelNET.Api;
+﻿using System;
+using MeshKernelNET.Api;
 using NUnit.Framework;
 
 namespace MeshKernelNETTest.Api
@@ -771,5 +772,38 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+        [Test]
+        public void CurvilinearGetSmoothnessThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            {
+                var id = 0;
+                var curvilinearGrid = new DisposableCurvilinearGrid();
+                try
+                {
+                    // Prepare
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    var smoothness = new double[curvilinearGrid.NumM * curvilinearGrid.NumN];
+
+                    // Execute
+                    Assert.AreEqual(0, api.CurvilinearComputeSmoothness(id, 1, ref smoothness));
+         
+                    // Assert
+                    Assert.AreEqual(1.0, smoothness[0]);
+                    Assert.AreEqual(1.0, smoothness[1]);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    curvilinearGrid.Dispose();
+                }
+            }
+        }
+
     }
 }

@@ -96,6 +96,14 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearComputeOrthogonalGridFromSplines(meshKernelId, ref geometryListNative,
                                                                              ref curvilinearParametersNative, ref splinesToCurvilinearParametersNative);
         }
+        
+        public int CurvilinearComputeSmoothness(int meshKernelId, int direction, ref double[] smoothness)
+        {
+            IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
+            int succcess = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, direction, smoothnessPtr);
+            Marshal.FreeCoTaskMem(smoothnessPtr);
+            return succcess;
+        }
 
         public int CurvilinearComputeTransfiniteFromPolygon(int meshKernelId,
                                                             in DisposableGeometryList geometryList,

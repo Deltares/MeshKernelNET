@@ -795,7 +795,7 @@ namespace MeshKernelNETTest.Api
          
                     // Assert
                     Assert.AreEqual(1.0, smoothness[0]);
-                    Assert.AreEqual(1.0, smoothness[1]);
+                    Assert.AreEqual(1.0, smoothness[10]);
                 }
                 finally
                 {

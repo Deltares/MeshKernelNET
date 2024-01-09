@@ -811,7 +811,7 @@ namespace MeshKernelNET.Api
         public int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges)
         {
             int numberOfHangingEdges = -1;
-            hangingEdges = new int[] { };
+            hangingEdges = new int[] {};
             int exitCode = MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numberOfHangingEdges);
             if (exitCode != 0)
             {
@@ -1118,8 +1118,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative);
         }
 
-
-
         public int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle)
         {
             return MeshKernelDll.Mesh2dRotate(meshKernelId, centreX, centreY, angle);
@@ -1129,7 +1127,6 @@ namespace MeshKernelNET.Api
         {
             return MeshKernelDll.Mesh2dTranslate(meshKernelId, translationX, translationY);
         }
-
 
         /// <inheritdoc/>
         public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)

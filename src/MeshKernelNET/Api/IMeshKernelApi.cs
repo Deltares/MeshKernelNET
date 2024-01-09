@@ -1186,6 +1186,7 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList disposableGeometryListIn,
                                        double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters);
+
         /// <summary>
         /// Rotates a mesh2d about a given point by a given angle
         /// </summary>

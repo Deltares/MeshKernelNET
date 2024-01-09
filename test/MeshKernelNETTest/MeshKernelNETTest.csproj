@@ -6,17 +6,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Deltares.MeshKernel" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="NetTopologySuite" />
-        <PackageReference Include="coverlet.collector" />
-        <PackageReference Include="NUnit" />
-        <PackageReference Include="NUnit.ConsoleRunner" />
-        <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="Deltares.MeshKernel"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="NetTopologySuite"/>
+        <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="NUnit"/>
+        <PackageReference Include="NUnit.ConsoleRunner"/>
+        <PackageReference Include="NUnit3TestAdapter"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\MeshKernelNET\MeshKernelNET.csproj" />
+        <ProjectReference Include="..\..\src\MeshKernelNET\MeshKernelNET.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>
+    public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>, IReadOnly2DMesh
     {
         [ProtoMember(1)]
         private int[] edgeFaces;
@@ -169,6 +169,57 @@ namespace MeshKernelNET.Api
             get { return numFaceNodes; }
             set { numFaceNodes = value; }
         }
+
+
+        #region IReadOnly2DMesh
+        /// <inheritdoc/>
+        public int CellCount()
+        {
+            return NumFaces;
+        }
+
+        /// <inheritdoc/>
+        public int GetCellEdgeCount(int cellIndex)
+        {
+            return NodesPerFace[cellIndex];
+        }
+
+        /// <inheritdoc/>
+        public int EdgeCount()
+        {
+            return NumEdges;
+        }
+
+        /// <inheritdoc/>
+        public int GetFirstNode(int edgeIndex)
+        {
+            return EdgeNodes[2 * edgeIndex];
+        }
+
+        /// <inheritdoc/>
+        public int GetLastNode(int edgeIndex)
+        {
+            return EdgeNodes[2 * edgeIndex + 1];
+        }
+
+        /// <inheritdoc/>
+        public int NodeCount()
+        {
+            return NumNodes;
+        }
+
+        /// <inheritdoc/>
+        public double GetNodeX(int nodeIndex)
+        {
+            return NodeX[nodeIndex];
+        }
+
+        /// <inheritdoc/>
+        public double GetNodeY(int nodeIndex)
+        {
+            return NodeY[nodeIndex];
+        }
+        #endregion
 
         protected override void SetNativeObject(ref Mesh2DNative nativeObject)
         {

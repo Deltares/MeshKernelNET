@@ -839,6 +839,71 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
-
+        
+        [Test]
+        public void CurvilinearGrid_GetNodeXY_AccessesNodeXY()
+        {
+            // Setup
+            using (var grid = CreateCurvilinearGrid(3, 2, 5.0, 2.0))
+            {
+                Assert.AreEqual((3,2),(grid.NumM, grid.NumN));
+                for (int row = 0; row < grid.NumM; ++row)
+                {
+                    for (int column = 0; column < grid.NumN; ++column)
+                    {
+                        int index = row * grid.NumN + column;
+                        Assert.AreEqual(grid.GetNodeX(index), grid.NodeX[index]);
+                        Assert.AreEqual(grid.GetNodeY(index), grid.NodeY[index]);
+                    }
+                }
+            }
+        }
+        
+        [TestCase(0,0,5)]   // first column-oriented edge
+        [TestCase(14,14,19)] // last column-oriented edge
+        [TestCase(15,0,1)]   // first row-oriented edge
+        [TestCase(30,18,19)] // last row-oriented edge
+        public void CurvilinearGrid_GetEdgeNodeIndexMethods_FollowMeshKernelEdgeOrderingConvention(int edgeIndex, int firstIndex, int secondIndex)
+        {
+            // first all column-oriented edges in row-major order, then all row-oriented edges in row-major order
+            using (var grid = CreateCurvilinearGrid(5, 4, 5.0, 2.0))
+            {
+                Assert.AreEqual((5,4), (grid.NumM,grid.NumN));
+                Assert.AreEqual((firstIndex,secondIndex), (grid.GetFirstNode(edgeIndex),grid.GetLastNode(edgeIndex)));
+            }
+        }
+        
+        [TestCase(5,3,5*3)]
+        [TestCase(15,42,15*42)]
+        public void CurvilinearGrid_GetNodeCount_CountsAllNodes(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.NodeCount());
+            }
+        }
+        
+        [TestCase(5,3,4*3+5*2)]
+        [TestCase(15,42,15*41+14*42)]
+        public void CurvilinearGrid_GetEdgeCount_CountsRowOrientedAndColumnOrientedEdges(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.EdgeCount());
+            }
+        }
+        
+        [TestCase(5,3, (5-1)*(3-1))]
+        [TestCase(15,42, (15-1)*(42-1))]
+        public void CurvilinearGrid_GetCellCount_CountsAllCells(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.CellCount());
+            }
+        }
     }
 }

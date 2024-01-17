@@ -101,6 +101,7 @@ namespace MeshKernelNET.Api
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
             int succcess = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, direction, smoothnessPtr);
+            Marshal.Copy(smoothnessPtr, smoothness, 0, smoothness.Length);
             Marshal.FreeCoTaskMem(smoothnessPtr);
             return succcess;
         }

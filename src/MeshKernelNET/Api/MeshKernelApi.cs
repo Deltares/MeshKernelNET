@@ -85,6 +85,15 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearComputeTransfiniteFromSplines(meshKernelId, ref geometryListIn, ref curvilinearParametersNative);
         }
 
+        public int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature)
+        {
+            IntPtr curvaturePtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * curvature.Length);
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), curvaturePtr);
+            Marshal.Copy(curvaturePtr, curvature, 0, curvature.Length);
+            Marshal.FreeCoTaskMem(curvaturePtr);
+            return success;
+        }
+
         public int CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId,
                                                                in DisposableGeometryList disposableGeometryListIn,
                                                                in CurvilinearParameters curvilinearParameters,
@@ -96,15 +105,14 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearComputeOrthogonalGridFromSplines(meshKernelId, ref geometryListNative,
                                                                              ref curvilinearParametersNative, ref splinesToCurvilinearParametersNative);
         }
-        
-        public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions directionOption, ref double[] smoothness)
+
+        public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness)
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
-            var curvilinearDirectionOption = Convert.ToInt32(directionOption);
-            int succcess = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, curvilinearDirectionOption, smoothnessPtr);
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), smoothnessPtr);
             Marshal.Copy(smoothnessPtr, smoothness, 0, smoothness.Length);
             Marshal.FreeCoTaskMem(smoothnessPtr);
-            return succcess;
+            return success;
         }
 
         public int CurvilinearComputeTransfiniteFromPolygon(int meshKernelId,
@@ -821,7 +829,7 @@ namespace MeshKernelNET.Api
         public int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges)
         {
             int numberOfHangingEdges = -1;
-            hangingEdges = new int[] {};
+            hangingEdges = new int[] { };
             int exitCode = MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numberOfHangingEdges);
             if (exitCode != 0)
             {

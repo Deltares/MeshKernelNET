@@ -772,6 +772,50 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void CurvilinearGetCurvatureThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            {
+                var id = 0;
+                DisposableCurvilinearGrid curvilinearGrid = null;
+                {
+                    try
+                    {
+                        // Prepare
+                        id = api.AllocateState(0);
+                        Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                        Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                        var curvature = new double[curvilinearGrid.NumM * curvilinearGrid.NumN];
+
+                        // Execute
+                        Assert.AreEqual(0, api.CurvilinearComputeCurvature(id, CurvilinearDirectionOptions.N, ref curvature));
+
+                        // Assert
+                        var tolerance = 1e-9;
+                        Assert.AreEqual(-999.0, curvature[0], tolerance);
+                        Assert.AreEqual(1.0, curvature[1], tolerance);
+                        Assert.AreEqual(1.0, curvature[2], tolerance);
+                        Assert.AreEqual(1.0, curvature[3], tolerance);
+                        Assert.AreEqual(-999.0, curvature[4], tolerance);
+                        Assert.AreEqual(-999.0, curvature[5], tolerance);
+                        Assert.AreEqual(1.0, curvature[6], tolerance);
+                        Assert.AreEqual(1.0, curvature[7], tolerance);
+                        Assert.AreEqual(1.0, curvature[8], tolerance);
+                        Assert.AreEqual(-999.0, curvature[9], tolerance);
+                        Assert.AreEqual(-999.0, curvature[10], tolerance);
+                    }
+                    finally
+                    {
+                        api.DeallocateState(id);
+                        curvilinearGrid?.Dispose();
+                    }
+                }
+            }
+        }
+
+        [Test]
         public void CurvilinearGetSmoothnessThroughAPI()
         {
             // Setup

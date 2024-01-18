@@ -100,7 +100,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions directionOption, ref double[] smoothness)
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
-            var curvilinearDirectionOption = (int)directionOption;
+            var curvilinearDirectionOption = Convert.ToInt32(directionOption);
             int succcess = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, curvilinearDirectionOption, smoothnessPtr);
             Marshal.Copy(smoothnessPtr, smoothness, 0, smoothness.Length);
             Marshal.FreeCoTaskMem(smoothnessPtr);

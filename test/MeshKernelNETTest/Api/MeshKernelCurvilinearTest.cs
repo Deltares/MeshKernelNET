@@ -791,7 +791,7 @@ namespace MeshKernelNETTest.Api
                     var smoothness = new double[curvilinearGrid.NumM * curvilinearGrid.NumN];
 
                     // Execute
-                    Assert.AreEqual(0, api.CurvilinearComputeSmoothness(id, 1, ref smoothness));
+                    Assert.AreEqual(0, api.CurvilinearComputeSmoothness(id, CurvilinearDirectionOptions.N, ref smoothness));
          
                     // Assert
                     var tolerance = 1e-9;

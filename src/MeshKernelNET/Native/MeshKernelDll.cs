@@ -125,6 +125,16 @@ namespace MeshKernelNET.Native
                                                                                [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParametersNative);
 
         /// <summary>
+        /// Computes the smoothness of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="direction">The direction in which to compute the smoothness (0 for m direction, 1 for n direction)</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_smoothness", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeSmoothness([In] int meshKernelId, [In] int direction, [In][Out] IntPtr smoothness);
+
+        /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
         /// </summary>
         /// <param name="meshKernelId">>Id of the mesh state</param>

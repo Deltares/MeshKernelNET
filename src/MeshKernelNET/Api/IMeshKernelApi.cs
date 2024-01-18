@@ -104,6 +104,15 @@ namespace MeshKernelNET.Api
                                                         in SplinesToCurvilinearParameters splinesToCurvilinearParameters);
 
         /// <summary>
+        /// Computes the smoothness of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions directionOption, ref double[] smoothness);
+
+        /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

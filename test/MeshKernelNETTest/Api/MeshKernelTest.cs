@@ -853,8 +853,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(3, curvilinearGrid.NumM);
-                    Assert.AreEqual(3, curvilinearGrid.NumN);
+                    Assert.AreEqual((3,3), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -893,8 +892,7 @@ namespace MeshKernelNETTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(4, curvilinearGrid.NumM);
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual((4,5),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {

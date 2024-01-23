@@ -2381,7 +2381,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dMakeGlobal(id, 19,25));
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreEqual(1200, mesh2d.NumEdges);
+                    Assert.AreEqual(1233, mesh2d.NumEdges);
                     Assert.AreEqual(629, mesh2d.NumNodes);
                 }
                 finally

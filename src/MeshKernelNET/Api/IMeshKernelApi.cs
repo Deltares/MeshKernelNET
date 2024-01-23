@@ -91,6 +91,15 @@ namespace MeshKernelNET.Api
                                                      in CurvilinearParameters curvilinearParameters);
 
         /// <summary>
+        /// Computes the curvature of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="curvature">The grid curvature values in the selected direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature);
+
+        /// <summary>
         /// Make curvilinear grid from splines with advancing front.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
@@ -102,6 +111,15 @@ namespace MeshKernelNET.Api
                                                         in DisposableGeometryList disposableGeometryListIn,
                                                         in CurvilinearParameters curvilinearParameters,
                                                         in SplinesToCurvilinearParameters splinesToCurvilinearParameters);
+
+        /// <summary>
+        /// Computes the smoothness of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness);
 
         /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
@@ -1195,6 +1213,7 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList disposableGeometryListIn,
                                        double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters);
+
         /// <summary>
         /// Rotates a mesh2d about a given point by a given angle
         /// </summary>

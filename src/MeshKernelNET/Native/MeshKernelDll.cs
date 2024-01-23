@@ -125,6 +125,26 @@ namespace MeshKernelNET.Native
                                                                                [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParametersNative);
 
         /// <summary>
+        /// Computes the curvature of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="direction">The direction in which to compute the smoothness (0 for M direction, 1 for N direction)</param>
+        /// <param name="curvature">The grid curvature values in the selected direction</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_curvature", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeCurvature([In] int meshKernelId, [In] int direction, [In][Out] IntPtr curvature);
+
+        /// <summary>
+        /// Computes the smoothness of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="direction">The direction in which to compute the smoothness (0 for m direction, 1 for n direction)</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_smoothness", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeSmoothness([In] int meshKernelId, [In] int direction, [In][Out] IntPtr smoothness);
+
+        /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
         /// </summary>
         /// <param name="meshKernelId">>Id of the mesh state</param>
@@ -1478,8 +1498,8 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_translate", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dTranslate([In] int meshKernelId,
-                                                [In] double translationX,
-                                                [In] double translationY);
+                                                   [In] double translationX,
+                                                   [In] double translationY);
 
         /// <summary>
         /// Synchronize provided mesh (

@@ -85,6 +85,15 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearComputeTransfiniteFromSplines(meshKernelId, ref geometryListIn, ref curvilinearParametersNative);
         }
 
+        public int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature)
+        {
+            IntPtr curvaturePtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * curvature.Length);
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), curvaturePtr);
+            Marshal.Copy(curvaturePtr, curvature, 0, curvature.Length);
+            Marshal.FreeCoTaskMem(curvaturePtr);
+            return success;
+        }
+
         public int CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId,
                                                                in DisposableGeometryList disposableGeometryListIn,
                                                                in CurvilinearParameters curvilinearParameters,
@@ -95,6 +104,15 @@ namespace MeshKernelNET.Api
             var splinesToCurvilinearParametersNative = splinesToCurvilinearParameters.ToSplinesToCurvilinearParametersNative();
             return MeshKernelDll.CurvilinearComputeOrthogonalGridFromSplines(meshKernelId, ref geometryListNative,
                                                                              ref curvilinearParametersNative, ref splinesToCurvilinearParametersNative);
+        }
+
+        public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness)
+        {
+            IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), smoothnessPtr);
+            Marshal.Copy(smoothnessPtr, smoothness, 0, smoothness.Length);
+            Marshal.FreeCoTaskMem(smoothnessPtr);
+            return success;
         }
 
         public int CurvilinearComputeTransfiniteFromPolygon(int meshKernelId,
@@ -1123,8 +1141,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative);
         }
 
-
-
         public int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle)
         {
             return MeshKernelDll.Mesh2dRotate(meshKernelId, centreX, centreY, angle);
@@ -1134,7 +1150,6 @@ namespace MeshKernelNET.Api
         {
             return MeshKernelDll.Mesh2dTranslate(meshKernelId, translationX, translationY);
         }
-
 
         /// <inheritdoc/>
         public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)

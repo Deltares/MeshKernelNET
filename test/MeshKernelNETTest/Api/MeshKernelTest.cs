@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
-using NetTopologySuite.Algorithm;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
@@ -669,6 +667,7 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
         private static double[,] RotateNodes([In] double[] nodesX,
                                              [In] double[] nodesY,
                                              [In] double[] centre,
@@ -684,18 +683,18 @@ namespace MeshKernelNETTest.Api
                 throw new ArgumentException("The size of centre must be exactly 2.");
             }
 
-            double[,] rotatedNodes = new double[nodesX.Length, 2];
+            var rotatedNodes = new double[nodesX.Length, 2];
 
-            double angleRad = angle * Math.PI / 180.0;
+            double angleRad = (angle * Math.PI) / 180.0;
             double angleCos = Math.Cos(angleRad);
             double angleSin = Math.Sin(angleRad);
 
-            for (int i = 0; i < nodesX.Length; i++)
+            for (var i = 0; i < nodesX.Length; i++)
             {
                 double offsetX = nodesX[i] - centre[0];
                 double offsetY = nodesY[i] - centre[1];
-                rotatedNodes[i, 0] = centre[0] + angleCos * offsetX - angleSin * offsetY;
-                rotatedNodes[i, 1] = centre[1] + angleSin * offsetX + angleCos * offsetY;
+                rotatedNodes[i, 0] = (centre[0] + (angleCos * offsetX)) - (angleSin * offsetY);
+                rotatedNodes[i, 1] = centre[1] + (angleSin * offsetX) + (angleCos * offsetY);
             }
 
             return rotatedNodes;
@@ -721,7 +720,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
                     Assert.IsNotNull(meshInitial);
 
-                    double[] rotationCentre = new[] { 1.0, 5.0 };
+                    var rotationCentre = new[] { 1.0, 5.0 };
                     const double rotationAngle = 45.0;
                     Assert.AreEqual(0, api.Mesh2dRotate(id,
                                                         rotationCentre[0],
@@ -732,13 +731,12 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshRotated));
                     Assert.IsNotNull(meshRotated);
 
-
                     // Compute expected nodes
                     double[,] expectedNodes = RotateNodes(meshInitial.NodeX, meshInitial.NodeY, rotationCentre, rotationAngle);
 
                     // Expected and actual values must be equal within a tolerance
                     const double tolerance = 1.0e-6;
-                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    for (var i = 0; i < meshInitial.NumNodes; i++)
                     {
                         Assert.AreEqual(expectedNodes[i, 0], meshRotated.NodeX[i], tolerance);
                         Assert.AreEqual(expectedNodes[i, 1], meshRotated.NodeY[i], tolerance);
@@ -767,11 +765,10 @@ namespace MeshKernelNETTest.Api
                 throw new ArgumentException("The size of translation must be exactly 2.");
             }
 
-            double[,] translatedNodes = new double[nodesX.Length, 2];
+            var translatedNodes = new double[nodesX.Length, 2];
 
-            for (int i = 0; i < nodesX.Length; i++)
+            for (var i = 0; i < nodesX.Length; i++)
             {
-
                 translatedNodes[i, 0] = nodesX[i] + translation[0];
                 translatedNodes[i, 1] = nodesY[i] + translation[1];
             }
@@ -799,7 +796,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
                     Assert.IsNotNull(meshInitial);
 
-                    double[] translation = new[] { 1.0, 5.0 };
+                    var translation = new[] { 1.0, 5.0 };
                     Assert.AreEqual(0, api.Mesh2dTranslate(id,
                                                            translation[0],
                                                            translation[1]));
@@ -808,13 +805,12 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshTranslated));
                     Assert.IsNotNull(meshTranslated);
 
-
                     // Compute expected nodes
                     double[,] expectedNodes = TranslateNodes(meshInitial.NodeX, meshInitial.NodeY, translation);
 
                     // Expected and actual values must be equal within a tolerance
                     const double tolerance = 1.0e-6;
-                    for (int i = 0; i < meshInitial.NumNodes; i++)
+                    for (var i = 0; i < meshInitial.NumNodes; i++)
                     {
                         Assert.AreEqual(expectedNodes[i, 0], meshTranslated.NodeX[i], tolerance);
                         Assert.AreEqual(expectedNodes[i, 1], meshTranslated.NodeY[i], tolerance);
@@ -1807,12 +1803,11 @@ namespace MeshKernelNETTest.Api
                     Assert.IsNotNull(meshInitial);
 
                     {
-
                         int expectedExitCode = -1;
                         api.GetExitCodeStdLibException(ref expectedExitCode);
 
                         // Missing projection key-value pair in string
-                        string zone = "+lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
+                        var zone = "+lat_1=0.5 +lat_2=2 +n=0.5 +zone=31";
                         int exitCode = api.Mesh2dConvertProjection(id, ProjectionOptions.Spherical, zone);
                         Assert.AreEqual(expectedExitCode, exitCode);
 

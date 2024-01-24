@@ -1047,6 +1047,11 @@ namespace MeshKernelNET.Api
             return successful;
         }
 
+        public int Mesh2dMakeGlobal(int meshKernelId, int numLongitudeNodes, int numLatitudeNodes)
+        {
+            return MeshKernelDll.Mesh2dMakeGlobal(meshKernelId, numLongitudeNodes, numLatitudeNodes);
+        }
+
         public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();

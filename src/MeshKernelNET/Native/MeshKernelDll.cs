@@ -1310,6 +1310,16 @@ namespace MeshKernelNET.Native
                                                                   [In][Out] IntPtr faceEdgeIndex);
 
         /// <summary>
+        /// Compute the global mesh with a given number of points along the longitude and latitude directions.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="numLongitudeNodes">The number of points along the longitude</param>
+        /// <param name="numLatitudeNodes">The number of points along the latitude (half hemisphere)</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_global", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dMakeGlobal(int meshKernelId, int numLongitudeNodes, int numLatitudeNodes);
+
+        /// <summary>
         /// Make a triangular grid in a polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

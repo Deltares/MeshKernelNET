@@ -1688,7 +1688,6 @@ namespace MeshKernelNETTest.Api
                                                                           orthogonalizationParametersList,
                                                                           polygon,
                                                                           landBoundaries));
-                    mesh2D = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(16, mesh2D.NumNodes);
                 }
@@ -1910,7 +1909,6 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    mesh2D = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(24, mesh2D.NumEdges);
 
@@ -1945,7 +1943,6 @@ namespace MeshKernelNETTest.Api
                     // Execute
                     Assert.AreEqual(0, api.Mesh2dDeleteSmallFlowEdgesAndSmallTriangles(id, smallFlowEdgesLengthThreshold, minFractionalAreaTriangles));
                     // Assert
-                    mesh2D = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(12, mesh2D.NumEdges);
                 }
@@ -2001,7 +1998,6 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    mesh2D = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     disposableGeometryList.XCoordinates = new[] { 0.6, 0.6, 1.6, 1.6, 0.6 };
                     disposableGeometryList.XCoordinates = new[] { 2.5, 0.5, 0.5, 2.5, 2.5 };
@@ -2068,7 +2064,6 @@ namespace MeshKernelNETTest.Api
                     makeGridParameters.YGridBlockSize = 10.0;
 
                     Assert.AreEqual(0, api.Mesh2dMakeRectangularMesh(id, makeGridParameters));
-                    mesh2d = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(16, mesh2d.NumNodes);
@@ -2136,7 +2131,6 @@ namespace MeshKernelNETTest.Api
                     polygon.NumberOfCoordinates = 5;
 
                     Assert.AreEqual(0, api.Mesh2dMakeRectangularMeshFromPolygon(id, makeGridParameters, polygon));
-                    mesh2d = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.NotNull(mesh2d);
                     Assert.AreEqual(9, mesh2d.NumNodes);
@@ -2175,7 +2169,6 @@ namespace MeshKernelNETTest.Api
                     // Execute
                     Assert.AreEqual(0, api.Mesh2dMakeRectangularMeshOnExtension(id, makeGridParameters));
                     // Assert
-                    mesh2D = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(121, mesh2D.NumNodes);
                 }
@@ -2268,7 +2261,7 @@ namespace MeshKernelNETTest.Api
                     int locationType = -1;
                     Assert.AreEqual(0, api.GetNodesLocationType(ref locationType));
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    mesh2D = new DisposableMesh2D();
+
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     samples.XCoordinates = new[] { 1.0, 2.0, 3.0, 1.0 };
                     samples.YCoordinates = new[] { 1.0, 3.0, 2.0, 4.0 };
@@ -2384,7 +2377,6 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(projectionType);
                     Assert.AreEqual(0, api.Mesh2dMakeGlobal(id, 19,25));
 
-                    mesh2d = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(1233, mesh2d.NumEdges);
                     Assert.AreEqual(629, mesh2d.NumNodes);

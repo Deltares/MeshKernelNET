@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 
@@ -951,5 +951,23 @@ namespace MeshKernelNETTest.Api
                 Assert.AreEqual(count, grid.CellCount());
             }
         }
+
+        [TestCaseSource(nameof(EdgeNodesSerialization))]
+        public void CurvilinearGrid_EdgeNodesSerialization(int numM, int numN, IList<(int,int)> edgeNodes)
+        {
+            using (var grid = CreateCurvilinearGrid(numM, numN, 5.0, 2.0))
+            {
+                Assert.AreEqual((numM, numN), (grid.NumM,grid.NumN));
+                for (int i = 0; i < grid.EdgeCount(); ++i)
+                {
+                    Assert.AreEqual(edgeNodes[i], (grid.GetFirstNode(i), grid.GetLastNode(i)));
+                }
+            }
+        }
+
+        public static object[] EdgeNodesSerialization = { 
+            new object[] { 3, 2, new[] { (0, 3), (1, 4), (2, 5), (0, 1), (1, 2), (3, 4), (4, 5) } }, 
+            new object[] { 2, 3, new[] { (0, 2), (1, 3), (2, 4), (3, 5), (0, 1), (2, 3), (4, 5) } } 
+        };
     }
 }

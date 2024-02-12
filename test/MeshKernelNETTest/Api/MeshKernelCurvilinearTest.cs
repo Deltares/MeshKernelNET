@@ -30,6 +30,52 @@ namespace MeshKernelNETTest.Api
             return result;
         }
 
+        [TestCase(3, 2, 2.0, 1.0)]
+        [TestCase(2, 3, 2.0, 1.5)]
+        public void TestUtility_CreateCurvilinearGrid_EqualToMakeGridParameters(int numRows, int numCols, double cellWidth, double cellHeight)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                DisposableCurvilinearGrid fromKernel = null;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridType = 0;
+                    makeGridParameters.NumberOfColumns = numCols - 1;
+                    makeGridParameters.NumberOfRows = numRows - 1;
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.OriginXCoordinate = 0.0;
+                    makeGridParameters.OriginYCoordinate = 0.0;
+                    makeGridParameters.XGridBlockSize = cellWidth;
+                    makeGridParameters.YGridBlockSize = cellHeight;
+                    makeGridParameters.UpperRightCornerXCoordinate = 0.0;
+                    makeGridParameters.UpperRightCornerYCoordinate = 0.0;
+
+                    Assert.AreEqual(0, api.CurvilinearComputeRectangularGrid(id, makeGridParameters));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out fromKernel));
+                    Assert.NotNull(fromKernel);
+                    Assert.AreEqual((numRows,numCols), (fromKernel.NumM,fromKernel.NumN));
+                    
+                    using (DisposableCurvilinearGrid subject = CreateCurvilinearGrid(numRows, numCols, cellWidth, cellHeight))
+                    {
+                        Assert.AreEqual((subject.NumM,subject.NumN), (fromKernel.NumM,fromKernel.NumN));
+                        Assert.That(subject.NodeX, Is.EquivalentTo(fromKernel.NodeX));                
+                        Assert.That(subject.NodeY, Is.EquivalentTo(fromKernel.NodeY));                
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    fromKernel?.Dispose();
+                }
+            }
+        }
+        
         [Test]
         public void CurvilinearComputeRectangularGridThroughAPI()
         {

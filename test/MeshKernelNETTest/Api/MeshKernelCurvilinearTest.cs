@@ -21,8 +21,8 @@ namespace MeshKernelNETTest.Api
             {
                 for (var j = 0; j < result.NumN; ++j)
                 {
-                    result.NodeX[nodeIndex] = i * cellWidth;
-                    result.NodeY[nodeIndex] = j * cellHeight;
+                    result.NodeX[nodeIndex] = j * cellWidth;
+                    result.NodeY[nodeIndex] = i * cellHeight;
                     nodeIndex++;
                 }
             }

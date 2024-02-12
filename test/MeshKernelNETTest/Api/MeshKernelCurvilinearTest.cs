@@ -905,9 +905,9 @@ namespace MeshKernelNETTest.Api
             }
         }
         
-        [TestCase(0,0,5)]   // first column-oriented edge
-        [TestCase(14,14,19)] // last column-oriented edge
-        [TestCase(15,0,1)]   // first row-oriented edge
+        [TestCase(0,0,4)]   // first column-oriented edge
+        [TestCase(15,15,19)] // last column-oriented edge
+        [TestCase(16,0,1)]   // first row-oriented edge
         [TestCase(30,18,19)] // last row-oriented edge
         public void CurvilinearGrid_GetEdgeNodeIndexMethods_FollowMeshKernelEdgeOrderingConvention(int edgeIndex, int firstIndex, int secondIndex)
         {
@@ -966,8 +966,8 @@ namespace MeshKernelNETTest.Api
         }
 
         public static object[] EdgeNodesSerialization = { 
-            new object[] { 3, 2, new[] { (0, 3), (1, 4), (2, 5), (0, 1), (1, 2), (3, 4), (4, 5) } }, 
-            new object[] { 2, 3, new[] { (0, 2), (1, 3), (2, 4), (3, 5), (0, 1), (2, 3), (4, 5) } } 
+            new object[] { 2, 3, new[] { (0, 3), (1, 4), (2, 5), (0, 1), (1, 2), (3, 4), (4, 5) } }, 
+            new object[] { 3, 2, new[] { (0, 2), (1, 3), (2, 4), (3, 5), (0, 1), (2, 3), (4, 5) } } 
         };
     }
 }

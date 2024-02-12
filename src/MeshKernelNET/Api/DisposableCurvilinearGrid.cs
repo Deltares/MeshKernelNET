@@ -86,8 +86,8 @@ namespace MeshKernelNET.Api
         /// First column-oriented edges, then row-oriented edges, in row major order</remarks>
         private (int first, int last) GetEdgeNodes(int edgeIndex)
         {
-            int numNodesInRow = NumM;
-            int numNodesInColumn = NumN;
+            int numNodesInRow = NumN;
+            int numNodesInColumn = NumM;
             int numColumnOrientedEdges = numNodesInRow * (numNodesInColumn - 1);             
             if (edgeIndex < numColumnOrientedEdges)
             {

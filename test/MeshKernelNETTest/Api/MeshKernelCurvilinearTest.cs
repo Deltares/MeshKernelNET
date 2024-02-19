@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 
@@ -21,8 +21,8 @@ namespace MeshKernelNETTest.Api
             {
                 for (var j = 0; j < result.NumN; ++j)
                 {
-                    result.NodeX[nodeIndex] = i * cellWidth;
-                    result.NodeY[nodeIndex] = j * cellHeight;
+                    result.NodeX[nodeIndex] = j * cellWidth;
+                    result.NodeY[nodeIndex] = i * cellHeight;
                     nodeIndex++;
                 }
             }
@@ -30,6 +30,52 @@ namespace MeshKernelNETTest.Api
             return result;
         }
 
+        [TestCase(3, 2, 2.0, 1.0)]
+        [TestCase(2, 3, 2.0, 1.5)]
+        public void TestUtility_CreateCurvilinearGrid_EqualToMakeGridParameters(int numRows, int numCols, double cellWidth, double cellHeight)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                DisposableCurvilinearGrid fromKernel = null;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridType = 0;
+                    makeGridParameters.NumberOfColumns = numCols - 1;
+                    makeGridParameters.NumberOfRows = numRows - 1;
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.OriginXCoordinate = 0.0;
+                    makeGridParameters.OriginYCoordinate = 0.0;
+                    makeGridParameters.XGridBlockSize = cellWidth;
+                    makeGridParameters.YGridBlockSize = cellHeight;
+                    makeGridParameters.UpperRightCornerXCoordinate = 0.0;
+                    makeGridParameters.UpperRightCornerYCoordinate = 0.0;
+
+                    Assert.AreEqual(0, api.CurvilinearComputeRectangularGrid(id, makeGridParameters));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out fromKernel));
+                    Assert.NotNull(fromKernel);
+                    Assert.AreEqual((numRows,numCols), (fromKernel.NumM,fromKernel.NumN));
+                    
+                    using (DisposableCurvilinearGrid subject = CreateCurvilinearGrid(numRows, numCols, cellWidth, cellHeight))
+                    {
+                        Assert.AreEqual((subject.NumM,subject.NumN), (fromKernel.NumM,fromKernel.NumN));
+                        Assert.That(subject.NodeX, Is.EquivalentTo(fromKernel.NodeX));                
+                        Assert.That(subject.NodeY, Is.EquivalentTo(fromKernel.NodeY));                
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    fromKernel?.Dispose();
+                }
+            }
+        }
+        
         [Test]
         public void CurvilinearComputeRectangularGridThroughAPI()
         {
@@ -125,8 +171,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearComputeRectangularGridFromPolygon(id, makeGridParameters, polygon));
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(11, curvilinearGrid.NumM);
-                    Assert.AreEqual(11, curvilinearGrid.NumN);
+                    Assert.AreEqual((11, 11), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -249,8 +294,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0,
                                     api.CurvilinearGridGetData(id, out curvilinearGrid)); // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(3, curvilinearGrid.NumM);
-                    Assert.AreEqual(3, curvilinearGrid.NumN);
+                    Assert.AreEqual((3,3), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -288,8 +332,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(4, curvilinearGrid.NumM);
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual((4,5), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -372,8 +415,7 @@ namespace MeshKernelNETTest.Api
 
                     // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
-                    Assert.AreEqual(3, curvilinearGrid.NumM);
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual((3,5), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -403,8 +445,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(4, curvilinearGrid.NumM);
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual((5,4), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -438,8 +479,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual(5, curvilinearGrid.NumM);
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
+                    Assert.AreEqual((5,5),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -567,8 +607,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(4, curvilinearGrid.NumN);
-                    Assert.AreEqual(13, curvilinearGrid.NumM);
+                    Assert.AreEqual((4,13),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -601,8 +640,7 @@ namespace MeshKernelNETTest.Api
                     // Assert
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
-                    Assert.AreEqual(5, curvilinearGrid.NumM);
+                    Assert.AreEqual((5,5),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -632,8 +670,7 @@ namespace MeshKernelNETTest.Api
                     // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
-                    Assert.AreEqual(5, curvilinearGrid.NumM);
+                    Assert.AreEqual((5,5), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -668,8 +705,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearComputeRectangularGridOnExtension(id, makeGridParameters));
                     var grid = new DisposableCurvilinearGrid();
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out grid));
-                    Assert.AreEqual(6, grid.NumM);
-                    Assert.AreEqual(11, grid.NumN);
+                    Assert.AreEqual((6, 11), (grid.NumM, grid.NumN));
                 }
                 finally
                 {
@@ -697,8 +733,7 @@ namespace MeshKernelNETTest.Api
                     // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
-                    Assert.AreEqual(6, curvilinearGrid.NumM);
+                    Assert.AreEqual((5,6), (curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -731,8 +766,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
                     // Assert
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
-                    Assert.AreEqual(5, curvilinearGrid.NumM);
+                    Assert.AreEqual((5,5),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -760,8 +794,7 @@ namespace MeshKernelNETTest.Api
                     // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 
-                    Assert.AreEqual(5, curvilinearGrid.NumN);
-                    Assert.AreEqual(6, curvilinearGrid.NumM);
+                    Assert.AreEqual((5,6),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -852,6 +885,89 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+        
+        [Test]
+        public void CurvilinearGrid_GetNodeXY_AccessesNodeXY()
+        {
+            // Setup
+            using (var grid = CreateCurvilinearGrid(3, 2, 5.0, 2.0))
+            {
+                Assert.AreEqual((3,2),(grid.NumM, grid.NumN));
+                for (int row = 0; row < grid.NumM; ++row)
+                {
+                    for (int column = 0; column < grid.NumN; ++column)
+                    {
+                        int index = row * grid.NumN + column;
+                        Assert.AreEqual(grid.GetNodeX(index), grid.NodeX[index]);
+                        Assert.AreEqual(grid.GetNodeY(index), grid.NodeY[index]);
+                    }
+                }
+            }
+        }
+        
+        [TestCase(0,0,4)]   // first column-oriented edge
+        [TestCase(15,15,19)] // last column-oriented edge
+        [TestCase(16,0,1)]   // first row-oriented edge
+        [TestCase(30,18,19)] // last row-oriented edge
+        public void CurvilinearGrid_GetEdgeNodeIndexMethods_FollowMeshKernelEdgeOrderingConvention(int edgeIndex, int firstIndex, int secondIndex)
+        {
+            // first all column-oriented edges in row-major order, then all row-oriented edges in row-major order
+            using (var grid = CreateCurvilinearGrid(5, 4, 5.0, 2.0))
+            {
+                Assert.AreEqual((5,4), (grid.NumM,grid.NumN));
+                Assert.AreEqual((firstIndex,secondIndex), (grid.GetFirstNode(edgeIndex),grid.GetLastNode(edgeIndex)));
+            }
+        }
+        
+        [TestCase(5,3,5*3)]
+        [TestCase(15,42,15*42)]
+        public void CurvilinearGrid_GetNodeCount_CountsAllNodes(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.NodeCount());
+            }
+        }
+        
+        [TestCase(5,3,4*3+5*2)]
+        [TestCase(15,42,15*41+14*42)]
+        public void CurvilinearGrid_GetEdgeCount_CountsRowOrientedAndColumnOrientedEdges(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.EdgeCount());
+            }
+        }
+        
+        [TestCase(5,3, (5-1)*(3-1))]
+        [TestCase(15,42, (15-1)*(42-1))]
+        public void CurvilinearGrid_GetCellCount_CountsAllCells(int m, int n, int count)
+        {
+            using (var grid = CreateCurvilinearGrid(m, n, 5.0, 2.0))
+            {
+                Assert.AreEqual((m,n), (grid.NumM,grid.NumN));
+                Assert.AreEqual(count, grid.CellCount());
+            }
+        }
 
+        [TestCaseSource(nameof(EdgeNodesSerialization))]
+        public void CurvilinearGrid_EdgeNodesSerialization(int numM, int numN, IList<(int,int)> edgeNodes)
+        {
+            using (var grid = CreateCurvilinearGrid(numM, numN, 5.0, 2.0))
+            {
+                Assert.AreEqual((numM, numN), (grid.NumM,grid.NumN));
+                for (int i = 0; i < grid.EdgeCount(); ++i)
+                {
+                    Assert.AreEqual(edgeNodes[i], (grid.GetFirstNode(i), grid.GetLastNode(i)));
+                }
+            }
+        }
+
+        public static object[] EdgeNodesSerialization = { 
+            new object[] { 2, 3, new[] { (0, 3), (1, 4), (2, 5), (0, 1), (1, 2), (3, 4), (4, 5) } }, 
+            new object[] { 3, 2, new[] { (0, 2), (1, 3), (2, 4), (3, 5), (0, 1), (2, 3), (4, 5) } } 
+        };
     }
 }

@@ -2311,24 +2311,131 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dDeleteInsidePolygonAndIntersectedThroughApi()
+        // The starting mesh looks as shown below. The grid spacing is uniform and equal to 1.
+        // The asterisks represent the vertices of a polygon. See the body of the test for the
+        // actual position of the vertices (they do not coincide with the cell centers).
+        // 30--31--32--33--34--35
+        // |   |   |   |   |   |
+        // 24--25--26--27--28--29
+        // |   | * |   | * |   |
+        // 18--19--20--12--22--23
+        // |   |   |   |   |   |
+        // 12--13--14--15--16--17
+        // |   | * |   | * |   |
+        // 6---7---8---9---10--11
+        // |   |   |   |   |   |
+        // 0---1---2---3---4---5
+        // nodes   6 * 6 = 36
+        // edges   2 * 5 = 60
+        // faces   5 * 5 = 25
+        // The test is parametrized by all possible combinations of deletion options and selection inversion
+        [TestCase(DeleteMeshInsidePolygonOptions.NotIntersecting,
+                  true,
+                  4,
+                  4,
+                  1)]
+        // Case 1: should keep the central cell
+        //  20--21
+        //  |   |
+        //  14--15
+        // nodes = 4
+        // edges = 1
+        // faces = 1
+        [TestCase(DeleteMeshInsidePolygonOptions.Intersecting,
+                  true,
+                  16,
+                  24,
+                  9)]
+        // Case 2: should keep 3x3 central cells
+        //  25--26--27--28
+        //  |   |   |   |
+        //  19--20--21--22
+        //  |   |   |   |
+        //  13--14--15--16
+        //  |   |   |   |
+        //  7---8---9---10
+        // nodes = 4 * 4 = 16
+        // edges = 2 * (3 * 4) = 24
+        // faces = 1
+        [TestCase(DeleteMeshInsidePolygonOptions.FacesWithIncludedCircumcenters,
+                  true,
+                  16,
+                  24,
+                  9)]
+        // Case 3: should deletes all the outer cells
+        //  25--26--27--28
+        //  |   |   |   |
+        //  19--20--21--22
+        //  |   |   |   |
+        //  13--14--15--16
+        //  |   |   |   |
+        //  7---8---9---10
+        // nodes = 16
+        // faces = 9
+        [TestCase(DeleteMeshInsidePolygonOptions.NotIntersecting,
+                  false,
+                  36,
+                  60,
+                  25)]
+        // Case 4: should keep all cells but the central cell, i.e. delete the central face
+        //  30--31--32--33--34--35
+        //  |   |   |   |   |   |
+        //  24--25--26--27--28--29
+        //  |   |   |   |   |   |
+        //  18--19--20--21--22--23
+        //  |   |   | / |   |   |
+        //  12--13--14--15--16--17
+        //  |   |   |   |   |   |
+        //  6---7---8---9---10--11
+        //  |   |   |   |   |   |
+        //  0---1---2---3---4---5
+        // nodes = 6 * 6 = 36 (no change)
+        // edges = 2 * (5 * 6) = 60 (no change)
+        // faces = 5 * 5 - 1 = 24
+        [TestCase(DeleteMeshInsidePolygonOptions.Intersecting,
+                  false,
+                  32,
+                  48,
+                  16)]
+        // Case 5: should delete 3x3 central cells
+        //  30--31--32--33--34--35
+        //  |   |   |   |   |   |
+        //  24--25--26--27--28--29
+        //  |   |           |   |
+        //  18--19          22--23
+        //  |   |           |   |
+        //  12--13          16--17
+        //  |   |           |   |
+        //  6---7---8---9---10--11
+        //  |   |   |   |   |   |
+        //  0---1---2---3---4---5
+        // nodes = 6 * 6 - 4 (central cell) = 32
+        // faces = 25 - (3 * 3) = 16
+        [TestCase(DeleteMeshInsidePolygonOptions.FacesWithIncludedCircumcenters,
+                  false,
+                  32,
+                  48,
+                  16)]
+        // Case 6: should delete 3x3 central cells
+        //  30--31--32--33--34--35
+        //  |   |   |   |   |   |
+        //  24--25--26--27--28--29
+        //  |   |           |   |
+        //  18--19          22--23
+        //  |   |           |   |
+        //  12--13          16--17
+        //  |   |           |   |
+        //  6---7---8---9---10--11
+        //  |   |   |   |   |   |
+        //  0---1---2---3---4---5
+        // nodes = 6 * 6 - 4 (central cell) = 32
+        // faces = 25 - (3 * 3) = 16
+        public void Mesh2dDeleteInsidePolygon(DeleteMeshInsidePolygonOptions deleteMeshInsidePolygonOptions,
+                                              bool invertSelection,
+                                              int expectedNumNodes,
+                                              int expectedNunEdges,
+                                              int expectedNumFaces)
         {
-            //          Before                           After
-            //          30--31--32--33--34--35           30--31--32--33--34--35
-            //          |   |   |   |   |   |            |   |   |   |   |   |
-            //          24--25--26--27--28--29           24--25--26--27--28--29  
-            //          |   | * |   | * |   |            |   |           |   |
-            //          18--19--20--12--22--23           18--19          22--23
-            //          |   |   |   |   |   |            |   |           |   |
-            //          12--13--14--15--16--17           12--13          16--17
-            //          |   | * |   | * |   |            |   |           |   |
-            //          6---7---8---9---10--11           6---7---8---9---10--11
-            //          |   |   |   |   |   |            |   |   |   |   |   |
-            //          0---1---2---3---4---5            0---1---2---3---4---5
-            // nodes   6 * 6 = 36                        36 - 4  = 32
-            // edges   2 * 5 = 60                        60 - 12 = 48
-            // faces   5 * 5 = 25                        25 - (3 * 3) = 16
-
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(5, 5, 1, 1))
             using (var api = new MeshKernelApi())
@@ -2339,19 +2446,19 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     polygon.NumberOfCoordinates = 5;
-                    polygon.XCoordinates = new[] { 1.5, 3.5, 3.5, 1.5, 1.5 };
-                    polygon.XCoordinates = new[] { 1.5, 1.5, 3.5, 3.5, 1.5 };
+                    polygon.XCoordinates = new[] { 1.25, 3.75, 3.75, 1.25, 1.25 };
+                    polygon.XCoordinates = new[] { 1.25, 1.25, 3.75, 3.75, 1.25 };
 
                     id = api.AllocateState(0);
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     Assert.AreEqual(0, api.Mesh2dDelete(id,
                                                         in polygon,
-                                                        DeleteMeshInsidePolygonOptions.Intersecting,
-                                                        false));
+                                                        deleteMeshInsidePolygonOptions,
+                                                        invertSelection));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreNotEqual(32, mesh.NumNodes);
-                    Assert.AreNotEqual(48, mesh.NumEdges);
-                    Assert.AreNotEqual(16, mesh.NumFaces);
+                    Assert.AreNotEqual(expectedNumNodes, mesh.NumNodes);
+                    Assert.AreNotEqual(expectedNunEdges, mesh.NumEdges);
+                    Assert.AreNotEqual(expectedNumFaces, mesh.NumFaces);
                 }
                 finally
                 {
@@ -2375,7 +2482,7 @@ namespace MeshKernelNETTest.Api
                 {
                     int projectionType = 1;
                     id = api.AllocateState(projectionType);
-                    Assert.AreEqual(0, api.Mesh2dMakeGlobal(id, 19,25));
+                    Assert.AreEqual(0, api.Mesh2dMakeGlobal(id, 19, 25));
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(1233, mesh2d.NumEdges);

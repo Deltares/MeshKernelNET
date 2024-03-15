@@ -77,7 +77,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh1dGetData(id, out mesh1D));
 
                     Assert.AreEqual(40, mesh1D.NumEdges);
-                    Assert.AreEqual(41, mesh1D.NumNodes);
+                    Assert.AreEqual(41, mesh1D.NumValidNodes);
                 }
                 finally
                 {

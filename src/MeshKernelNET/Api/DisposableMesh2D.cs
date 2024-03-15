@@ -43,24 +43,32 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(13)]
-        private int numEdges;
+        private int numValidNodes;
 
         [ProtoMember(14)]
-        private int numFaces;
+        private int numEdges;
 
         [ProtoMember(15)]
+        private int numValidEdges;
+
+        [ProtoMember(16)]
+        private int numFaces;
+
+        [ProtoMember(17)]
         private int numFaceNodes;
 
         public DisposableMesh2D()
         {
         }
 
-        public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
+        public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes,int nValidNodes, int nValidEdges)
         {
             NumNodes = nNodes;
             NumEdges = nEdges;
             NumFaces = nFaces;
             NumFaceNodes = nFaceNodes;
+            NumValidNodes = nValidNodes;
+            numValidEdges = nValidEdges;
 
             EdgeFaces = new int[NumEdges * 2];
             EdgeNodes = new int[NumEdges * 2];
@@ -152,10 +160,22 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
+        public int NumValidNodes
+        {
+            get { return numValidNodes; }
+            set { numValidNodes = value; }
+        }
+
         public int NumEdges
         {
             get { return numEdges; }
             set { numEdges = value; }
+        }
+
+        public int NumValidEdges
+        {
+            get { return numValidEdges; }
+            set { numValidEdges = value; }
         }
 
         public int NumFaces
@@ -235,7 +255,9 @@ namespace MeshKernelNET.Api
             nativeObject.face_x = GetPinnedObjectPointer(FaceX);
             nativeObject.face_y = GetPinnedObjectPointer(FaceY);
             nativeObject.num_nodes = NumNodes;
+            nativeObject.num_valid_nodes = NumValidNodes;
             nativeObject.num_edges = NumEdges;
+            nativeObject.num_valid_edges = NumValidEdges;
             nativeObject.num_faces = NumFaces;
             nativeObject.num_face_nodes = NumFaceNodes;
         }

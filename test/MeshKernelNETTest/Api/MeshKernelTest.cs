@@ -2498,24 +2498,6 @@ namespace MeshKernelNETTest.Api
         [Test]
         public void Mesh2dUndoRedoThroughApi()
         {
-            // Before                                          After
-            // 0 ------- 1 ------- 2 ------- 3                           1 ------- 2 ------- 3
-            // |         |         |         |                           |         |         |
-            // |         |         |         |                           |         |         |
-            // |         |         |         |                           |         |         |
-            // |         |         |         |                           |         |         |
-            // 4 ------- 5 ------- 6 ------- 7                 4 ------- 5 ------- 6 ------- 7
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11 
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |   
-            // |         |         |         |                 |         |         |         |
-            //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
-
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
@@ -2536,6 +2518,12 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NodeX.Length);
+
+                    bool undone = false;
+                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(true, undone);
+
+
                 }
                 finally
                 {

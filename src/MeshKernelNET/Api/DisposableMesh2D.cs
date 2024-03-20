@@ -43,32 +43,29 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(13)]
-        private int numValidNodes;
+        private readonly int numValidNodes;
 
         [ProtoMember(14)]
         private int numEdges;
 
         [ProtoMember(15)]
-        private int numValidEdges;
+        private readonly int numValidEdges;
 
         [ProtoMember(16)]
         private int numFaces;
 
         [ProtoMember(17)]
-        private int numFaceNodes;
+        private readonly int numFaceNodes;
 
         public DisposableMesh2D()
         {
         }
 
-        public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes,int nValidNodes, int nValidEdges)
+        public DisposableMesh2D(int nNodes, int nEdges, int nFaces)
         {
             NumNodes = nNodes;
             NumEdges = nEdges;
             NumFaces = nFaces;
-            NumFaceNodes = nFaceNodes;
-            NumValidNodes = nValidNodes;
-            numValidEdges = nValidEdges;
 
             EdgeFaces = new int[NumEdges * 2];
             EdgeNodes = new int[NumEdges * 2];
@@ -160,11 +157,7 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
-        public int NumValidNodes
-        {
-            get { return numValidNodes; }
-            set { numValidNodes = value; }
-        }
+        public int NumValidNodes => numValidNodes;
 
         public int NumEdges
         {
@@ -172,11 +165,7 @@ namespace MeshKernelNET.Api
             set { numEdges = value; }
         }
 
-        public int NumValidEdges
-        {
-            get { return numValidEdges; }
-            set { numValidEdges = value; }
-        }
+        public int NumValidEdges => numValidEdges;
 
         public int NumFaces
         {
@@ -184,12 +173,7 @@ namespace MeshKernelNET.Api
             set { numFaces = value; }
         }
 
-        public int NumFaceNodes
-        {
-            get { return numFaceNodes; }
-            set { numFaceNodes = value; }
-        }
-
+        public int NumFaceNodes => numFaceNodes;
 
         #region IReadOnly2DMesh
         /// <inheritdoc/>

@@ -799,10 +799,7 @@ namespace MeshKernelNET.Api
 
             disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
                                                     newMesh2D.num_edges,
-                                                    newMesh2D.num_faces,
-                                                    newMesh2D.num_face_nodes,
-                                                    newMesh2D.num_valid_nodes,
-                                                    newMesh2D.num_valid_edges);
+                                                    newMesh2D.num_faces);
 
             newMesh2D = disposableMesh2D.CreateNativeObject();
 
@@ -1258,9 +1255,7 @@ namespace MeshKernelNET.Api
                 NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
                 EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
                 NumEdges = newMesh2DNative.num_edges,
-                NumNodes = newMesh2DNative.num_nodes,
-                NumValidNodes = newMesh2DNative.num_valid_nodes,
-                NumValidEdges = newMesh2DNative.num_valid_edges
+                NumNodes = newMesh2DNative.num_nodes
             };
 
             if (addCellInformation && newMesh2DNative.num_faces > 0)

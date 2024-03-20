@@ -620,9 +620,7 @@ namespace MeshKernelNET.Api
             }
 
             disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes, 
-                                                    newMesh1D.num_edges, 
-                                                    newMesh1D.num_valid_nodes,
-                                                    newMesh1D.num_valid_edges);
+                                                    newMesh1D.num_edges);
 
             newMesh1D = disposableMesh1D.CreateNativeObject();
 
@@ -1279,9 +1277,7 @@ namespace MeshKernelNET.Api
                 NodeX = newMesh1DNative.node_x.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NodeY = newMesh1DNative.node_y.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NumNodes = newMesh1DNative.num_nodes,
-                NumEdges = newMesh1DNative.num_edges,
-                NumValidNodes = newMesh1DNative.num_valid_nodes,
-                NumValidEdges = newMesh1DNative.num_valid_edges
+                NumEdges = newMesh1DNative.num_edges
             };
             return disposableMesh1D;
         }

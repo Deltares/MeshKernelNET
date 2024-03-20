@@ -19,24 +19,22 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(5)]
-        private int numValidNodes;
+        private readonly int numValidNodes;
 
         [ProtoMember(6)]
         private int numEdges;
 
         [ProtoMember(7)]
-        private int numValidEdges;
+        private readonly int numValidEdges;
 
         public DisposableMesh1D()
         {
         }
 
-        public DisposableMesh1D(int nNodes, int nEdges, int numValidNodes, int numValidEdges)
+        public DisposableMesh1D(int nNodes, int nEdges)
         {
             NumNodes = nNodes;
             NumEdges = nEdges;
-            NumValidNodes = numValidNodes;
-            NumValidEdges = numValidEdges;
 
             EdgeNodes = new int[NumEdges * 2];
             NodeX = new double[NumNodes];
@@ -72,11 +70,7 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
-        public int NumValidNodes
-        {
-            get { return numValidNodes; }
-            set { numValidNodes = value; }
-        }
+        public int NumValidNodes => numValidNodes;
 
         public int NumEdges
         {
@@ -84,11 +78,7 @@ namespace MeshKernelNET.Api
             set { numEdges = value; }
         }
 
-        public int NumValidEdges
-        {
-            get { return numValidEdges; }
-            set { numValidEdges = value; }
-        }
+        public int NumValidEdges => numValidEdges;
 
         protected override void SetNativeObject(ref Mesh1DNative nativeObject)
         {

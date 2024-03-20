@@ -1590,7 +1590,7 @@ namespace MeshKernelNETTest.Api
             using (var api = new MeshKernelApi())
             {
                 var id = 1;
-                var inDisposableMesh1D = new DisposableMesh1D(2, 1, 2, 1);
+                var inDisposableMesh1D = new DisposableMesh1D(2, 1);
                 var outDisposableMesh1D = new DisposableMesh1D();
                 try
                 {

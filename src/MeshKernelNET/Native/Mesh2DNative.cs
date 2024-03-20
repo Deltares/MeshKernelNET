@@ -71,9 +71,19 @@ namespace MeshKernelNET.Native
         public int num_nodes;
 
         /// <summary>
+        /// The number of valid mesh nodes
+        /// </summary>
+        public int num_valid_nodes;
+
+        /// <summary>
         /// The number of edges
         /// </summary>
         public int num_edges;
+
+        /// <summary>
+        /// The number of valid edges
+        /// </summary>
+        public int num_valid_edges;
 
         /// <summary>
         /// The number of faces

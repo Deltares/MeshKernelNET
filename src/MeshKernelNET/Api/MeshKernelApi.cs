@@ -200,7 +200,7 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_m, curvilinearGrid.num_n);
+            disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_n, curvilinearGrid.num_m);
             curvilinearGrid = disposableCurvilinearGrid.CreateNativeObject();
 
             exitCode = MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
@@ -625,7 +625,8 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes, newMesh1D.num_edges);
+            disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes, 
+                                                    newMesh1D.num_edges);
 
             newMesh1D = disposableMesh1D.CreateNativeObject();
 
@@ -802,8 +803,7 @@ namespace MeshKernelNET.Api
 
             disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
                                                     newMesh2D.num_edges,
-                                                    newMesh2D.num_faces,
-                                                    newMesh2D.num_face_nodes);
+                                                    newMesh2D.num_faces);
 
             newMesh2D = disposableMesh2D.CreateNativeObject();
 
@@ -1295,7 +1295,7 @@ namespace MeshKernelNET.Api
                 NodeX = newMesh1DNative.node_x.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NodeY = newMesh1DNative.node_y.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NumNodes = newMesh1DNative.num_nodes,
-                NumEdges = newMesh1DNative.num_edges,
+                NumEdges = newMesh1DNative.num_edges
             };
             return disposableMesh1D;
         }

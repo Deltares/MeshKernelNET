@@ -47,8 +47,8 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreNotEqual(2, mesh.NumEdges);
-                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NodeX.Length);
+                    Assert.AreNotEqual(2, mesh.NumValidEdges);
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
                 }
                 finally
                 {
@@ -194,7 +194,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreNotEqual(2, mesh2D.NumEdges);
-                    Assert.AreEqual(numberOfEdgesBefore - 1, mesh2D.NumEdges);
+                    Assert.AreEqual(numberOfEdgesBefore - 1, mesh2D.NumValidEdges);
                 }
                 finally
                 {
@@ -892,7 +892,7 @@ namespace MeshKernelNETTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual((4,5),(curvilinearGrid.NumM,curvilinearGrid.NumN));
+                    Assert.AreEqual((5, 4),(curvilinearGrid.NumM,curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -987,7 +987,7 @@ namespace MeshKernelNETTest.Api
                     //Assert
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
-                    Assert.AreEqual(numEdges - 1, mesh2D.NumEdges);
+                    Assert.AreEqual(numEdges - 1, mesh2D.NumValidEdges);
                     mesh2D.Dispose();
                 }
                 finally
@@ -1942,7 +1942,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dDeleteSmallFlowEdgesAndSmallTriangles(id, smallFlowEdgesLengthThreshold, minFractionalAreaTriangles));
                     // Assert
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
-                    Assert.AreEqual(12, mesh2D.NumEdges);
+                    Assert.AreEqual(12, mesh2D.NumValidEdges);
                 }
                 finally
                 {

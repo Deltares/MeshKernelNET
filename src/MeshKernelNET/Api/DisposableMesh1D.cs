@@ -19,7 +19,13 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(5)]
+        private readonly int numValidNodes;
+
+        [ProtoMember(6)]
         private int numEdges;
+
+        [ProtoMember(7)]
+        private readonly int numValidEdges;
 
         public DisposableMesh1D()
         {
@@ -64,19 +70,25 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
+        public int NumValidNodes => numValidNodes;
+
         public int NumEdges
         {
             get { return numEdges; }
             set { numEdges = value; }
         }
 
+        public int NumValidEdges => numValidEdges;
+
         protected override void SetNativeObject(ref Mesh1DNative nativeObject)
         {
             nativeObject.edge_nodes = GetPinnedObjectPointer(EdgeNodes);
             nativeObject.node_x = GetPinnedObjectPointer(NodeX);
             nativeObject.node_y = GetPinnedObjectPointer(NodeY);
+            nativeObject.num_valid_nodes = numValidNodes;
             nativeObject.num_nodes = NumNodes;
             nativeObject.num_edges = NumEdges;
+            nativeObject.num_valid_edges = numValidEdges;
         }
     }
 }

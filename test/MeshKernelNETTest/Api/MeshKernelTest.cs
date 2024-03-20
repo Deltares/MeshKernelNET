@@ -2467,7 +2467,7 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dMakeGlobaThroughApi()
+        public void Mesh2dMakeGlobalThroughApi()
         {
             // Generates a mesh in spherical coordinates around the globe
 
@@ -2493,5 +2493,57 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+
+        [Test]
+        public void Mesh2dUndoRedoThroughApi()
+        {
+            // Before                                          After
+            // 0 ------- 1 ------- 2 ------- 3                           1 ------- 2 ------- 3
+            // |         |         |         |                           |         |         |
+            // |         |         |         |                           |         |         |
+            // |         |         |         |                           |         |         |
+            // |         |         |         |                           |         |         |
+            // 4 ------- 5 ------- 6 ------- 7                 4 ------- 5 ------- 6 ------- 7
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11 
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |   
+            // |         |         |         |                 |         |         |         |
+            //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
+
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                try
+                {
+                    int numberOfVerticesBefore = mesh.NumNodes;
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NodeX.Length);
+
+                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NodeX.Length);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
+
     }
 }

@@ -30,6 +30,14 @@ namespace MeshKernelNET.Native
         internal static extern int AllocateState([In] int projectionType, [In][Out] ref int meshKernelId);
 
         /// <summary>
+        /// Clear the undo state
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_clear_undo_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ClearUndoState([In] int meshKernelId);
+
+        /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary
         /// (ggeo_make1D2DRiverLinks_dll)
         /// </summary>
@@ -1652,5 +1660,21 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_refine", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int PolygonRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref GeometryListNative geometryListOut);
+
+        /// <summary>
+        /// Redo editing action
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_redo_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int RedoState(int meshKernelId, [In][Out] ref bool redone);
+
+        /// <summary>
+        /// Redo editing action
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_undo_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int UndoState(int meshKernelId, [In][Out] ref bool undone);
     }
 }

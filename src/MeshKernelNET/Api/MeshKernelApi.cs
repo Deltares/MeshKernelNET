@@ -20,6 +20,12 @@ namespace MeshKernelNET.Api
             return meshKernelId;
         }
 
+        /// <inheritdoc/>
+        public int ClearUndoState(int meshKernelId)
+        {
+            return MeshKernelDll.ClearUndoState(meshKernelId);
+        }
+
         public int ContactsComputeBoundary(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList polygons, double searchRadius)
         {
             GeometryListNative polygonsNative = polygons.CreateNativeObject();
@@ -1243,6 +1249,18 @@ namespace MeshKernelNET.Api
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject(); // Create an instance for the out parameter
             return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
+        }
+
+        /// <inheritdoc/>
+        public int RedoState(int meshKernelId, ref bool redone)
+        {
+            return MeshKernelDll.RedoState(meshKernelId, ref redone);
+        }
+
+        /// <inheritdoc/>
+        public int UndoState(int meshKernelId, ref bool undone)
+        {
+            return MeshKernelDll.UndoState(meshKernelId, ref undone);
         }
 
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)

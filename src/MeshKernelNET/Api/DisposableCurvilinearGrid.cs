@@ -22,7 +22,7 @@ namespace MeshKernelNET.Api
         {
         }
 
-        public DisposableCurvilinearGrid(int nM, int nN)
+        public DisposableCurvilinearGrid(int nN, int nM)
         {
             numM = nM;
             numN = nN;
@@ -86,8 +86,8 @@ namespace MeshKernelNET.Api
         /// First column-oriented edges, then row-oriented edges, in row major order</remarks>
         private (int first, int last) GetEdgeNodes(int edgeIndex)
         {
-            int numNodesInRow = NumN;
-            int numNodesInColumn = NumM;
+            int numNodesInRow = NumM;
+            int numNodesInColumn = NumN;
             int numColumnOrientedEdges = numNodesInRow * (numNodesInColumn - 1);             
             if (edgeIndex < numColumnOrientedEdges)
             {

@@ -43,24 +43,29 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(13)]
-        private int numEdges;
+        private readonly int numValidNodes;
 
         [ProtoMember(14)]
-        private int numFaces;
+        private int numEdges;
 
         [ProtoMember(15)]
-        private int numFaceNodes;
+        private readonly int numValidEdges;
+
+        [ProtoMember(16)]
+        private int numFaces;
+
+        [ProtoMember(17)]
+        private readonly int numFaceNodes;
 
         public DisposableMesh2D()
         {
         }
 
-        public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
+        public DisposableMesh2D(int nNodes, int nEdges, int nFaces)
         {
             NumNodes = nNodes;
             NumEdges = nEdges;
             NumFaces = nFaces;
-            NumFaceNodes = nFaceNodes;
 
             EdgeFaces = new int[NumEdges * 2];
             EdgeNodes = new int[NumEdges * 2];
@@ -152,11 +157,15 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
+        public int NumValidNodes => numValidNodes;
+
         public int NumEdges
         {
             get { return numEdges; }
             set { numEdges = value; }
         }
+
+        public int NumValidEdges => numValidEdges;
 
         public int NumFaces
         {
@@ -164,12 +173,7 @@ namespace MeshKernelNET.Api
             set { numFaces = value; }
         }
 
-        public int NumFaceNodes
-        {
-            get { return numFaceNodes; }
-            set { numFaceNodes = value; }
-        }
-
+        public int NumFaceNodes => numFaceNodes;
 
         #region IReadOnly2DMesh
         /// <inheritdoc/>
@@ -235,7 +239,9 @@ namespace MeshKernelNET.Api
             nativeObject.face_x = GetPinnedObjectPointer(FaceX);
             nativeObject.face_y = GetPinnedObjectPointer(FaceY);
             nativeObject.num_nodes = NumNodes;
+            nativeObject.num_valid_nodes = NumValidNodes;
             nativeObject.num_edges = NumEdges;
+            nativeObject.num_valid_edges = NumValidEdges;
             nativeObject.num_faces = NumFaces;
             nativeObject.num_face_nodes = NumFaceNodes;
         }

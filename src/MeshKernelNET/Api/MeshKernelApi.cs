@@ -1271,7 +1271,9 @@ namespace MeshKernelNET.Api
                 NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
                 EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
                 NumEdges = newMesh2DNative.num_edges,
-                NumNodes = newMesh2DNative.num_nodes
+                NumNodes = newMesh2DNative.num_nodes,
+                NumValidNodes = newMesh2DNative.num_valid_nodes,
+                NumValidEdges = newMesh2DNative.num_valid_edges
             };
 
             if (addCellInformation && newMesh2DNative.num_faces > 0)
@@ -1295,7 +1297,9 @@ namespace MeshKernelNET.Api
                 NodeX = newMesh1DNative.node_x.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NodeY = newMesh1DNative.node_y.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NumNodes = newMesh1DNative.num_nodes,
-                NumEdges = newMesh1DNative.num_edges
+                NumEdges = newMesh1DNative.num_edges,
+                NumValidNodes = newMesh1DNative.num_valid_nodes,
+                NumValidEdges = newMesh1DNative.num_valid_edges,
             };
             return disposableMesh1D;
         }

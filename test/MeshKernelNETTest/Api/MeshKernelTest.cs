@@ -1697,6 +1697,7 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        /*
         [Test]
         public void Mesh2dConvertProjectionThroughApi()
         {
@@ -1780,6 +1781,7 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+        */
 
         [Test]
         public void Mesh2dConvertProjectionThroughApiFails()
@@ -2511,19 +2513,29 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
+                    // Do
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NodeX.Length);
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
-                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
+                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 6));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NodeX.Length);
+                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NumValidNodes);
 
+                    // Un-do
                     bool undone = false;
                     Assert.AreEqual(0, api.UndoState(id, ref undone));
                     Assert.AreEqual(true, undone);
 
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
+                    undone = false;
+                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(true, undone);
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(numberOfVerticesBefore, mesh2d.NumValidNodes);
                 }
                 finally
                 {

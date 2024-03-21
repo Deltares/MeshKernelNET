@@ -43,19 +43,19 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(13)]
-        private readonly int numValidNodes;
+        private int numValidNodes;
 
         [ProtoMember(14)]
         private int numEdges;
 
         [ProtoMember(15)]
-        private readonly int numValidEdges;
+        private int numValidEdges;
 
         [ProtoMember(16)]
         private int numFaces;
 
         [ProtoMember(17)]
-        private readonly int numFaceNodes;
+        private int numFaceNodes;
 
         public DisposableMesh2D()
         {
@@ -157,7 +157,11 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
-        public int NumValidNodes => numValidNodes;
+        public int NumValidNodes
+        {
+            get { return numValidNodes; }
+            set { numValidNodes = value; }
+        }
 
         public int NumEdges
         {
@@ -165,7 +169,11 @@ namespace MeshKernelNET.Api
             set { numEdges = value; }
         }
 
-        public int NumValidEdges => numValidEdges;
+        public int NumValidEdges
+        {
+            get { return numValidEdges; }
+            set { numValidEdges = value; }
+        }
 
         public int NumFaces
         {

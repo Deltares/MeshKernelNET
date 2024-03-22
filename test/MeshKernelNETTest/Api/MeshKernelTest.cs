@@ -1780,7 +1780,7 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
-        
+
         [Test]
         public void Mesh2dConvertProjectionThroughApiFails()
         {
@@ -2543,5 +2543,6 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        
     }
 }

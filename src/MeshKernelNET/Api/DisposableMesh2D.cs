@@ -61,11 +61,12 @@ namespace MeshKernelNET.Api
         {
         }
 
-        public DisposableMesh2D(int nNodes, int nEdges, int nFaces)
+        public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
         {
             NumNodes = nNodes;
             NumEdges = nEdges;
             NumFaces = nFaces;
+            NumFaceNodes = nFaceNodes;
 
             EdgeFaces = new int[NumEdges * 2];
             EdgeNodes = new int[NumEdges * 2];
@@ -181,7 +182,11 @@ namespace MeshKernelNET.Api
             set { numFaces = value; }
         }
 
-        public int NumFaceNodes => numFaceNodes;
+        public int NumFaceNodes
+        {
+            get { return numFaceNodes; }
+            set { numFaceNodes = value; }
+        }
 
         #region IReadOnly2DMesh
         /// <inheritdoc/>

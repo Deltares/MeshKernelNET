@@ -969,5 +969,39 @@ namespace MeshKernelNETTest.Api
             new object[] { 2, 3, new[] { (0, 2), (1, 3), (2, 4), (3, 5), (0, 1), (2, 3), (4, 5) } },
             new object[] { 3, 2, new[] { (0, 3), (1, 4), (2, 5), (0, 1), (1, 2), (3, 4), (4, 5) } }
         };
+
+        [Test]
+        public void CurvilinearSetAndCovertThroughApi()
+        {
+
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            {
+                var id = 0;
+                DisposableCurvilinearGrid curvilinearGrid = null;
+                var mesh2d = new DisposableMesh2D();
+                {
+                    try
+                    {
+                        // Prepare
+                        id = api.AllocateState(0);
+                        Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                        Assert.AreEqual(0, api.CurvilinearConvertToMesh2D(id));
+                        Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                        
+                        // Assert
+                        Assert.AreEqual(25, mesh2d.NumNodes);
+                    }
+                    finally
+                    {
+                        api.DeallocateState(id);
+                        curvilinearGrid?.Dispose();
+                        mesh2d.Dispose();
+                    }
+                }
+            }
+        }
+
     }
 }

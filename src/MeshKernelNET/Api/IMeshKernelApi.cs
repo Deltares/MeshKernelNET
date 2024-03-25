@@ -15,6 +15,13 @@ namespace MeshKernelNET.Api
         int AllocateState(int projectionType);
 
         /// <summary>
+        /// Clear the undo state
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <returns>Error code</returns>
+        int ClearUndoState(int meshKernelId);
+
+        /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary
         /// (ggeo_make1D2DRiverLinks_dll)
         /// </summary>
@@ -1376,5 +1383,21 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int PolygonRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                           int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut);
+
+        /// <summary>
+        /// Redo editing action
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="redone">If the editing action has been re-done</param>
+        /// <returns>Error code</returns>
+        int RedoState(int meshKernelId, ref bool redone);
+
+        /// <summary>
+        /// Undo editing action
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="undone">If the editing action has been un-done</param>
+        /// <returns>Error code</returns>
+        int UndoState(int meshKernelId, ref bool undone);
     }
 }

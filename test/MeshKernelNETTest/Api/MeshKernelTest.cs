@@ -2467,7 +2467,7 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dMakeGlobaThroughApi()
+        public void Mesh2dMakeGlobalThroughApi()
         {
             // Generates a mesh in spherical coordinates around the globe
 
@@ -2493,5 +2493,56 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+
+        [Test]
+        public void Mesh2dUndoTwoDeleteNodesThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2d = new DisposableMesh2D();
+                try
+                {
+                    int numberOfVerticesBefore = mesh.NumNodes;
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // Do
+                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
+                    Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 6));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[6]);
+
+                    // Un-do
+                    bool undone = false;
+                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(true, undone);
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(100.0, mesh2d.NodeX[6]);
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
+
+                    undone = false;
+                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(true, undone);
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(0.0, mesh2d.NodeX[0]);
+                    Assert.AreEqual(numberOfVerticesBefore, mesh2d.NumValidNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2d.Dispose();
+                }
+            }
+        }
+
+        
     }
 }

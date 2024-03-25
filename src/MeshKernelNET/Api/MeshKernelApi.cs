@@ -20,6 +20,12 @@ namespace MeshKernelNET.Api
             return meshKernelId;
         }
 
+        /// <inheritdoc/>
+        public int ClearUndoState(int meshKernelId)
+        {
+            return MeshKernelDll.ClearUndoState(meshKernelId);
+        }
+
         public int ContactsComputeBoundary(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList polygons, double searchRadius)
         {
             GeometryListNative polygonsNative = polygons.CreateNativeObject();
@@ -797,7 +803,8 @@ namespace MeshKernelNET.Api
 
             disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
                                                     newMesh2D.num_edges,
-                                                    newMesh2D.num_faces);
+                                                    newMesh2D.num_faces,
+                                                    newMesh2D.num_face_nodes);
 
             newMesh2D = disposableMesh2D.CreateNativeObject();
 
@@ -1245,6 +1252,18 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
         }
 
+        /// <inheritdoc/>
+        public int RedoState(int meshKernelId, ref bool redone)
+        {
+            return MeshKernelDll.RedoState(meshKernelId, ref redone);
+        }
+
+        /// <inheritdoc/>
+        public int UndoState(int meshKernelId, ref bool undone)
+        {
+            return MeshKernelDll.UndoState(meshKernelId, ref undone);
+        }
+
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)
         {
             var disposableMesh2D = new DisposableMesh2D
@@ -1253,7 +1272,9 @@ namespace MeshKernelNET.Api
                 NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
                 EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
                 NumEdges = newMesh2DNative.num_edges,
-                NumNodes = newMesh2DNative.num_nodes
+                NumNodes = newMesh2DNative.num_nodes,
+                NumValidNodes = newMesh2DNative.num_valid_nodes,
+                NumValidEdges = newMesh2DNative.num_valid_edges
             };
 
             if (addCellInformation && newMesh2DNative.num_faces > 0)
@@ -1277,7 +1298,9 @@ namespace MeshKernelNET.Api
                 NodeX = newMesh1DNative.node_x.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NodeY = newMesh1DNative.node_y.CreateValueArray<double>(newMesh1DNative.num_nodes),
                 NumNodes = newMesh1DNative.num_nodes,
-                NumEdges = newMesh1DNative.num_edges
+                NumEdges = newMesh1DNative.num_edges,
+                NumValidNodes = newMesh1DNative.num_valid_nodes,
+                NumValidEdges = newMesh1DNative.num_valid_edges,
             };
             return disposableMesh1D;
         }

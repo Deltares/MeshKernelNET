@@ -2496,7 +2496,7 @@ namespace MeshKernelNETTest.Api
 
 
         [Test]
-        public void Mesh2dUndoRedoThroughApi()
+        public void Mesh2dUndoTwoDeleteNodesThroughApi()
         {
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
@@ -2514,18 +2514,17 @@ namespace MeshKernelNETTest.Api
                     // Do
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
-
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 6));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
-                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NumValidNodes);
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[6]);
 
                     // Un-do
                     bool undone = false;
                     Assert.AreEqual(0, api.UndoState(id, ref undone));
                     Assert.AreEqual(true, undone);
-
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(100.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
                     undone = false;
@@ -2533,6 +2532,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(true, undone);
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(0.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(numberOfVerticesBefore, mesh2d.NumValidNodes);
                 }
                 finally

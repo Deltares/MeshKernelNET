@@ -205,6 +205,9 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreNotEqual(2, mesh2D.NumEdges);
                     Assert.AreEqual(numberOfEdgesBefore + 1, mesh2D.NumEdges);
+                    Assert.AreEqual(2, firstNewNodeIndex);
+                    Assert.AreEqual(7, secondNewNodeIndex);
+                    Assert.AreEqual(24, newEdgeIndex);
                 }
                 finally
                 {

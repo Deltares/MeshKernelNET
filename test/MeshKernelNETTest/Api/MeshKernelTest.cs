@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
 using NUnit.Framework;
@@ -2543,6 +2544,123 @@ namespace MeshKernelNETTest.Api
             }
         }
 
-        
+        [Test]
+        public void Mesh2dAddTriangleAndUndoEachStepThroughApi()
+        {
+            // --- Setup ---
+            const int nx = 3;
+            const int ny = 3;
+            const double dx = 10.0;
+            const double dy = 10.0;
+            // insert a vertex left of the grid between the two first rows, i.e. between node #0 and node #nx 
+            const double vx = -0.5 * dx;
+            const double vy = 0.5 * dy;
+            using (DisposableMesh2D mesh = CreateMesh2D(nx,ny,dx,dy))
+            using (var api = new MeshKernelApi())
+            {
+                var mesh2D = new DisposableMesh2D();
+                var id = 0;
+                
+                try
+                {
+                    int initialNumNodes = mesh.NumNodes;
+                    int initialNumEdges = mesh.NumEdges;
+                    var initialNodeX = mesh.NodeX.ToArray();
+                    var initialNodeY = mesh.NodeY.ToArray();
+                    var initialEdgeNodes = mesh.EdgeNodes.ToArray();
+
+                    int result = -1;
+                    id = api.AllocateState(0);
+
+                    api.Mesh2dSet(id, mesh);
+
+                    int insertedVertex = 0;
+                    api.Mesh2dInsertNode(id, vx,vy, ref insertedVertex);
+                    Assert.That(insertedVertex, Is.EqualTo(initialNumNodes)); // appended at end
+
+                    var insertedEdge = 0;
+                    api.Mesh2dInsertEdge(id, 0, insertedVertex, ref insertedEdge);
+                    Assert.That(insertedEdge, Is.EqualTo(initialNumEdges)); // appended at end
+
+                    api.Mesh2dInsertEdge(id, insertedVertex, nx, ref insertedEdge);
+                    Assert.That(insertedEdge, Is.EqualTo(initialNumEdges+1)); // appended at end
+
+                    // Check mesh topology and geometry with added vertex and edges
+                    api.Mesh2dGetData(id, out mesh2D);
+                    Assert.That(mesh2D.NumEdges, Is.EqualTo(initialNumEdges+2));
+                    Assert.That(mesh2D.EdgeNodes, Is.EquivalentTo(initialEdgeNodes.Concat(new [] { 0,insertedVertex, insertedVertex,nx})));
+                    Assert.That(mesh2D.NumNodes, Is.EqualTo(initialNumNodes+1));
+                    Assert.That(mesh2D.NodeX, Is.EquivalentTo(initialNodeX.Concat( new []{ vx })));
+                    Assert.That(mesh2D.NodeY, Is.EquivalentTo(initialNodeY.Concat( new []{ vy })));
+
+                    // --- Execute & Assert --- 
+                    
+                    // Undo  edge (4,3) insertion
+                    bool undone = false;
+                    result = api.UndoState(id, ref undone);
+
+                    // Check mesh topology and geometry after undo - expect one extra valid vertex and one extra valid edge
+                    api.Mesh2dGetData(id, out mesh2D);
+                    Assert.Multiple(() =>
+                        {
+                            Assert.That(result, Is.EqualTo(0));
+                            Assert.That(undone, Is.True);
+                            Assert.That(mesh2D.NumValidEdges, Is.EqualTo(initialNumEdges + 1));
+                            Assert.That(mesh2D.EdgeNodes.Count(n => n >= 0), Is.EqualTo(2 * mesh2D.NumValidEdges));
+                            // the inserted vertex should still be valid
+                            Assert.That(mesh2D.NumValidNodes, Is.EqualTo(initialNumNodes + 1));
+                            Assert.That(mesh2D.NumNodes, Is.EqualTo(mesh2D.NumNodes));
+                            Assert.That(mesh2D.NodeX.Count(x => x == -999.0), Is.EqualTo(0));
+                            Assert.That(mesh2D.NodeY.Count(y => y == -999.0), Is.EqualTo(0));
+                        }
+                    );
+
+                    // Undo edge (1,3) insertion
+                    undone = false;
+                    result = api.UndoState(id, ref undone);
+                    
+                    // Topology and geometry checks are disabled temporarily because Mesh2dGetData will mark unconnected vertices 
+                    // as invalid, changing the topology of the mesh (GRIDEDIT-988) and causing the unconnected vertex expected
+                    // after the undo to be marked invalid.   
+                    /*
+                        // Check mesh topology and geometry after undo - expect one extra valid vertex
+                        api.Mesh2dGetData(id, out mesh2D);
+                        Assert.Multiple(() =>
+                        {
+                            Assert.That(result, Is.EqualTo(0));
+                            Assert.That(undone, Is.True);
+                            Assert.That(mesh2D.NumValidEdges, Is.EqualTo(initialNumEdges));
+                            Assert.That(mesh2D.EdgeNodes.Count(n => n >= 0), Is.EqualTo(2 * mesh2D.NumValidEdges));
+                            // the inserted vertex should still be valid
+                            Assert.That(mesh2D.NumValidNodes, Is.EqualTo(initialNumNodes + 1));
+                            Assert.That(mesh2D.NumNodes, Is.EqualTo(mesh2D.NumNodes));
+                            Assert.That(mesh2D.NodeX.Count(x => x == -999.0), Is.EqualTo(0));
+                            Assert.That(mesh2D.NodeY.Count(y => y == -999.0), Is.EqualTo(0));
+                        });
+                    */
+                    
+                    // Undo vertex insertion
+                    undone = false;
+                    result = api.UndoState(id, ref undone);
+                    api.Mesh2dGetData(id, out mesh2D);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(result, Is.EqualTo(0));
+                        Assert.That(undone, Is.True);
+                        Assert.That(mesh2D.NumValidEdges, Is.EqualTo(initialNumEdges));
+                        Assert.That(mesh2D.NumValidNodes, Is.EqualTo(initialNumNodes));
+                        Assert.That(mesh2D.EdgeNodes.Count(n => n >= 0), Is.EqualTo(2*mesh2D.NumValidEdges));
+                        Assert.That(mesh2D.EdgeNodes.Where(n => n >= 0), Is.EquivalentTo(initialEdgeNodes));
+                        Assert.That(mesh2D.NodeX.Where(x => x != -999.0), Is.EquivalentTo(initialNodeX));
+                        Assert.That(mesh2D.NodeY.Where(x => x != -999.0), Is.EquivalentTo(initialNodeY));
+                    });
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D.Dispose();
+                }
+            }
+        }
     }
 }

@@ -157,6 +157,64 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void Mesh2dInsertEdgeFromCoordinatesThroughApi()
+        {
+            // Before                                          After
+            // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
+            // |         |         |         |                 |      .  |         |         |
+            // |         |         |         |                 |    .    |         |         |
+            // |         |         |         |                 |  .      |         |         |
+            // |         |         |         |                 |.        |         |         |
+            // 4 ------- 5 ------- 6 ------- 7                 4 ------- 5 ------- 6 ------- 7
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |  
+            // |         |         |         |                 |         |         |         |
+            //12 ------ 13 ------ 14 ------ 15                 2 ------ 13 ------ 14 ------ 15
+
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2D = new DisposableMesh2D();
+                try
+                {
+                    int numberOfEdgesBefore = mesh.NumEdges;
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    var firstNewNodeIndex = 0;
+                    var secondNewNodeIndex = 0;
+                    var newEdgeIndex = 0;
+                    Assert.AreEqual(0, api.Mesh2dInsertEdgeFromCoordinates(id,
+                                                                           0.0,
+                                                                           400.0,
+                                                                           100.0,
+                                                                           600.0, 
+                                                                           ref firstNewNodeIndex, 
+                                                                           ref secondNewNodeIndex,
+                                                                           ref newEdgeIndex));
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreNotEqual(2, mesh2D.NumEdges);
+                    Assert.AreEqual(numberOfEdgesBefore + 1, mesh2D.NumEdges);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void Mesh2dMergeTwoNodesThroughApi()
         {
             // Before                                          After

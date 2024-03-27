@@ -1040,6 +1040,25 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dInsertEdge(int meshKernelId, int startVertexIndex, int endVertexIndex, ref int edgeIndex);
 
+        /// @brief Insert a new mesh2d edge from 2 coordinates
+        /// <param name="meshKernelId"> The id of the mesh state
+        /// <param name="firstNodeX">    The index of the first node to connect
+        /// <param name="firstNodeY">      The index of the second node to connect
+        /// <param name="secondNodeX">    The index of the first node to connect
+        /// <param name="secondNodeY ">     The index of the second node to connect
+        /// <param name="firstNodeIndex">      The index of the first node
+        /// <param name="secondNodeIndex">      The index of the second node
+        /// <param name="edgeIndex">      The index of the new generated edge
+        /// <returns>Error code</returns>
+        int Mesh2dInsertEdgeFromCoordinates(int meshKernelId,
+                                            double firstNodeX,
+                                            double firstNodeY,
+                                            double secondNodeX,
+                                            double secondNodeY,
+                                            ref int firstNodeIndex,
+                                            ref int secondNodeIndex,
+                                            ref int edgeIndex);
+
         /// <summary>
         /// Inserts a new vertex
         /// </summary>

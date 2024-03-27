@@ -1272,6 +1272,28 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dInsertEdge([In] int meshKernelId, [In] int startVertexIndex, [In] int endVertexIndex, [In][Out] ref int edgeIndex);
 
         /// <summary>
+        /// Insert a new mesh2d edge from 2 coordinates
+        /// <param name="startVertexIndex"/>
+        /// <param name="meshKernelId"> The id of the mesh state
+        /// <param name="firstNodeX">    The index of the first node to connect
+        /// <param name="firstNodeY">      The index of the second node to connect
+        /// <param name="secondNodeX">    The index of the first node to connect
+        /// <param name="secondNodeY ">     The index of the second node to connect
+        /// <param name="firstNodeIndex">      The index of the first node
+        /// <param name="secondNodeIndex">      The index of the second node
+        /// <param name="edgeIndex">      The index of the new generated edge
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_edge_from_coordinates", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dInsertEdgeFromCoordinates([In] int meshKernelId, 
+                                                    [In] double firstNodeX, 
+                                                    [In] double firstNodeY, 
+                                                    [In] double secondNodeX, 
+                                                    [In] double secondNodeY,
+                                                    [In][Out] ref int firstNodeIndex, 
+                                                    [In][Out] ref int secondNodeIndex,
+                                                    [In][Out] ref int edgeIndex);
+
+        /// <summary>
         /// Insert a new mesh2d edge connecting two nodes
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

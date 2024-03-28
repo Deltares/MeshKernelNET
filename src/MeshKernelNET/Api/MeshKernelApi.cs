@@ -971,6 +971,26 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dInsertEdge(meshKernelId, startVertexIndex, endVertexIndex, ref edgeIndex);
         }
 
+        /// <inheritdoc/>
+        public int Mesh2dInsertEdgeFromCoordinates(int meshKernelId,
+                                                   double firstNodeX,
+                                                   double firstNodeY,
+                                                   double secondNodeX,
+                                                   double secondNodeY,
+                                                   ref int firstNodeIndex,
+                                                   ref int secondNodeIndex,
+                                                   ref int edgeIndex)
+        {
+            return MeshKernelDll.Mesh2dInsertEdgeFromCoordinates(meshKernelId, 
+                                                                 firstNodeX, 
+                                                                 firstNodeY, 
+                                                                 secondNodeX, 
+                                                                 secondNodeY, 
+                                                                 ref firstNodeIndex, 
+                                                                 ref secondNodeIndex, 
+                                                                 ref edgeIndex);
+        }
+
         public int Mesh2dInsertNode(int meshKernelId, double xCoordinate, double yCoordinate, ref int vertexIndex)
         {
             return MeshKernelDll.Mesh2dInsertNode(meshKernelId, xCoordinate, yCoordinate, ref vertexIndex);

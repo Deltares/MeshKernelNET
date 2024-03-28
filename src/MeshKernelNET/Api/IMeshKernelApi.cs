@@ -1040,7 +1040,8 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dInsertEdge(int meshKernelId, int startVertexIndex, int endVertexIndex, ref int edgeIndex);
 
-        /// @brief Insert a new mesh2d edge from 2 coordinates
+        /// @brief Insert a new mesh2d edge from 2 coordinates. If the coordinates do not match an existing node within a computed search radius, new ones will be created.
+        /// The search radius is computed internally based on the minimum mesh size and the distance between the two nodes.
         /// <param name="meshKernelId"> The id of the mesh state
         /// <param name="firstNodeX">    The index of the first node to connect
         /// <param name="firstNodeY">      The index of the second node to connect

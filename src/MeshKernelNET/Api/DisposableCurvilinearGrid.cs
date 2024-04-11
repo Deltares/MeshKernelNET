@@ -1,10 +1,11 @@
-﻿using MeshKernelNET.Native;
+﻿using System.Diagnostics;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableCurvilinearGrid : DisposableNativeObject<CurvilinearGridNative>, IReadOnly2DMesh
+    public sealed class DisposableCurvilinearGrid : DisposableNativeObject<CurvilinearGridNative>, IReadOnlyCurvilinearGrid
     {
         [ProtoMember(1)]
         private double[] nodeX;
@@ -139,6 +140,21 @@ namespace MeshKernelNET.Api
             nativeObject.node_y = GetPinnedObjectPointer(NodeY);
             nativeObject.num_m = numM;
             nativeObject.num_n = numN;
+        }
+
+        /// <inheritdoc/>
+        public (int n, int m) VertexIndexToCurvilinearIndexPair(int vertex)
+        {
+            Debug.Assert(vertex >= 0 && vertex < NumM * NumN);
+            return (vertex / NumM, vertex % NumM);
+        }
+
+        /// <inheritdoc/>
+        public int VertexIndexFromCurvilinearIndexPair(int n, int m)
+        {
+            Debug.Assert(n >= 0 && n < NumN);
+            Debug.Assert(m >= 0 && m < NumM);
+            return n * NumM + m;
         }
     }
 }

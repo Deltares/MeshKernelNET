@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 
@@ -973,13 +974,11 @@ namespace MeshKernelNETTest.Api
         [Test]
         public void CurvilinearSetAndCovertThroughApi()
         {
-
             // Setup
             using (var api = new MeshKernelApi())
             using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(5, 5, 10, 10))
             {
                 var id = 0;
-                DisposableCurvilinearGrid curvilinearGrid = null;
                 var mesh2d = new DisposableMesh2D();
                 {
                     try
@@ -996,10 +995,38 @@ namespace MeshKernelNETTest.Api
                     finally
                     {
                         api.DeallocateState(id);
-                        curvilinearGrid?.Dispose();
                         mesh2d.Dispose();
                     }
                 }
+            }
+        }
+
+        [TestCase(3,0,9)]
+        [TestCase(0,2,2)]
+        [TestCase(1,1,4)]
+        [TestCase(2,2,8)]
+        public void VertexIndexFromCurvilinearIndexPair(int n, int m, int index)
+        {
+            const int numN = 4;
+            const int numM = 3;
+            Debug.Assert(n > -1 && n < numN);
+            Debug.Assert(m > -1 && m < numM);
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(numN,numM))
+            {
+                Assert.That(grid.VertexIndexFromCurvilinearIndexPair(n, m), Is.EqualTo(index));
+            }
+        }
+        
+        [TestCase(13, 2, 3)]
+        [TestCase(6, 1, 1)]
+        public void VertexIndexToCurvilinearIndexPair(int index, int n, int m )
+        {
+            const int numN = 4;
+            const int numM = 5;
+            Debug.Assert(index > -1 && index < numN*numM);
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(numN,numM))
+            {
+                Assert.That(grid.VertexIndexToCurvilinearIndexPair(index), Is.EqualTo((n,m)));
             }
         }
 

@@ -211,6 +211,24 @@ namespace MeshKernelNET.Api
         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
 
         /// <summary>
+        /// Gets the curvilinear location closet to a specific coordinate.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="locationType">The location type</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetLocationIndex(int meshKernelId,
+                                        double xCoordinate,
+                                        double yCoordinate,
+                                        int locationType,
+                                        ref BoundingBox boundingBox,
+                                        ref int locationIndex);
+
+        /// <summary>
         /// Generates a curvilinear grid from splines with the advancing front method. Initialization step (interactive)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
@@ -904,6 +922,7 @@ namespace MeshKernelNET.Api
                                  double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox,
                                  double yUpperRightBoundingBox, ref double xCoordinateOut, ref double yCoordinateOut);
 
+
         /// <summary>
         /// Gets the grid state as a <see cref="Mesh2DNative"/> structure including the cell information
         /// </summary>
@@ -936,6 +955,24 @@ namespace MeshKernelNET.Api
         /// <param name="edges">Pointer to memory where the indices of the hanging edges will be stored</param>
         /// <returns>Error code</returns>
         int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges);
+
+        /// <summary>
+        /// Gets the mesh location closet to a specific coordinate.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="locationType">The location type</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetLocationIndex(int meshKernelId, 
+                                   double xCoordinate, 
+                                   double yCoordinate, 
+                                   int locationType, 
+                                   ref BoundingBox boundingBox, 
+                                   ref int locationIndex);
 
         /// <summary>
         /// Retrives the mesh boundary polygon

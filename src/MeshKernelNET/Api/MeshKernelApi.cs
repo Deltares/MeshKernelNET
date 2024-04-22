@@ -214,6 +214,13 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
+        public int CurvilinearGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, int locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        {
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            var exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId, xCoordinate, yCoordinate, locationType, ref boundingBoxNative, ref locationIndex); 
+            return exitCode;
+        }
+
         public int CurvilinearInitializeLineShift(int meshKernelId)
         {
             return MeshKernelDll.CurvilinearInitializeLineShift(meshKernelId);
@@ -861,6 +868,13 @@ namespace MeshKernelNET.Api
 
             Marshal.FreeCoTaskMem(hangingVerticesPtr);
 
+            return exitCode;
+        }
+
+        public int Mesh2dGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, int locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        {
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            var exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId, xCoordinate, yCoordinate, locationType, ref boundingBoxNative, ref locationIndex);
             return exitCode;
         }
 

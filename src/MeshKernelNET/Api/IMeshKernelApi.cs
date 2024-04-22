@@ -224,7 +224,7 @@ namespace MeshKernelNET.Api
         int CurvilinearGetLocationIndex(int meshKernelId,
                                         double xCoordinate,
                                         double yCoordinate,
-                                        int locationType,
+                                        LocationTypes locationType,
                                         ref BoundingBox boundingBox,
                                         ref int locationIndex);
 
@@ -969,8 +969,8 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dGetLocationIndex(int meshKernelId, 
                                    double xCoordinate, 
-                                   double yCoordinate, 
-                                   int locationType, 
+                                   double yCoordinate,
+                                   LocationTypes locationType, 
                                    ref BoundingBox boundingBox, 
                                    ref int locationIndex);
 

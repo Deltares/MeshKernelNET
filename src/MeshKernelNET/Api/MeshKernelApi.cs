@@ -214,10 +214,16 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int CurvilinearGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, int locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        public int CurvilinearGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, ref BoundingBox boundingBox, ref int locationIndex)
         {
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            var exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId, xCoordinate, yCoordinate, locationType, ref boundingBoxNative, ref locationIndex); 
+            var locationTypeInt = Convert.ToInt32(locationType);
+            var exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId, 
+                                                                     xCoordinate, 
+                                                                     yCoordinate,
+                                                                     locationTypeInt,
+                                                                     ref boundingBoxNative, 
+                                                                     ref locationIndex); 
             return exitCode;
         }
 
@@ -871,10 +877,16 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, int locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        public int Mesh2dGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, ref BoundingBox boundingBox, ref int locationIndex)
         {
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            var exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId, xCoordinate, yCoordinate, locationType, ref boundingBoxNative, ref locationIndex);
+            var locationTypeInt = Convert.ToInt32(locationType);
+            var exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId, 
+                                                                xCoordinate,
+                                                                yCoordinate, 
+                                                                locationTypeInt, 
+                                                                ref boundingBoxNative, 
+                                                                ref locationIndex);
             return exitCode;
         }
 

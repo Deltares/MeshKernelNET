@@ -211,22 +211,52 @@ namespace MeshKernelNET.Api
         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
 
         /// <summary>
-        /// Gets the curvilinear location close to a specific coordinate.
+        /// Gets the index of the closest curvilinear edge
         /// </summary>
         /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="locationType">The location type</param>
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        int CurvilinearGetLocationIndex(int meshKernelId,
-                                        double xCoordinate,
-                                        double yCoordinate,
-                                        LocationTypes locationType,
-                                        BoundingBox boundingBox,
-                                        ref int locationIndex);
+        int CurvilinearGetEdgeLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest curvilinear face
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetFaceLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest curvilinear node
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetNodeLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
 
         /// <summary>
         /// Generates a curvilinear grid from splines with the advancing front method. Initialization step (interactive)
@@ -957,7 +987,39 @@ namespace MeshKernelNET.Api
         int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges);
 
         /// <summary>
-        /// Gets the mesh location closet to a specific coordinate.
+        /// Gets the index of the closest mesh edge
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetEdgeLocationIndex(int meshKernelId, 
+                                   double xCoordinate, 
+                                   double yCoordinate,
+                                   BoundingBox boundingBox, 
+                                   ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest mesh face.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetFaceLocationIndex(int meshKernelId,
+                                       double xCoordinate,
+                                       double yCoordinate,
+                                       BoundingBox boundingBox,
+                                       ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest mesh node
         /// </summary>
         /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
@@ -967,11 +1029,10 @@ namespace MeshKernelNET.Api
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        int Mesh2dGetLocationIndex(int meshKernelId, 
-                                   double xCoordinate, 
+        int Mesh2dGetNodeLocationIndex(int meshKernelId,
+                                   double xCoordinate,
                                    double yCoordinate,
-                                   LocationTypes locationType, 
-                                   BoundingBox boundingBox, 
+                                   BoundingBox boundingBox,
                                    ref int locationIndex);
 
         /// <summary>

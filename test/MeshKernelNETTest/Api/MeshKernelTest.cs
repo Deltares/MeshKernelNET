@@ -2636,7 +2636,6 @@ namespace MeshKernelNETTest.Api
             }
         }
 
-
         [Test]
         public void CurvilinearGetLocationIndexThroughApi()
         {
@@ -2669,6 +2668,6 @@ namespace MeshKernelNETTest.Api
             }
         }
 
-
     }
+
 }

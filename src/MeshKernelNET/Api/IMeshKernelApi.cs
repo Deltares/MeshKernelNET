@@ -211,7 +211,7 @@ namespace MeshKernelNET.Api
         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
 
         /// <summary>
-        /// Gets the curvilinear location closet to a specific coordinate.
+        /// Gets the curvilinear location close to a specific coordinate.
         /// </summary>
         /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
@@ -225,7 +225,7 @@ namespace MeshKernelNET.Api
                                         double xCoordinate,
                                         double yCoordinate,
                                         LocationTypes locationType,
-                                        ref BoundingBox boundingBox,
+                                        BoundingBox boundingBox,
                                         ref int locationIndex);
 
         /// <summary>
@@ -971,7 +971,7 @@ namespace MeshKernelNET.Api
                                    double xCoordinate, 
                                    double yCoordinate,
                                    LocationTypes locationType, 
-                                   ref BoundingBox boundingBox, 
+                                   BoundingBox boundingBox, 
                                    ref int locationIndex);
 
         /// <summary>

@@ -2624,7 +2624,7 @@ namespace MeshKernelNETTest.Api
                                                10.0,
                                                0.0,
                                                LocationTypes.Nodes,
-                                               ref boundingBox,
+                                                boundingBox,
                                                ref locationIndex);
 
                     Assert.AreEqual(locationIndex, 4);
@@ -2657,7 +2657,7 @@ namespace MeshKernelNETTest.Api
                                                     10.0,
                                                     0.0,
                                                     LocationTypes.Nodes,
-                                                    ref boundingBox,
+                                                    boundingBox,
                                                     ref locationIndex);
 
                     Assert.AreEqual(locationIndex, 4);

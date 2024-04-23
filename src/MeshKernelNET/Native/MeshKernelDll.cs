@@ -277,7 +277,7 @@ namespace MeshKernelNET.Native
         internal static extern int CurvilinearGetDimensions([In] int meshKernelId, [In][Out] ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
-        /// Gets the curvilinear location closet to a specific coordinate.
+        /// Gets the curvilinear location close to a specific coordinate.
         /// </summary>
         /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>

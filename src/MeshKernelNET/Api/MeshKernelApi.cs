@@ -214,7 +214,7 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int CurvilinearGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        public int CurvilinearGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, BoundingBox boundingBox, ref int locationIndex)
         {
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
             var locationTypeInt = Convert.ToInt32(locationType);
@@ -877,7 +877,7 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, ref BoundingBox boundingBox, ref int locationIndex)
+        public int Mesh2dGetLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, LocationTypes locationType, BoundingBox boundingBox, ref int locationIndex)
         {
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
             var locationTypeInt = Convert.ToInt32(locationType);

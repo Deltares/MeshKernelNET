@@ -287,7 +287,7 @@ namespace MeshKernelNET.Native
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_dimensions", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_location_index", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearGetLocationIndex([In] int meshKernelId,
                                                                [In] double xCoordinate,
                                                                [In] double yCoordinate,

@@ -2621,13 +2621,13 @@ namespace MeshKernelNETTest.Api
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
                     api.Mesh2dGetLocationIndex(id,
-                                               -1.0,
-                                               -1.0,
+                                               10.0,
+                                               0.0,
                                                LocationTypes.Nodes,
                                                ref boundingBox,
                                                ref locationIndex);
 
-                    Assert.AreEqual(locationIndex, 0);
+                    Assert.AreEqual(locationIndex, 4);
                 }
                 finally
                 {
@@ -2654,13 +2654,13 @@ namespace MeshKernelNETTest.Api
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
                     api.CurvilinearGetLocationIndex(id,
-                                                    -1.0,
-                                                    -1.0,
+                                                    10.0,
+                                                    0.0,
                                                     LocationTypes.Nodes,
                                                     ref boundingBox,
                                                     ref locationIndex);
 
-                    Assert.AreEqual(locationIndex, 0);
+                    Assert.AreEqual(locationIndex, 4);
                 }
                 finally
                 {

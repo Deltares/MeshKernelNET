@@ -1919,7 +1919,7 @@ namespace MeshKernelNETTest.Api
             }
         }
 
-        [Test]
+
         public void Mesh2dGetSmallFlowEdgeCentersThroughApi()
         {
             // Setup
@@ -2604,6 +2604,196 @@ namespace MeshKernelNETTest.Api
             }
         }
 
-        
+        [Test]
+        public void Mesh2dGetEdgeLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.Mesh2dGetEdgeLocationIndex(id,
+                                                   10.0,
+                                                   0.0,
+                                                   boundingBox,
+                                                   ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 0);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dGetFaceLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.Mesh2dGetFaceLocationIndex(id,
+                                                   10.0,
+                                                   0.0,
+                                                   boundingBox,
+                                                   ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 0);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dGetNodeLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.Mesh2dGetNodeLocationIndex(id,
+                                                   10.0,
+                                                   0.0,
+                                                   boundingBox,
+                                                   ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+
+        [Test]
+        public void CurvilinearGetEdgeLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.CurvilinearGetEdgeLocationIndex(id,
+                                                        20.0,
+                                                        20.0,
+                                                        boundingBox,
+                                                        ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearGetFaceLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.CurvilinearGetFaceLocationIndex(id,
+                                                        20.0,
+                                                        20.0,
+                                                        boundingBox,
+                                                        ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
+
+        [Test]
+        public void CurvilinearGetNodeLocationIndexThroughApi()
+        {
+            // Setup
+            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+
+                    BoundingBox boundingBox = BoundingBox.CreateDefault();
+                    int locationIndex = -1;
+                    api.CurvilinearGetNodeLocationIndex(id,
+                                                        20.0,
+                                                        20.0,
+                                                        boundingBox,
+                                                        ref locationIndex);
+
+                    Assert.AreEqual(locationIndex, 4);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                }
+            }
+        }
+
     }
+
 }

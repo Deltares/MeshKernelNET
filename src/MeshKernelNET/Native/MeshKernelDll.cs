@@ -277,6 +277,25 @@ namespace MeshKernelNET.Native
         internal static extern int CurvilinearGetDimensions([In] int meshKernelId, [In][Out] ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
+        /// Gets the curvilinear location close to a specific coordinate.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="locationType">The location type</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_location_index", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearGetLocationIndex([In] int meshKernelId,
+                                                               [In] double xCoordinate,
+                                                               [In] double yCoordinate,
+                                                               [In] int locationType,
+                                                               [In] ref BoundingBoxNative boundingBox,
+                                                               [In][Out] ref int locationIndex);
+
+        /// <summary>
         /// Initializes the curvilinear line shift algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
@@ -1131,6 +1150,25 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_hanging_edges", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dGetHangingEdges([In] int meshKernelId, [In][Out] IntPtr edges);
+
+        /// <summary>
+        /// Gets the curvilinear location closet to a specific coordinate.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="locationType">The location type</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_location_index", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetLocationIndex([In] int meshKernelId, 
+                                                          [In] double xCoordinate,
+                                                          [In] double yCoordinate,
+                                                          [In] int locationType,
+                                                          [In] ref BoundingBoxNative boundingBox,
+                                                          [In][Out] ref int locationIndex);
 
         /// <summary>
         /// Retrives the mesh boundary polygon

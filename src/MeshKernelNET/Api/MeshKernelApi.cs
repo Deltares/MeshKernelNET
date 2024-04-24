@@ -214,6 +214,60 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
+        public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId, 
+                                                                 xCoordinate, 
+                                                                 yCoordinate,
+                                                                 locationType,
+                                                                 ref boundingBoxNative, 
+                                                                 ref locationIndex); 
+            return exitCode;
+        }
+        public int CurvilinearGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
+                                                                 xCoordinate,
+                                                                 yCoordinate,
+                                                                 locationType,
+                                                                 ref boundingBoxNative,
+                                                                 ref locationIndex);
+            return exitCode;
+        }
+
+        public int CurvilinearGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
+                                                                 xCoordinate,
+                                                                 yCoordinate,
+                                                                 locationType,
+                                                                 ref boundingBoxNative,
+                                                                 ref locationIndex);
+            return exitCode;
+        }
+
         public int CurvilinearInitializeLineShift(int meshKernelId)
         {
             return MeshKernelDll.CurvilinearInitializeLineShift(meshKernelId);
@@ -861,6 +915,60 @@ namespace MeshKernelNET.Api
 
             Marshal.FreeCoTaskMem(hangingVerticesPtr);
 
+            return exitCode;
+        }
+
+        public int Mesh2dGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetEdgesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId, 
+                                                            xCoordinate,
+                                                            yCoordinate, 
+                                                            locationType, 
+                                                            ref boundingBoxNative, 
+                                                            ref locationIndex);
+            return exitCode;
+        }
+
+        public int Mesh2dGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
+                                                            xCoordinate,
+                                                            yCoordinate,
+                                                            locationType,
+                                                            ref boundingBoxNative,
+                                                            ref locationIndex);
+            return exitCode;
+        }
+
+        public int Mesh2dGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        {
+            int locationType = -1;
+            var exitCode = MeshKernelDll.GetNodesLocationType(ref locationType);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
+                                                            xCoordinate,
+                                                            yCoordinate,
+                                                            locationType,
+                                                            ref boundingBoxNative,
+                                                            ref locationIndex);
             return exitCode;
         }
 

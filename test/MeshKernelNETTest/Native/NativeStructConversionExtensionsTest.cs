@@ -89,6 +89,27 @@ namespace MeshKernelNETTest.Native
         }
 
         [Test]
+        public void GivenBoundingBox_ToBoundingBoxNative_ShouldCreateValidBoundingBoxNative()
+        {
+            //Arrange
+            var boundingBox = BoundingBox.CreateDefault();
+
+            // Act
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
+
+            // Assert
+            Assert.AreEqual(boundingBox.xLowerLeft, double.MinValue);
+            Assert.AreEqual(boundingBox.yLowerLeft, double.MinValue);
+            Assert.AreEqual(boundingBox.xUpperRight, double.MaxValue);
+            Assert.AreEqual(boundingBox.yUpperRight, double.MaxValue);
+
+            Assert.AreEqual(boundingBoxNative.xLowerLeft, double.MinValue);
+            Assert.AreEqual(boundingBoxNative.yLowerLeft, double.MinValue);
+            Assert.AreEqual(boundingBoxNative.xUpperRight, double.MaxValue);
+            Assert.AreEqual(boundingBoxNative.yUpperRight, double.MaxValue);
+        }
+
+        [Test]
         public void GivenAMultiPolygon_ToDisposableGeometryList_ShouldConvertToValidDisposableGeometryList()
         {
             //Arrange

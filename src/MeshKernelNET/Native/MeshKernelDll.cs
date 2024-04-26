@@ -833,6 +833,38 @@ namespace MeshKernelNET.Native
         internal static extern int GetProjectionSphericalAccurate([In][Out] ref int projection);
 
         /// <summary>
+        /// Gets an int indicating the interpolation type short
+        /// </summary>
+        /// <param name="projection">The int indicating the short type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_short", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeShort([In][Out] ref int type);
+
+        /// <summary>
+        /// Gets an int indicating the interpolation type float
+        /// </summary>
+        /// <param name="projection">The int indicating the interpolation type float type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_float", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeFloat([In][Out] ref int projection);
+
+        /// <summary>
+        /// Gets an int indicating the interpolation type int
+        /// </summary>
+        /// <param name="projection">The int indicating the interpolation type int</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_int", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeInt([In][Out] ref int projection);
+
+        /// <summary>
+        /// Gets an int indicating the interpolation type double
+        /// </summary>
+        /// <param name="projection">The int indicating the interpolation type double</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_double", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeDouble([In][Out] ref int projection);
+        
+        /// <summary>
         /// Get spline intermediate points
         /// </summary>
         /// <param name="geometryListNativeIn">The input corner nodes of the splines</param>

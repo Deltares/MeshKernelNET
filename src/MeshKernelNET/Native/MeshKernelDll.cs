@@ -939,6 +939,18 @@ namespace MeshKernelNET.Native
                                                            [In][MarshalAs(UnmanagedType.LPStr)] string zone);
 
         /// <summary>
+        /// Converts the projection of a mesh2d
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="xPointCoordinate">The new projection for the mesh</param>
+        /// <param name="yPointCoordinate">The UTM zone and information string</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_convert_to_curvilinear", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dConvertToCurvilinear([In] int meshKernelId,
+                                                              [In] double xPointCoordinate,
+                                                              [In] double yPointCoordinate);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

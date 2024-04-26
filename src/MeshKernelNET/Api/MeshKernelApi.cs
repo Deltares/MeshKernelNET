@@ -749,6 +749,15 @@ namespace MeshKernelNET.Api
                                                          zone);
         }
 
+        public int Mesh2dConvertCurvilinear([In] int meshKernelId,
+                                            [In] double xPointCoordinate,
+                                            [In] double yPointCoordinate)
+        {
+            return MeshKernelDll.Mesh2dConvertToCurvilinear(meshKernelId,
+                                                            xPointCoordinate,
+                                                            yPointCoordinate);
+        }
+
         public int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges)
         {
             return MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numEdges);

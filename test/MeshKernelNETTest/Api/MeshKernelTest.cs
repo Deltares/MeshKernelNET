@@ -2794,6 +2794,37 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        [Test]
+        public void Mesh2dConvertCurvilinearThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var curvilinearGrid = new DisposableCurvilinearGrid();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+
+                    api.Mesh2dConvertCurvilinear(id, 5, 5);
+
+                    // Get data of initial mesh
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.AreEqual((10, 10), (curvilinearGrid.NumM, curvilinearGrid.NumN));
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    curvilinearGrid?.Dispose();
+                }
+            }
+        }
+
+
     }
 
 }

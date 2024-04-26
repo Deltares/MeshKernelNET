@@ -827,6 +827,17 @@ namespace MeshKernelNET.Api
                                     [In] string zone);
 
         /// <summary>
+        /// Converts the projection of a mesh2d
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="xPointCoordinate">The x coordinate of the point identifying the face where to start the conversion</param>
+        /// <param name="yPointCoordinate">The y coordinate of the point identifying the face where to start the conversion</param>
+        /// <returns>Error code</returns>
+        int Mesh2dConvertCurvilinear([In] int meshKernelId,
+                                     [In] double xPointCoordinate,
+                                     [In] double yPointCoordinate);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

@@ -2803,6 +2803,7 @@ namespace MeshKernelNETTest.Api
             {
                 var id = 0;
                 var curvilinearGrid = new DisposableCurvilinearGrid();
+                var meshOut = new DisposableMesh2D();
                 try
                 {
                     id = api.AllocateState(0);
@@ -2812,19 +2813,22 @@ namespace MeshKernelNETTest.Api
 
                     api.Mesh2dConvertCurvilinear(id, 5, 5);
 
-                    // Get data of initial mesh
+                    // Get curvilinear grid data after conversion
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual((10, 10), (curvilinearGrid.NumM, curvilinearGrid.NumN));
+
+                    // Get mesh data after conversion
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    Assert.AreEqual(0, meshOut.NumNodes);
                 }
                 finally
                 {
                     api.DeallocateState(id);
                     curvilinearGrid?.Dispose();
+                    meshOut?.Dispose();
                 }
             }
         }
-
-
     }
 
 }

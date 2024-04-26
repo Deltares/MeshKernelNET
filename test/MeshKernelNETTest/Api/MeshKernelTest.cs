@@ -2295,14 +2295,82 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dRefineBasedOnGriddedSamplesThroughAPI()
+        public void Mesh2dRefineBasedOnFloatGriddedSamplesThroughAPI()
         {
             using (var api = new MeshKernelApi())
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
                 var id = 0;
                 DisposableMesh2D meshOut = null;
-                var griddedSamples = new DisposableGriddedSamples();
+                var griddedSamples = new DisposableGriddedSamples<float>();
+                try
+                {
+                    // Setup
+                    id = api.AllocateState(0);
+
+                    var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
+
+                    griddedSamples.NumX = 6;
+                    griddedSamples.NumY = 7;
+
+                    double coordinate = -50.0;
+                    var dx = 100.0;
+                    griddedSamples.CoordinatesX = new double[griddedSamples.NumX];
+                    for (var i = 0; i < griddedSamples.NumX; i++)
+                    {
+                        griddedSamples.CoordinatesX[i] = coordinate + (i * dx);
+                    }
+
+                    coordinate = -50.0;
+                    var dy = 100.0;
+                    griddedSamples.CoordinatesY = new double[griddedSamples.NumY];
+                    for (var i = 0; i < griddedSamples.NumY; ++i)
+                    {
+                        griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
+                    }
+                    
+                    griddedSamples.Values = new float[griddedSamples.NumY * griddedSamples.NumX];
+                    for (var i = 0; i < griddedSamples.Values.Length; ++i)
+                    {
+
+                        griddedSamples.Values[i] = -0.05f;
+                    }
+                    // Set the interpolation type to double
+                    int interpolationType = -1;
+                    Assert.AreEqual(0, api.GetInterpolationTypeFloat(ref interpolationType));
+                    griddedSamples.ValueType = interpolationType;
+
+                    
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    // Execute
+                    Assert.AreEqual(0, api.Mesh2dRefineBasedOnGriddedSamples(id,
+                                                                             griddedSamples,
+                                                                             meshRefinementParameters,
+                                                                             true));
+                    meshOut = new DisposableMesh2D();
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    // Assert
+                    Assert.NotNull(meshOut);
+                    Assert.AreEqual(16, meshOut.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshOut?.Dispose();
+                    griddedSamples.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dRefineBasedOnDoubleGriddedSamplesThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            {
+                var id = 0;
+                DisposableMesh2D meshOut = null;
+                var griddedSamples = new DisposableGriddedSamples<double>();
                 try
                 {
                     // Setup
@@ -2329,11 +2397,17 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
+                    
                     griddedSamples.Values = new double[griddedSamples.NumY * griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
+
                         griddedSamples.Values[i] = -0.05;
                     }
+                    // Set the interpolation type to float
+                    int interpolationType = -1;
+                    Assert.AreEqual(0, api.GetInterpolationTypeDouble(ref interpolationType));
+                    griddedSamples.ValueType = interpolationType;
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute

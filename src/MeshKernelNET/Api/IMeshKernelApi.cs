@@ -1351,10 +1351,10 @@ namespace MeshKernelNET.Api
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                              in DisposableGriddedSamples griddedSamplesNative,
-                                              in MeshRefinementParameters meshRefinementParameters,
-                                              bool useNodalRefinement);
+        int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                 in DisposableGriddedSamples<T> griddedSamplesNative,
+                                                 in MeshRefinementParameters meshRefinementParameters,
+                                                 bool useNodalRefinement);
 
         /// <summary>
         /// Refines a grid based on polygon

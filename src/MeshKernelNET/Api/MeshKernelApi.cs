@@ -1277,8 +1277,8 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dPrepareOuterIterationOrthogonalization(meshKernelId);
         }
 
-        public int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                                     in DisposableGriddedSamples griddedSamples,
+        public int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                     in DisposableGriddedSamples<T> griddedSamples,
                                                      in MeshRefinementParameters meshRefinementParameters,
                                                      bool useNodalRefinement)
         {

@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableGriddedSamples : DisposableNativeObject<GriddedSamplesNative>
+    public sealed class DisposableGriddedSamples<T> : DisposableNativeObject<GriddedSamplesNative>  
     {
         [ProtoMember(1)]
         private int numX;
@@ -28,7 +28,7 @@ namespace MeshKernelNET.Api
         private double[] coordinatesY;
 
         [ProtoMember(8)]
-        private double[] values;
+        private T[] values;
 
         [ProtoMember(9)]
         private int valueType;
@@ -43,7 +43,7 @@ namespace MeshKernelNET.Api
             numY = nY;
             originX = orgX;
             originY = orgY;
-            values = new double[numX * numY];
+            values = new T[numX * numY];
             valueType = orgValueType;
         }
 
@@ -94,7 +94,7 @@ namespace MeshKernelNET.Api
             set { coordinatesY = value; }
         }
 
-        public double[] Values
+        public T[] Values
         {
             get { return values; }
             set { values = value; }
@@ -116,7 +116,7 @@ namespace MeshKernelNET.Api
             nativeObject.coordinates_x = GetPinnedObjectPointer(coordinatesX);
             nativeObject.coordinates_y = GetPinnedObjectPointer(coordinatesY);
             nativeObject.values = GetPinnedObjectPointer(values);
-            nativeObject.values = GetPinnedObjectPointer(values);
+            nativeObject.value_type = valueType;
         }
     }
 }

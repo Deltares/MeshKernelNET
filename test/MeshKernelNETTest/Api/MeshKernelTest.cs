@@ -1633,6 +1633,61 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void GetInterpolationTypeShortThroughApi()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int type = -1;
+                Assert.AreEqual(0, api.GetInterpolationTypeShort(ref type));
+                // Assert
+                Assert.AreEqual(0, type);
+            }
+        }
+
+
+
+        [Test]
+        public void GetInterpolationTypeFloatThroughApi()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int type = -1;
+                Assert.AreEqual(0, api.GetInterpolationTypeFloat(ref type));
+                // Assert
+                Assert.AreEqual(1, type);
+            }
+        }
+
+        [Test]
+        public void GetInterpolationTypeIntThroughApi()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int type = -1;
+                Assert.AreEqual(0, api.GetInterpolationTypeInt(ref type));
+                // Assert
+                Assert.AreEqual(2, type);
+            }
+        }
+
+        [Test]
+        public void GetInterpolationTypeDouble()
+        {
+            using (var api = new MeshKernelApi())
+            {
+                // Execute
+                int type = -1;
+                Assert.AreEqual(0, api.GetInterpolationTypeDouble(ref type));
+                // Assert
+                Assert.AreEqual(3, type);
+            }
+        }
+
+
+        [Test]
         public void GetVersionThroughAPI()
         {
             using (var api = new MeshKernelApi())

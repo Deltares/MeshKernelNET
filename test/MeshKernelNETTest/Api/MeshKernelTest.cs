@@ -2700,29 +2700,33 @@ namespace MeshKernelNETTest.Api
 
 
 
-        [Test]
-        public void CurvilinearGetEdgeLocationIndexThroughApi()
+        [TestCase(20.0,16.0,6)]
+        [TestCase(20.0,23.0,10)]
+        [TestCase(17.0,20.0,19)]
+        [TestCase(24.0,20.0,20)]
+        public void CurvilinearGetEdgeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
-            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
                     id = api.AllocateState(0);
-
-                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+                    var square = new MakeGridParameters()
+                    {
+                        NumberOfColumns = 3,
+                        NumberOfRows = 3,
+                        XGridBlockSize = 10,
+                        YGridBlockSize = 10
+                    };
+                    api.CurvilinearComputeRectangularGrid(id, square);
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
-                    int locationIndex = -1;
-                    api.CurvilinearGetEdgeLocationIndex(id,
-                                                        20.0,
-                                                        20.0,
-                                                        boundingBox,
-                                                        ref locationIndex);
+                    int actualIndex = -1;
+                    api.CurvilinearGetEdgeLocationIndex(id, x, y, boundingBox, ref actualIndex);
 
-                    Assert.AreEqual(locationIndex, 4);
+                    Assert.That(actualIndex, Is.EqualTo(expectedIndex));
                 }
                 finally
                 {
@@ -2763,8 +2767,12 @@ namespace MeshKernelNETTest.Api
         }
 
 
-        [Test]
-        public void CurvilinearGetNodeLocationIndexThroughApi()
+        [TestCase(20.0,20.0,10)]
+        [TestCase(20.5,23,10)]
+        [TestCase(15.5,20.0,10)]
+        [TestCase(30.7,40.7,15)]
+        [TestCase(29.7,29.7,15)]
+        public void CurvilinearGetNodeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
             using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
@@ -2779,13 +2787,11 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetNodeLocationIndex(id,
-                                                        20.0,
-                                                        20.0,
+                    api.CurvilinearGetNodeLocationIndex(id,x,y,
                                                         boundingBox,
                                                         ref locationIndex);
 
-                    Assert.AreEqual(locationIndex, 4);
+                    Assert.That(locationIndex,Is.EqualTo(expectedIndex));
                 }
                 finally
                 {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GeoAPI.Geometries;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 
@@ -1044,47 +1046,52 @@ namespace MeshKernelNETTest.Api
         {
             CreateGrid(5,4,1.0,1.0,1.0,1.0);
 
-            (double x, double y)[] expectedVertices = { 
+            (double x, double y)[] expectedVertices_5x4 = { 
                 (1, 1), (2, 1), (3, 1), (4, 1),  // 0 - 3
                 (1, 2), (2, 2), (3, 2), (4, 2),  // 4 - 7
                 (1, 3), (2, 3), (3, 3), (4, 3),  // 8 - 11
                 (1, 4), (2, 4), (3, 4), (4, 4),  // 12 - 15
                 (1, 5), (2, 5), (3, 5), (4, 5) }; // 16 - 19
-            
-            Assert.That(vertices,Is.EquivalentTo(expectedVertices));
+
+            Assert.That(vertices,Is.EquivalentTo(expectedVertices_5x4));
         }
 
+        private void AssertThatPointIsCloseToExpectedVertex(double x, double y, int expectedIndex)
+        {
+            // Check that point is closest to expected vertex
+            Coordinate vertex = new Coordinate(vertices[expectedIndex].x, vertices[expectedIndex].y);
+            Coordinate point = new Coordinate(x, y);
+            Assert.That(vertex.Distance(point),Is.LessThan(Math.Sqrt(0.5*0.5 + 0.5*0.5)));
+        }
+        
         [TestCase(1.0,1.0, 0)]
-        [TestCase(2.0,2.0, 5)]
-        [TestCase(3.0,3.0, 10)]
+        [TestCase(.99, .95, 0)]  // slightly below and left of vertex (outside mesh perimeter)
+        [TestCase(1.01,1.01, 0)] // slightly above and right of vertex
+        
+        [TestCase(2.0,2.0, 5)]    // on vertex
+        [TestCase(1.97,1.999, 5)] // slightly below and left of vertex
+        [TestCase(2.01,2.01, 5)]  // slightly above and right of vertex
+        
         [TestCase(4.0,4.0, 15)]
+        [TestCase(4.01,3.99, 15)] // slightly below and right of vertex (outside mesh perimeter)
+        [TestCase(3.99,4.04, 15)] // slightly above and right of vertex
         
         [TestCase(4.0,1.0,3)]
+        [TestCase(3.99,0.99,3)] // slightly below and left of vertex (outside mesh perimeter)
+        [TestCase(4.01,1.01,3)] // slightly above and right of vertex (outside mesh perimeter)
+
         [TestCase(1.0,5.0,16)]
+        [TestCase(1.01,5.01,16)] // slightly above and right of vertex (outside mesh perimeter)
+        [TestCase(0.99,4.99,16)] // slightly below and left of vertex (outside mesh perimeter)
+        
         [TestCase(4.0,5.0,19)]
-
-        // slightly above and right of vertex
-        [TestCase(1.01,1.01, 0)]
-        [TestCase(2.01,2.01, 5)]
-        [TestCase(3.01,3.01, 10)]
-        [TestCase(4.01,4.01, 15)]
-        
-        [TestCase(4.01,1.01,3)]
-        [TestCase(1.01,5.01,16)]
-        [TestCase(4.01,5.01,19)]
-
-        // slightly below and left of vertex
-        [TestCase(.99, .95, 0)]
-        [TestCase(1.97,1.999, 5)]
-        [TestCase(2.9501, 2.99, 10)]
-        [TestCase(3.99,3.99, 15)]
-        
-        [TestCase(3.99,0.99,3)]
-        [TestCase(0.99,4.99,16)]
-        [TestCase(3.99,4.99,19)]
+        [TestCase(4.01,5.01,19)] // slightly above and right of vertex (outside mesh perimeter)
+        [TestCase(3.99,4.99,19)] // slightly below and left of vertex (outside mesh perimeter)
         public void CurvilinearGetNodeLocationIndex_AtOrCloseToVertexPositionFindsNearest(double x, double y, int expectedIndex)
         {
-            CreateGrid(6,5,1.0,1.0,1.0,1.0);
+            // Setup
+            CreateGrid(5,4,1.0,1.0,1.0,1.0);
+            AssertThatPointIsCloseToExpectedVertex(x,y,expectedIndex);
             
             // Call
             var box = new BoundingBox() // box around grid with 1.0 margin
@@ -1098,7 +1105,6 @@ namespace MeshKernelNETTest.Api
             int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
 
             // Assert
-            Assert.That(returnCode,Is.EqualTo(0));
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));
         }
 
@@ -1118,7 +1124,9 @@ namespace MeshKernelNETTest.Api
         [TestCase(3.0,3.4)]
         public void CurvilinearGetNodeLocationIndex_OnOrInBoundingBox_FindsNearest(double x, double y)
         {
-            CreateGrid(6,5,1.0,1.0,1.0,1.0);
+            const int expectedIndex = 10;
+            CreateGrid(5,4,1.0,1.0,1.0,1.0);
+            AssertThatPointIsCloseToExpectedVertex(x, y, expectedIndex);
             
             // Call
             var box = new BoundingBox() // box (w=0.8,h=0.8) around point (3,3) index 10
@@ -1132,18 +1140,25 @@ namespace MeshKernelNETTest.Api
             int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
 
             // Assert
-            Assert.That(returnCode,Is.EqualTo(0));
-            Assert.That(actualIndex,Is.EqualTo(10));
+            Assert.That(actualIndex,Is.EqualTo(expectedIndex));
         }
 
-        [TestCase(2.6,3.0)]
-        [TestCase(3.4,3.0)]
-        [TestCase(3.0,2.6)]
-        [TestCase(3.0,3.4)]
-        public void CurvilinearGetNodeLocationIndex_OutsideBoundingBox_DoesNotFindNearest(double x, double y)
+        // close to 10
+        [TestCase(3.4,3.0,10,10)]
+        [TestCase(3.0,3.4,10,10)]
+        [TestCase(2.6,3.0,10,10)]
+        [TestCase(3.0,2.6,10,10)]
+
+        // not close to 10
+        [TestCase(3.9,3.0,11,10)]
+        [TestCase(3.0,3.9,14,10)]
+        [TestCase(2.1,3.0,9,10)]
+        [TestCase(3.0,2.1,6,10)]
+        public void CurvilinearGetNodeLocationIndex_DoesNotFindNearest_OutsideBoundingBox(double x, double y, int closeToIndex, int expectedIndex)
         {
-            CreateGrid(6,5,1.0,1.0,1.0,1.0);
-            
+            CreateGrid(5,4,1.0,1.0,1.0,1.0);
+            AssertThatPointIsCloseToExpectedVertex(x, y, closeToIndex);
+
             // Call
             var box = new BoundingBox() // box (w=0.4,h=0.4) around point (3,3) index 10
             {
@@ -1156,8 +1171,8 @@ namespace MeshKernelNETTest.Api
             int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
 
             // Assert
-            Assert.That(returnCode,Is.Not.EqualTo(0)); // not a 0 return code?
-            Assert.That(actualIndex,Is.EqualTo(-1));
+            Assert.That(actualIndex,Is.EqualTo(expectedIndex));
         }
+        
     }
 }

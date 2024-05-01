@@ -1017,6 +1017,15 @@ namespace MeshKernelNETTest.Api
             api = new MeshKernelApi();
             id = api.AllocateState(0);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            api.DeallocateState(id);
+            api.Dispose();
+            api = null;
+        }
+        
         private void CreateGrid(int nx, int ny, double x0, double y0, double dx, double dy)
         {
             MakeGridParameters makeGridParameters = new MakeGridParameters()

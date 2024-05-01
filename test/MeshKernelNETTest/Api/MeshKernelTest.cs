@@ -2707,15 +2707,20 @@ namespace MeshKernelNETTest.Api
         public void CurvilinearGetEdgeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
-            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
                     id = api.AllocateState(0);
-
-                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+                    var square = new MakeGridParameters()
+                    {
+                        NumberOfColumns = 3,
+                        NumberOfRows = 3,
+                        XGridBlockSize = 10,
+                        YGridBlockSize = 10
+                    };
+                    api.CurvilinearComputeRectangularGrid(id, square);
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int actualIndex = -1;

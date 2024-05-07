@@ -217,7 +217,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            var exitCode = MeshKernelDll.GetEdgesLocationType(ref locationType);
             if (exitCode != 0)
             {
                 return exitCode;
@@ -253,7 +253,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            var exitCode = MeshKernelDll.GetNodesLocationType(ref locationType);
             if (exitCode != 0)
             {
                 return exitCode;

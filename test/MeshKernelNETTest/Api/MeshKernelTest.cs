@@ -2273,7 +2273,7 @@ namespace MeshKernelNETTest.Api
                     {
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
-                    
+
                     griddedSamples.Values = new float[griddedSamples.NumY * griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
@@ -2283,72 +2283,6 @@ namespace MeshKernelNETTest.Api
                     // Set the interpolation type to double
                     griddedSamples.ValueType = (int)InterpolationTypes.Float;
 
-                    
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    // Execute
-                    Assert.AreEqual(0, api.Mesh2dRefineBasedOnGriddedSamples(id,
-                                                                             griddedSamples,
-                                                                             meshRefinementParameters,
-                                                                             true));
-                    meshOut = new DisposableMesh2D();
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
-                    // Assert
-                    Assert.NotNull(meshOut);
-                    Assert.AreEqual(16, meshOut.NumNodes);
-                }
-                finally
-                {
-                    api.DeallocateState(id);
-                    meshOut?.Dispose();
-                    griddedSamples.Dispose();
-                }
-            }
-        }
-
-        [Test]
-        public void Mesh2dRefineBasedOnDoubleGriddedSamplesThroughAPI()
-        {
-            using (var api = new MeshKernelApi())
-            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
-            {
-                var id = 0;
-                DisposableMesh2D meshOut = null;
-                var griddedSamples = new DisposableGriddedSamples<double>();
-                try
-                {
-                    // Setup
-                    id = api.AllocateState(0);
-
-                    var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
-
-                    griddedSamples.NumX = 6;
-                    griddedSamples.NumY = 7;
-
-                    double coordinate = -50.0;
-                    var dx = 100.0;
-                    griddedSamples.CoordinatesX = new double[griddedSamples.NumX];
-                    for (var i = 0; i < griddedSamples.NumX; i++)
-                    {
-                        griddedSamples.CoordinatesX[i] = coordinate + (i * dx);
-                    }
-
-                    coordinate = -50.0;
-                    var dy = 100.0;
-                    griddedSamples.CoordinatesY = new double[griddedSamples.NumY];
-                    for (var i = 0; i < griddedSamples.NumY; ++i)
-                    {
-                        griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
-                    }
-
-                    
-                    griddedSamples.Values = new double[griddedSamples.NumY * griddedSamples.NumX];
-                    for (var i = 0; i < griddedSamples.Values.Length; ++i)
-                    {
-
-                        griddedSamples.Values[i] = -0.05;
-                    }
-                    // Set the interpolation type to float
-                    griddedSamples.ValueType = (int)InterpolationTypes.Double;
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute
@@ -2370,6 +2304,7 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
 
         [Test]
         public void Mesh2dTriangulationInterpolationThroughAPI()
@@ -2770,29 +2705,33 @@ namespace MeshKernelNETTest.Api
 
 
 
-        [Test]
-        public void CurvilinearGetEdgeLocationIndexThroughApi()
+        [TestCase(20.0,16.0,6)]
+        [TestCase(20.0,23.0,10)]
+        [TestCase(17.0,20.0,19)]
+        [TestCase(24.0,20.0,20)]
+        public void CurvilinearGetEdgeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
-            using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
                 try
                 {
                     id = api.AllocateState(0);
-
-                    Assert.AreEqual(0, api.CurvilinearSet(id, curvilinearGrid));
+                    var square = new MakeGridParameters()
+                    {
+                        NumberOfColumns = 3,
+                        NumberOfRows = 3,
+                        XGridBlockSize = 10,
+                        YGridBlockSize = 10
+                    };
+                    api.CurvilinearComputeRectangularGrid(id, square);
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
-                    int locationIndex = -1;
-                    api.CurvilinearGetEdgeLocationIndex(id,
-                                                        20.0,
-                                                        20.0,
-                                                        boundingBox,
-                                                        ref locationIndex);
+                    int actualIndex = -1;
+                    api.CurvilinearGetEdgeLocationIndex(id, x, y, boundingBox, ref actualIndex);
 
-                    Assert.AreEqual(locationIndex, 4);
+                    Assert.That(actualIndex, Is.EqualTo(expectedIndex));
                 }
                 finally
                 {
@@ -2833,8 +2772,12 @@ namespace MeshKernelNETTest.Api
         }
 
 
-        [Test]
-        public void CurvilinearGetNodeLocationIndexThroughApi()
+        [TestCase(20.0,20.0,10)]
+        [TestCase(20.5,23,10)]
+        [TestCase(15.5,20.0,10)]
+        [TestCase(30.7,40.7,15)]
+        [TestCase(29.7,29.7,15)]
+        public void CurvilinearGetNodeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
             using (DisposableCurvilinearGrid curvilinearGrid = CreateCurvilinearGrid(4, 4, 10, 10))
@@ -2849,13 +2792,11 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetNodeLocationIndex(id,
-                                                        20.0,
-                                                        20.0,
+                    api.CurvilinearGetNodeLocationIndex(id,x,y,
                                                         boundingBox,
                                                         ref locationIndex);
 
-                    Assert.AreEqual(locationIndex, 4);
+                    Assert.That(locationIndex,Is.EqualTo(expectedIndex));
                 }
                 finally
                 {

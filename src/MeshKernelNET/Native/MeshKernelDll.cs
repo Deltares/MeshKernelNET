@@ -833,6 +833,14 @@ namespace MeshKernelNET.Native
         internal static extern int GetProjectionSphericalAccurate([In][Out] ref int projection);
 
         /// <summary>
+        /// Gets an integer indicating the interpolation type double
+        /// </summary>
+        /// <param name="type">The integer indicating the interpolation type double</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_double", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeDouble([In][Out] ref int type);
+        
+        /// <summary>
         /// Get spline intermediate points
         /// </summary>
         /// <param name="geometryListNativeIn">The input corner nodes of the splines</param>

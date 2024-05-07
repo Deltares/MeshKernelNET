@@ -2240,14 +2240,14 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dRefineBasedOnGriddedSamplesThroughAPI()
+        public void Mesh2dRefineBasedOnFloatGriddedSamplesThroughAPI()
         {
             using (var api = new MeshKernelApi())
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
                 var id = 0;
                 DisposableMesh2D meshOut = null;
-                var griddedSamples = new DisposableGriddedSamples();
+                var griddedSamples = new DisposableGriddedSamples<float>();
                 try
                 {
                     // Setup
@@ -2274,11 +2274,15 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
-                    griddedSamples.Values = new double[griddedSamples.NumY * griddedSamples.NumX];
+                    griddedSamples.Values = new float[griddedSamples.NumY * griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
-                        griddedSamples.Values[i] = -0.05;
+
+                        griddedSamples.Values[i] = -0.05f;
                     }
+                    // Set the interpolation type to double
+                    griddedSamples.ValueType = (int)InterpolationTypes.Float;
+
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute
@@ -2300,6 +2304,7 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
 
         [Test]
         public void Mesh2dTriangulationInterpolationThroughAPI()

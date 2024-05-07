@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableGriddedSamples : DisposableNativeObject<GriddedSamplesNative>
+    public sealed class DisposableGriddedSamples<T> : DisposableNativeObject<GriddedSamplesNative>  
     {
         [ProtoMember(1)]
         private int numX;
@@ -28,27 +28,23 @@ namespace MeshKernelNET.Api
         private double[] coordinatesY;
 
         [ProtoMember(8)]
-        private double[] values;
+        private T[] values;
 
         [ProtoMember(9)]
-        private double upperRightX;
-
-        [ProtoMember(10)]
-        private double upperRightY;
+        private int valueType;
 
         public DisposableGriddedSamples()
         {
         }
 
-        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double upperRX, double upperRY)
+        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, int orgValueType)
         {
             numX = nX;
             numY = nY;
             originX = orgX;
             originY = orgY;
-            upperRightX = upperRX;
-            upperRightY = upperRY;
-            values = new double[numX * numY];
+            values = new T[numX * numY];
+            valueType = orgValueType;
         }
 
         ~DisposableGriddedSamples()
@@ -98,22 +94,16 @@ namespace MeshKernelNET.Api
             set { coordinatesY = value; }
         }
 
-        public double[] Values
+        public T[] Values
         {
             get { return values; }
             set { values = value; }
         }
 
-        public double UpperRightX
+        public int ValueType
         {
-            get { return upperRightX; }
-            set { upperRightX = value; }
-        }
-
-        public double UpperRightY
-        {
-            get { return upperRightY; }
-            set { upperRightY = value; }
+            get { return valueType; }
+            set { valueType = value; }
         }
 
         protected override void SetNativeObject(ref GriddedSamplesNative nativeObject)
@@ -126,8 +116,7 @@ namespace MeshKernelNET.Api
             nativeObject.coordinates_x = GetPinnedObjectPointer(coordinatesX);
             nativeObject.coordinates_y = GetPinnedObjectPointer(coordinatesY);
             nativeObject.values = GetPinnedObjectPointer(values);
-            nativeObject.upper_right_x = upperRightX;
-            nativeObject.upper_right_y = upperRightY;
+            nativeObject.value_type = valueType;
         }
     }
 }

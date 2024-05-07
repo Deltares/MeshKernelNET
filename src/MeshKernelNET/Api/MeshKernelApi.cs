@@ -643,26 +643,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetProjectionSphericalAccurate(ref projection);
         }
 
-        public int GetInterpolationTypeShort(ref int type)
-        {
-            return MeshKernelDll.GetInterpolationTypeShort(ref type);
-        }
-
-        public int GetInterpolationTypeFloat(ref int type)
-        {
-            return MeshKernelDll.GetInterpolationTypeFloat(ref type);
-        }
-
-        public int GetInterpolationTypeInt(ref int type)
-        {
-            return MeshKernelDll.GetInterpolationTypeInt(ref type);
-        }
-
-        public int GetInterpolationTypeDouble(ref int type)
-        {
-            return MeshKernelDll.GetInterpolationTypeDouble(ref type);
-        }
-
         public int GetSplines(in DisposableGeometryList disposableGeometryListIn, ref DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices)
         {
             GeometryListNative nativeGeometryListIn = disposableGeometryListIn.CreateNativeObject();

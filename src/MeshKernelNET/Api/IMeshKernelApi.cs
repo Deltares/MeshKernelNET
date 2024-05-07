@@ -739,34 +739,6 @@ namespace MeshKernelNET.Api
         int GetProjectionSphericalAccurate(ref int projection);
 
         /// <summary>
-        /// Gets an integer indicating the interpolation type short
-        /// </summary>
-        /// <param name="type">The integer indicating the interpolation type short</param>
-        /// <returns>Error code</returns>
-        int GetInterpolationTypeShort(ref int type);
-
-        /// <summary>
-        /// Gets an integer indicating the interpolation type float
-        /// </summary>
-        /// <param name="type">he integer indicating the interpolation type float</param>
-        /// <returns>Error code</returns>
-        int GetInterpolationTypeFloat(ref int type);
-
-        /// <summary>
-        /// Gets an integer indicating the interpolation type int
-        /// </summary>
-        /// <param name="type">The integer indicating the interpolation type int</param>
-        /// <returns>Error code</returns>
-        int GetInterpolationTypeInt(ref int type);
-
-        /// <summary>
-        /// Gets an integer indicating the interpolation type double
-        /// </summary>
-        /// <param name="type">The integer indicating the interpolation type double</param>
-        /// <returns>Error code</returns>
-        int GetInterpolationTypeDouble(ref int type);
-
-        /// <summary>
         /// Get spline intermediate points
         /// </summary>
         /// <param name="disposableGeometryListIn">The input corner vertices of the splines</param>

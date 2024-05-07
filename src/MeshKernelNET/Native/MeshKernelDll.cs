@@ -833,30 +833,6 @@ namespace MeshKernelNET.Native
         internal static extern int GetProjectionSphericalAccurate([In][Out] ref int projection);
 
         /// <summary>
-        /// Gets an integer indicating the interpolation type short
-        /// </summary>
-        /// <param name="type">The integer indicating the interpolation type short</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_short", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetInterpolationTypeShort([In][Out] ref int type);
-
-        /// <summary>
-        /// Gets an integer indicating the interpolation type float
-        /// </summary>
-        /// <param name="type">he integer indicating the interpolation type float</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_float", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetInterpolationTypeFloat([In][Out] ref int type);
-
-        /// <summary>
-        /// Gets an integer indicating the interpolation type int
-        /// </summary>
-        /// <param name="type">The integer indicating the interpolation type int</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_int", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int GetInterpolationTypeInt([In][Out] ref int type);
-
-        /// <summary>
         /// Gets an integer indicating the interpolation type double
         /// </summary>
         /// <param name="type">The integer indicating the interpolation type double</param>

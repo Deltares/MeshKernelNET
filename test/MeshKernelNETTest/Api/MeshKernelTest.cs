@@ -1633,61 +1633,6 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void GetInterpolationTypeShortThroughApi()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int type = -1;
-                Assert.AreEqual(0, api.GetInterpolationTypeShort(ref type));
-                // Assert
-                Assert.AreEqual(0, type);
-            }
-        }
-
-
-
-        [Test]
-        public void GetInterpolationTypeFloatThroughApi()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int type = -1;
-                Assert.AreEqual(0, api.GetInterpolationTypeFloat(ref type));
-                // Assert
-                Assert.AreEqual(1, type);
-            }
-        }
-
-        [Test]
-        public void GetInterpolationTypeIntThroughApi()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int type = -1;
-                Assert.AreEqual(0, api.GetInterpolationTypeInt(ref type));
-                // Assert
-                Assert.AreEqual(2, type);
-            }
-        }
-
-        [Test]
-        public void GetInterpolationTypeDouble()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int type = -1;
-                Assert.AreEqual(0, api.GetInterpolationTypeDouble(ref type));
-                // Assert
-                Assert.AreEqual(3, type);
-            }
-        }
-
-
-        [Test]
         public void GetVersionThroughAPI()
         {
             using (var api = new MeshKernelApi())
@@ -2336,9 +2281,7 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.Values[i] = -0.05f;
                     }
                     // Set the interpolation type to double
-                    int interpolationType = -1;
-                    Assert.AreEqual(0, api.GetInterpolationTypeFloat(ref interpolationType));
-                    griddedSamples.ValueType = interpolationType;
+                    griddedSamples.ValueType = (int)InterpolationTypes.Float;
 
                     
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
@@ -2405,9 +2348,7 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.Values[i] = -0.05;
                     }
                     // Set the interpolation type to float
-                    int interpolationType = -1;
-                    Assert.AreEqual(0, api.GetInterpolationTypeDouble(ref interpolationType));
-                    griddedSamples.ValueType = interpolationType;
+                    griddedSamples.ValueType = (int)InterpolationTypes.Double;
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute

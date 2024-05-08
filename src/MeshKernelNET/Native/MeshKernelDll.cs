@@ -833,6 +833,14 @@ namespace MeshKernelNET.Native
         internal static extern int GetProjectionSphericalAccurate([In][Out] ref int projection);
 
         /// <summary>
+        /// Gets an integer indicating the interpolation type double
+        /// </summary>
+        /// <param name="type">The integer indicating the interpolation type double</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_double", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetInterpolationTypeDouble([In][Out] ref int type);
+        
+        /// <summary>
         /// Get spline intermediate points
         /// </summary>
         /// <param name="geometryListNativeIn">The input corner nodes of the splines</param>
@@ -937,6 +945,18 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dConvertProjection([In] int meshKernelId,
                                                            [In] int projection,
                                                            [In][MarshalAs(UnmanagedType.LPStr)] string zone);
+
+        /// <summary>
+        /// Converts the projection of a mesh2d
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="startingFaceCoordinateX">The x coordinate of the point identifying the face where to start the conversion</param>
+        /// <param name="startingFaceCoordinateY">The y coordinate of the point identifying the face where to start the conversion</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_convert_to_curvilinear", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dConvertToCurvilinear([In] int meshKernelId,
+                                                              [In] double startingFaceCoordinateX,
+                                                              [In] double startingFaceCoordinateY);
 
         /// <summary>
         /// Count the number of hanging edges in a mesh2d.

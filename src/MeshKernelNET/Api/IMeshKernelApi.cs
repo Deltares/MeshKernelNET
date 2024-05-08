@@ -827,6 +827,18 @@ namespace MeshKernelNET.Api
                                     [In] string zone);
 
         /// <summary>
+        /// Converts a mesh into a curvilinear grid, with the grid expanding outward from a specified starting point.
+        /// This function enables the conversion of a portion of the mesh based on the chosen starting coordinate.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="startingFaceCoordinateX">The x coordinate of the point identifying the face where to start the conversion</param>
+        /// <param name="startingFaceCoordinateY">The y coordinate of the point identifying the face where to start the conversion</param>
+        /// <returns>Error code</returns>
+        int Mesh2dConvertCurvilinear([In] int meshKernelId,
+                                     [In] double startingFaceCoordinateX,
+                                     [In] double startingFaceCoordinateY);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -1312,10 +1324,10 @@ namespace MeshKernelNET.Api
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                              in DisposableGriddedSamples griddedSamplesNative,
-                                              in MeshRefinementParameters meshRefinementParameters,
-                                              bool useNodalRefinement);
+        int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                 in DisposableGriddedSamples<T> griddedSamplesNative,
+                                                 in MeshRefinementParameters meshRefinementParameters,
+                                                 bool useNodalRefinement);
 
         /// <summary>
         /// Refines a grid based on polygon

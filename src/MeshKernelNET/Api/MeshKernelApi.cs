@@ -217,7 +217,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            var exitCode = MeshKernelDll.GetEdgesLocationType(ref locationType);
             if (exitCode != 0)
             {
                 return exitCode;
@@ -253,7 +253,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
+            var exitCode = MeshKernelDll.GetNodesLocationType(ref locationType);
             if (exitCode != 0)
             {
                 return exitCode;
@@ -747,6 +747,15 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dConvertProjection(meshKernelId,
                                                          (int)projection,
                                                          zone);
+        }
+
+        public int Mesh2dConvertCurvilinear([In] int meshKernelId,
+                                            [In] double startingFaceCoordinateX,
+                                            [In] double startingFaceCoordinateY)
+        {
+            return MeshKernelDll.Mesh2dConvertToCurvilinear(meshKernelId,
+                                                            startingFaceCoordinateX,
+                                                            startingFaceCoordinateY);
         }
 
         public int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges)
@@ -1248,8 +1257,8 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dPrepareOuterIterationOrthogonalization(meshKernelId);
         }
 
-        public int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                                     in DisposableGriddedSamples griddedSamples,
+        public int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                     in DisposableGriddedSamples<T> griddedSamples,
                                                      in MeshRefinementParameters meshRefinementParameters,
                                                      bool useNodalRefinement)
         {

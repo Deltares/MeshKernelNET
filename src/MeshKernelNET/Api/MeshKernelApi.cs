@@ -750,12 +750,12 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dConvertCurvilinear([In] int meshKernelId,
-                                            [In] double xPointCoordinate,
-                                            [In] double yPointCoordinate)
+                                            [In] double startingFaceCoordinateX,
+                                            [In] double startingFaceCoordinateY)
         {
             return MeshKernelDll.Mesh2dConvertToCurvilinear(meshKernelId,
-                                                            xPointCoordinate,
-                                                            yPointCoordinate);
+                                                            startingFaceCoordinateX,
+                                                            startingFaceCoordinateY);
         }
 
         public int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges)

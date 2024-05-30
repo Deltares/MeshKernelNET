@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
 		<id>MeshKernelNET</id>
-		<version>4.1.0</version>
+		<version>4.2.0</version>
 		<title>Deltares meshing library</title>
 		<authors>Deltares</authors>
 		<owners>Deltares</owners>
@@ -10,7 +10,7 @@
 		<description>This is a package containing a managed dll wrapping around the native dll of MeshKernel. This native dll is a library containing functionality to generate and edit 1D, 2D meshes.</description>
 		<copyright>Deltares</copyright>
 		<dependencies>
-			<dependency id="NetTopologySuite" version="1.15.0"/>
+			<dependency id="NetTopologySuite" version="1.15.0" />
 		</dependencies>
 	</metadata>
 	<files>

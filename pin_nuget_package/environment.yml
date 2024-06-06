@@ -1,5 +1,0 @@
-name: pin_nuget_package
-
-dependencies:
-  - python=3.10
-  - requests

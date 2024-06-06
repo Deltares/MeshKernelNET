@@ -1,0 +1,4 @@
+name: update_nuget_package
+
+dependencies:
+  - python=3.10

@@ -2247,7 +2247,7 @@ namespace MeshKernelNETTest.Api
             {
                 var id = 0;
                 DisposableMesh2D meshOut = null;
-                var griddedSamples = new DisposableGriddedSamples<float>();
+                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
                 try
                 {
                     // Setup
@@ -2255,12 +2255,8 @@ namespace MeshKernelNETTest.Api
 
                     var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
 
-                    griddedSamples.NumX = 6;
-                    griddedSamples.NumY = 7;
-
                     double coordinate = -50.0;
                     var dx = 100.0;
-                    griddedSamples.CoordinatesX = new double[griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.NumX; i++)
                     {
                         griddedSamples.CoordinatesX[i] = coordinate + (i * dx);
@@ -2268,21 +2264,16 @@ namespace MeshKernelNETTest.Api
 
                     coordinate = -50.0;
                     var dy = 100.0;
-                    griddedSamples.CoordinatesY = new double[griddedSamples.NumY];
                     for (var i = 0; i < griddedSamples.NumY; ++i)
                     {
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
-                    griddedSamples.Values = new float[griddedSamples.NumY * griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
 
                         griddedSamples.Values[i] = -0.05f;
                     }
-                    // Set the interpolation type to double
-                    griddedSamples.ValueType = (int)InterpolationTypes.Float;
-
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute

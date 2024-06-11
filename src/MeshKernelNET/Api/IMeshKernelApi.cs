@@ -1008,10 +1008,10 @@ namespace MeshKernelNET.Api
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        int Mesh2dGetEdgeLocationIndex(int meshKernelId, 
-                                   double xCoordinate, 
+        int Mesh2dGetEdgeLocationIndex(int meshKernelId,
+                                   double xCoordinate,
                                    double yCoordinate,
-                                   BoundingBox boundingBox, 
+                                   BoundingBox boundingBox,
                                    ref int locationIndex);
 
         /// <summary>
@@ -1517,17 +1517,15 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Redo editing action
         /// </summary>
-        /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="redone">If the editing action has been re-done</param>
         /// <returns>Error code</returns>
-        int RedoState(int meshKernelId, ref bool redone);
+        int RedoState(ref bool redone);
 
         /// <summary>
         /// Undo editing action
         /// </summary>
-        /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="undone">If the editing action has been un-done</param>
         /// <returns>Error code</returns>
-        int UndoState(int meshKernelId, ref bool undone);
+        int UndoState(ref bool undone);
     }
 }

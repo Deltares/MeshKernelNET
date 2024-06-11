@@ -223,12 +223,12 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId, 
-                                                                 xCoordinate, 
+            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
+                                                                 xCoordinate,
                                                                  yCoordinate,
                                                                  locationType,
-                                                                 ref boundingBoxNative, 
-                                                                 ref locationIndex); 
+                                                                 ref boundingBoxNative,
+                                                                 ref locationIndex);
             return exitCode;
         }
         public int CurvilinearGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
@@ -679,7 +679,7 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes, 
+            disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes,
                                                     newMesh1D.num_edges);
 
             newMesh1D = disposableMesh1D.CreateNativeObject();
@@ -936,11 +936,11 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId, 
+            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
                                                             xCoordinate,
-                                                            yCoordinate, 
-                                                            locationType, 
-                                                            ref boundingBoxNative, 
+                                                            yCoordinate,
+                                                            locationType,
+                                                            ref boundingBoxNative,
                                                             ref locationIndex);
             return exitCode;
         }
@@ -1098,13 +1098,13 @@ namespace MeshKernelNET.Api
                                                    ref int secondNodeIndex,
                                                    ref int edgeIndex)
         {
-            return MeshKernelDll.Mesh2dInsertEdgeFromCoordinates(meshKernelId, 
-                                                                 firstNodeX, 
-                                                                 firstNodeY, 
-                                                                 secondNodeX, 
-                                                                 secondNodeY, 
-                                                                 ref firstNodeIndex, 
-                                                                 ref secondNodeIndex, 
+            return MeshKernelDll.Mesh2dInsertEdgeFromCoordinates(meshKernelId,
+                                                                 firstNodeX,
+                                                                 firstNodeY,
+                                                                 secondNodeX,
+                                                                 secondNodeY,
+                                                                 ref firstNodeIndex,
+                                                                 ref secondNodeIndex,
                                                                  ref edgeIndex);
         }
 
@@ -1390,15 +1390,15 @@ namespace MeshKernelNET.Api
         }
 
         /// <inheritdoc/>
-        public int RedoState(int meshKernelId, ref bool redone)
+        public int RedoState(ref bool redone)
         {
-            return MeshKernelDll.RedoState(meshKernelId, ref redone);
+            return MeshKernelDll.RedoState(ref redone);
         }
 
         /// <inheritdoc/>
-        public int UndoState(int meshKernelId, ref bool undone)
+        public int UndoState(ref bool undone)
         {
-            return MeshKernelDll.UndoState(meshKernelId, ref undone);
+            return MeshKernelDll.UndoState(ref undone);
         }
 
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)

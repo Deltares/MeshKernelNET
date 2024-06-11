@@ -839,7 +839,7 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_interpolation_type_double", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetInterpolationTypeDouble([In][Out] ref int type);
-        
+
         /// <summary>
         /// Get spline intermediate points
         /// </summary>
@@ -1183,7 +1183,7 @@ namespace MeshKernelNET.Native
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_location_index", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetLocationIndex([In] int meshKernelId, 
+        internal static extern int Mesh2dGetLocationIndex([In] int meshKernelId,
                                                           [In] double xCoordinate,
                                                           [In] double yCoordinate,
                                                           [In] int locationType,
@@ -1342,12 +1342,12 @@ namespace MeshKernelNET.Native
         /// <param name="edgeIndex">      The index of the new generated edge
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_insert_edge_from_coordinates", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dInsertEdgeFromCoordinates([In] int meshKernelId, 
-                                                    [In] double firstNodeX, 
-                                                    [In] double firstNodeY, 
-                                                    [In] double secondNodeX, 
+        internal static extern int Mesh2dInsertEdgeFromCoordinates([In] int meshKernelId,
+                                                    [In] double firstNodeX,
+                                                    [In] double firstNodeY,
+                                                    [In] double secondNodeX,
                                                     [In] double secondNodeY,
-                                                    [In][Out] ref int firstNodeIndex, 
+                                                    [In][Out] ref int firstNodeIndex,
                                                     [In][Out] ref int secondNodeIndex,
                                                     [In][Out] ref int edgeIndex);
 
@@ -1744,17 +1744,17 @@ namespace MeshKernelNET.Native
         /// <summary>
         /// Redo editing action
         /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="redone">If the editing action has been re-done</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_redo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RedoState(int meshKernelId, [In][Out] ref bool redone);
+        internal static extern int RedoState([In][Out] ref bool redone);
 
         /// <summary>
         /// Redo editing action
         /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="undone">If the editing action has been un-done</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_undo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UndoState(int meshKernelId, [In][Out] ref bool undone);
+        internal static extern int UndoState([In][Out] ref bool undone);
     }
 }

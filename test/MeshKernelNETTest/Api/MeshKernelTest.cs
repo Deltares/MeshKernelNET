@@ -197,8 +197,8 @@ namespace MeshKernelNETTest.Api
                                                                            0.0,
                                                                            400.0,
                                                                            100.0,
-                                                                           600.0, 
-                                                                           ref firstNewNodeIndex, 
+                                                                           600.0,
+                                                                           ref firstNewNodeIndex,
                                                                            ref secondNewNodeIndex,
                                                                            ref newEdgeIndex));
 
@@ -914,7 +914,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual((3,3), (curvilinearGrid.NumM,curvilinearGrid.NumN));
+                    Assert.AreEqual((3, 3), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -953,7 +953,7 @@ namespace MeshKernelNETTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual((5, 4),(curvilinearGrid.NumM,curvilinearGrid.NumN));
+                    Assert.AreEqual((5, 4), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -2587,14 +2587,14 @@ namespace MeshKernelNETTest.Api
 
                     // Un-do
                     bool undone = false;
-                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(0, api.UndoState(ref undone));
                     Assert.AreEqual(true, undone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(100.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
                     undone = false;
-                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(0, api.UndoState(ref undone));
                     Assert.AreEqual(true, undone);
 
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
@@ -2622,7 +2622,7 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    
+
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
                     api.Mesh2dGetEdgeLocationIndex(id,
@@ -2705,10 +2705,10 @@ namespace MeshKernelNETTest.Api
 
 
 
-        [TestCase(20.0,16.0,6)]
-        [TestCase(20.0,23.0,10)]
-        [TestCase(17.0,20.0,19)]
-        [TestCase(24.0,20.0,20)]
+        [TestCase(20.0, 16.0, 6)]
+        [TestCase(20.0, 23.0, 10)]
+        [TestCase(17.0, 20.0, 19)]
+        [TestCase(24.0, 20.0, 20)]
         public void CurvilinearGetEdgeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
@@ -2772,11 +2772,11 @@ namespace MeshKernelNETTest.Api
         }
 
 
-        [TestCase(20.0,20.0,10)]
-        [TestCase(20.5,23,10)]
-        [TestCase(15.5,20.0,10)]
-        [TestCase(30.7,40.7,15)]
-        [TestCase(29.7,29.7,15)]
+        [TestCase(20.0, 20.0, 10)]
+        [TestCase(20.5, 23, 10)]
+        [TestCase(15.5, 20.0, 10)]
+        [TestCase(30.7, 40.7, 15)]
+        [TestCase(29.7, 29.7, 15)]
         public void CurvilinearGetNodeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
@@ -2792,11 +2792,11 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetNodeLocationIndex(id,x,y,
+                    api.CurvilinearGetNodeLocationIndex(id, x, y,
                                                         boundingBox,
                                                         ref locationIndex);
 
-                    Assert.That(locationIndex,Is.EqualTo(expectedIndex));
+                    Assert.That(locationIndex, Is.EqualTo(expectedIndex));
                 }
                 finally
                 {

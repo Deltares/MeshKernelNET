@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableGriddedSamples<T> : DisposableNativeObject<GriddedSamplesNative>  
+    public sealed class DisposableGriddedSamples<T> : DisposableNativeObject<GriddedSamplesNative>
     {
         [ProtoMember(1)]
         private int numX;
@@ -33,16 +33,15 @@ namespace MeshKernelNET.Api
         [ProtoMember(9)]
         private int valueType;
 
-        public DisposableGriddedSamples()
-        {
-        }
-
-        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, int orgValueType)
+        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double cSize, int orgValueType)
         {
             numX = nX;
             numY = nY;
             originX = orgX;
             originY = orgY;
+            cellSize = cSize;
+            coordinatesX = new double[numX];
+            coordinatesY = new double[numY];
             values = new T[numX * numY];
             valueType = orgValueType;
         }

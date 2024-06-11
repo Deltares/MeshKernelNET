@@ -197,8 +197,8 @@ namespace MeshKernelNETTest.Api
                                                                            0.0,
                                                                            400.0,
                                                                            100.0,
-                                                                           600.0, 
-                                                                           ref firstNewNodeIndex, 
+                                                                           600.0,
+                                                                           ref firstNewNodeIndex,
                                                                            ref secondNewNodeIndex,
                                                                            ref newEdgeIndex));
 
@@ -914,7 +914,7 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual((3,3), (curvilinearGrid.NumM,curvilinearGrid.NumN));
+                    Assert.AreEqual((3, 3), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -953,7 +953,7 @@ namespace MeshKernelNETTest.Api
 
                     // Assert a valid mesh is produced
                     Assert.NotNull(curvilinearGrid);
-                    Assert.AreEqual((5, 4),(curvilinearGrid.NumM,curvilinearGrid.NumN));
+                    Assert.AreEqual((5, 4), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
                 finally
                 {
@@ -2247,7 +2247,7 @@ namespace MeshKernelNETTest.Api
             {
                 var id = 0;
                 DisposableMesh2D meshOut = null;
-                var griddedSamples = new DisposableGriddedSamples<float>();
+                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
                 try
                 {
                     // Setup
@@ -2255,12 +2255,8 @@ namespace MeshKernelNETTest.Api
 
                     var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
 
-                    griddedSamples.NumX = 6;
-                    griddedSamples.NumY = 7;
-
                     double coordinate = -50.0;
                     var dx = 100.0;
-                    griddedSamples.CoordinatesX = new double[griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.NumX; i++)
                     {
                         griddedSamples.CoordinatesX[i] = coordinate + (i * dx);
@@ -2268,21 +2264,16 @@ namespace MeshKernelNETTest.Api
 
                     coordinate = -50.0;
                     var dy = 100.0;
-                    griddedSamples.CoordinatesY = new double[griddedSamples.NumY];
                     for (var i = 0; i < griddedSamples.NumY; ++i)
                     {
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
-                    griddedSamples.Values = new float[griddedSamples.NumY * griddedSamples.NumX];
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
 
                         griddedSamples.Values[i] = -0.05f;
                     }
-                    // Set the interpolation type to double
-                    griddedSamples.ValueType = (int)InterpolationTypes.Float;
-
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     // Execute
@@ -2562,7 +2553,7 @@ namespace MeshKernelNETTest.Api
 
 
         [Test]
-        public void Mesh2dUndoTwoDeleteNodesThroughApi()
+        public void Mesh2dUndoThenRedoTwoDeleteNodesThroughApi()
         {
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
@@ -2581,25 +2572,40 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 0));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
                     Assert.AreEqual(0, api.Mesh2dDeleteNode(id, 6));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[6]);
+                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NumValidNodes);
 
                     // Un-do
                     bool undone = false;
-                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(0, api.UndoState(ref undone));
                     Assert.AreEqual(true, undone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(100.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
-                    undone = false;
-                    Assert.AreEqual(0, api.UndoState(id, ref undone));
+                    Assert.AreEqual(0, api.UndoState(ref undone));
                     Assert.AreEqual(true, undone);
-
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(0.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(numberOfVerticesBefore, mesh2d.NumValidNodes);
+
+                    // Re-do
+                    bool redone = false;
+
+                    Assert.AreEqual(0, api.RedoState(ref redone));
+                    Assert.AreEqual(true, redone);
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
+                    Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
+
+                    Assert.AreEqual(0, api.RedoState(ref redone));
+                    Assert.AreEqual(true, redone);
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
+                    Assert.AreEqual(-999.0, mesh2d.NodeX[6]);
+                    Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NumValidNodes);
                 }
                 finally
                 {
@@ -2622,7 +2628,7 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    
+
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
                     api.Mesh2dGetEdgeLocationIndex(id,
@@ -2705,10 +2711,10 @@ namespace MeshKernelNETTest.Api
 
 
 
-        [TestCase(20.0,16.0,6)]
-        [TestCase(20.0,23.0,10)]
-        [TestCase(17.0,20.0,19)]
-        [TestCase(24.0,20.0,20)]
+        [TestCase(20.0, 16.0, 6)]
+        [TestCase(20.0, 23.0, 10)]
+        [TestCase(17.0, 20.0, 19)]
+        [TestCase(24.0, 20.0, 20)]
         public void CurvilinearGetEdgeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
@@ -2772,11 +2778,11 @@ namespace MeshKernelNETTest.Api
         }
 
 
-        [TestCase(20.0,20.0,10)]
-        [TestCase(20.5,23,10)]
-        [TestCase(15.5,20.0,10)]
-        [TestCase(30.7,40.7,15)]
-        [TestCase(29.7,29.7,15)]
+        [TestCase(20.0, 20.0, 10)]
+        [TestCase(20.5, 23, 10)]
+        [TestCase(15.5, 20.0, 10)]
+        [TestCase(30.7, 40.7, 15)]
+        [TestCase(29.7, 29.7, 15)]
         public void CurvilinearGetNodeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
@@ -2792,11 +2798,11 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetNodeLocationIndex(id,x,y,
+                    api.CurvilinearGetNodeLocationIndex(id, x, y,
                                                         boundingBox,
                                                         ref locationIndex);
 
-                    Assert.That(locationIndex,Is.EqualTo(expectedIndex));
+                    Assert.That(locationIndex, Is.EqualTo(expectedIndex));
                 }
                 finally
                 {

@@ -891,6 +891,14 @@ namespace MeshKernelNET.Api
                              double yLowerLeftBoundingBox, double xUpperRightBoundingBox, double yUpperRightBoundingBox);
 
         /// <summary>
+        /// Deletes a mesh 2d edge given the index of the edge
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="edgeIndex">The index of the edge to delete</param>
+        /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
+        int Mesh2dDeleteEdgeByIndex(int meshKernelId, [In] int edgeIndex);
+
+        /// <summary>
         /// Deletes all hanging edges. An hanging edge is an edge where one of the two nodes is not connected.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

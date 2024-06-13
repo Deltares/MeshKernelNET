@@ -790,6 +790,11 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dDeleteEdge(meshKernelId, xCoordinate, yCoordinate, xLowerLeftBoundingBox, yLowerLeftBoundingBox, xUpperRightBoundingBox, yUpperRightBoundingBox);
         }
 
+        public int Mesh2dDeleteEdgeByIndex(int meshKernelId, int edgeIndex)
+        {
+            return MeshKernelDll.Mesh2dDeleteEdgeByIndex(meshKernelId, edgeIndex);
+        }
+
         public int Mesh2dDeleteHangingEdges(int meshKernelId)
         {
             return MeshKernelDll.Mesh2dDeleteHangingEdges(meshKernelId);

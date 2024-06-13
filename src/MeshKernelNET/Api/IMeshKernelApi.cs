@@ -15,6 +15,13 @@ namespace MeshKernelNET.Api
         int AllocateState(int projectionType);
 
         /// <summary>
+        /// Clear the undo state
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <returns>Error code</returns>
+        int ClearUndoState(int meshKernelId);
+
+        /// <summary>
         /// Computes 1d-2d contacts, where 1d nodes are connected to the closest 2d faces at the boundary
         /// (ggeo_make1D2DRiverLinks_dll)
         /// </summary>
@@ -91,6 +98,15 @@ namespace MeshKernelNET.Api
                                                      in CurvilinearParameters curvilinearParameters);
 
         /// <summary>
+        /// Computes the curvature of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="curvature">The grid curvature values in the selected direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature);
+
+        /// <summary>
         /// Make curvilinear grid from splines with advancing front.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
@@ -102,6 +118,15 @@ namespace MeshKernelNET.Api
                                                         in DisposableGeometryList disposableGeometryListIn,
                                                         in CurvilinearParameters curvilinearParameters,
                                                         in SplinesToCurvilinearParameters splinesToCurvilinearParameters);
+
+        /// <summary>
+        /// Computes the smoothness of a curvilinear grid.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness);
 
         /// <summary>
         /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
@@ -184,6 +209,54 @@ namespace MeshKernelNET.Api
         /// The disposable curvilinear grid</returns>
         /// <returns>Error code</returns>
         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
+
+        /// <summary>
+        /// Gets the index of the closest curvilinear edge
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetEdgeLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest curvilinear face
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetFaceLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest curvilinear node
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetNodeLocationIndex(int meshKernelId,
+                                            double xCoordinate,
+                                            double yCoordinate,
+                                            BoundingBox boundingBox,
+                                            ref int locationIndex);
 
         /// <summary>
         /// Generates a curvilinear grid from splines with the advancing front method. Initialization step (interactive)
@@ -754,6 +827,18 @@ namespace MeshKernelNET.Api
                                     [In] string zone);
 
         /// <summary>
+        /// Converts a mesh into a curvilinear grid, with the grid expanding outward from a specified starting point.
+        /// This function enables the conversion of a portion of the mesh based on the chosen starting coordinate.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="startingFaceCoordinateX">The x coordinate of the point identifying the face where to start the conversion</param>
+        /// <param name="startingFaceCoordinateY">The y coordinate of the point identifying the face where to start the conversion</param>
+        /// <returns>Error code</returns>
+        int Mesh2dConvertCurvilinear([In] int meshKernelId,
+                                     [In] double startingFaceCoordinateX,
+                                     [In] double startingFaceCoordinateY);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -879,6 +964,7 @@ namespace MeshKernelNET.Api
                                  double xLowerLeftBoundingBox, double yLowerLeftBoundingBox, double xUpperRightBoundingBox,
                                  double yUpperRightBoundingBox, ref double xCoordinateOut, ref double yCoordinateOut);
 
+
         /// <summary>
         /// Gets the grid state as a <see cref="Mesh2DNative"/> structure including the cell information
         /// </summary>
@@ -911,6 +997,55 @@ namespace MeshKernelNET.Api
         /// <param name="edges">Pointer to memory where the indices of the hanging edges will be stored</param>
         /// <returns>Error code</returns>
         int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges);
+
+        /// <summary>
+        /// Gets the index of the closest mesh edge
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetEdgeLocationIndex(int meshKernelId,
+                                   double xCoordinate,
+                                   double yCoordinate,
+                                   BoundingBox boundingBox,
+                                   ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest mesh face.
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetFaceLocationIndex(int meshKernelId,
+                                       double xCoordinate,
+                                       double yCoordinate,
+                                       BoundingBox boundingBox,
+                                       ref int locationIndex);
+
+        /// <summary>
+        /// Gets the index of the closest mesh node
+        /// </summary>
+        /// 
+        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="xCoordinate">The input point coordinates</param>
+        /// <param name="yCoordinate">The input point coordinates</param>
+        /// <param name="locationType">The location type</param>
+        /// <param name="boundingBox">The input bounding box</param>
+        /// <param name="locationIndex">The location index</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetNodeLocationIndex(int meshKernelId,
+                                   double xCoordinate,
+                                   double yCoordinate,
+                                   BoundingBox boundingBox,
+                                   ref int locationIndex);
 
         /// <summary>
         /// Retrives the mesh boundary polygon
@@ -1015,6 +1150,26 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dInsertEdge(int meshKernelId, int startVertexIndex, int endVertexIndex, ref int edgeIndex);
 
+        /// @brief Insert a new mesh2d edge from 2 coordinates. If the coordinates do not match an existing node within a computed search radius, new ones will be created.
+        /// The search radius is computed internally based on the minimum mesh size and the distance between the two nodes.
+        /// <param name="meshKernelId"> The id of the mesh state
+        /// <param name="firstNodeX">    The index of the first node to connect
+        /// <param name="firstNodeY">      The index of the second node to connect
+        /// <param name="secondNodeX">    The index of the first node to connect
+        /// <param name="secondNodeY ">     The index of the second node to connect
+        /// <param name="firstNodeIndex">      The index of the first node
+        /// <param name="secondNodeIndex">      The index of the second node
+        /// <param name="edgeIndex">      The index of the new generated edge
+        /// <returns>Error code</returns>
+        int Mesh2dInsertEdgeFromCoordinates(int meshKernelId,
+                                            double firstNodeX,
+                                            double firstNodeY,
+                                            double secondNodeX,
+                                            double secondNodeY,
+                                            ref int firstNodeIndex,
+                                            ref int secondNodeIndex,
+                                            ref int edgeIndex);
+
         /// <summary>
         /// Inserts a new vertex
         /// </summary>
@@ -1058,6 +1213,15 @@ namespace MeshKernelNET.Api
                                            ref int[] faceIndexes,
                                            ref int[] faceNumEdges,
                                            ref int[] faceEdgeIndex);
+
+        /// <summary>
+        /// Compute the global mesh with a given number of points along the longitude and latitude directions.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="numLongitudeNodes">The number of points along the longitude</param>
+        /// <param name="numLatitudeNodes">The number of points along the latitude (half hemisphere)</param>
+        /// <returns>Error code</returns>
+        int Mesh2dMakeGlobal(int meshKernelId, int numLongitudeNodes, int numLatitudeNodes);
 
         /// <summary>
         /// Make a triangular grid in a polygon
@@ -1160,10 +1324,10 @@ namespace MeshKernelNET.Api
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
-                                              in DisposableGriddedSamples griddedSamplesNative,
-                                              in MeshRefinementParameters meshRefinementParameters,
-                                              bool useNodalRefinement);
+        int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                 in DisposableGriddedSamples<T> griddedSamplesNative,
+                                                 in MeshRefinementParameters meshRefinementParameters,
+                                                 bool useNodalRefinement);
 
         /// <summary>
         /// Refines a grid based on polygon
@@ -1349,5 +1513,19 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int PolygonRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                           int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut);
+
+        /// <summary>
+        /// Redo editing action
+        /// </summary>
+        /// <param name="redone">If the editing action has been re-done</param>
+        /// <returns>Error code</returns>
+        int RedoState(ref bool redone);
+
+        /// <summary>
+        /// Undo editing action
+        /// </summary>
+        /// <param name="undone">If the editing action has been un-done</param>
+        /// <returns>Error code</returns>
+        int UndoState(ref bool undone);
     }
 }

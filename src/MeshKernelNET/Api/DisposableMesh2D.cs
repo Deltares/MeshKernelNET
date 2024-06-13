@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>
+    public sealed class DisposableMesh2D : DisposableNativeObject<Mesh2DNative>, IReadOnly2DMesh
     {
         [ProtoMember(1)]
         private int[] edgeFaces;
@@ -43,12 +43,18 @@ namespace MeshKernelNET.Api
         private int numNodes;
 
         [ProtoMember(13)]
-        private int numEdges;
+        private int numValidNodes;
 
         [ProtoMember(14)]
-        private int numFaces;
+        private int numEdges;
 
         [ProtoMember(15)]
+        private int numValidEdges;
+
+        [ProtoMember(16)]
+        private int numFaces;
+
+        [ProtoMember(17)]
         private int numFaceNodes;
 
         public DisposableMesh2D()
@@ -152,10 +158,22 @@ namespace MeshKernelNET.Api
             set { numNodes = value; }
         }
 
+        public int NumValidNodes
+        {
+            get { return numValidNodes; }
+            set { numValidNodes = value; }
+        }
+
         public int NumEdges
         {
             get { return numEdges; }
             set { numEdges = value; }
+        }
+
+        public int NumValidEdges
+        {
+            get { return numValidEdges; }
+            set { numValidEdges = value; }
         }
 
         public int NumFaces
@@ -169,6 +187,56 @@ namespace MeshKernelNET.Api
             get { return numFaceNodes; }
             set { numFaceNodes = value; }
         }
+
+        #region IReadOnly2DMesh
+        /// <inheritdoc/>
+        public int CellCount()
+        {
+            return NumFaces;
+        }
+
+        /// <inheritdoc/>
+        public int GetCellEdgeCount(int cellIndex)
+        {
+            return NodesPerFace[cellIndex];
+        }
+
+        /// <inheritdoc/>
+        public int EdgeCount()
+        {
+            return NumEdges;
+        }
+
+        /// <inheritdoc/>
+        public int GetFirstNode(int edgeIndex)
+        {
+            return EdgeNodes[2 * edgeIndex];
+        }
+
+        /// <inheritdoc/>
+        public int GetLastNode(int edgeIndex)
+        {
+            return EdgeNodes[2 * edgeIndex + 1];
+        }
+
+        /// <inheritdoc/>
+        public int NodeCount()
+        {
+            return NumNodes;
+        }
+
+        /// <inheritdoc/>
+        public double GetNodeX(int nodeIndex)
+        {
+            return NodeX[nodeIndex];
+        }
+
+        /// <inheritdoc/>
+        public double GetNodeY(int nodeIndex)
+        {
+            return NodeY[nodeIndex];
+        }
+        #endregion
 
         protected override void SetNativeObject(ref Mesh2DNative nativeObject)
         {
@@ -184,7 +252,9 @@ namespace MeshKernelNET.Api
             nativeObject.face_x = GetPinnedObjectPointer(FaceX);
             nativeObject.face_y = GetPinnedObjectPointer(FaceY);
             nativeObject.num_nodes = NumNodes;
+            nativeObject.num_valid_nodes = NumValidNodes;
             nativeObject.num_edges = NumEdges;
+            nativeObject.num_valid_edges = NumValidEdges;
             nativeObject.num_faces = NumFaces;
             nativeObject.num_face_nodes = NumFaceNodes;
         }

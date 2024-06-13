@@ -48,13 +48,8 @@ namespace MeshKernelNET.Native
         public IntPtr values;
 
         /// <summary>
-        /// X coordinate of the upper right
+        /// The numeric representation of the values (0 = short, 1 = float, 2 = int and 3 = double)
         /// </summary>
-        public double upper_right_x;
-
-        /// <summary>
-        /// Y coordinate of the upper right
-        /// </summary>
-        public double upper_right_y;
+        public int value_type;
     }
 }

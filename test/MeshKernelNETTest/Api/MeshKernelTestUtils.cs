@@ -7,8 +7,8 @@ namespace MeshKernelNETTest.Api
     public static class TestUtilityFunctions
     {
         public static DisposableMesh2D CreateMesh2D(
-            int numbOfCellsHorizontal,
-            int numbOfCellsVertical,
+            int numbOfNodesHorizontal,
+            int numbOfNodesVertical,
             double cellWidth,
             double cellHeight,
             double xOffset = 0.0,
@@ -16,30 +16,30 @@ namespace MeshKernelNETTest.Api
         {
             var result = new DisposableMesh2D();
 
-            var indicesValues = new int[numbOfCellsHorizontal, numbOfCellsVertical];
-            result.NodeX = new double[numbOfCellsHorizontal * numbOfCellsVertical];
-            result.NodeY = new double[numbOfCellsHorizontal * numbOfCellsVertical];
-            result.NumNodes = numbOfCellsHorizontal * numbOfCellsVertical;
+            var indicesValues = new int[numbOfNodesHorizontal, numbOfNodesVertical];
+            result.NodeX = new double[numbOfNodesHorizontal * numbOfNodesVertical];
+            result.NodeY = new double[numbOfNodesHorizontal * numbOfNodesVertical];
+            result.NumNodes = numbOfNodesHorizontal * numbOfNodesVertical;
 
             var nodeIndex = 0;
-            for (var i = 0; i < numbOfCellsHorizontal; ++i)
+            for (var i = 0; i < numbOfNodesHorizontal; ++i)
             {
-                for (var j = 0; j < numbOfCellsVertical; ++j)
+                for (var j = 0; j < numbOfNodesVertical; ++j)
                 {
-                    indicesValues[i, j] = (i * numbOfCellsVertical) + j;
+                    indicesValues[i, j] = (i * numbOfNodesVertical) + j;
                     result.NodeX[nodeIndex] = xOffset + (i * cellWidth);
                     result.NodeY[nodeIndex] = yOffset + (j * cellHeight);
                     nodeIndex++;
                 }
             }
 
-            result.NumEdges = ((numbOfCellsHorizontal - 1) * numbOfCellsVertical) +
-                              (numbOfCellsHorizontal * (numbOfCellsVertical - 1));
+            result.NumEdges = ((numbOfNodesHorizontal - 1) * numbOfNodesVertical) +
+                              (numbOfNodesHorizontal * (numbOfNodesVertical - 1));
             result.EdgeNodes = new int[result.NumEdges * 2];
             var edgeIndex = 0;
-            for (var i = 0; i < numbOfCellsHorizontal - 1; ++i)
+            for (var i = 0; i < numbOfNodesHorizontal - 1; ++i)
             {
-                for (var j = 0; j < numbOfCellsVertical; ++j)
+                for (var j = 0; j < numbOfNodesVertical; ++j)
                 {
                     result.EdgeNodes[edgeIndex] = indicesValues[i, j];
                     edgeIndex++;
@@ -48,9 +48,9 @@ namespace MeshKernelNETTest.Api
                 }
             }
 
-            for (var i = 0; i < numbOfCellsHorizontal; ++i)
+            for (var i = 0; i < numbOfNodesHorizontal; ++i)
             {
-                for (var j = 0; j < numbOfCellsVertical - 1; ++j)
+                for (var j = 0; j < numbOfNodesVertical - 1; ++j)
                 {
                     result.EdgeNodes[edgeIndex] = indicesValues[i, j + 1];
                     edgeIndex++;

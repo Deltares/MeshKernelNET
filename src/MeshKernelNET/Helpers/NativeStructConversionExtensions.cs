@@ -85,6 +85,17 @@ namespace MeshKernelNET.Helpers
             };
         }
 
+        internal static BoundingBoxNative ToBoundingBoxNative(this BoundingBox boundingBox)
+        {
+            return new BoundingBoxNative
+            {
+                xLowerLeft = boundingBox.xLowerLeft,
+                yLowerLeft = boundingBox.yLowerLeft,
+                xUpperRight = boundingBox.xUpperRight,
+                yUpperRight = boundingBox.yUpperRight
+            };
+        }
+
         /// <summary>
         /// Converts a multi-polygon into a <see cref="DisposableGeometryList"/>
         /// </summary>

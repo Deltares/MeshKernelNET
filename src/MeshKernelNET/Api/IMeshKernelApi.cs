@@ -895,7 +895,7 @@ namespace MeshKernelNET.Api
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="edgeIndex">The index of the edge to delete</param>
-        /// <returns> true if the edge has been deleted, false if not (the edge is outside the search radius) </returns>
+        /// <returns> true if the edge has been deleted, false if not </returns>
         int Mesh2dDeleteEdgeByIndex(int meshKernelId, [In] int edgeIndex);
 
         /// <summary>

@@ -1073,14 +1073,19 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    int numEdges = mesh.NumEdges;
+                    int initNumEdges = mesh.NumEdges;
 
-                    // Call
+                    // Delete a valid edge
                     Assert.AreEqual(0, api.Mesh2dDeleteEdgeByIndex(id, 0));
-
-                    // Assert
+                    // Expect the number of edges to decrease by 1
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
-                    Assert.AreEqual(numEdges - 1, mesh2D.NumValidEdges);
+                    Assert.AreEqual(initNumEdges - 1, mesh2D.NumValidEdges);
+
+                    // Delete an invalid edge
+                    Assert.AreEqual(0, api.Mesh2dDeleteEdgeByIndex(id, 666));
+                    // Expect the number of edges to remain unchanged
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreEqual(initNumEdges - 1, mesh2D.NumValidEdges);
                 }
                 finally
                 {

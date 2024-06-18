@@ -1020,6 +1020,15 @@ namespace MeshKernelNET.Native
                                                     [In] double yUpperRightBoundingBox);
 
         /// <summary>
+        /// Deletes a mesh 2d edge given the index of the edge
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="edgeIndex">The index of the edge to delete</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_delete_edge_by_index", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dDeleteEdgeByIndex([In] int meshKernelId, [In] int edgeIndex);
+
+        /// <summary>
         /// Deletes all hanging edges. An hanging edge is an edge where one of the two nodes is not connected.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

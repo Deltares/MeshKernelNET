@@ -1059,6 +1059,43 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void Mesh2dDeleteEdgeByIndexThroughAPI()
+        {
+            //Setup
+
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 100, 100))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh2D = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    int initNumEdges = mesh.NumEdges;
+
+                    // Delete a valid edge
+                    Assert.AreEqual(0, api.Mesh2dDeleteEdgeByIndex(id, 0));
+                    // Expect the number of edges to decrease by 1
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreEqual(initNumEdges - 1, mesh2D.NumValidEdges);
+
+                    // Delete an invalid edge
+                    Assert.AreEqual(0, api.Mesh2dDeleteEdgeByIndex(id, 666));
+                    // Expect the number of edges to remain unchanged
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreEqual(initNumEdges - 1, mesh2D.NumValidEdges);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void Mesh2dGetEdgeThroughAPI()
         {
             //Setup

@@ -6,7 +6,7 @@
 		<AssemblyTitle>$(MSBuildProjectName)</AssemblyTitle>
 
 		<BuildNumber>0</BuildNumber>
-		<MeshKernelNETVersion>4.2.0</MeshKernelNETVersion>
+		<MeshKernelNETVersion>4.3.0</MeshKernelNETVersion>
 		<Version>$(MeshKernelNETVersion).$(BuildNumber)</Version>
 		<FileVersion>$(Version)</FileVersion>
 	</PropertyGroup>

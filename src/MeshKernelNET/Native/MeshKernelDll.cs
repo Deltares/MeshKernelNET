@@ -909,6 +909,64 @@ namespace MeshKernelNET.Native
                                                                 [In] double relativeSearchSize,
                                                                 [In] int minNumSamples,
                                                                 [In][Out] ref GeometryListNative results);
+        /// <summary>
+        /// Refine mesh using the Casulli de-refinement algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_derefinement", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliDerefinement([In] int meshKernelId);
+
+        /// <summary>
+        /// Refine mesh using the Casulli de-refinement algorithm on polygon
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListNativePolygon">The polygon where to perform the de-refinement </param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_derefinement_on_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliDerefinementOnPolygon([In] int meshKernelId,
+                                                                      [In] ref GeometryListNative geometryListNativePolygon);
+
+        /// <summary>
+        /// Refine mesh using the Casulli de-refinement algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListNativeElements">The elements to be removed </param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_derefinement_elements", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliDerefinementElements([In] int meshKernelId,
+                                                                     [In][Out] ref GeometryListNative geometryListNativeElements);
+
+        /// <summary>
+        /// Refine mesh using the Casulli de-refinement algorithm on polygon
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListNativePolygon">The input polygon</param>
+        /// <param name="geometryListNativeElements">The elements to be removed </param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_derefinement_elements_on_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliDerefinementElementsOnPolygon([In] int meshKernelId,
+                                                                              [In] ref GeometryListNative geometryListNativePolygon,
+                                                                              [In][Out] ref GeometryListNative geometryListNativeElements);
+
+
+        /// <summary>
+        /// Refine mesh using the Casulli refinement algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_refinement", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliRefinement([In] int meshKernelId);
+
+        /// <summary>
+        /// Refine mesh using the Casulli refinement algorithm on polygon
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param
+        /// <param name="geometryListNativePolygon">The polygon where to perform the refinement </param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_casulli_refinement_on_polygon", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dCasulliRefinementOnPolygon([In] int meshKernelId,
+                                                                    [In] ref GeometryListNative geometryListNativePolygon);
 
         /// <summary>
         /// Performs inner orthogonalization iteration, by slowly moving the mesh nodes to new optimal positions (interactive mode)

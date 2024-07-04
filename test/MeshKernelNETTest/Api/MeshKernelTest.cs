@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
@@ -1757,6 +1758,129 @@ namespace MeshKernelNETTest.Api
                     api.DeallocateState(id);
                     results.Dispose();
                     samples.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliDerefinementThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinement(id));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.Greater(mesh.NumNodes, mesh2D.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliDerefinementOnPolygonThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                var elements = new DisposableGeometryList();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    polygon.NumberOfCoordinates = 4;
+                    polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
+                    polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinementOnPolygon(id, polygon));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.Greater(mesh.NumNodes, mesh2D.NumNodes);
+                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinementElementsOnPolygon(id, polygon, ref elements));
+
+                    //polygon.NumberOfCoordinates = 4;
+                    //polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
+                    //polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
+                    //polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D?.Dispose();
+                    elements?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliRefinementThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.AreEqual(0, api.Mesh2dCasulliRefinement(id));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.Less(mesh.NumNodes, mesh2D.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliRefinementOnPolygonThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (var api = new MeshKernelApi())
+            using (var polygon = new DisposableGeometryList())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    polygon.NumberOfCoordinates = 5;
+                    polygon.XCoordinates = new[] { 2.0, 6.0, 6.0, 2.0, 2.0 };
+                    polygon.YCoordinates = new[] { 2.0, 2.0, 6.0, 6.0, 2.0 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    Assert.AreEqual(0, api.Mesh2dCasulliRefinementOnPolygon(id, polygon));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.Less(mesh.NumNodes, mesh2D.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D?.Dispose();
                 }
             }
         }

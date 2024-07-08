@@ -910,7 +910,7 @@ namespace MeshKernelNET.Native
                                                                 [In] int minNumSamples,
                                                                 [In][Out] ref GeometryListNative results);
         /// <summary>
-        /// Refine mesh using the Casulli de-refinement algorithm
+        /// De-refine a whole mesh using the Casulli algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
@@ -918,7 +918,7 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dCasulliDerefinement([In] int meshKernelId);
 
         /// <summary>
-        /// Refine mesh using the Casulli de-refinement algorithm on polygon
+        /// De-refine a mesh on polygon using the Casulli algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNativePolygon">The polygon where to perform the de-refinement </param>
@@ -928,7 +928,7 @@ namespace MeshKernelNET.Native
                                                                       [In] ref GeometryListNative geometryListNativePolygon);
 
         /// <summary>
-        /// Refine mesh using the Casulli de-refinement algorithm
+        /// Get the list of elements that will be removed after applying the Casulli de-refinement algorithm to a whole mesh
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNativeElements">The elements to be removed </param>
@@ -938,7 +938,7 @@ namespace MeshKernelNET.Native
                                                                      [In][Out] ref GeometryListNative geometryListNativeElements);
 
         /// <summary>
-        /// Refine mesh using the Casulli de-refinement algorithm on polygon
+        /// Get the list of elements that will be removed after applying the Casulli de-refinement algorithm to a mesh on polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNativePolygon">The input polygon</param>
@@ -951,7 +951,7 @@ namespace MeshKernelNET.Native
 
 
         /// <summary>
-        /// Refine mesh using the Casulli refinement algorithm
+        /// Refine a whole mesh using the Casulli algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
@@ -959,7 +959,7 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dCasulliRefinement([In] int meshKernelId);
 
         /// <summary>
-        /// Refine mesh using the Casulli refinement algorithm on polygon
+        /// Refine a mesh on polygon using the Casulli algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param
         /// <param name="geometryListNativePolygon">The polygon where to perform the refinement </param>

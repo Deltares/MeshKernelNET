@@ -1804,20 +1804,14 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    polygon.NumberOfCoordinates = 4;
-                    polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
-                    polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
-                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+                    polygon.NumberOfCoordinates = 5;
+                    polygon.XCoordinates = new[] { 2.0, 6.0, 6.0, 2.0, 2.0 };
+                    polygon.YCoordinates = new[] { 2.0, 2.0, 6.0, 6.0, 2.0 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
                     Assert.AreEqual(0, api.Mesh2dCasulliDerefinementOnPolygon(id, polygon));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.Greater(mesh.NumNodes, mesh2D.NumNodes);
                     Assert.AreEqual(0, api.Mesh2dCasulliDerefinementElementsOnPolygon(id, polygon, ref elements));
-
-                    //polygon.NumberOfCoordinates = 4;
-                    //polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
-                    //polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
-                    //polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
-
                 }
                 finally
                 {

@@ -889,7 +889,7 @@ namespace MeshKernelNET.Api
             newMesh2DNative = disposableMesh2D.CreateNativeObject();
             exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2DNative);
 
-            CreateDisposableMesh2DCached(newMesh2DNative, ref disposableMesh2D, true);
+            disposableMesh2D = CreateDisposableMesh2DCached(newMesh2DNative, disposableMesh2D, true);
 
             return exitCode;
         }
@@ -1315,8 +1315,8 @@ namespace MeshKernelNET.Api
         /// <inheritdoc/>
         public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)
         {
-            MeshKernelStateDictionary[meshKernelId].DisposableMesh2D = disposableMesh2D;
-            Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
+            MeshKernelStateDictionary[meshKernelId].DisposableMesh2D = new DisposableMesh2D(disposableMesh2D);
+            Mesh2DNative mesh2D = MeshKernelStateDictionary[meshKernelId].DisposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dSet(meshKernelId, ref mesh2D);
         }
 
@@ -1445,7 +1445,7 @@ namespace MeshKernelNET.Api
             return disposableMesh2D;
         }
 
-        private void CreateDisposableMesh2DCached(Mesh2DNative newMesh2DNative, ref DisposableMesh2D disposableMesh2D, bool addCellInformation = false)
+        private DisposableMesh2D CreateDisposableMesh2DCached(Mesh2DNative newMesh2DNative, DisposableMesh2D disposableMesh2D, bool addCellInformation = false)
         {
 
             newMesh2DNative.node_x.CreateValueArrayCached<double>(newMesh2DNative.num_nodes, disposableMesh2D.NodeX);
@@ -1467,6 +1467,8 @@ namespace MeshKernelNET.Api
                 newMesh2DNative.face_x.CreateValueArrayCached<double>(newMesh2DNative.num_faces, disposableMesh2D.FaceX);
                 newMesh2DNative.face_y.CreateValueArrayCached<double>(newMesh2DNative.num_faces, disposableMesh2D.FaceY);
             }
+
+            return disposableMesh2D;
         }
 
         private DisposableMesh1D CreateDisposableMesh1d(Mesh1DNative newMesh1DNative)

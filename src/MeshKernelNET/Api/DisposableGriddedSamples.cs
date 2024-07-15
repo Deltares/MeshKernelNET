@@ -112,9 +112,9 @@ namespace MeshKernelNET.Api
             nativeObject.origin_x = originX;
             nativeObject.origin_y = originY;
             nativeObject.cell_size = cellSize;
-            nativeObject.coordinates_x = GetPinnedObjectPointer(coordinatesX);
-            nativeObject.coordinates_y = GetPinnedObjectPointer(coordinatesY);
-            nativeObject.values = GetPinnedObjectPointer(values);
+            nativeObject.coordinates_x = GetPinnedObjectPointer(0);
+            nativeObject.coordinates_y = GetPinnedObjectPointer(1);
+            nativeObject.values = GetPinnedObjectPointer(2);
             nativeObject.value_type = valueType;
         }
     }

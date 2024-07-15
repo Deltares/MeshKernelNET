@@ -51,8 +51,8 @@ namespace MeshKernelNET.Api
 
         protected override void SetNativeObject(ref ContactsNative nativeObject)
         {
-            nativeObject.mesh1d_indices = GetPinnedObjectPointer(Mesh1dIndices);
-            nativeObject.mesh2d_indices = GetPinnedObjectPointer(Mesh2dIndices);
+            nativeObject.mesh1d_indices = GetPinnedObjectPointer(0);
+            nativeObject.mesh2d_indices = GetPinnedObjectPointer(1);
             nativeObject.num_contacts = NumContacts;
         }
     }

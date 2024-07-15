@@ -90,9 +90,9 @@ namespace MeshKernelNET.Api
         
         protected override void SetNativeObject(ref Mesh1DNative nativeObject)
         {
-            nativeObject.edge_nodes = GetPinnedObjectPointer(EdgeNodes);
-            nativeObject.node_x = GetPinnedObjectPointer(NodeX);
-            nativeObject.node_y = GetPinnedObjectPointer(NodeY);
+            nativeObject.edge_nodes = GetPinnedObjectPointer(0);
+            nativeObject.node_x = GetPinnedObjectPointer(1);
+            nativeObject.node_y = GetPinnedObjectPointer(2);
             nativeObject.num_valid_nodes = numValidNodes;
             nativeObject.num_nodes = NumNodes;
             nativeObject.num_edges = NumEdges;

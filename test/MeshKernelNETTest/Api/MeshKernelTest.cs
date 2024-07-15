@@ -769,6 +769,7 @@ namespace MeshKernelNETTest.Api
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
+                var meshApi = new DisposableMesh2D();
                 var meshInitial = new DisposableMesh2D();
                 var meshRotated = new DisposableMesh2D();
                 try
@@ -778,7 +779,9 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     // Get data of initial mesh
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshApi));
+                    meshInitial?.Dispose();
+                    meshInitial = new DisposableMesh2D(meshApi);
                     Assert.IsNotNull(meshInitial);
 
                     var rotationCentre = new[] { 1.0, 5.0 };
@@ -789,7 +792,9 @@ namespace MeshKernelNETTest.Api
                                                         rotationAngle));
 
                     // Get data of rotated mesh
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshRotated));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshApi));
+                    meshRotated?.Dispose();
+                    meshRotated = new DisposableMesh2D(meshApi);
                     Assert.IsNotNull(meshRotated);
 
                     // Compute expected nodes
@@ -845,6 +850,7 @@ namespace MeshKernelNETTest.Api
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
+                var meshApi = new DisposableMesh2D();
                 var meshInitial = new DisposableMesh2D();
                 var meshTranslated = new DisposableMesh2D();
                 try
@@ -854,7 +860,9 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     // Get data of initial mesh
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshInitial));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshApi));
+                    meshInitial?.Dispose();
+                    meshInitial = new DisposableMesh2D(meshApi);
                     Assert.IsNotNull(meshInitial);
 
                     var translation = new[] { 1.0, 5.0 };
@@ -863,7 +871,9 @@ namespace MeshKernelNETTest.Api
                                                            translation[1]));
 
                     // Get data of rotated mesh
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshTranslated));
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshApi));
+                    meshTranslated?.Dispose();
+                    meshTranslated = new DisposableMesh2D(meshApi);
                     Assert.IsNotNull(meshTranslated);
 
                     // Compute expected nodes
@@ -880,8 +890,9 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     api.DeallocateState(id);
-                    meshInitial.Dispose();
-                    meshTranslated.Dispose();
+                    meshInitial?.Dispose();
+                    meshTranslated?.Dispose();
+                    meshApi?.Dispose();
                 }
             }
         }
@@ -1072,8 +1083,9 @@ namespace MeshKernelNETTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
                     int initNumEdges = mesh.NumEdges;
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
 
                     // Delete a valid edge
                     Assert.AreEqual(0, api.Mesh2dDeleteEdgeByIndex(id, 0));
@@ -1090,7 +1102,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     api.DeallocateState(id);
-                    meshApi.Dispose();
+                    meshApi?.Dispose();
                 }
             }
         }

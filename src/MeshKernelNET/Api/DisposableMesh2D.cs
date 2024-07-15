@@ -1,4 +1,5 @@
-﻿using MeshKernelNET.Native;
+﻿using System;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -59,6 +60,32 @@ namespace MeshKernelNET.Api
 
         public DisposableMesh2D()
         {
+            NumNodes = 0;
+            NumEdges = 0;
+            NumFaces = 0;
+            NumFaceNodes = 0;
+        }
+
+        public DisposableMesh2D(DisposableMesh2D source)
+        {
+            NumNodes = source.NumNodes;
+            NumEdges = source.NumEdges;
+            NumFaces = source.NumFaces;
+            NumFaceNodes = source.NumFaceNodes;
+
+            edgeFaces = (int[])source.edgeFaces.Clone();
+            edgeNodes = (int[])source.edgeNodes.Clone();
+            faceEdges = (int[])source.faceEdges.Clone();
+            faceNodes = (int[])source.faceNodes.Clone();
+            nodesPerFace = (int[])source.nodesPerFace.Clone();
+            nodeX = (double[])source.nodeX.Clone();
+            nodeY = (double[])source.nodeY.Clone();
+            edgeX = (double[])source.edgeX.Clone();
+            edgeY = (double[])source.edgeY.Clone();
+            faceX = (double[])source.faceX.Clone();
+            faceY = (double[])source.faceY.Clone();
+            numValidNodes = source.numValidNodes;
+            numValidEdges = source.numValidEdges;
         }
 
         public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
@@ -79,6 +106,113 @@ namespace MeshKernelNET.Api
             EdgeY = new double[NumEdges];
             FaceX = new double[NumFaces];
             FaceY = new double[NumFaces];
+        }
+
+        public void UnPinPin()
+        {
+            UnPinMemory();
+            PinMemory();
+        }
+
+
+        public void Resize(int nNodes, int nEdges, int nFaces, int nFaceNodes)
+        {
+            bool changed = false;
+            if (nNodes > NumNodes)
+            {
+                double[] newNodeX = new double[nNodes];
+                double[] newNodeY = new double[nNodes];
+                if (NodeX != null)
+                {
+                    Array.Copy(NodeY, newNodeY, NumNodes);
+                }
+                if (NodeY != null)
+                {
+                    Array.Copy(NodeY, newNodeY, NumNodes);
+                }
+                NodeX = newNodeX;
+                NodeY = newNodeY;
+                NumNodes = nNodes;
+                changed = true;
+            }
+
+            if (nEdges > NumEdges)
+            {
+                double[] newEdgeX = new double[nEdges];
+                double[] newEdgeY = new double[nEdges];
+                int[] newEdgeFaces = new int[nEdges * 2];
+                int[] newEdgeNodes = new int[nEdges * 2];
+                if (EdgeX != null)
+                {
+                    Array.Copy(EdgeX, newEdgeX, NumEdges);
+                }
+                if (EdgeY != null)
+                {
+                    Array.Copy(EdgeY, newEdgeY, NumEdges);
+                }
+                if (EdgeFaces != null)
+                {
+                    Array.Copy(EdgeFaces, newEdgeFaces, NumEdges * 2);
+                }
+                if (EdgeNodes != null)
+                {
+                    Array.Copy(EdgeNodes, newEdgeNodes, NumEdges * 2);
+                }
+                EdgeX = newEdgeX;
+                EdgeY = newEdgeY;
+                EdgeFaces = newEdgeFaces;
+                EdgeNodes = newEdgeNodes;
+                NumEdges = nEdges;
+                changed = true;
+            }
+
+            if (nFaces > NumFaces)
+            {
+                double[] newFaceX = new double[nFaces];
+                double[] newFaceY = new double[nFaces];
+                int[] newNodesPerFace = new int[nFaces];
+                if (FaceX != null)
+                {
+                    Array.Copy(FaceX, newFaceX, NumFaces);
+                }
+                if (FaceY != null)
+                {
+                    Array.Copy(FaceY, newFaceY, NumFaces);
+                }
+                if (NodesPerFace != null)
+                {
+                    Array.Copy(NodesPerFace, newNodesPerFace, NumFaces);
+                }
+                FaceX = newFaceX;
+                FaceY = newFaceY;
+                NodesPerFace = newNodesPerFace;
+                NumFaces = nFaces;
+                changed = true;
+            }
+
+            if (nFaceNodes > NumFaceNodes)
+            {
+                int[] newFaceEdges = new int[nFaceNodes];
+                int[] newFaceNodes = new int[nFaceNodes];
+                if (FaceEdges != null)
+                {
+                    Array.Copy(FaceEdges, newFaceEdges, NumFaceNodes);
+                }
+                if (FaceNodes != null)
+                {
+                    Array.Copy(FaceNodes, newFaceNodes, NumFaceNodes);
+                }
+                
+                FaceEdges = newFaceEdges;
+                FaceNodes = newFaceNodes;
+                NumFaceNodes = nFaceNodes;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                UnPinPin();
+            }
         }
 
         ~DisposableMesh2D()

@@ -67,7 +67,8 @@ namespace MeshKernelNET.Api
         /// <returns></returns>
         protected IntPtr GetPinnedObjectPointer(object objectToLookUp)
         {
-            return objectGarbageCollectHandles[objectToLookUp].AddrOfPinnedObject();
+            var addressPinnedObject = objectGarbageCollectHandles[objectToLookUp].AddrOfPinnedObject();
+            return addressPinnedObject;
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Pins the arrays in memory (no garbage collect until unpinned (done in dispose))
         /// </summary>
-        private void PinMemory()
+        public void PinMemory()
         {
             IEnumerable<PropertyInfo> arrayProperties = GetType().GetProperties().Where(f => f.PropertyType.IsArray);
 
@@ -126,7 +127,7 @@ namespace MeshKernelNET.Api
             }
         }
 
-        private void UnPinMemory()
+        public void UnPinMemory()
         {
             foreach (KeyValuePair<object, GCHandle> valuePair in objectGarbageCollectHandles)
             {
@@ -139,7 +140,10 @@ namespace MeshKernelNET.Api
         private void AddObjectToPin(object objectToPin, object lookupObject = null)
         {
             object key = lookupObject ?? objectToPin;
-            objectGarbageCollectHandles.Add(key, GCHandle.Alloc(objectToPin, GCHandleType.Pinned));
+            if (!objectGarbageCollectHandles.ContainsKey(key))
+            {
+                objectGarbageCollectHandles.Add(key, GCHandle.Alloc(objectToPin, GCHandleType.Pinned));
+            }
         }
 
         private void ReleaseUnmanagedResources()

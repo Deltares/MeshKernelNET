@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Helpers;
 using MeshKernelNET.Native;
+using System.Collections.Generic;
 
 namespace MeshKernelNET.Api
 {
@@ -12,11 +13,16 @@ namespace MeshKernelNET.Api
     // DotCover on the build server does not work correctly with remoting
     public sealed class MeshKernelApi : IMeshKernelApi
     {
+
+        // Static dictionary equivalent to static std::unordered_map<int, MeshKernelState> meshKernelState in C++
+        public static Dictionary<int, MeshKernelState> MeshKernelStateDictionary = new Dictionary<int, MeshKernelState>();
+
         /// <inheritdoc/>
         public int AllocateState(int projectionType)
         {
             var meshKernelId = 0;
             MeshKernelDll.AllocateState(projectionType, ref meshKernelId);
+            MeshKernelStateDictionary[meshKernelId] = new MeshKernelState();
             return meshKernelId;
         }
 
@@ -503,7 +509,12 @@ namespace MeshKernelNET.Api
 
         public int DeallocateState(int meshKernelId)
         {
-            return MeshKernelDll.DeallocateState(meshKernelId);
+            var errorCode = MeshKernelDll.DeallocateState(meshKernelId);
+            if (errorCode == 0)
+            {
+                MeshKernelStateDictionary.Remove(meshKernelId);
+            }
+            return errorCode;
         }
 
         public int GetAveragingMethodClosestPoint(ref int method)
@@ -859,25 +870,26 @@ namespace MeshKernelNET.Api
 
         public int Mesh2dGetData(int meshKernelId, out DisposableMesh2D disposableMesh2D)
         {
-            var newMesh2D = new Mesh2DNative();
+            disposableMesh2D = MeshKernelStateDictionary[meshKernelId].DisposableMesh2D;
 
-            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
+            var newMesh2DNative = new Mesh2DNative();
+
+            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2DNative);
 
             if (exitCode != 0)
             {
-                disposableMesh2D = new DisposableMesh2D();
                 return exitCode;
             }
 
-            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
-                                                    newMesh2D.num_edges,
-                                                    newMesh2D.num_faces,
-                                                    newMesh2D.num_face_nodes);
+            disposableMesh2D.Resize(newMesh2DNative.num_nodes,
+                                    newMesh2DNative.num_edges,
+                                    newMesh2DNative.num_faces,
+                                    newMesh2DNative.num_face_nodes);
 
-            newMesh2D = disposableMesh2D.CreateNativeObject();
+            newMesh2DNative = disposableMesh2D.CreateNativeObject();
+            exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2DNative);
 
-            exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2D);
-            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, true);
+            CreateDisposableMesh2DCached(newMesh2DNative, ref disposableMesh2D, true);
 
             return exitCode;
         }
@@ -1303,6 +1315,7 @@ namespace MeshKernelNET.Api
         /// <inheritdoc/>
         public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)
         {
+            MeshKernelStateDictionary[meshKernelId].DisposableMesh2D = disposableMesh2D;
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dSet(meshKernelId, ref mesh2D);
         }
@@ -1430,6 +1443,30 @@ namespace MeshKernelNET.Api
             }
 
             return disposableMesh2D;
+        }
+
+        private void CreateDisposableMesh2DCached(Mesh2DNative newMesh2DNative, ref DisposableMesh2D disposableMesh2D, bool addCellInformation = false)
+        {
+
+            newMesh2DNative.node_x.CreateValueArrayCached<double>(newMesh2DNative.num_nodes, disposableMesh2D.NodeX);
+            newMesh2DNative.node_y.CreateValueArrayCached<double>(newMesh2DNative.num_nodes, disposableMesh2D.NodeY);
+            newMesh2DNative.edge_nodes.CreateValueArrayCached<int>(newMesh2DNative.num_edges * 2, disposableMesh2D.EdgeNodes);
+
+            disposableMesh2D.NumEdges = newMesh2DNative.num_edges;
+            disposableMesh2D.NumNodes = newMesh2DNative.num_nodes;
+            disposableMesh2D.NumValidNodes = newMesh2DNative.num_valid_nodes;
+            disposableMesh2D.NumValidEdges = newMesh2DNative.num_valid_edges;
+
+
+            if (addCellInformation && newMesh2DNative.num_faces > 0)
+            {
+                disposableMesh2D.NumFaces = newMesh2DNative.num_faces;
+                newMesh2DNative.nodes_per_face.CreateValueArrayCached<int>(newMesh2DNative.num_faces, disposableMesh2D.NodesPerFace);
+                int numFaceNodes = disposableMesh2D.NodesPerFace.Sum();
+                newMesh2DNative.face_nodes.CreateValueArrayCached<int>(numFaceNodes, disposableMesh2D.FaceNodes);
+                newMesh2DNative.face_x.CreateValueArrayCached<double>(newMesh2DNative.num_faces, disposableMesh2D.FaceX);
+                newMesh2DNative.face_y.CreateValueArrayCached<double>(newMesh2DNative.num_faces, disposableMesh2D.FaceY);
+            }
         }
 
         private DisposableMesh1D CreateDisposableMesh1d(Mesh1DNative newMesh1DNative)

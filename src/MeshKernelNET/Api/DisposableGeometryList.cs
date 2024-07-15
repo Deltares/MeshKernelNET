@@ -91,9 +91,9 @@ namespace MeshKernelNET.Api
 
         protected override void SetNativeObject(ref GeometryListNative nativeObject)
         {
-            nativeObject.xCoordinates = GetPinnedObjectPointer(XCoordinates);
-            nativeObject.yCoordinates = GetPinnedObjectPointer(YCoordinates);
-            nativeObject.zCoordinates = GetPinnedObjectPointer(Values);
+            nativeObject.xCoordinates = GetPinnedObjectPointer(0);
+            nativeObject.yCoordinates = GetPinnedObjectPointer(1);
+            nativeObject.zCoordinates = GetPinnedObjectPointer(2);
             nativeObject.numberOfCoordinates = NumberOfCoordinates;
             nativeObject.geometrySeperator = GeometrySeparator;
             nativeObject.innerOuterSeperator = InnerOuterSeparator;

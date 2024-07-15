@@ -1,4 +1,8 @@
-﻿using MeshKernelNET.Native;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -59,6 +63,33 @@ namespace MeshKernelNET.Api
 
         public DisposableMesh2D()
         {
+            NumNodes = 0;
+            NumEdges = 0;
+            NumFaces = 0;
+            NumFaceNodes = 0;
+        }
+
+        public DisposableMesh2D(DisposableMesh2D source)
+        {
+            NumNodes = source.NumNodes;
+            NumEdges = source.NumEdges;
+            NumFaces = source.NumFaces;
+            NumFaceNodes = source.NumFaceNodes;
+
+
+            edgeFaces = (int[])source.edgeFaces?.Clone();
+            edgeNodes = (int[])source.edgeNodes?.Clone();
+            faceEdges = (int[])source.faceEdges?.Clone();
+            faceNodes = (int[])source.faceNodes?.Clone();
+            nodesPerFace = (int[])source.nodesPerFace?.Clone();
+            nodeX = (double[])source.nodeX?.Clone();
+            nodeY = (double[])source.nodeY?.Clone();
+            edgeX = (double[])source.edgeX?.Clone();
+            edgeY = (double[])source.edgeY?.Clone();
+            faceX = (double[])source.faceX?.Clone();
+            faceY = (double[])source.faceY?.Clone();
+            numValidNodes = source.numValidNodes;
+            numValidEdges = source.numValidEdges;
         }
 
         public DisposableMesh2D(int nNodes, int nEdges, int nFaces, int nFaceNodes)
@@ -79,6 +110,126 @@ namespace MeshKernelNET.Api
             EdgeY = new double[NumEdges];
             FaceX = new double[NumFaces];
             FaceY = new double[NumFaces];
+        }
+
+        private bool HasChanged(int nNodes, int nEdges, int nFaces)
+        {
+            if (nNodes > NumNodes)
+            {
+                return true;
+            }
+            if (nEdges > NumEdges)
+            {
+                return true;
+            }
+            if (nFaces > NumFaces)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public void Resize(int nNodes, int nEdges, int nFaces, int nFaceNodes)
+        {
+            bool hasChanged = HasChanged(nNodes, nEdges, nFaces);
+            if (hasChanged)
+            {
+                UnPinMemory();
+            }
+
+            if (nNodes > NumNodes)
+            {
+                double[] newNodeX = new double[nNodes];
+                double[] newNodeY = new double[nNodes];
+                if (NodeX != null)
+                {
+                    Array.Copy(NodeY, newNodeY, NumNodes);
+                }
+                if (NodeY != null)
+                {
+                    Array.Copy(NodeY, newNodeY, NumNodes);
+                }
+                NodeX = newNodeX;
+                NodeY = newNodeY;
+                NumNodes = nNodes;
+            }
+
+            if (nEdges > NumEdges)
+            {
+                double[] newEdgeX = new double[nEdges];
+                double[] newEdgeY = new double[nEdges];
+                int[] newEdgeFaces = new int[nEdges * 2];
+                int[] newEdgeNodes = new int[nEdges * 2];
+                if (EdgeX != null)
+                {
+                    Array.Copy(EdgeX, newEdgeX, NumEdges);
+                }
+                if (EdgeY != null)
+                {
+                    Array.Copy(EdgeY, newEdgeY, NumEdges);
+                }
+                if (EdgeFaces != null)
+                {
+                    Array.Copy(EdgeFaces, newEdgeFaces, NumEdges * 2);
+                }
+                if (EdgeNodes != null)
+                {
+                    Array.Copy(EdgeNodes, newEdgeNodes, NumEdges * 2);
+                }
+                EdgeX = newEdgeX;
+                EdgeY = newEdgeY;
+                EdgeFaces = newEdgeFaces;
+                EdgeNodes = newEdgeNodes;
+                NumEdges = nEdges;
+            }
+
+            if (nFaces > NumFaces)
+            {
+                double[] newFaceX = new double[nFaces];
+                double[] newFaceY = new double[nFaces];
+                int[] newNodesPerFace = new int[nFaces];
+                if (FaceX != null)
+                {
+                    Array.Copy(FaceX, newFaceX, NumFaces);
+                }
+                if (FaceY != null)
+                {
+                    Array.Copy(FaceY, newFaceY, NumFaces);
+                }
+                if (NodesPerFace != null)
+                {
+                    Array.Copy(NodesPerFace, newNodesPerFace, NumFaces);
+                }
+                FaceX = newFaceX;
+                FaceY = newFaceY;
+                NodesPerFace = newNodesPerFace;
+                NumFaces = nFaces;
+            }
+
+            if (nFaceNodes > NumFaceNodes)
+            {
+                int[] newFaceEdges = new int[nFaceNodes];
+                int[] newFaceNodes = new int[nFaceNodes];
+                if (FaceEdges != null)
+                {
+                    Array.Copy(FaceEdges, newFaceEdges, NumFaceNodes);
+                }
+                if (FaceNodes != null)
+                {
+                    Array.Copy(FaceNodes, newFaceNodes, NumFaceNodes);
+                }
+                
+                FaceEdges = newFaceEdges;
+                FaceNodes = newFaceNodes;
+                NumFaceNodes = nFaceNodes;
+            }
+
+            if (hasChanged)
+            {
+                PinMemory();
+            }
         }
 
         ~DisposableMesh2D()
@@ -240,17 +391,18 @@ namespace MeshKernelNET.Api
 
         protected override void SetNativeObject(ref Mesh2DNative nativeObject)
         {
-            nativeObject.edge_faces = GetPinnedObjectPointer(EdgeFaces);
-            nativeObject.edge_nodes = GetPinnedObjectPointer(EdgeNodes);
-            nativeObject.face_edges = GetPinnedObjectPointer(FaceEdges);
-            nativeObject.face_nodes = GetPinnedObjectPointer(FaceNodes);
-            nativeObject.nodes_per_face = GetPinnedObjectPointer(NodesPerFace);
-            nativeObject.node_x = GetPinnedObjectPointer(NodeX);
-            nativeObject.node_y = GetPinnedObjectPointer(NodeY);
-            nativeObject.edge_x = GetPinnedObjectPointer(EdgeX);
-            nativeObject.edge_y = GetPinnedObjectPointer(EdgeY);
-            nativeObject.face_x = GetPinnedObjectPointer(FaceX);
-            nativeObject.face_y = GetPinnedObjectPointer(FaceY);
+            nativeObject.edge_faces = GetPinnedObjectPointer(0);
+            nativeObject.edge_nodes = GetPinnedObjectPointer(1);
+            nativeObject.face_edges = GetPinnedObjectPointer(2);
+            nativeObject.face_nodes = GetPinnedObjectPointer(3);
+            nativeObject.nodes_per_face = GetPinnedObjectPointer(4);
+            nativeObject.node_x = GetPinnedObjectPointer(5);
+            nativeObject.node_y = GetPinnedObjectPointer(6);
+            nativeObject.edge_x = GetPinnedObjectPointer(7);
+            nativeObject.edge_y = GetPinnedObjectPointer(8);
+            nativeObject.face_x = GetPinnedObjectPointer(9);
+            nativeObject.face_y = GetPinnedObjectPointer(10);
+
             nativeObject.num_nodes = NumNodes;
             nativeObject.num_valid_nodes = NumValidNodes;
             nativeObject.num_edges = NumEdges;

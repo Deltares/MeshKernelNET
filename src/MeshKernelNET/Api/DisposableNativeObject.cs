@@ -12,7 +12,7 @@ namespace MeshKernelNET.Api
     /// </summary>
     public abstract class DisposableNativeObject<TNative> : IDisposable where TNative : new()
     {
-        private readonly Dictionary<object, GCHandle> objectGarbageCollectHandles = new Dictionary<object, GCHandle>();
+        private readonly Dictionary<int, GCHandle> objectGarbageCollectHandles = new Dictionary<int, GCHandle>();
         private bool disposed;
 
         /// <summary>
@@ -63,11 +63,12 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Get the pointer to the pinned object
         /// </summary>
-        /// <param name="objectToLookUp">Object to get </param>
+        /// <param name="objectId">Object to get </param>
         /// <returns></returns>
-        protected IntPtr GetPinnedObjectPointer(object objectToLookUp)
+        protected IntPtr GetPinnedObjectPointer(int objectId)
         {
-            return objectGarbageCollectHandles[objectToLookUp].AddrOfPinnedObject();
+            var addressPinnedObject = objectGarbageCollectHandles[objectId].AddrOfPinnedObject();
+            return addressPinnedObject;
         }
 
         /// <summary>
@@ -92,11 +93,12 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Pins the arrays in memory (no garbage collect until unpinned (done in dispose))
         /// </summary>
-        private void PinMemory()
+        public void PinMemory()
         {
             IEnumerable<PropertyInfo> arrayProperties = GetType().GetProperties().Where(f => f.PropertyType.IsArray);
 
             // force initialization
+            int keyCounter = 0;
             foreach (PropertyInfo arrayProperty in arrayProperties)
             {
                 Type elementType = arrayProperty.PropertyType.GetElementType();
@@ -117,18 +119,25 @@ namespace MeshKernelNET.Api
                     }
 
                     byte[] bytes = ((string[])objectToPin).GetFlattenedAsciiCodedStringArray(bufferSize);
-                    AddObjectToPin(bytes, objectToPin);
+                    AddObjectToPin(bytes, keyCounter);
                 }
                 else
                 {
-                    AddObjectToPin(objectToPin);
+                    AddObjectToPin(objectToPin, keyCounter);
                 }
+
+                keyCounter++;
             }
         }
 
-        private void UnPinMemory()
+        public void UnPinMemory()
         {
-            foreach (KeyValuePair<object, GCHandle> valuePair in objectGarbageCollectHandles)
+            if (objectGarbageCollectHandles.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<int, GCHandle> valuePair in objectGarbageCollectHandles)
             {
                 valuePair.Value.Free();
             }
@@ -136,9 +145,8 @@ namespace MeshKernelNET.Api
             objectGarbageCollectHandles.Clear();
         }
 
-        private void AddObjectToPin(object objectToPin, object lookupObject = null)
+        private void AddObjectToPin(object objectToPin, int key)
         {
-            object key = lookupObject ?? objectToPin;
             objectGarbageCollectHandles.Add(key, GCHandle.Alloc(objectToPin, GCHandleType.Pinned));
         }
 

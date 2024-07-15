@@ -135,8 +135,8 @@ namespace MeshKernelNET.Api
 
         protected override void SetNativeObject(ref CurvilinearGridNative nativeObject)
         {
-            nativeObject.node_x = GetPinnedObjectPointer(NodeX);
-            nativeObject.node_y = GetPinnedObjectPointer(NodeY);
+            nativeObject.node_x = GetPinnedObjectPointer(0);
+            nativeObject.node_y = GetPinnedObjectPointer(1);
             nativeObject.num_m = numM;
             nativeObject.num_n = numN;
         }

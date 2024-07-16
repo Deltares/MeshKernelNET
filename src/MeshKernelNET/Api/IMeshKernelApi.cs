@@ -792,6 +792,58 @@ namespace MeshKernelNET.Api
                                          double relativeSearchSize,
                                          int minNumSamples,
                                          ref DisposableGeometryList results);
+        /// <summary>
+        /// De-refine a whole mesh using the Casulli algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns
+        int Mesh2dCasulliDerefinement(int meshKernelId);
+
+        /// <summary>
+        /// De-refine a mesh on polygon using the Casulli algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListPolygon">The input polygons</param>
+        /// <returns></returns>
+        int Mesh2dCasulliDerefinementOnPolygon(int meshKernelId,
+                                               [In] DisposableGeometryList geometryListPolygon);
+
+
+        /// <summary>
+        /// Get the list of elements that will be removed after applying the Casulli de-refinement algorithm to a whole mesh
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListElements">The elements to be removed </param>
+        /// <returns>Error code</returns>
+        int Mesh2dCasulliDerefinementElements([In] int meshKernelId,
+                                              [In][Out] ref DisposableGeometryList geometryListElements);
+
+        /// <summary>
+        /// Get the list of elements that will be removed after applying the Casulli de-refinement algorithm to a mesh on polygon
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListPolygon">The input polygon</param>
+        /// <param name="geometryListElements">The elements to be removed </param>
+        /// <returns>Error code</returns>
+        int Mesh2dCasulliDerefinementElementsOnPolygon([In] int meshKernelId,
+                                                       [In] DisposableGeometryList geometryListPolygon,
+                                                       [In][Out] ref DisposableGeometryList geometryListElements);
+
+        /// <summary>
+        /// Refine a whole mesh using the Casulli algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <returns>Error code</returns
+        int Mesh2dCasulliRefinement(int meshKernelId);
+
+        /// <summary>
+        /// Refine a mesh on polygon using the Casulli algorithm
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListPolygon">The input polygons</param>
+        /// <returns></returns>
+        int Mesh2dCasulliRefinementOnPolygon(int meshKernelId,
+                                             [In] DisposableGeometryList geometryListPolygon);
 
         /// <summary>
         /// Perform inner orthogonalization iteration

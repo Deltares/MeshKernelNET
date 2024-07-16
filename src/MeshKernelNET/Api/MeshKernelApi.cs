@@ -716,6 +716,50 @@ namespace MeshKernelNET.Api
                                                               ref resultsNative);
         }
 
+        public int Mesh2dCasulliDerefinement(int meshKernelId)
+        {
+            return MeshKernelDll.Mesh2dCasulliDerefinement(meshKernelId);
+        }
+
+        public int Mesh2dCasulliDerefinementOnPolygon(int meshKernelId,
+                                                      [In] DisposableGeometryList geometryListPolygon)
+        {
+            GeometryListNative geometryListNativePolygon = geometryListPolygon?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
+            return MeshKernelDll.Mesh2dCasulliDerefinementOnPolygon(meshKernelId,
+                                                                    ref geometryListNativePolygon);
+        }
+
+        public int Mesh2dCasulliDerefinementElements(int meshKernelId,
+                                                     [In][Out] ref DisposableGeometryList geometryListElements)
+        {
+            GeometryListNative geometryListNativeElements = geometryListElements.CreateNativeObject();
+            return MeshKernelDll.Mesh2dCasulliDerefinementElements(meshKernelId,
+                                                                   ref geometryListNativeElements);
+        }
+
+        public int Mesh2dCasulliDerefinementElementsOnPolygon(int meshKernelId,
+                                                      [In] DisposableGeometryList geometryListPolygon,
+                                                      [In][Out] ref DisposableGeometryList geometryListElements)
+        {
+            GeometryListNative geometryListNativePolygon = geometryListPolygon?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
+            GeometryListNative geometryListNativeElements = geometryListElements.CreateNativeObject();
+            return MeshKernelDll.Mesh2dCasulliDerefinementElementsOnPolygon(meshKernelId,
+                                                                            ref geometryListNativePolygon,
+                                                                            ref geometryListNativeElements);
+        }
+
+        public int Mesh2dCasulliRefinement(int meshKernelId)
+        {
+            return MeshKernelDll.Mesh2dCasulliRefinement(meshKernelId);
+        }
+
+        public int Mesh2dCasulliRefinementOnPolygon(int meshKernelId,
+                                                    [In] DisposableGeometryList geometryListPolygon)
+        {
+            GeometryListNative geometryListPolygonNative = geometryListPolygon?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
+            return MeshKernelDll.Mesh2dCasulliRefinementOnPolygon(meshKernelId, ref geometryListPolygonNative);
+        }
+
         public int Mesh2dComputeInnerOrtogonalizationIteration(int meshKernelId)
         {
             return MeshKernelDll.Mesh2dComputeInnerOrtogonalizationIteration(meshKernelId);

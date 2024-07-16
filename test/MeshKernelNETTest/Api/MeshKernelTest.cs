@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using MeshKernelNET.Api;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
@@ -1766,9 +1767,8 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dCasulliDerefinementThroughApi()
         {
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
             using (var api = new MeshKernelApi())
-            using (var polygon = new DisposableGeometryList())
             {
                 var id = 0;
                 DisposableMesh2D mesh2D = null;
@@ -1792,32 +1792,131 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dCasulliDerefinementOnPolygonThroughApi()
         {
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
             using (var api = new MeshKernelApi())
-            using (var polygon = new DisposableGeometryList())
             {
                 var id = 0;
                 DisposableMesh2D mesh2D = null;
-                var elements = new DisposableGeometryList();
+                var polygon = new DisposableGeometryList();
                 try
                 {
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    polygon.NumberOfCoordinates = 5;
-                    polygon.XCoordinates = new[] { 2.0, 6.0, 6.0, 2.0, 2.0 };
-                    polygon.YCoordinates = new[] { 2.0, 2.0, 6.0, 6.0, 2.0 };
-                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    polygon.NumberOfCoordinates = 4;
+                    polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
+                    polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
                     Assert.AreEqual(0, api.Mesh2dCasulliDerefinementOnPolygon(id, polygon));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.Greater(mesh.NumNodes, mesh2D.NumNodes);
-                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinementElementsOnPolygon(id, polygon, ref elements));
                 }
                 finally
                 {
                     api.DeallocateState(id);
                     mesh2D?.Dispose();
-                    elements?.Dispose();
+                    polygon?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliDerefinementElementsThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var elementsToRemove = new DisposableGeometryList();
+                var expectedElementsToRemove = new DisposableGeometryList();
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    elementsToRemove.NumberOfCoordinates = mesh.NumNodes;
+                    elementsToRemove.XCoordinates = new double[mesh.NumNodes];
+                    elementsToRemove.YCoordinates = new double[mesh.NumNodes];
+                    for (var i = 0; i < elementsToRemove.NumberOfCoordinates; ++i)
+                    {
+                        elementsToRemove.XCoordinates[i] = elementsToRemove.YCoordinates[i] = 0.0;
+                    }
+
+                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinementElements(id, ref elementsToRemove));
+
+
+                    expectedElementsToRemove.NumberOfCoordinates = 25;
+                    expectedElementsToRemove.XCoordinates = new[] { 1.5, 1.5, 1.5, 1.5, 1.5, 3.5, 3.5, 3.5, 3.5, 3.5, 5.5, 5.5, 5.5, 5.5, 5.5, 7.5, 7.5, 7.5, 7.5, 7.5, 9.5, 9.5, 9.5, 9.5, 9.5 };
+                    expectedElementsToRemove.YCoordinates = new[] { 0.5, 2.5, 4.5, 6.5, 8.5, 0.5, 2.5, 4.5, 6.5, 8.5, 0.5, 2.5, 4.5, 6.5, 8.5, 0.5, 2.5, 4.5, 6.5, 8.5, 0.5, 2.5, 4.5, 6.5, 8.5 };
+
+                    const double tolerance = 1.0e-12;
+                    for (var i = 0; i < expectedElementsToRemove.NumberOfCoordinates; ++i)
+                    {
+                        Assert.AreEqual(expectedElementsToRemove.XCoordinates[i], elementsToRemove.XCoordinates[i], tolerance);
+                        Assert.AreEqual(expectedElementsToRemove.YCoordinates[i], elementsToRemove.YCoordinates[i], tolerance);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    elementsToRemove?.Dispose();
+                    expectedElementsToRemove?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dCasulliDerefinementElementsOnPolygonThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var polygon = new DisposableGeometryList();
+                var elementsToRemove = new DisposableGeometryList();
+                var expectedElementsToRemove = new DisposableGeometryList();
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+
+                    polygon.NumberOfCoordinates = 4;
+                    polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
+                    polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+
+                    elementsToRemove.NumberOfCoordinates = mesh.NumNodes;
+                    elementsToRemove.XCoordinates = new double[mesh.NumNodes];
+                    elementsToRemove.YCoordinates = new double[mesh.NumNodes];
+                    for (var i = 0; i < elementsToRemove.NumberOfCoordinates; ++i)
+                    {
+                        elementsToRemove.XCoordinates[i] = elementsToRemove.YCoordinates[i] = 0.0;
+                    }
+
+                    Assert.AreEqual(0, api.Mesh2dCasulliDerefinementElementsOnPolygon(id, polygon, ref elementsToRemove));
+
+
+                    expectedElementsToRemove.NumberOfCoordinates = 5;
+                    expectedElementsToRemove.XCoordinates = new[] { 2.5, 4.5, 4.5, 6.5, 6.5 };
+                    expectedElementsToRemove.YCoordinates = new[] { 2.5, 4.5, 6.5, 4.5, 6.5 };
+
+
+                    const double tolerance = 1.0e-12;
+                    for (var i = 0; i < expectedElementsToRemove.NumberOfCoordinates; ++i)
+                    {
+                        Assert.AreEqual(expectedElementsToRemove.XCoordinates[i], elementsToRemove.XCoordinates[i], tolerance);
+                        Assert.AreEqual(expectedElementsToRemove.YCoordinates[i], elementsToRemove.YCoordinates[i], tolerance);
+                    }
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    polygon?.Dispose();
+                    elementsToRemove?.Dispose();
+                    expectedElementsToRemove?.Dispose();
                 }
             }
         }
@@ -1826,9 +1925,8 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dCasulliRefinementThroughApi()
         {
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
             using (var api = new MeshKernelApi())
-            using (var polygon = new DisposableGeometryList())
             {
                 var id = 0;
                 DisposableMesh2D mesh2D = null;
@@ -1852,21 +1950,21 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dCasulliRefinementOnPolygonThroughApi()
         {
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 1, 1))
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 1, 1))
             using (var api = new MeshKernelApi())
-            using (var polygon = new DisposableGeometryList())
             {
                 var id = 0;
                 DisposableMesh2D mesh2D = null;
+                var polygon = new DisposableGeometryList();
                 try
                 {
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    polygon.NumberOfCoordinates = 5;
-                    polygon.XCoordinates = new[] { 2.0, 6.0, 6.0, 2.0, 2.0 };
-                    polygon.YCoordinates = new[] { 2.0, 2.0, 6.0, 6.0, 2.0 };
-                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    polygon.NumberOfCoordinates = 4;
+                    polygon.XCoordinates = new[] { 2.5, 7.5, 5.5, 2.5 };
+                    polygon.YCoordinates = new[] { 2.5, 4.5, 8.5, 2.5 };
+                    polygon.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
                     Assert.AreEqual(0, api.Mesh2dCasulliRefinementOnPolygon(id, polygon));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.Less(mesh.NumNodes, mesh2D.NumNodes);
@@ -1875,6 +1973,7 @@ namespace MeshKernelNETTest.Api
                 {
                     api.DeallocateState(id);
                     mesh2D?.Dispose();
+                    polygon?.Dispose();
                 }
             }
         }

@@ -232,7 +232,6 @@ namespace MeshKernelNET.Api
             boundaryPolygons = new DisposableGeometryList();
             boundaryPolygons.XCoordinates = new double[numberOfPolygonNodes];
             boundaryPolygons.YCoordinates = new double[numberOfPolygonNodes];
-            boundaryPolygons.Values = new double[numberOfPolygonNodes];
             double geometrySeparator = GetSeparator();
             boundaryPolygons.GeometrySeparator = geometrySeparator;
             boundaryPolygons.NumberOfCoordinates = numberOfPolygonNodes;

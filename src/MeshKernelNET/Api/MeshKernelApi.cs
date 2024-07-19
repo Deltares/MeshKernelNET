@@ -243,6 +243,15 @@ namespace MeshKernelNET.Api
                                                                              upperRightN,
                                                                              upperRightM,
                                                                              ref geometryListNative);
+
+            if (exitCode != 0)
+            {
+                boundaryPolygons = new DisposableGeometryList();
+                return exitCode;
+            }
+
+            boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+            boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
             return exitCode;
         }
 

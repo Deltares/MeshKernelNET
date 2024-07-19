@@ -1029,8 +1029,32 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearComputeRectangularGrid(id, makeGridParameters));
                     Assert.AreEqual(0, api.CurvilinearGetBoundariesAsPolygons(id, 0, 0, 3, 3, out DisposableGeometryList boundaryPolygons));
 
-                    //var expectedPolygonXCoordinates = new []{1,2,3};
-                    //var expectedPolygonYCoordinates = new[] { 1, 2, 3 };
+                    var expectedPolygonXCoordinates = new[] { 0.0,
+                        10.0,
+                        20.0,
+                        30.0,
+                        40.0,
+                        50.0,
+                        60.0,
+                        70.0,
+                        80.0,
+                        90.0,
+                        90.0,
+                        90.0,
+                        90.0 };
+                    var expectedPolygonYCoordinates = new[] { 0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        10.0,
+                        20.0,
+                        30.0 };
 
                     //Assert.That(boundaryPolygons.XCoordinates, Is.EquivalentTo(expectedPolygonXCoordinates));
                     //Assert.That(boundaryPolygons.YCoordinates, Is.EquivalentTo(expectedPolygonYCoordinates));

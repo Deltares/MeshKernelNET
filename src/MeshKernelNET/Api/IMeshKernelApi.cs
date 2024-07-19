@@ -211,6 +211,18 @@ namespace MeshKernelNET.Api
         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
 
         /// <summary>
+        /// Gets the boundary polygon of a curvilinear grid, nodes with invalid coordinates are excluded
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="lowerLeftN">The n index of the lower left corner</param>
+        /// <param name="lowerLeftM">The m index of the lower left corner</param>
+        /// <param name="upperRightN">The n index of the upper right corner</param>
+        /// <param name="upperRightM">The m index of the upper right corner</param>
+        /// <param name="boundaryPolygons">The geometry list containing the boundary polygons. If multiple polygons are present, a separator is used</param>
+        /// <returns>Error code</returns>
+        int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN, int upperRightM, out DisposableGeometryList boundaryPolygons);
+
+        /// <summary>
         /// Gets the index of the closest curvilinear edge
         /// </summary>
         /// 

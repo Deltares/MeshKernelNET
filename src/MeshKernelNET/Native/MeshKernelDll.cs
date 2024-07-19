@@ -268,6 +268,32 @@ namespace MeshKernelNET.Native
         internal static extern int CurvilinearGetData([In] int meshKernelId, [In][Out] ref CurvilinearGridNative curvilinearGridNative);
 
         /// <summary>
+        ///  Counts the number of nodes in curvilinear grid boundary polygons.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="lowerLeftN">The n index of the lower left corner</param>
+        /// <param name="lowerLeftM">The m index of the lower left corner</param>
+        /// <param name="upperRightN">The n index of the upper right corner</param>
+        /// <param name="upperRightM">The m index of the upper right corner</param>
+        /// <param name="numberOfPolygonNodes">The number of polygon nodes</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_count_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearCountGetBoundariesAsPolygons([In] int meshKernelId, [In] int lowerLeftN, [In] int lowerLeftM, [In] int upperRightN, [In] int upperRightM, [In][Out] ref int numberOfPolygonNodes);
+
+        /// <summary>
+        /// Gets the boundary polygon of a curvilinear grid, nodes with invalid coordinates are excluded.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="lowerLeftN">The n index of the lower left corner</param>
+        /// <param name="lowerLeftM">The m index of the lower left corner</param>
+        /// <param name="upperRightN">The n index of the upper right corner</param>
+        /// <param name="upperRightM">The m index of the upper right corner</param>
+        /// <param name="boundaryPolygons">The geometry list containing the boundary polygons. If multiple polygons are present, a separator is used</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_count_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearGetBoundariesAsPolygons([In] int meshKernelId, [In] int lowerLeftN, [In] int lowerLeftM, [In] int upperRightN, [In] int upperRightM, [In][Out] ref GeometryListNative boundaryPolygons);
+
+        /// <summary>
         /// Gets the curvilinear grid dimensions as a CurvilinearGrid struct (converted as set of edges and nodes).
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

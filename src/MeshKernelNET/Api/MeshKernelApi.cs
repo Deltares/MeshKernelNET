@@ -214,6 +214,39 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
+        public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN,  int upperRightM, out DisposableGeometryList boundaryPolygons)
+        {
+            int numberOfPolygonNodes = 0; 
+            int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId, 
+                                                                                 lowerLeftN, 
+                                                                                 lowerLeftM, 
+                                                                                 upperRightN, 
+                                                                                 upperRightM, 
+                                                                                 ref numberOfPolygonNodes);
+            if (exitCode != 0)
+            {
+                boundaryPolygons = new DisposableGeometryList();
+                return exitCode;
+            }
+
+            boundaryPolygons = new DisposableGeometryList();
+            boundaryPolygons.XCoordinates = new double[numberOfPolygonNodes];
+            boundaryPolygons.YCoordinates = new double[numberOfPolygonNodes];
+            boundaryPolygons.Values = new double[numberOfPolygonNodes];
+            double geometrySeparator = GetSeparator();
+            boundaryPolygons.GeometrySeparator = geometrySeparator;
+            boundaryPolygons.NumberOfCoordinates = numberOfPolygonNodes;
+
+            var geometryListNative = boundaryPolygons.CreateNativeObject();
+            exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
+                                                                             lowerLeftN,
+                                                                             lowerLeftM,
+                                                                             upperRightN,
+                                                                             upperRightM,
+                                                                             ref geometryListNative);
+            return exitCode;
+        }
+
         public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;

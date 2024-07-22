@@ -290,7 +290,7 @@ namespace MeshKernelNET.Native
         /// <param name="upperRightM">The m index of the upper right corner</param>
         /// <param name="boundaryPolygons">The geometry list containing the boundary polygons. If multiple polygons are present, a separator is used</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_count_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_get_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearGetBoundariesAsPolygons([In] int meshKernelId, [In] int lowerLeftN, [In] int lowerLeftM, [In] int upperRightN, [In] int upperRightM, [In][Out] ref GeometryListNative boundaryPolygons);
 
         /// <summary>

@@ -238,11 +238,11 @@ namespace MeshKernelNET.Api
 
             var geometryListNative = boundaryPolygons.CreateNativeObject();
             exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
-                                                                             lowerLeftN,
-                                                                             lowerLeftM,
-                                                                             upperRightN,
-                                                                             upperRightM,
-                                                                             ref geometryListNative);
+                                                                        lowerLeftN,
+                                                                        lowerLeftM,
+                                                                        upperRightN,
+                                                                        upperRightM,
+                                                                        ref geometryListNative);
 
             if (exitCode != 0)
             {

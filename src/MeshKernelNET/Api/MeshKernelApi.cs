@@ -1408,6 +1408,15 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonCountOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref numberOfPolygonVertices);
         }
 
+        public int PolygonCountLinearRefine(int meshKernelId, 
+                                            in DisposableGeometryList disposableGeometryListIn,
+                                            int firstIndex,
+                                            int secondIndex, ref int numberOfPolygonNodes)
+        {
+            GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
+            return MeshKernelDll.PolygonCountLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, ref numberOfPolygonNodes);
+        }
+
         public int PolygonCountRefine(int meshKernelId, in DisposableGeometryList disposableGeometryList, int firstIndex, int secondIndex, double distance, ref int numberOfPolygonVertices)
         {
             GeometryListNative geometryListInNative = disposableGeometryList.CreateNativeObject();
@@ -1436,6 +1445,15 @@ namespace MeshKernelNET.Api
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject(); // Create an instance for the out parameter
             return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
+        }
+
+
+        public int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+                                       int secondIndex, ref DisposableGeometryList disposableGeometryListOut)
+        {
+            GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
+            GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject(); // Create an instance for the out parameter
+            return MeshKernelDll.PolygonLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, ref geometryListNativeOut);
         }
 
         /// <inheritdoc/>

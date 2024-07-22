@@ -1530,7 +1530,7 @@ namespace MeshKernelNET.Api
                                bool innerPolygon, double distance, ref int numberOfPolygonVertices);
 
         /// <summary>
-        /// Count the number of polygon vertices after refinement
+        /// Count the number of polygon vertices after equidistant refinement
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListIn">The input polygon</param>
@@ -1545,6 +1545,22 @@ namespace MeshKernelNET.Api
                                int secondIndex,
                                double distance,
                                ref int numberOfPolygonVertices);
+
+        /// <summary>
+        /// Count the number of polygon vertices after linear refinement
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="disposableGeometryListIn">The input polygon</param>
+        /// <param name="firstIndex">The index of the first vertex</param>
+        /// <param name="secondIndex">The index of the second vertex</param>
+        /// <param name="distance">The refinement distance</param>
+        /// <param name="numberOfPolygonVertices">The number of vertices after refinement </param>
+        /// <returns>Error code</returns>
+        int PolygonCountLinearRefine(int meshKernelId,
+                                      in DisposableGeometryList disposableGeometryListIn,
+                                      int firstIndex,
+                                      int secondIndex,
+                                      ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Selects points in polygons
@@ -1574,7 +1590,7 @@ namespace MeshKernelNET.Api
                              double distance, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
-        /// Gets the refined polygon
+        /// Equidistant refinement of a polygon.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListIn">The input polygon</param>
@@ -1585,6 +1601,18 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int PolygonRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                           int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut);
+
+        /// <summary>
+        /// Linear refinement of a polygon
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="disposableGeometryListIn">The input polygon</param>
+        /// <param name="firstIndex">The index of the first vertex</param>
+        /// <param name="secondIndex">The index of the second vertex</param>
+        /// <param name="disposableGeometryListOut">The refined polygon</param>
+        /// <returns>Error code</returns>
+        int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+                          int secondIndex, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
         /// Redo editing action

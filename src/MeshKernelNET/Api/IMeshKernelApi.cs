@@ -1587,7 +1587,7 @@ namespace MeshKernelNET.Api
         /// <param name="distance">The refinement distance</param>
         /// <param name="disposableGeometryListOut">The refined polygon</param>
         /// <returns>Error code</returns>
-        int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+        int PolygonEquidistantRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                           int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>

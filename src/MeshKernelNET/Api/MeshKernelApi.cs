@@ -1439,7 +1439,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonGetOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref geometryListNativeOut);
         }
 
-        public int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+        public int PolygonEquidistantRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                                  int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();

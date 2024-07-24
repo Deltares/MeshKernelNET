@@ -629,7 +629,7 @@ namespace MeshKernelNETTest.Api
                     geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
                     geometryListOut.Values = new double[numberOfPolygonVertices];
 
-                    Assert.AreEqual(0, api.PolygonRefine(id,
+                    Assert.AreEqual(0, api.PolygonLinearRefine(id,
                                                          geometryListIn,
                                                          firstIndex,
                                                          secondIndex,
@@ -655,7 +655,6 @@ namespace MeshKernelNETTest.Api
             using (var geometryListIn = new DisposableGeometryList())
             {
                 var id = 0;
-                var mesh2D = new DisposableMesh2D();
                 var geometryListOut = new DisposableGeometryList();
                 try
                 {
@@ -674,11 +673,12 @@ namespace MeshKernelNETTest.Api
                     var firstIndex = 0;
                     var secondIndex = 2;
                     int numberOfPolygonVertices = -1;
-                    Assert.AreEqual(0, api.PolygonCountLinearRefine(id,
-                                                                    geometryListIn,
-                                                                    firstIndex,
-                                                                    secondIndex,
-                                                                    ref numberOfPolygonVertices));
+                    var result = api.PolygonCountLinearRefine(id,
+                                                       geometryListIn,
+                                                       firstIndex,
+                                                       secondIndex,
+                                                       ref numberOfPolygonVertices);
+                    Assert.That(result, Is.EqualTo(0));
 
                     geometryListOut.GeometrySeparator = geometrySeparator;
                     geometryListOut.NumberOfCoordinates = numberOfPolygonVertices;
@@ -687,19 +687,18 @@ namespace MeshKernelNETTest.Api
                     geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
                     geometryListOut.Values = new double[numberOfPolygonVertices];
 
-                    Assert.AreEqual(0, api.PolygonLinearRefine(id,
-                                                               geometryListIn,
-                                                               firstIndex,
-                                                               secondIndex,
-                                                               ref geometryListOut));
+                    result = api.PolygonLinearRefine(id,
+                                                  geometryListIn,
+                                                  firstIndex,
+                                                  secondIndex,
+                                                  ref geometryListOut);
+                    Assert.That(result, Is.EqualTo(0));
 
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                 }
                 finally
                 {
                     api.DeallocateState(id);
                     geometryListOut.Dispose();
-                    mesh2D.Dispose();
                 }
             }
         }

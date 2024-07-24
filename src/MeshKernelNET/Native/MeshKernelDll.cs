@@ -1818,7 +1818,7 @@ namespace MeshKernelNET.Native
         /// <param name="geometryListOut"></param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_refine", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int PolygonRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref GeometryListNative geometryListOut);
+        internal static extern int PolygonLinearRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref GeometryListNative geometryListOut);
 
         /// <summary>
         /// Linear refinement of a polygon

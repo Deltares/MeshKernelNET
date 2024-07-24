@@ -1439,12 +1439,12 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonGetOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref geometryListNativeOut);
         }
 
-        public int PolygonRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+        public int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
                                  int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject(); // Create an instance for the out parameter
-            return MeshKernelDll.PolygonRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
+            return MeshKernelDll.PolygonLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
         }
 
 

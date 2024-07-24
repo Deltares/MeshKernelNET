@@ -1539,7 +1539,7 @@ namespace MeshKernelNET.Api
         /// <param name="distance">The refinement distance</param>
         /// <param name="numberOfPolygonVertices">The number of vertices after refinement </param>
         /// <returns>Error code</returns>
-        int PolygonCountRefine(int meshKernelId,
+        int PolygonCountEquidistantRefine(int meshKernelId,
                                in DisposableGeometryList disposableGeometryListIn,
                                int firstIndex,
                                int secondIndex,

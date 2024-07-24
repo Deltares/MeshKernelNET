@@ -1796,7 +1796,7 @@ namespace MeshKernelNET.Native
         /// <param name="numberOfPolygonVertices">The number of vertices after refinement </param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_count_refine", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int PolygonCountRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref int numberOfPolygonVertices);
+        internal static extern int PolygonCountEquidistantRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Count the number of vertices after linear refinement of a polygon
@@ -1844,7 +1844,7 @@ namespace MeshKernelNET.Native
         /// <param name="geometryListOut"></param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_refine", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int PolygonLinearRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref GeometryListNative geometryListOut);
+        internal static extern int PolygonEquidistantRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In] double distance, [In][Out] ref GeometryListNative geometryListOut);
 
         /// <summary>
         /// Linear refinement of a polygon

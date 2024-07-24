@@ -1458,10 +1458,10 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonCountLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, ref numberOfPolygonNodes);
         }
 
-        public int PolygonCountRefine(int meshKernelId, in DisposableGeometryList disposableGeometryList, int firstIndex, int secondIndex, double distance, ref int numberOfPolygonVertices)
+        public int PolygonCountEquidistantRefine(int meshKernelId, in DisposableGeometryList disposableGeometryList, int firstIndex, int secondIndex, double distance, ref int numberOfPolygonVertices)
         {
             GeometryListNative geometryListInNative = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.PolygonCountRefine(meshKernelId, ref geometryListInNative, firstIndex, secondIndex, distance, ref numberOfPolygonVertices);
+            return MeshKernelDll.PolygonCountEquidistantRefine(meshKernelId, ref geometryListInNative, firstIndex, secondIndex, distance, ref numberOfPolygonVertices);
         }
 
         public int GetPointsInPolygon(int meshKernelId, in DisposableGeometryList inputPolygon, in DisposableGeometryList inputPoints, ref DisposableGeometryList selectedPoints)
@@ -1485,7 +1485,7 @@ namespace MeshKernelNET.Api
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject(); // Create an instance for the out parameter
-            return MeshKernelDll.PolygonLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
+            return MeshKernelDll.PolygonEquidistantRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, distance, ref geometryListNativeOut);
         }
 
 

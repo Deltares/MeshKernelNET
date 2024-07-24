@@ -615,7 +615,7 @@ namespace MeshKernelNETTest.Api
                     var firstIndex = 0;
                     var secondIndex = 2;
                     int numberOfPolygonVertices = -1;
-                    Assert.AreEqual(0, api.PolygonCountRefine(id,
+                    Assert.AreEqual(0, api.PolygonCountEquidistantRefine(id,
                                                               geometryListIn,
                                                               firstIndex,
                                                               secondIndex,

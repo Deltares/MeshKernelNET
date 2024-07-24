@@ -629,7 +629,7 @@ namespace MeshKernelNETTest.Api
                     geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
                     geometryListOut.Values = new double[numberOfPolygonVertices];
 
-                    Assert.AreEqual(0, api.PolygonLinearRefine(id,
+                    Assert.AreEqual(0, api.PolygonEquidistantRefine(id,
                                                          geometryListIn,
                                                          firstIndex,
                                                          secondIndex,

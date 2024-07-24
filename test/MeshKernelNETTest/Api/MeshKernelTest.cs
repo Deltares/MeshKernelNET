@@ -688,10 +688,11 @@ namespace MeshKernelNETTest.Api
                     geometryListOut.Values = new double[numberOfPolygonVertices];
 
                     result = api.PolygonLinearRefine(id,
-                                                  geometryListIn,
-                                                  firstIndex,
-                                                  secondIndex,
-                                                  ref geometryListOut);
+                                                     geometryListIn,
+                                                     firstIndex,
+                                                     secondIndex,
+                                                     ref geometryListOut);
+
                     Assert.That(result, Is.EqualTo(0));
 
                 }

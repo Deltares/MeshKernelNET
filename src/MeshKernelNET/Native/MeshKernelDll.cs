@@ -133,6 +133,18 @@ namespace MeshKernelNET.Native
                                                                                [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParametersNative);
 
         /// <summary>
+        /// Make curvilinear grid from splines with an advancing front.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="geometryListNative">The input splines</param>
+        /// <param name="curvilinearParametersNative">The input parameters to generate the curvilinear grid</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_compute_grid_from_splines", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearComputeFromSplines([In] int meshKernelId,
+                                                                 [In] ref GeometryListNative geometryListNative,
+                                                                 [In] ref CurvilinearParametersNative curvilinearParametersNative);
+
+        /// <summary>
         /// Computes the curvature of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

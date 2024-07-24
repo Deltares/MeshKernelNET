@@ -120,6 +120,17 @@ namespace MeshKernelNET.Api
                                                         in SplinesToCurvilinearParameters splinesToCurvilinearParameters);
 
         /// <summary>
+        /// Make curvilinear grid from splines.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="disposableGeometryListIn">The input splines</param>
+        /// <param name="curvilinearParameters">The parameters for the generation of the curvilinear grid</param>
+        /// <returns>Error code</returns>
+        int CurvilinearComputeGridFromSplines(int meshKernelId,
+                                              in DisposableGeometryList disposableGeometryListIn,
+                                              in CurvilinearParameters curvilinearParameters);
+
+        /// <summary>
         /// Computes the smoothness of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

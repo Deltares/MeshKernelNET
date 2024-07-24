@@ -112,6 +112,16 @@ namespace MeshKernelNET.Api
                                                                              ref curvilinearParametersNative, ref splinesToCurvilinearParametersNative);
         }
 
+        public int CurvilinearComputeGridFromSplines(int meshKernelId,
+                                                     in DisposableGeometryList disposableGeometryListIn,
+                                                     in CurvilinearParameters curvilinearParameters)
+        {
+            GeometryListNative geometryListNative = disposableGeometryListIn.CreateNativeObject();
+            var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
+            return MeshKernelDll.CurvilinearComputeFromSplines(meshKernelId, ref geometryListNative, ref curvilinearParametersNative);
+        }
+
+        
         public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness)
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);

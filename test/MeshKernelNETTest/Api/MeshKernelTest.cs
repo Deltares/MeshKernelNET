@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
 using MeshKernelNET.Api;
-using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using static MeshKernelNETTest.Api.TestUtilityFunctions;
 
@@ -617,7 +615,7 @@ namespace MeshKernelNETTest.Api
                     var firstIndex = 0;
                     var secondIndex = 2;
                     int numberOfPolygonVertices = -1;
-                    Assert.AreEqual(0, api.PolygonCountRefine(id,
+                    Assert.AreEqual(0, api.PolygonCountEquidistantRefine(id,
                                                               geometryListIn,
                                                               firstIndex,
                                                               secondIndex,
@@ -631,7 +629,7 @@ namespace MeshKernelNETTest.Api
                     geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
                     geometryListOut.Values = new double[numberOfPolygonVertices];
 
-                    Assert.AreEqual(0, api.PolygonRefine(id,
+                    Assert.AreEqual(0, api.PolygonEquidistantRefine(id,
                                                          geometryListIn,
                                                          firstIndex,
                                                          secondIndex,
@@ -645,6 +643,63 @@ namespace MeshKernelNETTest.Api
                     api.DeallocateState(id);
                     geometryListOut.Dispose();
                     mesh2D.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void PolygonLinearRefineThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var geometryListIn = new DisposableGeometryList())
+            {
+                var id = 0;
+                var geometryListOut = new DisposableGeometryList();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    double geometrySeparator = api.GetSeparator();
+                    geometryListIn.GeometrySeparator = geometrySeparator;
+                    geometryListIn.NumberOfCoordinates = 4;
+
+                    geometryListIn.XCoordinates = new[] { 76.251099, 498.503723, 505.253784, 76.251099 };
+
+                    geometryListIn.YCoordinates = new[] { 92.626556, 91.126541, 490.130554, 92.626556 };
+
+                    geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0 };
+
+                    var firstIndex = 0;
+                    var secondIndex = 2;
+                    int numberOfPolygonVertices = -1;
+                    var result = api.PolygonCountLinearRefine(id,
+                                                       geometryListIn,
+                                                       firstIndex,
+                                                       secondIndex,
+                                                       ref numberOfPolygonVertices);
+                    Assert.That(result, Is.EqualTo(0));
+
+                    geometryListOut.GeometrySeparator = geometrySeparator;
+                    geometryListOut.NumberOfCoordinates = numberOfPolygonVertices;
+
+                    geometryListOut.XCoordinates = new double[numberOfPolygonVertices];
+                    geometryListOut.YCoordinates = new double[numberOfPolygonVertices];
+                    geometryListOut.Values = new double[numberOfPolygonVertices];
+
+                    result = api.PolygonLinearRefine(id,
+                                                     geometryListIn,
+                                                     firstIndex,
+                                                     secondIndex,
+                                                     ref geometryListOut);
+
+                    Assert.That(result, Is.EqualTo(0));
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    geometryListOut.Dispose();
                 }
             }
         }

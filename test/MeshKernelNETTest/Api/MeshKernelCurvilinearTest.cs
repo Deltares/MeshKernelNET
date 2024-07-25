@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GeoAPI.Geometries;
 using MeshKernelNET.Api;
+using NetTopologySuite.Algorithm;
 using NUnit.Framework;
 
 namespace MeshKernelNETTest.Api
@@ -255,6 +256,60 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.CurvilinearComputeOrthogonalGridFromSplines(id, geometryListIn,
                                                                                        curvilinearParameters, splinesToCurvilinearParameters));
+
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+
+                    geometryListIn.Dispose();
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    curvilinearGrid?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void CurvilinearComputeGridFromSplinesThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var geometryListIn = new DisposableGeometryList())
+            {
+                var id = 0;
+                DisposableCurvilinearGrid curvilinearGrid = null;
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    double geometrySeparator = api.GetSeparator();
+                    geometryListIn.GeometrySeparator = geometrySeparator;
+                    
+
+                    geometryListIn.XCoordinates = new[] {
+                        -1.0, 11.0,
+                        geometrySeparator,
+                        10.0, 10.0,
+                        geometrySeparator,
+                        11.0, -1.0,
+                        geometrySeparator,
+                        0.0, 0.0};
+                    geometryListIn.YCoordinates = new[] {
+                        0.0, 0.0,
+                        geometrySeparator,
+                        11.0, -1.0,
+                        geometrySeparator,
+                        10.0, 10.0,
+                        geometrySeparator,
+                        11.0, -1.0};
+
+                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+
+                    var curvilinearParameters = CurvilinearParameters.CreateDefault();
+                    curvilinearParameters.MRefinement = 5;
+                    curvilinearParameters.NRefinement = 5;
+
+                    Assert.AreEqual(0, api.CurvilinearComputeGridFromSplines(id, geometryListIn, curvilinearParameters));
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 

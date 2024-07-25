@@ -121,7 +121,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearComputeFromSplines(meshKernelId, ref geometryListNative, ref curvilinearParametersNative);
         }
 
-        
+
         public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness)
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
@@ -224,14 +224,14 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN,  int upperRightM, out DisposableGeometryList boundaryPolygons)
+        public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN, int upperRightM, out DisposableGeometryList boundaryPolygons)
         {
-            int numberOfPolygonNodes = 0; 
-            int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId, 
-                                                                                 lowerLeftN, 
-                                                                                 lowerLeftM, 
-                                                                                 upperRightN, 
-                                                                                 upperRightM, 
+            int numberOfPolygonNodes = 0;
+            int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId,
+                                                                                 lowerLeftN,
+                                                                                 lowerLeftM,
+                                                                                 upperRightN,
+                                                                                 upperRightM,
                                                                                  ref numberOfPolygonNodes);
             if (exitCode != 0)
             {
@@ -972,7 +972,7 @@ namespace MeshKernelNET.Api
             newMesh2D = disposableMesh2D.CreateNativeObject();
 
             exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2D);
-            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, true);
+            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, false);
 
             return exitCode;
         }
@@ -1459,7 +1459,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonCountOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref numberOfPolygonVertices);
         }
 
-        public int PolygonCountLinearRefine(int meshKernelId, 
+        public int PolygonCountLinearRefine(int meshKernelId,
                                             in DisposableGeometryList disposableGeometryListIn,
                                             int firstIndex,
                                             int secondIndex, ref int numberOfPolygonNodes)

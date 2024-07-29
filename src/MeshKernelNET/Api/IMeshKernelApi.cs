@@ -87,6 +87,15 @@ namespace MeshKernelNET.Api
         int ContactsGetData(int meshKernelId, out DisposableContacts disposableContacts);
 
         /// <summary>
+        /// Snaps a mesh to a land boundary
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="selectingPolygon">The polygon where to perform the snapping</param>
+        /// <param name="landBoundaries"> The input land boundaries</param>
+        /// <returns>Error code</returns>
+        int Mesh2dSnapToLandBoundary(int meshKernelId, in DisposableGeometryList selectingPolygon, in DisposableGeometryList landBoundaries);
+
+        /// <summary>
         /// Make curvilinear grid from splines
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

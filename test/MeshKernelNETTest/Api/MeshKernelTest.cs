@@ -3155,6 +3155,37 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+        [Test]
+        public void Mesh2dSnapToAnEmptyLandBoundaryThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (var selectingPolygon = new DisposableGeometryList())
+            using (var landBoundaries = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshOut = new DisposableMesh2D();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+
+                    // Get mesh data after conversion
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    Assert.AreEqual(0, meshOut.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshOut?.Dispose();
+                }
+            }
+        }
     }
 
 }

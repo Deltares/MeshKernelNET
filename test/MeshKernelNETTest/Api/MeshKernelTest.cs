@@ -3177,7 +3177,60 @@ namespace MeshKernelNETTest.Api
 
                     // Get mesh data after conversion
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
-                    Assert.AreEqual(0, meshOut.NumNodes);
+                    Assert.AreEqual(100, meshOut.NumNodes);
+                    Assert.AreEqual(0.0, meshOut.NodeX[0]);
+                    Assert.AreEqual(0.0, meshOut.NodeX[1]);
+                    Assert.AreEqual(0.0, meshOut.NodeY[0]);
+                    Assert.AreEqual(10.0, meshOut.NodeY[1]);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    meshOut?.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void Mesh2dSnapToLandBoundaryThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (var selectingPolygon = new DisposableGeometryList())
+            using (var landBoundaries = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+
+                
+
+                var id = 0;
+                var meshOut = new DisposableMesh2D();
+                try
+                {
+                    // prepare
+                    id = api.AllocateState(0);
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    selectingPolygon.XCoordinates = new[] { -10.0, 11.0, 15.0, -10.0, -10.0 };
+                    selectingPolygon.YCoordinates = new[] { -10.0, -10.0, 15.0, 15.0, -10.0 };
+                    selectingPolygon.NumberOfCoordinates = selectingPolygon.XCoordinates.Length;
+
+
+                    landBoundaries.XCoordinates = new[] { -1.0, 11.0 };
+                    landBoundaries.YCoordinates = new[] { -1.0, 11.0 };
+                    landBoundaries.NumberOfCoordinates = landBoundaries.XCoordinates.Length;
+
+                    // execute
+                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+
+                    // assert
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    Assert.AreEqual(100, meshOut.NumNodes);
+                    Assert.AreEqual(0.0, meshOut.NodeX[0]);
+                    Assert.AreEqual(0.0, meshOut.NodeX[1]);
+                    Assert.AreEqual(0.0, meshOut.NodeY[0]);
+                    Assert.AreEqual(10.0, meshOut.NodeY[1]);
                 }
                 finally
                 {

@@ -705,6 +705,93 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void PolygonSnapToLandBoundaryThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 100, 100))
+            using (var landboundaries = new DisposableGeometryList())
+            {
+                var id = 0;
+                var polygon = new DisposableGeometryList();
+                try
+                {
+                    id = api.AllocateState(0);
+
+                    double geometrySeparator = api.GetSeparator();
+                    landboundaries.GeometrySeparator = geometrySeparator;
+                    landboundaries.NumberOfCoordinates = 4;
+                    landboundaries.XCoordinates = new[] { 139.251465, 527.753906, 580.254211, 194.001801 };
+                    landboundaries.YCoordinates = new[] { 497.630615, 499.880676, 265.878296, 212.627762 };
+                    landboundaries.NumberOfCoordinates = landboundaries.XCoordinates.Length;
+
+                    polygon.XCoordinates = new[] { 170.001648, 263.002228, 344.002747,
+                        458.753448, 515.753845, 524.753906,
+                        510.503754, 557.754089, 545.004028,
+                        446.003387, 340.252716, 242.752106,
+                        170.001648 };
+                    polygon.YCoordinates = new[] { 472.880371, 472.880371, 475.130432,
+                        482.630493, 487.130554, 434.630005,
+                        367.129333, 297.378601, 270.378357,
+                        259.128235, 244.128067, 226.877884,
+                        472.880371 };
+                    polygon.NumberOfCoordinates = polygon.XCoordinates.Length;
+
+
+                    var firstIndex = 0;
+                    var secondIndex = 2;
+                    int numberOfPolygonVertices = -1;
+                    var result = api.PolygonSnapToLandBoundary(id,
+                                                               landboundaries,
+                                                               ref polygon,
+                                                               firstIndex,
+                                                               secondIndex);
+                    Assert.That(result, Is.EqualTo(0));
+
+
+                    const double tolerance = 1.0e-3;
+                    var expectedXCoordinates = new[] { 169.85727722422831,
+                        262.854737816309,
+                        343.86557098779792,
+                        458.753448,
+                        515.753845,
+                        524.753906,
+                        510.503754,
+                        557.754089,
+                        545.004028,
+                        446.003387,
+                        340.252716,
+                        242.752106,
+                        170.001648 };
+
+                    var expectedYCoordinates = new[]
+                    {   497.80787243056284,
+                        498.34647897995455,
+                        498.81566346133775,
+                        482.630493,
+                        487.130554,
+                        434.630005,
+                        367.129333,
+                        297.378601,
+                        270.378357,
+                        259.128235,
+                        244.128067,
+                        226.877884,
+                        472.880371};
+
+                    Assert.That(polygon.XCoordinates, Is.EqualTo(expectedXCoordinates).Within(tolerance));
+                    Assert.That(polygon.YCoordinates, Is.EqualTo(expectedYCoordinates).Within(tolerance));
+
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    polygon.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void Mesh2dRefineBasedOnSamplesThroughAPI()
         {
             // Setup

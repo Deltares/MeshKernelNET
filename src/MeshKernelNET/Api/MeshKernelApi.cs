@@ -1514,6 +1514,17 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, ref geometryListNativeOut);
         }
 
+        public int PolygonSnapToLandBoundary(int meshKernelId, 
+                                             in DisposableGeometryList landboundaries, 
+                                             ref DisposableGeometryList polygon,
+                                             int firstIndex,
+                                             int secondIndex)
+        {
+            GeometryListNative landboundariesNative = landboundaries.CreateNativeObject();
+            GeometryListNative polygonNative = polygon.CreateNativeObject(); // Create an instance for the out parameter
+            return MeshKernelDll.PolygonSnapToLandBoundary(meshKernelId, ref landboundariesNative, ref polygonNative, firstIndex, secondIndex);
+        }
+
         /// <inheritdoc/>
         public int RedoState(ref bool redone)
         {

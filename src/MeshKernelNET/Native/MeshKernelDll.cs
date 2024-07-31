@@ -1881,6 +1881,22 @@ namespace MeshKernelNET.Native
         internal static extern int PolygonLinearRefine([In] int meshKernelId, [In] ref GeometryListNative geometryListIn, [In] int firstIndex, [In] int secondIndex, [In][Out] ref GeometryListNative geometryListOut);
 
         /// <summary>
+        /// Snaps part of a polygon to a land boundary
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param
+        /// <param name="landboundaries">The land boundaries</param>
+        /// <param name="polygon">The input polygon</param>
+        /// <param name="firstIndex">The index of the first vertex</param>
+        /// <param name="secondIndex">The index of the second vertex</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_polygon_snap_to_landboundary", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int PolygonSnapToLandBoundary([In] int meshKernelId,
+                                                             [In] ref GeometryListNative landboundaries,
+                                                             [In][Out] ref GeometryListNative polygon,
+                                                             [In] int firstIndex,
+                                                             [In] int secondIndex);
+
+        /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>

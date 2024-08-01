@@ -1709,6 +1709,16 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dSet([In] int meshKernelId, [In] ref Mesh2DNative mesh2DNative);
 
         /// <summary>
+        /// Snaps a mesh to a land boundary
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="selectingPolygon">The polygon where to perform the snapping</param>
+        /// <param name="landBoundaries"> The input land boundaries</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_snap_to_landboundary", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dSnapToLandBoundary([In] int meshKernelId, [In] ref GeometryListNative selectingPolygon, [In] ref GeometryListNative landBoundaries);
+
+        /// <summary>
         /// Get the double value used in the back-end library as separator and missing value
         /// </summary>
         /// <returns>The double missing value</returns>

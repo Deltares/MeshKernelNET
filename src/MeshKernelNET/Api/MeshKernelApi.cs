@@ -82,6 +82,13 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
+        public int Mesh2dSnapToLandBoundary(int meshKernelId, in DisposableGeometryList selectingPolygon, in DisposableGeometryList landBoundaries)
+        {
+            var selectingPolygonNative = selectingPolygon.CreateNativeObject();
+            var landBoundariesNative = landBoundaries.CreateNativeObject();
+            return MeshKernelDll.Mesh2dSnapToLandBoundary(meshKernelId,  ref selectingPolygonNative,  ref landBoundariesNative);
+        }
+
         public int CurvilinearComputeTransfiniteFromSplines(int meshKernelId,
                                                             in DisposableGeometryList disposableGeometryListIn,
                                                             in CurvilinearParameters curvilinearParameters)

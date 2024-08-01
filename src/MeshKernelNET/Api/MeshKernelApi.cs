@@ -86,8 +86,7 @@ namespace MeshKernelNET.Api
         {
             var selectingPolygonNative = selectingPolygon.CreateNativeObject();
             var landBoundariesNative = landBoundaries.CreateNativeObject();
-            int exitCode = MeshKernelDll.Mesh2dSnapToLandBoundary(meshKernelId,  ref selectingPolygonNative,  ref landBoundariesNative);
-            return exitCode;
+            return MeshKernelDll.Mesh2dSnapToLandBoundary(meshKernelId,  ref selectingPolygonNative,  ref landBoundariesNative);
         }
 
         public int CurvilinearComputeTransfiniteFromSplines(int meshKernelId,

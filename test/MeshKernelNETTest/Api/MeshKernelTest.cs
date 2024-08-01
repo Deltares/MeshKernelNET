@@ -3200,9 +3200,6 @@ namespace MeshKernelNETTest.Api
             using (var landBoundaries = new DisposableGeometryList())
             using (var api = new MeshKernelApi())
             {
-
-                
-
                 var id = 0;
                 var meshOut = new DisposableMesh2D();
                 try
@@ -3215,7 +3212,6 @@ namespace MeshKernelNETTest.Api
                     selectingPolygon.XCoordinates = new[] { -10.0, 11.0, 15.0, -10.0, -10.0 };
                     selectingPolygon.YCoordinates = new[] { -10.0, -10.0, 15.0, 15.0, -10.0 };
                     selectingPolygon.NumberOfCoordinates = selectingPolygon.XCoordinates.Length;
-
 
                     landBoundaries.XCoordinates = new[] { -1.0, 11.0 };
                     landBoundaries.YCoordinates = new[] { -1.0, 11.0 };

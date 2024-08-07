@@ -2155,6 +2155,42 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void Mesh2dConnectMeshesThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D firstMesh = CreateMesh2D(3, 3, 1, 1))
+            using (DisposableMesh2D secondMesh = CreateMesh2D(6, 6, 0.5, 0.5, 3.0))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    // Prepare
+                    double searchFraction = 0.1;
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, firstMesh));
+
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+
+                    // Execute
+                    Assert.AreEqual(0, api.Mesh2dConnectMeshes(id, secondMesh, searchFraction));
+
+
+                    // Assert
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.AreEqual(45, mesh2D.NumNodes);
+                }
+                finally
+                {
+                    api.DeallocateState(id);
+                    mesh2D?.Dispose();
+                }
+            }
+
+        }
+
+        [Test]
         public void Mesh2dConvertProjectionThroughApi()
         {
             // Setup

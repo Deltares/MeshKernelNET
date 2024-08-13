@@ -1087,6 +1087,8 @@ namespace MeshKernelNETTest.Api
                     var expectedPolygonXCoordinates = new[] { 0, 1, 2, 3, 3, 3, 3, 2, 1, 0, 0, 0, 0 };
                     var expectedPolygonYCoordinates = new[] { 0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 2, 1, 0 };
 
+                    Assert.That(boundaryPolygons.GeometrySeparator,Is.EqualTo(api.GetSeparator()));
+                    Assert.That(boundaryPolygons.InnerOuterSeparator,Is.EqualTo(api.GetInnerOuterSeparator()));
                     Assert.That(boundaryPolygons.XCoordinates, Is.EquivalentTo(expectedPolygonXCoordinates));
                     Assert.That(boundaryPolygons.YCoordinates, Is.EquivalentTo(expectedPolygonYCoordinates));
 

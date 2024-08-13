@@ -1631,8 +1631,26 @@ namespace MeshKernelNET.Api
         /// <param name="secondIndex">The index of the second vertex</param>
         /// <param name="disposableGeometryListOut">The refined polygon</param>
         /// <returns>Error code</returns>
-        int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
-                          int secondIndex, ref DisposableGeometryList disposableGeometryListOut);
+        int PolygonLinearRefine(int meshKernelId, 
+                                in DisposableGeometryList disposableGeometryListIn, 
+                                int firstIndex,
+                                int secondIndex, 
+                                ref DisposableGeometryList disposableGeometryListOut);
+
+        /// <summary>
+        /// Snaps part of a polygon to a land boundary
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param
+        /// <param name="landboundaries">The land boundaries</param>
+        /// <param name="polygon">The input polygon</param>
+        /// <param name="firstIndex">The index of the first vertex</param>
+        /// <param name="secondIndex">The index of the second vertex</param>
+        /// <returns>Error code</returns>
+        int PolygonSnapToLandBoundary(int meshKernelId,
+                                      in DisposableGeometryList landboundaries,
+                                      ref DisposableGeometryList polygon,
+                                      int firstIndex,
+                                      int secondIndex);
 
         /// <summary>
         /// Redo editing action

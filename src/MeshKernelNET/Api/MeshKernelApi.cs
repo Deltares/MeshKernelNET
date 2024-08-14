@@ -234,6 +234,7 @@ namespace MeshKernelNET.Api
         public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN,  int upperRightM, out DisposableGeometryList boundaryPolygons)
         {
             int numberOfPolygonNodes = 0; 
+            boundaryPolygons = new DisposableGeometryList();
             int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId, 
                                                                                  lowerLeftN, 
                                                                                  lowerLeftM, 
@@ -242,33 +243,36 @@ namespace MeshKernelNET.Api
                                                                                  ref numberOfPolygonNodes);
             if (exitCode != 0)
             {
-                boundaryPolygons = new DisposableGeometryList();
                 return exitCode;
             }
 
-            boundaryPolygons = new DisposableGeometryList();
-            boundaryPolygons.XCoordinates = new double[numberOfPolygonNodes];
-            boundaryPolygons.YCoordinates = new double[numberOfPolygonNodes];
-            double geometrySeparator = GetSeparator();
-            boundaryPolygons.GeometrySeparator = geometrySeparator;
-            boundaryPolygons.NumberOfCoordinates = numberOfPolygonNodes;
-
-            var geometryListNative = boundaryPolygons.CreateNativeObject();
-            exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
-                                                                        lowerLeftN,
-                                                                        lowerLeftM,
-                                                                        upperRightN,
-                                                                        upperRightM,
-                                                                        ref geometryListNative);
-
-            if (exitCode != 0)
+            using(var exchangePolygons = new DisposableGeometryList())
             {
-                boundaryPolygons = new DisposableGeometryList();
-                return exitCode;
-            }
+                exchangePolygons.NumberOfCoordinates = numberOfPolygonNodes;
+                exchangePolygons.XCoordinates = new double[numberOfPolygonNodes];
+                exchangePolygons.YCoordinates = new double[numberOfPolygonNodes];
+                exchangePolygons.GeometrySeparator = GetSeparator();
+                exchangePolygons.InnerOuterSeparator = GetInnerOuterSeparator();
 
-            boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
-            boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                var geometryListNative = exchangePolygons.CreateNativeObject();
+                exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
+                                                                            lowerLeftN,
+                                                                            lowerLeftM,
+                                                                            upperRightN,
+                                                                            upperRightM,
+                                                                            ref geometryListNative);
+
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                boundaryPolygons.NumberOfCoordinates = exchangePolygons.NumberOfCoordinates;
+                boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                boundaryPolygons.GeometrySeparator = exchangePolygons.GeometrySeparator;
+                boundaryPolygons.InnerOuterSeparator = exchangePolygons.InnerOuterSeparator;
+            }
             return exitCode;
         }
 

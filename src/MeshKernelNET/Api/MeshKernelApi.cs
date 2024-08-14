@@ -246,29 +246,33 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            // prepare the data structure for pinning
-            boundaryPolygons.NumberOfCoordinates = numberOfPolygonNodes;
-            boundaryPolygons.XCoordinates = new double[numberOfPolygonNodes];
-            boundaryPolygons.YCoordinates = new double[numberOfPolygonNodes];
-            boundaryPolygons.GeometrySeparator = GetSeparator();
-            boundaryPolygons.InnerOuterSeparator = GetInnerOuterSeparator();
-
-            var geometryListNative = boundaryPolygons.CreateNativeObject();
-            exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
-                                                                        lowerLeftN,
-                                                                        lowerLeftM,
-                                                                        upperRightN,
-                                                                        upperRightM,
-                                                                        ref geometryListNative);
-
-            if (exitCode != 0)
+            using(var exchangePolygons = new DisposableGeometryList())
             {
-                boundaryPolygons = new DisposableGeometryList();
-                return exitCode;
-            }
+                exchangePolygons.NumberOfCoordinates = numberOfPolygonNodes;
+                exchangePolygons.XCoordinates = new double[numberOfPolygonNodes];
+                exchangePolygons.YCoordinates = new double[numberOfPolygonNodes];
+                exchangePolygons.GeometrySeparator = GetSeparator();
+                exchangePolygons.InnerOuterSeparator = GetInnerOuterSeparator();
 
-            boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
-            boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                var geometryListNative = exchangePolygons.CreateNativeObject();
+                exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
+                                                                            lowerLeftN,
+                                                                            lowerLeftM,
+                                                                            upperRightN,
+                                                                            upperRightM,
+                                                                            ref geometryListNative);
+
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                boundaryPolygons.NumberOfCoordinates = exchangePolygons.NumberOfCoordinates;
+                boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
+                boundaryPolygons.GeometrySeparator = exchangePolygons.GeometrySeparator;
+                boundaryPolygons.InnerOuterSeparator = exchangePolygons.InnerOuterSeparator;
+            }
             return exitCode;
         }
 

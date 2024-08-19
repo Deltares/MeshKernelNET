@@ -846,6 +846,14 @@ namespace MeshKernelNET.Api
                                                                 ref geometryListLandBoundariesNative);
         }
 
+        public int Mesh2dConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction)
+        {
+            Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
+            return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
+                                                     ref mesh2D,
+                                                     searchFraction);
+        }
+
         public int Mesh2dConvertProjection([In] int meshKernelId,
                                            [In] ProjectionOptions projection,
                                            [In] string zone)

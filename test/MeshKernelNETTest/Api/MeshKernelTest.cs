@@ -2167,17 +2167,16 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     // Prepare
-                    double searchFraction = 0.1;
+                    const double searchFraction = 0.1;
                     id = api.AllocateState(0);
-                    Assert.AreEqual(0, api.Mesh2dSet(id, firstMesh));
-
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    api.Mesh2dSet(id, firstMesh);
+                    api.Mesh2dGetData(id, out mesh2D);
 
                     // Execute
-                    Assert.AreEqual(0, api.Mesh2dConnectMeshes(id, secondMesh, searchFraction));
-
+                    var result = api.Mesh2dConnectMeshes(id, secondMesh, searchFraction);
 
                     // Assert
+                    Assert.That(result, Is.EqualTo(0));
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
                     Assert.AreEqual(45, mesh2D.NumNodes);
                 }

@@ -3011,13 +3011,14 @@ namespace MeshKernelNETTest.Api
 
                     // Un-do
                     bool undone = false;
-                    Assert.AreEqual(0, api.UndoState(ref undone));
+                    int meshKernelId = -1;
+                    Assert.AreEqual(0, api.UndoState(ref undone, ref meshKernelId));
                     Assert.AreEqual(true, undone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(100.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
-                    Assert.AreEqual(0, api.UndoState(ref undone));
+                    Assert.AreEqual(0, api.UndoState(ref undone, ref meshKernelId));
                     Assert.AreEqual(true, undone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(0.0, mesh2d.NodeX[0]);
@@ -3026,13 +3027,13 @@ namespace MeshKernelNETTest.Api
                     // Re-do
                     bool redone = false;
 
-                    Assert.AreEqual(0, api.RedoState(ref redone));
+                    Assert.AreEqual(0, api.RedoState(ref redone, ref meshKernelId));
                     Assert.AreEqual(true, redone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
-                    Assert.AreEqual(0, api.RedoState(ref redone));
+                    Assert.AreEqual(0, api.RedoState(ref redone, ref meshKernelId));
                     Assert.AreEqual(true, redone);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[6]);

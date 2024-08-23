@@ -1743,6 +1743,13 @@ namespace MeshKernelNET.Native
         internal static extern double GetInnerOuterSeparator();
 
         /// <summary>
+        /// Gets the integer (int) value used in the back-end library missing value and null identifier
+        /// </summary>
+        /// <returns>The int missing value used in mesh kernel</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_null_identifier", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern double GetNullIdentifier();
+
+        /// <summary>
         /// Triangle interpolation
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -1910,16 +1917,18 @@ namespace MeshKernelNET.Native
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the redo action</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_redo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RedoState([In][Out] ref bool redone);
+        internal static extern int RedoState([In][Out] ref bool redone, [In] ref int meshKernelId);
 
         /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the undo action</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_undo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UndoState([In][Out] ref bool undone);
+        internal static extern int UndoState([In][Out] ref bool undone, [In] ref int meshKernelId);
     }
 }

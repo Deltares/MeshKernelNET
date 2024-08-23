@@ -1666,14 +1666,16 @@ namespace MeshKernelNET.Api
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the redo action</param>
         /// <returns>Error code</returns>
-        int RedoState(ref bool redone);
+        int RedoState(ref bool redone, ref int meshKernelId);
 
         /// <summary>
         /// Undo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the undo action</param>
         /// <returns>Error code</returns>
-        int UndoState(ref bool undone);
+        int UndoState(ref bool undone, ref int meshKernelId);
     }
 }

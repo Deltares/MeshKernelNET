@@ -977,7 +977,7 @@ namespace MeshKernelNET.Api
 
             int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
 
-            if (exitCode != 0)
+            if (exitCode != 0 || newMesh2D.num_nodes <= 0 || newMesh2D.num_edges <= 0)
             {
                 disposableMesh2D = new DisposableMesh2D();
                 return exitCode;
@@ -1538,15 +1538,15 @@ namespace MeshKernelNET.Api
         }
 
         /// <inheritdoc/>
-        public int RedoState(ref bool redone)
+        public int RedoState(ref bool redone, ref int meshKernelId)
         {
-            return MeshKernelDll.RedoState(ref redone);
+            return MeshKernelDll.RedoState(ref redone, ref meshKernelId);
         }
 
         /// <inheritdoc/>
-        public int UndoState(ref bool undone)
+        public int UndoState(ref bool undone, ref int meshKernelId)
         {
-            return MeshKernelDll.UndoState(ref undone);
+            return MeshKernelDll.UndoState(ref undone, ref meshKernelId);
         }
 
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)

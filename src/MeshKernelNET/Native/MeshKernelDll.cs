@@ -1743,13 +1743,6 @@ namespace MeshKernelNET.Native
         internal static extern double GetInnerOuterSeparator();
 
         /// <summary>
-        /// Gets the integer (int) value used in the back-end library missing value and null identifier
-        /// </summary>
-        /// <returns>The int missing value used in mesh kernel</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_null_identifier", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern double GetNullIdentifier();
-
-        /// <summary>
         /// Triangle interpolation
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

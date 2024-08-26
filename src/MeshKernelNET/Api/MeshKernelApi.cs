@@ -211,7 +211,7 @@ namespace MeshKernelNET.Api
             var curvilinearGrid = new CurvilinearGridNative();
 
             int exitCode = MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
-            if (exitCode != 0)
+            if (exitCode != 0 || curvilinearGrid.num_n <=0 || curvilinearGrid.num_m <= 0)
             {
                 disposableCurvilinearGrid = new DisposableCurvilinearGrid();
                 return exitCode;
@@ -977,7 +977,7 @@ namespace MeshKernelNET.Api
 
             int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
 
-            if (exitCode != 0 || newMesh2D.num_nodes <= 0 || newMesh2D.num_edges <= 0)
+            if (exitCode != 0)
             {
                 disposableMesh2D = new DisposableMesh2D();
                 return exitCode;

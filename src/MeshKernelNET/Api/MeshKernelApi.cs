@@ -211,7 +211,7 @@ namespace MeshKernelNET.Api
             var curvilinearGrid = new CurvilinearGridNative();
 
             int exitCode = MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
-            if (exitCode != 0 || curvilinearGrid.num_n <=0 || curvilinearGrid.num_m <= 0)
+            if (exitCode != 0)
             {
                 disposableCurvilinearGrid = new DisposableCurvilinearGrid();
                 return exitCode;

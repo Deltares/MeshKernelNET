@@ -594,6 +594,13 @@ namespace MeshKernelNET.Api
         int DeallocateState(int meshKernelId);
 
         /// <summary>
+        /// Deallocate grid state (collections of mesh arrays with auxiliary variables)
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <returns>Error code</returns>
+        int ExpungeState(int meshKernelId);
+
+        /// <summary>
         /// Gets an int indicating the closest point averaging method type
         /// </summary>
         /// <param name="method">The int indicating the closest point averaging method type</param>

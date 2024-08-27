@@ -42,7 +42,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     mesh1D.Dispose();
                 }
             }
@@ -81,7 +81,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     mesh1D.Dispose();
                 }
             }

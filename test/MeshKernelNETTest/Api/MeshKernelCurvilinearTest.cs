@@ -73,7 +73,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     fromKernel?.Dispose();
                 }
             }
@@ -111,7 +111,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -142,7 +142,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -218,7 +218,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -263,7 +263,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -317,7 +317,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -355,7 +355,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -393,7 +393,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -419,7 +419,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -476,7 +476,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                     geometryListIn?.Dispose();
                 }
@@ -506,7 +506,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -540,7 +540,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -573,7 +573,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -602,7 +602,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -641,7 +641,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -668,7 +668,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -701,7 +701,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -731,7 +731,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -766,7 +766,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                 }
             }
         }
@@ -794,7 +794,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -827,7 +827,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -855,7 +855,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                     curvilinearGrid?.Dispose();
                 }
             }
@@ -898,7 +898,7 @@ namespace MeshKernelNETTest.Api
                     }
                     finally
                     {
-                        api.DeallocateState(id);
+                        api.ExpungeState(id);
                         curvilinearGrid?.Dispose();
                     }
                 }
@@ -936,7 +936,7 @@ namespace MeshKernelNETTest.Api
                     }
                     finally
                     {
-                        api.DeallocateState(id);
+                        api.ExpungeState(id);
                         curvilinearGrid?.Dispose();
                     }
                 }
@@ -1049,7 +1049,7 @@ namespace MeshKernelNETTest.Api
                     }
                     finally
                     {
-                        api.DeallocateState(id);
+                        api.ExpungeState(id);
                         curvilinearGrid?.Dispose();
                         mesh2d.Dispose();
                     }
@@ -1096,7 +1096,7 @@ namespace MeshKernelNETTest.Api
                 }
                 finally
                 {
-                    api.DeallocateState(id);
+                    api.ExpungeState(id);
                 }
             }
         }
@@ -1120,7 +1120,7 @@ namespace MeshKernelNETTest.Api
         [TearDown]
         public void TearDown()
         {
-            api.DeallocateState(id);
+            api.ExpungeState(id);
             api.Dispose();
             api = null;
         }

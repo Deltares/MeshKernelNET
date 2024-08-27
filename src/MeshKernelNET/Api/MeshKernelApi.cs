@@ -568,6 +568,11 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.DeallocateState(meshKernelId);
         }
 
+        public int ExpungeState(int meshKernelId)
+        {
+            return MeshKernelDll.ExpungeState(meshKernelId);
+        }
+
         public int GetAveragingMethodClosestPoint(ref int method)
         {
             return MeshKernelDll.GetAveragingMethodClosestPoint(ref method);

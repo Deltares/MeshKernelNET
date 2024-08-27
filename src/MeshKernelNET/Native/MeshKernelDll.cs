@@ -669,6 +669,14 @@ namespace MeshKernelNET.Native
         internal static extern int DeallocateState([In] int meshKernelId);
 
         /// <summary>
+        /// Deallocate mesh state and remove it completely, no undo for this meshKernelId will be possible after expunging
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_expunge_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ExpungeState([In] int meshKernelId);
+
+        /// <summary>
         /// Gets an int indicating the closest point averaging method type
         /// </summary>
         /// <param name="method">The int indicating the closest point averaging method type</param>

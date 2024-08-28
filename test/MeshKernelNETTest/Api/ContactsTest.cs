@@ -47,7 +47,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     onedNodeMaskPinned.Free();
-                    api.ExpungeState(id);
+                    api.ClearState();
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     onedNodeMaskPinned.Free();
-                    api.ExpungeState(id);
+                    api.ClearState();
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     onedNodeMaskPinned.Free();
-                    api.ExpungeState(id);
+                    api.ClearState();
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     onedNodeMaskPinned.Free();
-                    api.ExpungeState(id);
+                    api.ClearState();
                 }
             }
         }

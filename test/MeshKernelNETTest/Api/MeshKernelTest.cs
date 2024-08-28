@@ -3014,12 +3014,14 @@ namespace MeshKernelNETTest.Api
                     int meshKernelId = -1;
                     Assert.AreEqual(0, api.UndoState(ref undone, ref meshKernelId));
                     Assert.AreEqual(true, undone);
+                    Assert.AreEqual(0, meshKernelId);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(100.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
                     Assert.AreEqual(0, api.UndoState(ref undone, ref meshKernelId));
                     Assert.AreEqual(true, undone);
+                    Assert.AreEqual(0, meshKernelId);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(0.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(numberOfVerticesBefore, mesh2d.NumValidNodes);
@@ -3029,12 +3031,14 @@ namespace MeshKernelNETTest.Api
 
                     Assert.AreEqual(0, api.RedoState(ref redone, ref meshKernelId));
                     Assert.AreEqual(true, redone);
+                    Assert.AreEqual(0, meshKernelId);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[0]);
                     Assert.AreEqual(numberOfVerticesBefore - 1, mesh2d.NumValidNodes);
 
                     Assert.AreEqual(0, api.RedoState(ref redone, ref meshKernelId));
                     Assert.AreEqual(true, redone);
+                    Assert.AreEqual(0, meshKernelId);
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2d));
                     Assert.AreEqual(-999.0, mesh2d.NodeX[6]);
                     Assert.AreEqual(numberOfVerticesBefore - 2, mesh2d.NumValidNodes);
@@ -3355,6 +3359,40 @@ namespace MeshKernelNETTest.Api
                 {
                     api.ClearState();
                     meshOut?.Dispose();
+                }
+            }
+        }
+
+
+        [Test]
+        public void Mesh2dExpungeStateThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var mesh0 = new DisposableMesh2D();
+                var mesh1 = new DisposableMesh2D();
+                try
+                {
+                    // prepare
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // execute
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh0));
+                    Assert.AreEqual(0, api.ExpungeState(id));
+                    Assert.AreEqual(1, api.Mesh2dGetData(id, out mesh1)); //Once the id is expunged, no data can be retrieved and the exitcode is 1
+
+                    // assert
+                    Assert.AreEqual(100, mesh0.NumNodes);
+                    Assert.AreEqual(0, mesh1.NumNodes);
+                }
+                finally
+                {
+                    api.ClearState();
+                    mesh1?.Dispose();
                 }
             }
         }

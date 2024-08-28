@@ -568,6 +568,11 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.DeallocateState(meshKernelId);
         }
 
+        public int ExpungeState(int meshKernelId)
+        {
+            return MeshKernelDll.ExpungeState(meshKernelId);
+        }
+
         public int GetAveragingMethodClosestPoint(ref int method)
         {
             return MeshKernelDll.GetAveragingMethodClosestPoint(ref method);
@@ -1538,15 +1543,20 @@ namespace MeshKernelNET.Api
         }
 
         /// <inheritdoc/>
-        public int RedoState(ref bool redone)
+        public int RedoState(ref bool redone, ref int meshKernelId)
         {
-            return MeshKernelDll.RedoState(ref redone);
+            return MeshKernelDll.RedoState(ref redone, ref meshKernelId);
+        }
+
+        public int ClearState()
+        {
+            return MeshKernelDll.ClearState();
         }
 
         /// <inheritdoc/>
-        public int UndoState(ref bool undone)
+        public int UndoState(ref bool undone, ref int meshKernelId)
         {
-            return MeshKernelDll.UndoState(ref undone);
+            return MeshKernelDll.UndoState(ref undone, ref meshKernelId);
         }
 
         private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)

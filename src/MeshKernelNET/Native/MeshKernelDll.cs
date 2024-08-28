@@ -669,6 +669,14 @@ namespace MeshKernelNET.Native
         internal static extern int DeallocateState([In] int meshKernelId);
 
         /// <summary>
+        /// Deallocate mesh state and remove it completely, no undo for this meshKernelId will be possible after expunging
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_expunge_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ExpungeState([In] int meshKernelId);
+
+        /// <summary>
         /// Gets an int indicating the closest point averaging method type
         /// </summary>
         /// <param name="method">The int indicating the closest point averaging method type</param>
@@ -1910,16 +1918,25 @@ namespace MeshKernelNET.Native
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the redo action</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_redo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int RedoState([In][Out] ref bool redone);
+        internal static extern int RedoState([In][Out] ref bool redone, [In] ref int meshKernelId);
+
+        /// <summary>
+        /// Clear all internal mesh kernel state and undo actions, no undo will be possible after this
+        /// </summary>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_clear_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ClearState();
 
         /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the undo action</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_undo_state", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int UndoState([In][Out] ref bool undone);
+        internal static extern int UndoState([In][Out] ref bool undone, [In] ref int meshKernelId);
     }
 }

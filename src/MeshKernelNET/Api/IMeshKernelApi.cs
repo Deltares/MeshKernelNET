@@ -594,6 +594,13 @@ namespace MeshKernelNET.Api
         int DeallocateState(int meshKernelId);
 
         /// <summary>
+        /// Deallocate grid state (collections of mesh arrays with auxiliary variables)
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <returns>Error code</returns>
+        int ExpungeState(int meshKernelId);
+
+        /// <summary>
         /// Gets an int indicating the closest point averaging method type
         /// </summary>
         /// <param name="method">The int indicating the closest point averaging method type</param>
@@ -1666,14 +1673,22 @@ namespace MeshKernelNET.Api
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the redo action</param>
         /// <returns>Error code</returns>
-        int RedoState(ref bool redone);
+        int RedoState(ref bool redone, ref int meshKernelId);
+
+        /// <summary>
+        /// Clear all internal mesh kernel state and undo actions, no undo will be possible after this
+        /// </summary>
+        /// <returns>Error code</returns>
+        int ClearState();
 
         /// <summary>
         /// Undo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>
+        /// <param name="meshKernelId">The mesh kernel id related to the undo action</param>
         /// <returns>Error code</returns>
-        int UndoState(ref bool undone);
+        int UndoState(ref bool undone, ref int meshKernelId);
     }
 }

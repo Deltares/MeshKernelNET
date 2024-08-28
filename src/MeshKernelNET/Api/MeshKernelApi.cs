@@ -1548,6 +1548,11 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.RedoState(ref redone, ref meshKernelId);
         }
 
+        public int ClearState()
+        {
+            return MeshKernelDll.ClearState();
+        }
+
         /// <inheritdoc/>
         public int UndoState(ref bool undone, ref int meshKernelId)
         {

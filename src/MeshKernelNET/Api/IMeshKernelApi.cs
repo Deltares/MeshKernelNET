@@ -1678,6 +1678,12 @@ namespace MeshKernelNET.Api
         int RedoState(ref bool redone, ref int meshKernelId);
 
         /// <summary>
+        /// Clear all internal mesh kernel state and undo actions, no undo will be possible after this
+        /// </summary>
+        /// <returns>Error code</returns>
+        int ClearState();
+
+        /// <summary>
         /// Undo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>

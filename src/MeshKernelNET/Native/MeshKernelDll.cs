@@ -1924,6 +1924,13 @@ namespace MeshKernelNET.Native
         internal static extern int RedoState([In][Out] ref bool redone, [In] ref int meshKernelId);
 
         /// <summary>
+        /// Clear all internal mesh kernel state and undo actions, no undo will be possible after this
+        /// </summary>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_clear_state", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ClearState();
+
+        /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="undone">If the editing action has been un-done</param>

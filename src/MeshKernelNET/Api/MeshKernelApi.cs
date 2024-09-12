@@ -1542,7 +1542,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonSnapToLandBoundary(meshKernelId, ref landboundariesNative, ref polygonNative, firstIndex, secondIndex);
         }
 
-        public int SplineToLandBoundary(int meshKernelId, 
+        public int SplinesToLandBoundary(int meshKernelId, 
             in DisposableGeometryList landboundaries, 
             ref DisposableGeometryList splines, 
             int firstIndex,
@@ -1550,7 +1550,7 @@ namespace MeshKernelNET.Api
         {
             GeometryListNative landboundariesNative = landboundaries.CreateNativeObject();
             GeometryListNative polygonNative = splines.CreateNativeObject(); 
-            return MeshKernelDll.SplineToLandBoundary(meshKernelId, ref landboundariesNative, ref polygonNative, firstIndex, secondIndex);
+            return MeshKernelDll.SplinesToLandBoundary(meshKernelId, ref landboundariesNative, ref polygonNative, firstIndex, secondIndex);
         }
 
         /// <inheritdoc/>

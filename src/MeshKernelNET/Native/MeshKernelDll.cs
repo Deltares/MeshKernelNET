@@ -1923,7 +1923,7 @@ namespace MeshKernelNET.Native
         /// <param name="secondIndex">The end index of the splines to be snapped</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_splines_snap_to_landboundary", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int SplineToLandBoundary([In] int meshKernelId,
+        internal static extern int SplinesToLandBoundary([In] int meshKernelId,
             [In] ref GeometryListNative land,
             [In] ref GeometryListNative splines,
             [In] int startSplineIndex,

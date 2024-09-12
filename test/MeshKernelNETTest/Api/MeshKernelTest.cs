@@ -817,7 +817,7 @@ namespace MeshKernelNETTest.Api
 
                     var firstIndex = 0;
                     var secondIndex = splines.XCoordinates.Length - 1;
-                    var result = api.SplineToLandBoundary(id, 
+                    var result = api.SplinesToLandBoundary(id, 
                                                           landboundaries,
                                                           ref splines,
                                                           firstIndex,

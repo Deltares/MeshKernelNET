@@ -792,6 +792,60 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void SplineSnapToLandBoundaryThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 100, 100))
+            using (var landboundaries = new DisposableGeometryList())
+            {
+                var splines = new DisposableGeometryList();
+                try
+                {
+                    var id = api.AllocateState(0);
+
+                    double geometrySeparator = api.GetSeparator();
+                    landboundaries.GeometrySeparator = geometrySeparator;
+                    landboundaries.XCoordinates = new[] { 257.002197, 518.753845, 938.006470 };
+                    landboundaries.YCoordinates = new[] { 442.130066, 301.128662, 416.629822 };
+                    landboundaries.NumberOfCoordinates = landboundaries.XCoordinates.Length;
+
+                    splines.XCoordinates = new[] { 281.0023, 367.2529, 461.7534, 517.2538, 614.0045, 720.5051, 827.7558, 923.7563 };
+                    splines.YCoordinates = new[] { 447.3801, 401.6296, 354.3792, 318.3788, 338.629, 377.6294, 417.3798, 424.1299 };
+                    splines.NumberOfCoordinates = splines.XCoordinates.Length;
+
+
+                    var firstIndex = 0;
+                    var secondIndex = splines.XCoordinates.Length - 1;
+                    var result = api.SplineToLandBoundary(id, 
+                                                          landboundaries,
+                                                          ref splines,
+                                                          firstIndex,
+                                                          secondIndex);
+                    Assert.That(result, Is.EqualTo(0));
+
+
+                    var expectedXCoordinates = new[] { 273.5868719643935, 359.5998304717778, 451.5303458337523, 517.7962262926076,
+                        616.7325138813335, 725.7358644094627, 836.2627853156330, 923.5001778441060};
+
+                    var expectedYCoordinates = new[]
+                    {  434.2730022174478, 386.1712239047134, 338.3551703843473, 306.3259738916997,
+                        327.9627689164845, 358.0902879743862, 388.6415116416172, 412.5818685325169};
+
+                    const double tolerance = 1.0e-3;
+                    Assert.That(splines.XCoordinates, Is.EqualTo(expectedXCoordinates).Within(tolerance));
+                    Assert.That(splines.YCoordinates, Is.EqualTo(expectedYCoordinates).Within(tolerance));
+
+                }
+                finally
+                {
+                    api.ClearState();
+                    splines.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void Mesh2dRefineBasedOnSamplesThroughAPI()
         {
             // Setup

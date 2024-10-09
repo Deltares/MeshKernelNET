@@ -1670,6 +1670,20 @@ namespace MeshKernelNET.Api
                                       int secondIndex);
 
         /// <summary>
+        /// Snaps the spline (or splines) to the land boundary
+        /// </summary>
+        /// <param name="land">The land boundaries</param>
+        /// <param name="splines">The spline to be snapped</param>
+        /// <param name="firstIndex">The start index of the splines to be snapped</param>
+        /// <param name="secondIndex">The end index of the splines to be snapped</param>
+        /// <returns>Error code</returns>
+        int SplinesToLandBoundary(int meshKernelId,
+                                  in DisposableGeometryList landboundaries,
+                                  ref DisposableGeometryList splines,
+                                  int firstIndex,
+                                  int secondIndex);
+
+        /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>

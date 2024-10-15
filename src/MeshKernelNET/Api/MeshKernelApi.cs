@@ -563,6 +563,27 @@ namespace MeshKernelNET.Api
                                                                  yUpperRightCornerSmoothingArea);
         }
 
+
+        public int CurvilinearSnapToLandBoundary(int meshKernelId,
+                                                 in DisposableGeometryList land,
+                                                 double sectionControlPoint1x,
+                                                 double sectionControlPoint1y,
+                                                 double sectionControlPoint2x,
+                                                 double sectionControlPoint2y,
+                                                 double regionControlPointX,
+                                                 double regionControlPointY)
+        {
+            var geometryListNative = land.CreateNativeObject();
+            return MeshKernelDll.CurvilinearSnapToLandBoundary(meshKernelId,
+                                                               ref geometryListNative,
+                                                               sectionControlPoint1x,
+                                                               sectionControlPoint1y,
+                                                               sectionControlPoint2x,
+                                                               sectionControlPoint2y,
+                                                               regionControlPointX,
+                                                               regionControlPointY);
+        }
+
         public int DeallocateState(int meshKernelId)
         {
             return MeshKernelDll.DeallocateState(meshKernelId);

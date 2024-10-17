@@ -1260,7 +1260,6 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dDeleteEdgeByIndexThroughAPI()
         {
             //Setup
-
             using (DisposableMesh2D mesh = CreateMesh2D(11, 11, 100, 100))
             using (var api = new MeshKernelApi())
             {

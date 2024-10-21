@@ -68,15 +68,19 @@ namespace MeshKernelNET.Api
             NumFaces = nFaces;
             NumFaceNodes = nFaceNodes;
 
-            EdgeFaces = new int[NumEdges * 2];
-            EdgeNodes = new int[NumEdges * 2];
-            FaceEdges = new int[NumFaceNodes];
-            FaceNodes = new int[NumFaceNodes];
-            NodesPerFace = new int[NumFaces];
+
+
             NodeX = new double[NumNodes];
             NodeY = new double[NumNodes];
+            EdgeNodes = new int[NumEdges * 2];
+
+
+            EdgeFaces = new int[NumEdges * 2];
+            FaceEdges = new int[NumFaceNodes];
             EdgeX = new double[NumEdges];
             EdgeY = new double[NumEdges];
+            FaceNodes = new int[NumFaceNodes];
+            NodesPerFace = new int[NumFaces];
             FaceX = new double[NumFaces];
             FaceY = new double[NumFaces];
         }

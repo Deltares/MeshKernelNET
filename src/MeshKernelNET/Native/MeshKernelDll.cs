@@ -1249,6 +1249,25 @@ namespace MeshKernelNET.Native
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="mesh2DNative">Grid data</param>
         /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_node_edge_data", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetNodeEdgeData([In] int meshKernelId,
+            [In][Out] ref Mesh2DNative mesh2DNative);
+
+        /// <summary>
+        /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure including faces information
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="mesh2DNative">Grid data</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_data_reduced", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetReducedData([In] int meshKernelId, [In][Out] ref Mesh2DNative mesh2DNative);
+
+        /// <summary>
+        /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure including faces information
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="mesh2DNative">Grid data</param>
+        /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_data", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dGetData([In] int meshKernelId,
                                                  [In][Out] ref Mesh2DNative mesh2DNative);

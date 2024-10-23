@@ -1001,6 +1001,56 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
+        public int Mesh2dGetNodeEdgeData(int meshKernelId, out DisposableMesh2D disposableMesh2D)
+        {
+            var newMesh2D = new Mesh2DNative();
+
+            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
+
+            if (exitCode != 0)
+            {
+                disposableMesh2D = new DisposableMesh2D();
+                return exitCode;
+            }
+
+            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
+                newMesh2D.num_edges,
+                newMesh2D.num_faces,
+                newMesh2D.num_face_nodes);
+
+            newMesh2D = disposableMesh2D.CreateNativeObject();
+
+            exitCode = MeshKernelDll.Mesh2dGetNodeEdgeData(meshKernelId, ref newMesh2D);
+            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, true);
+
+            return exitCode;
+        }
+
+        public int Mesh2dGetDataReduced(int meshKernelId, out DisposableMesh2D disposableMesh2D)
+        {
+            var newMesh2D = new Mesh2DNative();
+
+            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
+
+            if (exitCode != 0)
+            {
+                disposableMesh2D = new DisposableMesh2D();
+                return exitCode;
+            }
+
+            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
+                newMesh2D.num_edges,
+                newMesh2D.num_faces,
+                newMesh2D.num_face_nodes);
+
+            newMesh2D = disposableMesh2D.CreateNativeObject();
+
+            exitCode = MeshKernelDll.Mesh2dGetNodeEdgeData(meshKernelId, ref newMesh2D);
+            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, true);
+
+            return exitCode;
+        }
+
         public int Mesh2dGetEdge(int meshKernelId,
                                  double xCoordinate,
                                  double yCoordinate,

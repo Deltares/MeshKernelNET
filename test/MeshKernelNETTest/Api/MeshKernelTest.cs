@@ -3454,6 +3454,52 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+        [Test]
+        public void Mesh2dGetNodeEdgeDataThroughApi()
+        {
+
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshRetrived = new DisposableMesh2D();
+                try
+                {
+                    // prepare
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // execute
+                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out meshRetrived));
+
+                    // assert non empty
+                    Assert.AreEqual(100, meshRetrived.NumNodes);
+                    Assert.AreEqual(180, meshRetrived.NumEdges);
+                    Assert.AreEqual(100, meshRetrived.NodeX.Length);
+                    Assert.AreEqual(100, meshRetrived.NodeY.Length);
+                    Assert.AreEqual(360, meshRetrived.EdgeNodes.Length);
+
+                    // assert null or empty
+                    Assert.IsNull(meshRetrived.EdgeFaces);
+                    Assert.IsNull(meshRetrived.EdgeX);
+                    Assert.IsNull(meshRetrived.EdgeY);
+                    Assert.IsNull(meshRetrived.FaceEdges);
+                    Assert.IsNull(meshRetrived.FaceNodes);
+                    Assert.IsNull(meshRetrived.FaceX);
+                    Assert.IsNull(meshRetrived.FaceY);
+                    Assert.AreEqual(0, meshRetrived.NumFaceNodes);
+                    Assert.AreEqual(0, meshRetrived.NumFaces);
+                    Assert.IsNull(meshRetrived.NodesPerFace);
+                }
+                finally
+                {
+                    api.ClearState();
+                    meshRetrived?.Dispose();
+                }
+            }
+        }
     }
 
 }

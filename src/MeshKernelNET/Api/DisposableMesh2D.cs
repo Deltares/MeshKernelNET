@@ -68,13 +68,9 @@ namespace MeshKernelNET.Api
             NumFaces = nFaces;
             NumFaceNodes = nFaceNodes;
 
-
-
             NodeX = new double[NumNodes];
             NodeY = new double[NumNodes];
             EdgeNodes = new int[NumEdges * 2];
-
-
             EdgeFaces = new int[NumEdges * 2];
             FaceEdges = new int[NumFaceNodes];
             EdgeX = new double[NumEdges];
@@ -83,6 +79,15 @@ namespace MeshKernelNET.Api
             NodesPerFace = new int[NumFaces];
             FaceX = new double[NumFaces];
             FaceY = new double[NumFaces];
+        }
+
+        public DisposableMesh2D(int nNodes, int nEdges)
+        {
+            NumNodes = nNodes;
+            NumEdges = nEdges;
+            NodeX = new double[NumNodes];
+            NodeY = new double[NumNodes];
+            EdgeNodes = new int[NumEdges * 2];
         }
 
         ~DisposableMesh2D()

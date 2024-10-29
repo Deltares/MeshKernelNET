@@ -1013,10 +1013,7 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
-                newMesh2D.num_edges,
-                newMesh2D.num_faces,
-                newMesh2D.num_face_nodes);
+            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,newMesh2D.num_edges);
 
             newMesh2D = disposableMesh2D.CreateNativeObject();
 

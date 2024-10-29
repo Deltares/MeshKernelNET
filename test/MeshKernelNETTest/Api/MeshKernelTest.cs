@@ -3476,6 +3476,7 @@ namespace MeshKernelNETTest.Api
 
                     // assert non empty
                     Assert.AreEqual(100, meshRetrived.NumNodes);
+                    Assert.AreEqual(100, meshRetrived.NumValidNodes);
                     Assert.AreEqual(180, meshRetrived.NumEdges);
                     Assert.AreEqual(100, meshRetrived.NodeX.Length);
                     Assert.AreEqual(100, meshRetrived.NodeY.Length);

@@ -3454,6 +3454,53 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+        [Test]
+        public void Mesh2dGetNodeEdgeDataThroughApi()
+        {
+
+            // Setup
+            using (DisposableMesh2D mesh = CreateMesh2D(7, 10, 10, 10))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                var meshRetrieved = new DisposableMesh2D();
+                try
+                {
+                    // prepare
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+
+                    // execute
+                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out meshRetrieved));
+
+                    // assert non empty
+                    Assert.AreEqual(70, meshRetrieved.NumNodes);
+                    Assert.AreEqual(70, meshRetrieved.NumValidNodes);
+                    Assert.AreEqual(123, meshRetrieved.NumEdges);
+                    Assert.AreEqual(70, meshRetrieved.NodeX.Length);
+                    Assert.AreEqual(70, meshRetrieved.NodeY.Length);
+                    Assert.AreEqual(246, meshRetrieved.EdgeNodes.Length);
+
+                    // assert null or empty
+                    Assert.IsNull(meshRetrieved.EdgeFaces);
+                    Assert.IsNull(meshRetrieved.EdgeX);
+                    Assert.IsNull(meshRetrieved.EdgeY);
+                    Assert.IsNull(meshRetrieved.FaceEdges);
+                    Assert.IsNull(meshRetrieved.FaceNodes);
+                    Assert.IsNull(meshRetrieved.FaceX);
+                    Assert.IsNull(meshRetrieved.FaceY);
+                    Assert.AreEqual(0, meshRetrieved.NumFaceNodes);
+                    Assert.AreEqual(0, meshRetrieved.NumFaces);
+                    Assert.IsNull(meshRetrieved.NodesPerFace);
+                }
+                finally
+                {
+                    api.ClearState();
+                    meshRetrieved?.Dispose();
+                }
+            }
+        }
     }
 
 }

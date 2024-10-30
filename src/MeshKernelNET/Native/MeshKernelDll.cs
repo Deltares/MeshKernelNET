@@ -1254,6 +1254,16 @@ namespace MeshKernelNET.Native
                                                  [In][Out] ref Mesh2DNative mesh2DNative);
 
         /// <summary>
+        /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure, only the node and edge data
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="mesh2DNative">Grid data</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_node_edge_data", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetNodeEdgeData([In] int meshKernelId,
+                                                         [In][Out] ref Mesh2DNative mesh2DNative);
+
+        /// <summary>
         /// Gets the mesh2d dimensions <see cref="Mesh2DNative"/> structure
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

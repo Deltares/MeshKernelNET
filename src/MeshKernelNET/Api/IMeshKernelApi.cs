@@ -1075,13 +1075,24 @@ namespace MeshKernelNET.Api
 
 
         /// <summary>
-        /// Gets the grid state as a <see cref="Mesh2DNative"/> structure including the cell information
+        /// Gets the grid state as a <see cref="DisposableMesh2D"/> structure including the cell information.
+        /// Node coordinates, edge connectivity, face connectivity, edge midpoints and face center points are initialized.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableMesh2D">
         /// <see cref="DisposableMesh2D"/> with the grid state
         /// <returns>Error code</returns>
         int Mesh2dGetData(int meshKernelId, out DisposableMesh2D disposableMesh2D);
+
+        /// <summary>
+        /// Gets the mesh state as a <see cref="DisposableMesh2D"/> structure, only the node and edge data.
+        /// Only vertex coordinates and edge connectivity are initialized.
+        /// </summary>
+        /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="disposableMesh2D">
+        /// <see cref="DisposableMesh2D"/> with the grid state
+        /// <returns>Error code</returns>
+        int Mesh2dGetNodeEdgeData(int meshKernelId, out DisposableMesh2D disposableMesh2D);
 
         /// <summary>
         /// Finds the closest edge within the search radius from the input point

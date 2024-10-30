@@ -3460,11 +3460,11 @@ namespace MeshKernelNETTest.Api
         {
 
             // Setup
-            using (DisposableMesh2D mesh = CreateMesh2D(10, 10, 10, 10))
+            using (DisposableMesh2D mesh = CreateMesh2D(7, 10, 10, 10))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
-                var meshRetrived = new DisposableMesh2D();
+                var meshRetrieved = new DisposableMesh2D();
                 try
                 {
                     // prepare
@@ -3472,32 +3472,32 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
                     // execute
-                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out meshRetrived));
+                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out meshRetrieved));
 
                     // assert non empty
-                    Assert.AreEqual(100, meshRetrived.NumNodes);
-                    Assert.AreEqual(100, meshRetrived.NumValidNodes);
-                    Assert.AreEqual(180, meshRetrived.NumEdges);
-                    Assert.AreEqual(100, meshRetrived.NodeX.Length);
-                    Assert.AreEqual(100, meshRetrived.NodeY.Length);
-                    Assert.AreEqual(360, meshRetrived.EdgeNodes.Length);
+                    Assert.AreEqual(70, meshRetrieved.NumNodes);
+                    Assert.AreEqual(70, meshRetrieved.NumValidNodes);
+                    Assert.AreEqual(123, meshRetrieved.NumEdges);
+                    Assert.AreEqual(70, meshRetrieved.NodeX.Length);
+                    Assert.AreEqual(70, meshRetrieved.NodeY.Length);
+                    Assert.AreEqual(246, meshRetrieved.EdgeNodes.Length);
 
                     // assert null or empty
-                    Assert.IsNull(meshRetrived.EdgeFaces);
-                    Assert.IsNull(meshRetrived.EdgeX);
-                    Assert.IsNull(meshRetrived.EdgeY);
-                    Assert.IsNull(meshRetrived.FaceEdges);
-                    Assert.IsNull(meshRetrived.FaceNodes);
-                    Assert.IsNull(meshRetrived.FaceX);
-                    Assert.IsNull(meshRetrived.FaceY);
-                    Assert.AreEqual(0, meshRetrived.NumFaceNodes);
-                    Assert.AreEqual(0, meshRetrived.NumFaces);
-                    Assert.IsNull(meshRetrived.NodesPerFace);
+                    Assert.IsNull(meshRetrieved.EdgeFaces);
+                    Assert.IsNull(meshRetrieved.EdgeX);
+                    Assert.IsNull(meshRetrieved.EdgeY);
+                    Assert.IsNull(meshRetrieved.FaceEdges);
+                    Assert.IsNull(meshRetrieved.FaceNodes);
+                    Assert.IsNull(meshRetrieved.FaceX);
+                    Assert.IsNull(meshRetrieved.FaceY);
+                    Assert.AreEqual(0, meshRetrieved.NumFaceNodes);
+                    Assert.AreEqual(0, meshRetrieved.NumFaces);
+                    Assert.IsNull(meshRetrieved.NodesPerFace);
                 }
                 finally
                 {
                     api.ClearState();
-                    meshRetrived?.Dispose();
+                    meshRetrieved?.Dispose();
                 }
             }
         }

@@ -3501,6 +3501,52 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+
+
+        [Test]
+        public void Mesh2dMakeTwoRectangularGridThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2dFirst = null;
+                DisposableMesh2D mesh2dSecond = null;
+                try
+                {
+                    var makeGridParameters = MakeGridParameters.CreateDefault();
+
+                    makeGridParameters.GridType = 0;
+                    makeGridParameters.NumberOfColumns = 3;
+                    makeGridParameters.NumberOfRows = 3;
+                    makeGridParameters.GridAngle = 0.0;
+                    makeGridParameters.OriginXCoordinate = 0.0;
+                    makeGridParameters.OriginYCoordinate = 0.0;
+                    makeGridParameters.XGridBlockSize = 10.0;
+                    makeGridParameters.YGridBlockSize = 10.0;
+
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dMakeRectangularMesh(id, makeGridParameters));
+                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out mesh2dFirst));
+                    Assert.NotNull(mesh2dFirst);
+                    Assert.AreEqual(16, mesh2dFirst.NumValidNodes);
+
+
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dMakeRectangularMesh(id, makeGridParameters));
+                    Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out mesh2dSecond));
+                    Assert.NotNull(mesh2dSecond);
+                    Assert.AreEqual(16, mesh2dSecond.NumValidNodes);
+
+                }
+                finally
+                {
+                    api.ClearState();
+                    mesh2dFirst?.Dispose();
+                    mesh2dSecond?.Dispose();
+                }
+            }
+        }
     }
 
 }

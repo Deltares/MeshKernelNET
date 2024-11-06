@@ -3471,7 +3471,7 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
 
-                    // execute
+                    // execute Mesh2dGetNodeEdgeData
                     Assert.AreEqual(0, api.Mesh2dGetNodeEdgeData(id, out meshRetrieved));
 
                     // assert non empty

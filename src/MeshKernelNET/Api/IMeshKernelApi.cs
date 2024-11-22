@@ -587,6 +587,27 @@ namespace MeshKernelNET.Api
                                             double yUpperRightCornerSmoothingArea);
 
         /// <summary>
+        /// Snaps a curvilinear grid line to land boundary
+        /// </summary>
+        /// <param name="meshKernelId">The ID of the mesh state</param>
+        /// <param name="land">The land boundary</param>
+        /// <param name="sectionControlPoint1x">Start point x-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint1y">Start point y-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint2x">End point x-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint2y">End point y-coordinate for the boundary section</param>
+        /// <param name="regionControlPointX">X-coordinate of the region-defining point; if equal to double missing value, use the default region</param>
+        /// <param name="regionControlPointY">Y-coordinate of the region-defining point; if equal to double missing value, use the default region</param>
+        /// <returns>Error code</returns>
+        int CurvilinearSnapToLandBoundary(int meshKernelId,
+                                          in DisposableGeometryList land,
+                                          double sectionControlPoint1x,
+                                          double sectionControlPoint1y,
+                                          double sectionControlPoint2x,
+                                          double sectionControlPoint2y,
+                                          double regionControlPointX,
+                                          double regionControlPointY);
+
+        /// <summary>
         /// Deallocate grid state (collections of mesh arrays with auxiliary variables)
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>

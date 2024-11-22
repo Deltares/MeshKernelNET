@@ -220,6 +220,38 @@ namespace MeshKernelNET.Native
         public static extern int CurvilinearConvertToMesh2D([In] int meshKernelId);
 
         /// <summary>
+        /// Delete the interior part of a curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to delete</param>
+        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to delete</param>
+        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to delete</param>
+        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to delete</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_delete_interior", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int CurvilinearDeleteInterior([In] int meshKernelId,
+                                                           [In] double xLowerLeftCorner,
+                                                           [In] double yLowerLeftCorner,
+                                                           [In] double xUpperRightCorner,
+                                                           [In] double yUpperRightCorner);
+
+        /// <summary>
+        /// Delete the exterior part of a curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to preserve</param>
+        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to preserve</param>
+        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to preserve</param>
+        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to preserve</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_delete_exterior", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int CurvilinearDeleteExterior([In] int meshKernelId,
+                                                           [In] double xLowerLeftCorner,
+                                                           [In] double yLowerLeftCorner,
+                                                           [In] double xUpperRightCorner,
+                                                           [In] double yUpperRightCorner);
+
+        /// <summary>
         /// Delete the node closest to a point
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

@@ -173,6 +173,32 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearConvertToMesh2D(meshKernelId);
         }
 
+        public int CurvilinearDeleteExterior(int meshKernelId,
+                                             double xLowerLeftCorner,
+                                             double yLowerLeftCorner,
+                                             double xUpperRightCorner,
+                                             double yUpperRightCorner)
+        {
+            return MeshKernelDll.CurvilinearDeleteExterior(meshKernelId,
+                                                           xLowerLeftCorner,
+                                                           yLowerLeftCorner,
+                                                           xUpperRightCorner,
+                                                           yUpperRightCorner);
+        }
+
+        public int CurvilinearDeleteInterior(int meshKernelId,
+                                             double xLowerLeftCorner,
+                                             double yLowerLeftCorner,
+                                             double xUpperRightCorner,
+                                             double yUpperRightCorner)
+        {
+            return MeshKernelDll.CurvilinearDeleteInterior(meshKernelId,
+                                                           xLowerLeftCorner,
+                                                           yLowerLeftCorner,
+                                                           xUpperRightCorner,
+                                                           yUpperRightCorner);
+        }
+
         public int CurvilinearDeleteNode(int meshKernelId, double xPointCoordinate, double yPointCoordinate)
         {
             return MeshKernelDll.CurvilinearDeleteNode(meshKernelId, xPointCoordinate, yPointCoordinate);

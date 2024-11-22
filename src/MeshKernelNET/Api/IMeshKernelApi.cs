@@ -186,6 +186,37 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int CurvilinearConvertToMesh2D(int meshKernelId);
 
+
+        /// <summary>
+        /// Delete the interior part of a curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to delete</param>
+        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to delete</param>
+        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to delete</param>
+        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to delete</param>
+        /// <returns>Error code</returns>
+        int CurvilinearDeleteExterior(int meshKernelId,
+            double xLowerLeftCorner,
+            double yLowerLeftCorner,
+            double xUpperRightCorner,
+            double yUpperRightCorner);
+
+        /// <summary>
+        /// Delete the exterior part of a curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to preserve</param>
+        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to preserve</param>
+        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to preserve</param>
+        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to preserve</param>
+        /// <returns>Error code</returns>
+        int CurvilinearDeleteInterior(int meshKernelId,
+            double xLowerLeftCorner,
+            double yLowerLeftCorner,
+            double xUpperRightCorner,
+            double yUpperRightCorner);
+
         /// <summary>
         /// Delete the node closest to a point
         /// </summary>

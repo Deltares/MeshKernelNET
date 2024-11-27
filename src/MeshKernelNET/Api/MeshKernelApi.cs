@@ -173,30 +173,17 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearConvertToMesh2D(meshKernelId);
         }
 
-        public int CurvilinearDeleteExterior(int meshKernelId,
-                                             double xLowerLeftCorner,
-                                             double yLowerLeftCorner,
-                                             double xUpperRightCorner,
-                                             double yUpperRightCorner)
+        public int CurvilinearDeleteExterior(int meshKernelId, BoundingBox boundingBox)
         {
-            return MeshKernelDll.CurvilinearDeleteExterior(meshKernelId,
-                                                           xLowerLeftCorner,
-                                                           yLowerLeftCorner,
-                                                           xUpperRightCorner,
-                                                           yUpperRightCorner);
+            BoundingBoxNative boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            return MeshKernelDll.CurvilinearDeleteExterior(meshKernelId, ref boundingBoxNative);
         }
 
         public int CurvilinearDeleteInterior(int meshKernelId,
-                                             double xLowerLeftCorner,
-                                             double yLowerLeftCorner,
-                                             double xUpperRightCorner,
-                                             double yUpperRightCorner)
+                                             BoundingBox boundingBox)
         {
-            return MeshKernelDll.CurvilinearDeleteInterior(meshKernelId,
-                                                           xLowerLeftCorner,
-                                                           yLowerLeftCorner,
-                                                           xUpperRightCorner,
-                                                           yUpperRightCorner);
+            BoundingBoxNative boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            return MeshKernelDll.CurvilinearDeleteInterior(meshKernelId, ref boundingBoxNative);
         }
 
         public int CurvilinearDeleteNode(int meshKernelId, double xPointCoordinate, double yPointCoordinate)

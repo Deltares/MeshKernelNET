@@ -1119,14 +1119,22 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out disposableCurvilinearGridBefore));
 
+                    var box = new BoundingBox() 
+                    {
+                        xLowerLeft = 0.0,
+                        yLowerLeft = 0.0,
+                        xUpperRight = 20.0,
+                        yUpperRight = 20.0
+                    };
+
                     // Call the method dynamically based on the parameter
                     if (methodName == "CurvilinearDeleteExterior")
                     {
-                        Assert.AreEqual(0, api.CurvilinearDeleteExterior(id, 0, 0, 20.0, 20.0));
+                        Assert.AreEqual(0, api.CurvilinearDeleteExterior(id, box));
                     }
                     else if (methodName == "CurvilinearDeleteInterior")
                     {
-                        Assert.AreEqual(0, api.CurvilinearDeleteInterior(id, 0, 0, 20.0, 20.0));
+                        Assert.AreEqual(0, api.CurvilinearDeleteInterior(id, box));
                     }
                     else
                     {

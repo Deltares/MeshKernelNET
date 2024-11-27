@@ -1101,6 +1101,64 @@ namespace MeshKernelNETTest.Api
         }
         
         [Test]
+        [TestCase("CurvilinearDeleteExterior", 0.0, -999.0)]
+        [TestCase("CurvilinearDeleteInterior", 0.0,   0.0)]
+        public void CurvilinearDeleteThroughApi(string methodName, double expectedBefore, double expectedAfter)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            {
+                var id = 0;
+                var disposableCurvilinearGridBefore = new DisposableCurvilinearGrid();
+                var disposableCurvilinearGridAfter = new DisposableCurvilinearGrid();
+                try
+                {
+                    // Prepare
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out disposableCurvilinearGridBefore));
+
+                    var box = new BoundingBox() 
+                    {
+                        xLowerLeft = 0.0,
+                        yLowerLeft = 0.0,
+                        xUpperRight = 20.0,
+                        yUpperRight = 20.0
+                    };
+
+                    // Call the method dynamically based on the parameter
+                    if (methodName == "CurvilinearDeleteExterior")
+                    {
+                        Assert.AreEqual(0, api.CurvilinearDeleteExterior(id, box));
+                    }
+                    else if (methodName == "CurvilinearDeleteInterior")
+                    {
+                        Assert.AreEqual(0, api.CurvilinearDeleteInterior(id, box));
+                    }
+                    else
+                    {
+                        Assert.Fail("Invalid method name provided");
+                    }
+
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out disposableCurvilinearGridAfter));
+
+                    // Assert
+                    var nodeXBefore = disposableCurvilinearGridBefore.NodeX[3];
+                    var nodeXAfter = disposableCurvilinearGridAfter.NodeX[3];
+                    Assert.AreEqual(expectedBefore, nodeXBefore);
+                    Assert.AreEqual(expectedAfter, nodeXAfter);
+                }
+                finally
+                {
+                    api.ClearState();
+                    disposableCurvilinearGridBefore?.Dispose();
+                    disposableCurvilinearGridAfter?.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void CurvilinearGetBoundariesAsPolygons()
         {
             // Setup

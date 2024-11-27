@@ -186,6 +186,23 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int CurvilinearConvertToMesh2D(int meshKernelId);
 
+
+        /// <summary>
+        /// Delete the exterior part of a rectangle in the curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="boundingBox">The bounding box defining the rectangle</param>
+        /// <returns>Error code</returns>
+        int CurvilinearDeleteExterior(int meshKernelId, BoundingBox boundingBox);
+
+        /// <summary>
+        /// Delete the interior part of a rectangle in the curvilinear grid
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="boundingBox">The bounding box defining the rectangle</param>
+        /// <returns>Error code</returns>
+        int CurvilinearDeleteInterior(int meshKernelId, BoundingBox boundingBox);
+
         /// <summary>
         /// Delete the node closest to a point
         /// </summary>

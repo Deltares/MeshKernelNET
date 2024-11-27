@@ -220,6 +220,24 @@ namespace MeshKernelNET.Native
         public static extern int CurvilinearConvertToMesh2D([In] int meshKernelId);
 
         /// <summary>
+        /// Delete the interior part of a rectangle in the curvilinear grid
+        /// </summary>
+         /// <param name="boundingBox">The bounding box defining the rectangle</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_delete_interior", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int CurvilinearDeleteInterior([In] int meshKernelId,
+                                                           [In] ref BoundingBoxNative boundingBox);
+
+        /// <summary>
+        /// Delete the exterior part of a rectangle in the curvilinear grid
+        /// </summary>
+         /// <param name="boundingBox">The bounding box defining the rectangle</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_delete_exterior", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int CurvilinearDeleteExterior([In] int meshKernelId,
+                                                           [In] ref BoundingBoxNative boundingBox);
+
+        /// <summary>
         /// Delete the node closest to a point
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

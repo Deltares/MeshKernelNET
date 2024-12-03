@@ -597,6 +597,27 @@ namespace MeshKernelNET.Api
                                                                regionControlPointY);
         }
 
+        public int CurvilinearSnapToSpline(int meshKernelId,
+                                           in DisposableGeometryList spline,
+                                           double sectionControlPoint1x,
+                                           double sectionControlPoint1y,
+                                           double sectionControlPoint2x,
+                                           double sectionControlPoint2y,
+                                           double regionControlPointX,
+                                           double regionControlPointY)
+        {
+            var geometryListNative = spline.CreateNativeObject();
+            return MeshKernelDll.CurvilinearSnapToSpline(meshKernelId,
+                                                         ref geometryListNative,
+                                                         sectionControlPoint1x,
+                                                         sectionControlPoint1y,
+                                                         sectionControlPoint2x,
+                                                         sectionControlPoint2y,
+                                                         regionControlPointX,
+                                                         regionControlPointY);
+        }
+
+
         public int DeallocateState(int meshKernelId)
         {
             return MeshKernelDll.DeallocateState(meshKernelId);

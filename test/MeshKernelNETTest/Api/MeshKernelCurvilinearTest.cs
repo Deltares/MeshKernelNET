@@ -691,6 +691,49 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void CurvilinearSnapToSplineThroughAPI()
+        {
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(5, 5, 10, 10))
+            using (DisposableGeometryList spline = new DisposableGeometryList())
+            using (var api = new MeshKernelApi())
+            {
+                DisposableCurvilinearGrid curvilinearGrid = null;
+                try
+                {
+                    // Prepare
+                    var id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                    spline.XCoordinates = new[] { 0.0, 10.0, 20.0, 30.0, 40.0 };
+                    spline.YCoordinates = new[] { -10.0, -10.0, -10.0, -10.0, -10.0 };
+                    spline.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+                    spline.NumberOfCoordinates = spline.XCoordinates.Length;
+
+                    // Execute
+                    Assert.AreEqual(0, api.CurvilinearSnapToSpline(id,
+                                                                   spline,
+                                                                   0.0,
+                                                                   0.0,
+                                                                   30.0,
+                                                                   0.0,
+                                                                   20.0,
+                                                                   20.0));
+                    // Assert
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.AreEqual(5, curvilinearGrid.NumM);
+                    Assert.AreEqual(0.0, curvilinearGrid.NodeX[0]);
+                    Assert.AreEqual(-10.0, curvilinearGrid.NodeY[0]);
+                    Assert.AreEqual(-10.0, curvilinearGrid.NodeY[15]);
+                    Assert.AreEqual(0.0, curvilinearGrid.NodeY[20]);
+                }
+                finally
+                {
+                    api.ClearState();
+                    curvilinearGrid?.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void CurvilinearRefineThroughAPI()
         {
             // Setup

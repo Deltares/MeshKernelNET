@@ -701,6 +701,28 @@ namespace MeshKernelNET.Native
                                                                  [In] double regionControlPointY);
 
         /// <summary>
+        /// Snaps a curvilinear grid line a spline
+        /// </summary>
+        /// <param name="meshKernelId">The ID of the mesh state</param>
+        /// <param name="spline">The spline to snap to</param>
+        /// <param name="sectionControlPoint1x">Start point x-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint1y">Start point y-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint2x">End point x-coordinate for the boundary section</param>
+        /// <param name="sectionControlPoint2y">End point y-coordinate for the boundary section</param>
+        /// <param name="regionControlPointX">X-coordinate of the region-defining point; if equal to double missing value, use the default region</param>
+        /// <param name="regionControlPointY">Y-coordinate of the region-defining point; if equal to double missing value, use the default region</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_snap_to_spline", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearSnapToSpline([In] int meshKernelId,
+                                                           [In] ref GeometryListNative spline,
+                                                           [In] double sectionControlPoint1x,
+                                                           [In] double sectionControlPoint1y,
+                                                           [In] double sectionControlPoint2x,
+                                                           [In] double sectionControlPoint2y,
+                                                           [In] double regionControlPointX,
+                                                           [In] double regionControlPointY);
+
+        /// <summary>
         /// Deallocate mesh state
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

@@ -701,7 +701,7 @@ namespace MeshKernelNET.Native
                                                                  [In] double regionControlPointY);
 
         /// <summary>
-        /// Snaps a curvilinear grid line to land boundary
+        /// Snaps a curvilinear grid line a spline
         /// </summary>
         /// <param name="meshKernelId">The ID of the mesh state</param>
         /// <param name="spline">The spline to snap to</param>

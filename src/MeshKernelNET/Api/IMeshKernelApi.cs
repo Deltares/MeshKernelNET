@@ -239,13 +239,20 @@ namespace MeshKernelNET.Api
         int CurvilinearFinalizeLineShift(int meshKernelId);
 
         /// <summary>
-        /// Gets the curvilinear data and returns a DisposableCurvilinearGrid
+        /// Finalizes curvilinear orthogonalize algorithm
         /// </summary>
-        /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableCurvilinearGrid">
-        /// The disposable curvilinear grid</returns>
+        /// <param name="meshKernelId">Id of the mesh state</param>
         /// <returns>Error code</returns>
-        int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
+        int CurvilinearFinalizeOrthogonalize(int meshKernelId);
+
+         /// <summary>
+         /// Gets the curvilinear data and returns a DisposableCurvilinearGrid
+         /// </summary>
+         /// <param name="meshKernelId">Id of the grid state</param>
+         /// <param name="disposableCurvilinearGrid">
+         /// The disposable curvilinear grid</returns>
+         /// <returns>Error code</returns>
+         int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid);
 
         /// <summary>
         /// Gets the boundary polygon of a curvilinear grid, nodes with invalid coordinates are excluded

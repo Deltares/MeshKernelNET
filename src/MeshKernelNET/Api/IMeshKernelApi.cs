@@ -315,6 +315,13 @@ namespace MeshKernelNET.Api
                                             ref int locationIndex);
 
         /// <summary>
+        /// Initializes the curvilinear line shift algorithm
+        /// </summary>
+        /// <param name="meshKernelId">the id of the mesh state</param>
+        /// <returns></returns>
+        int CurvilinearInitializeLineShift(int meshKernelId);
+            
+        /// <summary>
         /// Generates a curvilinear grid from splines with the advancing front method. Initialization step (interactive)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

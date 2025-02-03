@@ -3341,8 +3341,11 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        [TestCase(0,8)]
         [TestCase(4,8)]
+        [TestCase(8,8)]
         [TestCase(9,11)]
+        [TestCase(16,11)]
         public void Mesh2dSplitEdgesThroughAPI(int edgeId, int expectedExtraEdges)
         {
             // Setup

@@ -576,21 +576,49 @@ namespace MeshKernelNET.Api
                                         double ySecondGridLineNode);
 
         /// <summary>
-        /// Smooths a curvilinear grid
+        /// Initialize curvilinear smoothing
         /// </summary>
         /// <param name="meshKernelId">The meshKernelId of the block to orthogonalize</param>
         /// <param name="smoothingIterations">The number of smoothing iterations to perform</param>
+        /// <returns>Error code</returns>
+        int CurvilinearInitializeSmoothing([In] int meshKernelId,
+                                           [In] int smoothingIterations);
+
+        /// <summary>
+        /// Sets the frozen lines for the curvilinear smoothing algorithm
+        /// </summary>
+        /// <param name="xFirstGridLineNode">The x coordinate of the first point of the line to freeze</param>
+        /// <param name="yFirstGridLineNode">The y coordinate of the first point of the line to freeze</param>
+        /// <param name="xSecondGridLineNode">The x coordinate of the second point of the line to freeze</param>
+        /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
+        /// <returns>Error code</returns>
+        int CurvilinearSetFrozenLinesSmoothing([In] int meshKernelId,
+                                               [In] double xFirstGridLineNode,
+                                               [In] double yFirstGridLineNode,
+                                               [In] double xSecondGridLineNode,
+                                               [In] double ySecondGridLineNode);
+
+        /// <summary>
+        /// Smooths the curvilinear grid inside a block
+        /// </summary>
+        /// <param name="meshKernelId">The meshKernelId</param>
         /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to smooth</param>
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to smooth</param>
         /// <param name="xUpperRightCorner">The x coordinate of the right corner of the block to smooth</param>
         /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to smooth</param>
         /// <returns>Error code</returns>
-        int CurvilinearSmoothing(int meshKernelId,
-                                 int smoothingIterations,
-                                 double xLowerLeftCorner,
-                                 double yLowerLeftCorner,
-                                 double xUpperRightCorner,
-                                 double yUpperRightCorner);
+        int CurvilinearSmoothing([In] int meshKernelId,
+                                 [In] double xLowerLeftCorner,
+                                 [In] double yLowerLeftCorner,
+                                 [In] double xUpperRightCorner,
+                                 [In] double yUpperRightCorner);
+
+        /// <summary>
+        /// Sets the frozen lines for the curvilinear smoothing algorithm
+        /// </summary>
+        /// <param name="meshKernelId">The meshKernelId</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFinalizeSmoothing([In] int meshKernelId);
 
         /// <summary>
         /// Smooths a curvilinear grid along the direction specified by a segment

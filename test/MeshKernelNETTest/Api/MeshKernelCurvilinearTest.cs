@@ -593,11 +593,14 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+
                     // Execute
-                    Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
+                    Assert.AreEqual(0, api.CurvilinearInitializeSmoothing(id, 10));
+                    Assert.AreEqual(0, api.CurvilinearSetFrozenLinesSmoothing(id, 10.0,0.0,10.0,10.0));
+                    Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10.0, 20.0, 30.0, 20.0));
+                    Assert.AreEqual(0, api.CurvilinearFinalizeSmoothing(id));
 
                     // Assert
-
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                 }
                 finally

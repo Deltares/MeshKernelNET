@@ -538,19 +538,41 @@ namespace MeshKernelNET.Api
                                                              ySecondGridLineNode);
         }
 
+        public int CurvilinearInitializeSmoothing(int meshKernelId,
+                                                  int smoothingIterations)
+        {
+            return MeshKernelDll.CurvilinearInitializeSmoothing(meshKernelId, smoothingIterations);
+        }
+
+        public int CurvilinearSetFrozenLinesSmoothing(int meshKernelId,
+                                                      double xFirstGridLineNode,
+                                                      double yFirstGridLineNode,
+                                                      double xSecondGridLineNode,
+                                                      double ySecondGridLineNode)
+        {
+            return MeshKernelDll.CurvilinearSetFrozenLinesSmoothing(meshKernelId, 
+                                                                    xFirstGridLineNode, 
+                                                                    yFirstGridLineNode, 
+                                                                    xSecondGridLineNode, 
+                                                                    ySecondGridLineNode);
+        }
+
         public int CurvilinearSmoothing(int meshKernelId,
-                                        int smoothingIterations,
                                         double xLowerLeftCorner,
                                         double yLowerLeftCorner,
                                         double xUpperRightCorner,
                                         double yUpperRightCorner)
         {
             return MeshKernelDll.CurvilinearSmoothing(meshKernelId,
-                                                      smoothingIterations,
                                                       xLowerLeftCorner,
                                                       yLowerLeftCorner,
                                                       xUpperRightCorner,
                                                       yUpperRightCorner);
+        }
+
+        public int CurvilinearFinalizeSmoothing(int meshKernelId)
+        {
+            return MeshKernelDll.CurvilinearFinalizeSmoothing(meshKernelId);
         }
 
         public int CurvilinearSmoothingDirectional(int meshKernelId,

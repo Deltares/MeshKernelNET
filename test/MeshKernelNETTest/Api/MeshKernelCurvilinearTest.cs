@@ -1462,7 +1462,7 @@ namespace MeshKernelNETTest.Api
                                                        2.0,
                                                        ref forzenLineId);
             // Id is always increasing
-            Assert.That(returnCode, Is.EqualTo(1));
+            Assert.That(forzenLineId, Is.EqualTo(1));
 
         }
 

@@ -502,14 +502,14 @@ namespace MeshKernelNET.Api
                                                           double xFirstGridLineNode,
                                                           double yFirstGridLineNode,
                                                           double xSecondGridLineNode,
-                                                          double yUpperRightCorner,
+                                                          double ySecondGridLineNode,
                                                           ref int frozenLineId)
         {
             return MeshKernelDll.CurvilinearSetFrozenLines(meshKernelId,
                                                            xFirstGridLineNode,
                                                            yFirstGridLineNode,
                                                            xSecondGridLineNode,
-                                                           yUpperRightCorner, 
+                                                           ySecondGridLineNode, 
                                                            ref frozenLineId);
         }
 

@@ -597,6 +597,16 @@ namespace MeshKernelNET.Native
                                                              [In][Out] ref int frozenLineId);
 
         /// <summary>
+        /// Sets a new frozen line in the meshkernel state
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="frozenLineId">The id of the frozen line to delete</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_delete_frozen_lines", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearDeleteFrozenLines([In] int meshKernelId, [In] int frozenLineId);
+
+
+        /// <summary>
         /// Sets the start and end nodes of the line to shift
         /// </summary>
         /// <param name="meshKernelId">The meshKernelId of the block to orthogonalize</param>

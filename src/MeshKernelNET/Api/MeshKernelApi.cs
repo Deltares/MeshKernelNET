@@ -513,6 +513,11 @@ namespace MeshKernelNET.Api
                                                            ref frozenLineId);
         }
 
+        public int CurvilinearDeleteFrozenLines(int meshKernelId, int frozenLineId)
+        {
+            return MeshKernelDll.CurvilinearDeleteFrozenLines(meshKernelId, frozenLineId);
+        }
+
         public int CurvilinearSetLineLineShift(int meshKernelId,
                                                double xFirstGridLineNode,
                                                double yFirstGridLineNode,

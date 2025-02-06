@@ -606,7 +606,7 @@ namespace MeshKernelNETTest.Api
 
                     // Execute
                     int frozenLineId = -1;
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id, 10.0,0.0,10.0,10.0,ref frozenLineId));
+                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id, 10.0,0.0,10.0,10.0, ref frozenLineId));
                     Assert.AreEqual(0, frozenLineId);
                     Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
 
@@ -1436,6 +1436,35 @@ namespace MeshKernelNETTest.Api
             // Assert
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));
         }
-        
+
+        [Test]
+        public void CurvilinearSetAndDeleteFrozenLines_ShouldSetAndDeleteFrozenLines()
+        {
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int forzenLineId = -1;
+
+            // Set and delete
+            int returnCode = api.CurvilinearSetFrozenLines(id, 
+                                                           0.0,
+                                                           0.0,
+                                                           0.0,
+                                                           2.0, 
+                                                           ref forzenLineId);
+            Assert.That(forzenLineId, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearDeleteFrozenLines(id, forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearSetFrozenLines(id,
+                                                       0.0,
+                                                       0.0,
+                                                       0.0,
+                                                       2.0,
+                                                       ref forzenLineId);
+            // Id is always increasing
+            Assert.That(returnCode, Is.EqualTo(1));
+
+        }
+
     }
 }

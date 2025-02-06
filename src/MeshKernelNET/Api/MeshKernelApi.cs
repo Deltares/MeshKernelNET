@@ -214,11 +214,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearFinalizeLineShift(meshKernelId);
         }
 
-        public int CurvilinearFinalizeOrthogonalize(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearFinalizeOrthogonalize(meshKernelId);
-        }
-
         public int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid)
         {
             var curvilinearGrid = new CurvilinearGridNative();
@@ -362,13 +357,6 @@ namespace MeshKernelNET.Api
                                                                                 ref splinesToCurvilinearParametersNative);
         }
 
-        public int CurvilinearInitializeOrthogonalize(int meshKernelId,
-                                                      in OrthogonalizationParameters orthogonalizationParameters)
-        {
-            var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
-            return MeshKernelDll.CurvilinearInitializeOrthogonalize(meshKernelId, ref orthogonalizationParametersNative);
-        }
-
         public int CurvilinearInsertFace(int meshKernelId, double xCoordinate, double yCoordinate)
         {
             return MeshKernelDll.CurvilinearInsertFace(meshKernelId, xCoordinate, yCoordinate);
@@ -460,9 +448,20 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearMoveNodeLineShift(meshKernelId, xFromCoordinate, yFromCoordinate, xToCoordinate, yToCoordinate);
         }
 
-        public int CurvilinearOrthogonalize(int meshKernelId)
+        public int CurvilinearOrthogonalize(int meshKernelId,
+                                            ref OrthogonalizationParameters orthogonalizationParameters, 
+                                            double xLowerLeftCorner,
+                                            double yLowerLeftCorner,
+                                            double xUpperRightCorner,
+                                            double yUpperRightCorner)
         {
-            return MeshKernelDll.CurvilinearOrthogonalize(meshKernelId);
+            var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
+            return MeshKernelDll.CurvilinearOrthogonalize(meshKernelId, 
+                                                          ref orthogonalizationParametersNative,
+                                                          xLowerLeftCorner,
+                                                          yLowerLeftCorner,
+                                                          xUpperRightCorner,
+                                                          yUpperRightCorner);
         }
 
         public int CurvilinearRefine(int meshKernelId,
@@ -499,30 +498,19 @@ namespace MeshKernelNET.Api
                                                               yUpperRightCorner);
         }
 
-        public int CurvilinearSetBlockOrthogonalize(int meshKernelId,
-                                                    double xLowerLeftCorner,
-                                                    double yLowerLeftCorner,
-                                                    double xUpperRightCorner,
-                                                    double yUpperRightCorner)
-        {
-            return MeshKernelDll.CurvilinearSetBlockOrthogonalize(meshKernelId,
-                                                                  xLowerLeftCorner,
-                                                                  yLowerLeftCorner,
-                                                                  xUpperRightCorner,
-                                                                  yUpperRightCorner);
-        }
-
-        public int CurvilinearSetFrozenLinesOrthogonalize(int meshKernelId,
+        public int CurvilinearSetFrozenLines(int meshKernelId,
                                                           double xFirstGridLineNode,
                                                           double yFirstGridLineNode,
                                                           double xSecondGridLineNode,
-                                                          double yUpperRightCorner)
+                                                          double yUpperRightCorner,
+                                                          ref int frozenLineId)
         {
-            return MeshKernelDll.CurvilinearSetFrozenLinesOrthogonalize(meshKernelId,
-                                                                        xFirstGridLineNode,
-                                                                        yFirstGridLineNode,
-                                                                        xSecondGridLineNode,
-                                                                        yUpperRightCorner);
+            return MeshKernelDll.CurvilinearSetFrozenLines(meshKernelId,
+                                                           xFirstGridLineNode,
+                                                           yFirstGridLineNode,
+                                                           xSecondGridLineNode,
+                                                           yUpperRightCorner, 
+                                                           ref frozenLineId);
         }
 
         public int CurvilinearSetLineLineShift(int meshKernelId,
@@ -538,41 +526,19 @@ namespace MeshKernelNET.Api
                                                              ySecondGridLineNode);
         }
 
-        public int CurvilinearInitializeSmoothing(int meshKernelId,
-                                                  int smoothingIterations)
-        {
-            return MeshKernelDll.CurvilinearInitializeSmoothing(meshKernelId, smoothingIterations);
-        }
-
-        public int CurvilinearSetFrozenLinesSmoothing(int meshKernelId,
-                                                      double xFirstGridLineNode,
-                                                      double yFirstGridLineNode,
-                                                      double xSecondGridLineNode,
-                                                      double ySecondGridLineNode)
-        {
-            return MeshKernelDll.CurvilinearSetFrozenLinesSmoothing(meshKernelId, 
-                                                                    xFirstGridLineNode, 
-                                                                    yFirstGridLineNode, 
-                                                                    xSecondGridLineNode, 
-                                                                    ySecondGridLineNode);
-        }
-
         public int CurvilinearSmoothing(int meshKernelId,
+                                        [In] int smoothingIterations,
                                         double xLowerLeftCorner,
                                         double yLowerLeftCorner,
                                         double xUpperRightCorner,
                                         double yUpperRightCorner)
         {
             return MeshKernelDll.CurvilinearSmoothing(meshKernelId,
+                                                      smoothingIterations,
                                                       xLowerLeftCorner,
                                                       yLowerLeftCorner,
                                                       xUpperRightCorner,
                                                       yUpperRightCorner);
-        }
-
-        public int CurvilinearFinalizeSmoothing(int meshKernelId)
-        {
-            return MeshKernelDll.CurvilinearFinalizeSmoothing(meshKernelId);
         }
 
         public int CurvilinearSmoothingDirectional(int meshKernelId,

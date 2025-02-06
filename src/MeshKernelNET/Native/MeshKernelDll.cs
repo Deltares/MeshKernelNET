@@ -281,14 +281,6 @@ namespace MeshKernelNET.Native
         public static extern int CurvilinearFinalizeLineShift([In] int meshKernelId);
 
         /// <summary>
-        /// Finalizes the curvilinear orthogonalization algorithm
-        /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_finalize_orthogonalize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int CurvilinearFinalizeOrthogonalize([In] int meshKernelId);
-
-        /// <summary>
         /// Gets the curvilinear grid data as a CurvilinearGrid struct (converted as set of edges and nodes)
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
@@ -372,16 +364,6 @@ namespace MeshKernelNET.Native
                                                                                   [In] ref GeometryListNative geometryListNative,
                                                                                   [In] ref CurvilinearParametersNative curvilinearParametersNative,
                                                                                   [In] ref SplinesToCurvilinearParametersNative splinesToCurvilinearParameters);
-
-        /// <summary>
-        /// Initializes the orthogonal curvilinear algorithm
-        /// </summary>
-        /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="orthogonalizationParameters">The orthogonalization parameters to use in the algorithm</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_initialize_orthogonalize", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearInitializeOrthogonalize([In] int meshKernelId,
-                                                                      [In] ref OrthogonalizationParametersNative orthogonalizationParameters);
 
         /// <summary>
         /// Inserts a new face on a curvilinear grid. The new face will be inserted on top of the closest edge by linear
@@ -528,12 +510,22 @@ namespace MeshKernelNET.Native
                                                                 [In] double yToCoordinate);
 
         /// <summary>
-        /// Orthogonalize a curvilinear grid
+        ///  Define a block on the curvilinear grid where to perform orthogonalization
         /// </summary>
-        /// <param name="meshKernelId">The id of the mesh state </param>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="orthogonalizationParameters">orthogonalizationParameters The orthogonalization parameters to use in the algorithm
+        /// <param name="xLowerLeftCorner">xLowerLeftCorner The x coordinate of the lower left corner of the block to orthogonalize
+        /// <param name="yLowerLeftCorner">yLowerLeftCorner The y coordinate of the lower left corner of the block to orthogonalize
+        /// <param name="xUpperRightCorner">xUpperRightCorner The x coordinate of the upper right corner of the block to orthogonalize
+        /// <param name="yUpperRightCorner">yUpperRightCorner The y coordinate of the upper right corner of the block to orthogonalize
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_orthogonalize", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearOrthogonalize([In] int meshKernelId);
+        internal static extern int CurvilinearOrthogonalize([In] int meshKernelId,
+                                                            [In] ref OrthogonalizationParametersNative orthogonalizationParameters,
+                                                            [In] double xLowerLeftCorner,
+                                                            [In] double yLowerLeftCorner,
+                                                            [In] double xUpperRightCorner,
+                                                            [In] double yUpperRightCorner);
 
         /// <summary>
         /// Directional curvilinear grid refinement. Additional gridlines are added perpendicularly to the segment defined by
@@ -587,36 +579,22 @@ namespace MeshKernelNET.Native
                                                                 [In] double yUpperRightCorner);
 
         /// <summary>
-        /// efine a block on the curvilinear grid where to perform orthogonalization
-        /// </summary>
-        /// <param name="meshKernelId">The meshKernelId of the block to orthogonalize</param>
-        /// <param name="xLowerLeftCorner">The xLowerLeftCorner of the block to orthogonalize</param>
-        /// <param name="yLowerLeftCorner">The yLowerLeftCorner of the block to orthogonalize</param>
-        /// <param name="xUpperRightCorner">The xUpperRightCorner of the block to orthogonalize</param>
-        /// <param name="yUpperRightCorner">The yUpperRightCorner of the block to orthogonalize</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_set_block_orthogonalize", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearSetBlockOrthogonalize([In] int meshKernelId,
-                                                                    [In] double xLowerLeftCorner,
-                                                                    [In] double yLowerLeftCorner,
-                                                                    [In] double xUpperRightCorner,
-                                                                    [In] double yUpperRightCorner);
-
-        /// <summary>
-        /// Freezes a line in the curvilinear orthogonalization process
+        /// Sets a new frozen line in the meshkernel state
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="xFirstGridLineNode">The x coordinate of the first point of the line to freeze</param>
         /// <param name="yFirstGridLineNode">The y coordinate of the first point of the line to freeze</param>
         /// <param name="xSecondGridLineNode">The x coordinate of the second point of the line to freeze</param>
         /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
+        /// <param name="frozenLineId">The id of the frozen line</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_set_frozen_lines_orthogonalize", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearSetFrozenLinesOrthogonalize([In] int meshKernelId,
-                                                                          [In] double xFirstGridLineNode,
-                                                                          [In] double yFirstGridLineNode,
-                                                                          [In] double xSecondGridLineNode,
-                                                                          [In] double ySecondGridLineNode);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_set_frozen_lines", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearSetFrozenLines([In] int meshKernelId,
+                                                             [In] double xFirstGridLineNode,
+                                                             [In] double yFirstGridLineNode,
+                                                             [In] double xSecondGridLineNode,
+                                                             [In] double ySecondGridLineNode,
+                                                             [In][Out] ref int frozenLineId);
 
         /// <summary>
         /// Sets the start and end nodes of the line to shift
@@ -635,54 +613,22 @@ namespace MeshKernelNET.Native
                                                                [In] double ySecondGridLineNode);
 
         /// <summary>
-        /// Initialize curvilinear smoothing
+        /// Smooths a curvilinear grid
         /// </summary>
-        /// <param name="meshKernelId">The meshKernelId</param>
+        /// <param name="meshKernelId">The meshKernelId of the block to orthogonalize</param>
         /// <param name="smoothingIterations">The number of smoothing iterations to perform</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_initialize_smoothing", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearInitializeSmoothing([In] int meshKernelId,
-                                                                  [In] int smoothingIterations);
-
-        /// <summary>
-        /// Sets the frozen lines for the curvilinear smoothing algorithm
-        /// </summary>
-        /// <param name="meshKernelId">The meshKernelId</param>
-        /// <param name="xFirstGridLineNode">The x coordinate of the first point of the line to freeze</param>
-        /// <param name="yFirstGridLineNode">The y coordinate of the first point of the line to freeze</param>
-        /// <param name="xSecondGridLineNode">The x coordinate of the second point of the line to freeze</param>
-        /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_set_frozen_lines_smoothing", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearSetFrozenLinesSmoothing([In] int meshKernelId,
-                                                                      [In] double xFirstGridLineNode,
-                                                                      [In] double yFirstGridLineNode,
-                                                                      [In] double xSecondGridLineNode,
-                                                                      [In] double ySecondGridLineNode);
-
-        /// <summary>
-        /// Performs curvilinear smoothing
-        /// </summary>
-        /// <param name="meshKernelId">The meshKernelId</param>
         /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to smooth</param>
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to smooth</param>
-        /// <param name="xUpperRightCorner">The x coordinate of the right corner of the block to smooth</param>
+        /// <param name="xUpperRightCorner">The y coordinate of the lower left corner of the block to smooth</param>
         /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to smooth</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_smoothing", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearSmoothing([In] int meshKernelId,
-                                                                      [In] double xLowerLeftCorner,
-                                                                      [In] double yLowerLeftCorner,
-                                                                      [In] double xUpperRightCorner,
-                                                                      [In] double yUpperRightCorner);
-
-        /// <summary>
-        /// Finalizes curvilinear smoothing algorithm
-        /// </summary>
-        /// <param name="meshKernelId">The meshKernelId</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_finalize_smoothing", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearFinalizeSmoothing([In] int meshKernelId);
+                                                        [In] int smoothingIterations,
+                                                        [In] double xLowerLeftCorner,
+                                                        [In] double yLowerLeftCorner,
+                                                        [In] double xUpperRightCorner,
+                                                        [In] double yUpperRightCorner);
 
         /// <summary>
         /// Smooths a curvilinear grid along the direction specified by a segment

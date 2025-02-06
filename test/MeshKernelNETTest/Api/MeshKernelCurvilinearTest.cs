@@ -562,12 +562,22 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
                     var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
-                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0), 0);
-                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
+                    int frozenLineId = -1;
+                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id,
+                                                                      10.0,
+                                                                      0.0,
+                                                                      10.0,
+                                                                      10.0, 
+                                                                     ref frozenLineId));
+                    Assert.AreEqual(0, frozenLineId);
+                    Assert.AreEqual(0, api.CurvilinearOrthogonalize(id, 
+                                                                    ref orthogonalizationParameters, 
+                                                                    20.0, 
+                                                                    0.0,
+                                                                    20.0,
+                                                                    10.0));
 
                     // Assert
-
                     int gridOut = api.CurvilinearGridGetData(id, out curvilinearGrid);
                     Assert.NotNull(gridOut);
                 }
@@ -595,10 +605,10 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
 
                     // Execute
-                    Assert.AreEqual(0, api.CurvilinearInitializeSmoothing(id, 10));
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLinesSmoothing(id, 10.0,0.0,10.0,10.0));
-                    Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10.0, 20.0, 30.0, 20.0));
-                    Assert.AreEqual(0, api.CurvilinearFinalizeSmoothing(id));
+                    int frozenLineId = -1;
+                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id, 10.0,0.0,10.0,10.0,ref frozenLineId));
+                    Assert.AreEqual(0, frozenLineId);
+                    Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
 
                     // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
@@ -776,15 +786,13 @@ namespace MeshKernelNETTest.Api
                 {
                     // Prepare
                     id = api.AllocateState(0);
-
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+
                     // Execute
                     var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
-                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
-                    Assert.AreEqual(0, api.CurvilinearSetBlockOrthogonalize(id, 0.0, 0.0, 30.0, 30.0), 0);
-                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
-                    // Assert
+                    Assert.AreEqual(0, api.CurvilinearOrthogonalize(id, ref orthogonalizationParameters, 0.0, 0.0, 30.0, 30.0), 0);
 
+                    // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual((5, 5), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }

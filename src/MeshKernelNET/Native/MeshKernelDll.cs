@@ -586,7 +586,7 @@ namespace MeshKernelNET.Native
         /// <param name="yFirstGridLineNode">The y coordinate of the first point of the line to freeze</param>
         /// <param name="xSecondGridLineNode">The x coordinate of the second point of the line to freeze</param>
         /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
-        /// <param name="frozenLineId">The id of the frozen line</param>
+        /// <param name="frozenLineId">The id of the frozen line, unique for each frozen line and meshkernel id. It will not be re-issued again for another frozen line</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_frozen_line_add", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearFrozenLineAdd([In] int meshKernelId,
@@ -634,10 +634,10 @@ namespace MeshKernelNET.Native
                                                             [In][Out] ref double ySecondFrozenLineCoordinate);
 
         /// <summary>
-        /// Gets the number of stored frozen lines in the meshkernel state
+        /// Gets the number of stored frozen lines in the state
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="numFrozenLines">The number of stored frozen lines in the meshkernel state</param>
+        /// <param name="numFrozenLines">The number of stored frozen lines in the state</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_frozen_lines_get_count", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearFrozenLinesGetCount([In] int meshKernelId, [In][Out] ref int numFrozenLines);

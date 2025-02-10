@@ -533,7 +533,8 @@ namespace MeshKernelNET.Api
         /// <param name="yFirstGridLineNode">The y coordinate of the first point of the line to freeze</param>
         /// <param name="xSecondGridLineNode">The x coordinate of the second point of the line to freeze</param>
         /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
-        /// <param name="frozenLineId">The frozen line id</param>
+        /// <param name="frozenLineId">The id of the frozen line, unique for each frozen line and meshkernel id.
+        /// It will not be re-issued again for another frozen line</param>
         /// <returns>Error code</returns>
         int CurvilinearFrozenLineAdd(int meshKernelId,
                                      double xFirstGridLineNode,
@@ -542,6 +543,56 @@ namespace MeshKernelNET.Api
                                      double ySecondGridLineNode,
                                      ref int frozenLineId);
 
+        /// <summary>
+        /// Deletes a frozen line in the meshkernel state
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="frozenLineId">The id of the frozen line to delete</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFrozenLineDelete(int meshKernelId, int frozenLineId);
+
+        /// <summary>
+        /// Checks if a frozen line is valid
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="frozenLineId">The id of the frozen line to check</param>
+        /// <param name="isValid">True if the provided id is valid</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFrozenLineValid(int meshKernelId, int frozenLineId, ref bool isValid);
+
+        /// <summary>
+        /// Gets the coordinates of the frozen line
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="frozenLineId">The id of the frozen line to delete</param>
+        /// <param name="xFirstFrozenLineCoordinate">The x coordinate of the first point of the frozen line</param>
+        /// <param name="yFirstFrozenLineCoordinate">The y coordinate of the first point of the frozen line</param>
+        /// <param name="xSecondFrozenLineCoordinate">The x coordinate of the second point of the frozen line</param>
+        /// <param name="ySecondFrozenLineCoordinate">The x coordinate of the second point of the frozen line</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFrozenLineGet(int meshKernelId,
+                                     int frozenLineId,
+                                     ref double xFirstFrozenLineCoordinate,
+                                     ref double yFirstFrozenLineCoordinate,
+                                     ref double xSecondFrozenLineCoordinate,
+                                     ref double ySecondFrozenLineCoordinate);
+
+        /// <summary>
+        /// Gets the number of stored frozen lines in the state
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="numFrozenLines">The number of stored frozen lines in the state</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFrozenLinesGetCount(int meshKernelId, ref int numFrozenLines);
+
+        /// <summary>
+        /// Gets the ids of the frozen lines
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="frozenLinesIds">The frozen line ids</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFrozenLinesGetIds(int meshKernelId, ref int[] frozenLinesIds);
+        
         /// <summary>
         /// Sets the start and end nodes of the line to shift
         /// </summary>

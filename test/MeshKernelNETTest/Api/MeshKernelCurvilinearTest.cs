@@ -563,7 +563,7 @@ namespace MeshKernelNETTest.Api
                     // Execute
                     var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
                     int frozenLineId = -1;
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id,
+                    Assert.AreEqual(0, api.CurvilinearFrozenLineAdd(id,
                                                                       10.0,
                                                                       0.0,
                                                                       10.0,
@@ -606,7 +606,7 @@ namespace MeshKernelNETTest.Api
 
                     // Execute
                     int frozenLineId = -1;
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLines(id, 10.0,0.0,10.0,10.0, ref frozenLineId));
+                    Assert.AreEqual(0, api.CurvilinearFrozenLineAdd(id, 10.0,0.0,10.0,10.0, ref frozenLineId));
                     Assert.AreEqual(0, frozenLineId);
                     Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
 
@@ -1444,7 +1444,7 @@ namespace MeshKernelNETTest.Api
             int forzenLineId = -1;
 
             // Set and delete
-            int returnCode = api.CurvilinearSetFrozenLines(id, 
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 
                                                            0.0,
                                                            0.0,
                                                            0.0,
@@ -1452,10 +1452,10 @@ namespace MeshKernelNETTest.Api
                                                            ref forzenLineId);
             Assert.That(forzenLineId, Is.EqualTo(0));
 
-            returnCode = api.CurvilinearDeleteFrozenLines(id, forzenLineId);
+            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
             Assert.That(returnCode, Is.EqualTo(0));
 
-            returnCode = api.CurvilinearSetFrozenLines(id,
+            returnCode = api.CurvilinearFrozenLineAdd(id,
                                                        0.0,
                                                        0.0,
                                                        0.0,

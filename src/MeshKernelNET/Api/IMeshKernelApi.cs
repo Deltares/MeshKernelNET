@@ -535,12 +535,12 @@ namespace MeshKernelNET.Api
         /// <param name="ySecondGridLineNode">The y coordinate of the second point of the line to freeze</param>
         /// <param name="frozenLineId">The frozen line id</param>
         /// <returns>Error code</returns>
-        int CurvilinearSetFrozenLines(int meshKernelId,
-                                      double xFirstGridLineNode,
-                                      double yFirstGridLineNode,
-                                      double xSecondGridLineNode,
-                                      double ySecondGridLineNode,
-                                      ref int frozenLineId);
+        int CurvilinearFrozenLineAdd(int meshKernelId,
+                                     double xFirstGridLineNode,
+                                     double yFirstGridLineNode,
+                                     double xSecondGridLineNode,
+                                     double ySecondGridLineNode,
+                                     ref int frozenLineId);
 
         /// <summary>
         /// Sets the start and end nodes of the line to shift

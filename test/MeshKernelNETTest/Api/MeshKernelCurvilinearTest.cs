@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using GeoAPI.Geometries;
 using MeshKernelNET.Api;
 using NetTopologySuite.Algorithm;
@@ -1464,6 +1465,113 @@ namespace MeshKernelNETTest.Api
             // Id is always increasing
             Assert.That(forzenLineId, Is.EqualTo(1));
 
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineAdd_ShouldReturnValidId()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+
+            // Act
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(frozenLineId, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLinesGetCount_ShouldReturnCorrectCount()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int numFrozenLines = 0;
+            int returnCode = api.CurvilinearFrozenLinesGetCount(id, ref numFrozenLines);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(numFrozenLines, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLinesGetIds_ShouldReturnCorrectIds()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int numFrozenLines = 1;
+            var frozenLinesIds = new int[numFrozenLines];
+            int returnCode = api.CurvilinearFrozenLinesGetIds(id, ref frozenLinesIds);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(frozenLinesIds[0], Is.EqualTo(frozenLineId));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineValid_ShouldReturnTrueForValidLine()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            bool isValid = false;
+            int returnCode = api.CurvilinearFrozenLineValid(id, frozenLineId, ref isValid);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(isValid, Is.True);
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineGet_ShouldReturnCorrectCoordinates()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            double xFirstGridLineNode = 0.0;
+            double yFirstGridLineNode = 0.0;
+            double xSecondGridLineNode = 0.0;
+            double ySecondGridLineNode = 0.0;
+            int returnCode = api.CurvilinearFrozenLineGet(id, frozenLineId, ref xFirstGridLineNode, ref yFirstGridLineNode, ref xSecondGridLineNode, ref ySecondGridLineNode);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(xFirstGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(yFirstGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(xSecondGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(ySecondGridLineNode, Is.EqualTo(2.0).Within(1e-9));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineAdd_ShouldIncrementId()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int newFrozenLineId = -1;
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 1.0, 1.0, 1.0, 3.0, ref newFrozenLineId);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(newFrozenLineId, Is.GreaterThan(frozenLineId));
         }
 
     }

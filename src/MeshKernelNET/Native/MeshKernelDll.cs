@@ -510,7 +510,7 @@ namespace MeshKernelNET.Native
                                                                 [In] double yToCoordinate);
 
         /// <summary>
-        ///  Define a block on the curvilinear grid where to perform orthogonalization
+        /// Orthogonalize a curvilinear grid
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="orthogonalizationParameters">orthogonalizationParameters The orthogonalization parameters to use in the algorithm
@@ -579,7 +579,8 @@ namespace MeshKernelNET.Native
                                                                 [In] double yUpperRightCorner);
 
         /// <summary>
-        /// Add a new frozen line in the meshkernel state
+        /// Adds a frozen in the meshkernel state. A frozen line is stored as a pair of coordinates.
+        /// The actual edges to freeze are computed during each algorithm execution, as they may change (for example, after a refinement operation).
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="xFirstGridLineNode">The x coordinate of the first point of the line to freeze</param>

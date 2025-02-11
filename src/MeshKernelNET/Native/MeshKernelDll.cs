@@ -673,10 +673,10 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The meshKernelId of the block to orthogonalize</param>
         /// <param name="smoothingIterations">The number of smoothing iterations to perform</param>
-        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to smooth</param>
-        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to smooth</param>
-        /// <param name="xUpperRightCorner">The y coordinate of the lower left corner of the block to smooth</param>
-        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to smooth</param>
+        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner</param>
+        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner</param>
+        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner </param>
+        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner </param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_smoothing", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearSmoothing([In] int meshKernelId,

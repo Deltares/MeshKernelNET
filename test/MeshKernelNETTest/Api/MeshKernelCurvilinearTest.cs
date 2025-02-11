@@ -1580,7 +1580,7 @@ namespace MeshKernelNETTest.Api
         public void CurvilinearSetAndDeleteFrozenLinesTwice_ShouldAddAndDeleteFrozenLineAndReturnErrorCode()
         {
             CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
-            int forzenLineId = -1;
+            int frozenLineId = -1;
 
             // Set and delete
             int returnCode = api.CurvilinearFrozenLineAdd(id,
@@ -1588,12 +1588,12 @@ namespace MeshKernelNETTest.Api
                                                           0.0,
                                                           0.0,
                                                           2.0,
-                                                          ref forzenLineId);
-            Assert.That(forzenLineId, Is.EqualTo(0));
+                                                          ref frozenLineId);
+            Assert.That(frozenLineId, Is.EqualTo(0));
 
-            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
+            returnCode = api.CurvilinearFrozenLineDelete(id, frozenLineId);
             Assert.That(returnCode, Is.EqualTo(0));
-            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
+            returnCode = api.CurvilinearFrozenLineDelete(id, frozenLineId);
             Assert.That(returnCode, Is.EqualTo(1));
         }
 

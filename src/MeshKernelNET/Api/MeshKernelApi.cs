@@ -579,7 +579,7 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearSmoothing(int meshKernelId,
-                                        [In] int smoothingIterations,
+                                        int smoothingIterations,
                                         double xLowerLeftCorner,
                                         double yLowerLeftCorner,
                                         double xUpperRightCorner,

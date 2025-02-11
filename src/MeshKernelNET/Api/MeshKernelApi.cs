@@ -518,9 +518,9 @@ namespace MeshKernelNET.Api
         {
             return MeshKernelDll.CurvilinearFrozenLineDelete(meshKernelId, frozenLineId);
         }
-        public int CurvilinearFrozenLineValid(int meshKernelId, int frozenLineId, ref bool isValid)
+        public int CurvilinearFrozenLineIsValid(int meshKernelId, int frozenLineId, ref bool isValid)
         {
-            return MeshKernelDll.CurvilinearFrozenLineValid(meshKernelId, frozenLineId, ref isValid);
+            return MeshKernelDll.CurvilinearFrozenLineIsValid(meshKernelId, frozenLineId, ref isValid);
         }
 
         public int CurvilinearFrozenLineGet(int meshKernelId, 
@@ -543,8 +543,21 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearFrozenLinesGetCount(meshKernelId, ref numFrozenLines);
         }
 
-        public int CurvilinearFrozenLinesGetIds(int meshKernelId, ref int[] frozenLinesIds)
+        public int CurvilinearFrozenLinesGetIds(int meshKernelId, out int[] frozenLinesIds)
         {
+            int numFrozenLines = -1;
+            MeshKernelDll.CurvilinearFrozenLinesGetCount(meshKernelId, ref numFrozenLines);
+            if (numFrozenLines < 0)
+            {
+                frozenLinesIds = null;
+                return -1;
+            }
+
+            frozenLinesIds = new int[numFrozenLines];
+            if (numFrozenLines == 0)
+            {
+                return 0;
+            }
             IntPtr frozenLinesIdsPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * frozenLinesIds.Length);
             int success = MeshKernelDll.CurvilinearFrozenLinesGetIds(meshKernelId, frozenLinesIdsPtr);
             Marshal.Copy(frozenLinesIdsPtr, frozenLinesIds, 0, frozenLinesIds.Length);

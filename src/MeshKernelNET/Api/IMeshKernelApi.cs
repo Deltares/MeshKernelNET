@@ -559,7 +559,7 @@ namespace MeshKernelNET.Api
         /// <param name="frozenLineId">The id of the frozen line to check</param>
         /// <param name="isValid">True if the provided id is valid</param>
         /// <returns>Error code</returns>
-        int CurvilinearFrozenLineValid(int meshKernelId, int frozenLineId, ref bool isValid);
+        int CurvilinearFrozenLineIsValid(int meshKernelId, int frozenLineId, ref bool isValid);
 
         /// <summary>
         /// Gets the coordinates of the frozen line
@@ -587,12 +587,12 @@ namespace MeshKernelNET.Api
         int CurvilinearFrozenLinesGetCount(int meshKernelId, ref int numFrozenLines);
 
         /// <summary>
-        /// Gets the ids of the frozen lines
+        /// Gets the ids of the frozen lines.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="frozenLinesIds">The frozen line ids</param>
         /// <returns>Error code</returns>
-        int CurvilinearFrozenLinesGetIds(int meshKernelId, ref int[] frozenLinesIds);
+        int CurvilinearFrozenLinesGetIds(int meshKernelId, out int[] frozenLinesIds);
         
         /// <summary>
         /// Sets the start and end nodes of the line to shift

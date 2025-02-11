@@ -613,8 +613,8 @@ namespace MeshKernelNET.Native
         /// <param name="frozenLineId">The id of the frozen line to check</param>
         /// <param name="isValid">True if the provided id is valid</param>
         /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_frozen_line_valid", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int CurvilinearFrozenLineValid([In] int meshKernelId, [In] int frozenLineId, [In][Out] ref bool isValid);
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_frozen_line_is_valid", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearFrozenLineIsValid([In] int meshKernelId, [In] int frozenLineId, [In][Out] ref bool isValid);
 
         /// <summary>
         /// Gets the coordinates of the frozen line
@@ -644,7 +644,7 @@ namespace MeshKernelNET.Native
         internal static extern int CurvilinearFrozenLinesGetCount([In] int meshKernelId, [In][Out] ref int numFrozenLines);
 
         /// <summary>
-        /// Gets the ids of the frozen lines
+        /// Gets the ids of the frozen lines.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="frozenLinesIds">The frozen line ids</param>

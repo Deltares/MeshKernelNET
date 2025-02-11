@@ -1462,6 +1462,8 @@ namespace MeshKernelNETTest.Api
                                                        0.0,
                                                        2.0,
                                                        ref forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+
             // Id is always increasing
             Assert.That(forzenLineId, Is.EqualTo(1));
 
@@ -1509,8 +1511,8 @@ namespace MeshKernelNETTest.Api
 
             // Act
             int numFrozenLines = 1;
-            var frozenLinesIds = new int[numFrozenLines];
-            int returnCode = api.CurvilinearFrozenLinesGetIds(id, ref frozenLinesIds);
+            int[] frozenLinesIds;
+            int returnCode = api.CurvilinearFrozenLinesGetIds(id, out frozenLinesIds);
 
             // Assert
             Assert.That(returnCode, Is.EqualTo(0));
@@ -1527,7 +1529,7 @@ namespace MeshKernelNETTest.Api
 
             // Act
             bool isValid = false;
-            int returnCode = api.CurvilinearFrozenLineValid(id, frozenLineId, ref isValid);
+            int returnCode = api.CurvilinearFrozenLineIsValid(id, frozenLineId, ref isValid);
 
             // Assert
             Assert.That(returnCode, Is.EqualTo(0));
@@ -1572,6 +1574,27 @@ namespace MeshKernelNETTest.Api
             // Assert
             Assert.That(returnCode, Is.EqualTo(0));
             Assert.That(newFrozenLineId, Is.GreaterThan(frozenLineId));
+        }
+
+        [Test]
+        public void CurvilinearSetAndDeleteFrozenLinesTwice_ShouldAddAndDeleteFrozenLineAndReturnErrorCode()
+        {
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int forzenLineId = -1;
+
+            // Set and delete
+            int returnCode = api.CurvilinearFrozenLineAdd(id,
+                                                          0.0,
+                                                          0.0,
+                                                          0.0,
+                                                          2.0,
+                                                          ref forzenLineId);
+            Assert.That(forzenLineId, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(1));
         }
 
     }

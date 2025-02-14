@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using GeoAPI.Geometries;
 using MeshKernelNET.Api;
 using NetTopologySuite.Algorithm;
@@ -562,12 +563,22 @@ namespace MeshKernelNETTest.Api
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
                     // Execute
                     var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
-                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
-                    Assert.AreEqual(0, api.CurvilinearSetFrozenLinesOrthogonalize(id, 20.0, 0.0, 20.0, 10.0), 0);
-                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
+                    int frozenLineId = -1;
+                    Assert.AreEqual(0, api.CurvilinearFrozenLineAdd(id,
+                                                                      10.0,
+                                                                      0.0,
+                                                                      10.0,
+                                                                      10.0, 
+                                                                     ref frozenLineId));
+                    Assert.AreEqual(0, frozenLineId);
+                    Assert.AreEqual(0, api.CurvilinearOrthogonalize(id, 
+                                                                    ref orthogonalizationParameters, 
+                                                                    20.0, 
+                                                                    0.0,
+                                                                    20.0,
+                                                                    10.0));
 
                     // Assert
-
                     int gridOut = api.CurvilinearGridGetData(id, out curvilinearGrid);
                     Assert.NotNull(gridOut);
                 }
@@ -593,11 +604,14 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+
                     // Execute
+                    int frozenLineId = -1;
+                    Assert.AreEqual(0, api.CurvilinearFrozenLineAdd(id, 10.0,0.0,10.0,10.0, ref frozenLineId));
+                    Assert.AreEqual(0, frozenLineId);
                     Assert.AreEqual(0, api.CurvilinearSmoothing(id, 10, 10.0, 20.0, 30.0, 20.0));
 
                     // Assert
-
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                 }
                 finally
@@ -773,15 +787,13 @@ namespace MeshKernelNETTest.Api
                 {
                     // Prepare
                     id = api.AllocateState(0);
-
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+
                     // Execute
                     var orthogonalizationParameters = OrthogonalizationParameters.CreateDefault();
-                    Assert.AreEqual(0, api.CurvilinearInitializeOrthogonalize(id, orthogonalizationParameters));
-                    Assert.AreEqual(0, api.CurvilinearSetBlockOrthogonalize(id, 0.0, 0.0, 30.0, 30.0), 0);
-                    Assert.AreEqual(0, api.CurvilinearFinalizeOrthogonalize(id));
-                    // Assert
+                    Assert.AreEqual(0, api.CurvilinearOrthogonalize(id, ref orthogonalizationParameters, 0.0, 0.0, 30.0, 30.0), 0);
 
+                    // Assert
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
                     Assert.AreEqual((5, 5), (curvilinearGrid.NumM, curvilinearGrid.NumN));
                 }
@@ -1425,6 +1437,165 @@ namespace MeshKernelNETTest.Api
             // Assert
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));
         }
-        
+
+        [Test]
+        public void CurvilinearSetAndDeleteFrozenLines_ShouldSetAndDeleteFrozenLines()
+        {
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int forzenLineId = -1;
+
+            // Set and delete
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 
+                                                           0.0,
+                                                           0.0,
+                                                           0.0,
+                                                           2.0, 
+                                                           ref forzenLineId);
+            Assert.That(forzenLineId, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearFrozenLineDelete(id, forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearFrozenLineAdd(id,
+                                                       0.0,
+                                                       0.0,
+                                                       0.0,
+                                                       2.0,
+                                                       ref forzenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+
+            // Id is always increasing
+            Assert.That(forzenLineId, Is.EqualTo(1));
+
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineAdd_ShouldReturnValidId()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+
+            // Act
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(frozenLineId, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLinesGetCount_ShouldReturnCorrectCount()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int numFrozenLines = 0;
+            int returnCode = api.CurvilinearFrozenLinesGetCount(id, ref numFrozenLines);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(numFrozenLines, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLinesGetIds_ShouldReturnCorrectIds()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int numFrozenLines = 1;
+            int[] frozenLinesIds;
+            int returnCode = api.CurvilinearFrozenLinesGetIds(id, out frozenLinesIds);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(frozenLinesIds[0], Is.EqualTo(frozenLineId));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineValid_ShouldReturnTrueForValidLine()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            bool isValid = false;
+            int returnCode = api.CurvilinearFrozenLineIsValid(id, frozenLineId, ref isValid);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(isValid, Is.True);
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineGet_ShouldReturnCorrectCoordinates()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            double xFirstGridLineNode = 0.0;
+            double yFirstGridLineNode = 0.0;
+            double xSecondGridLineNode = 0.0;
+            double ySecondGridLineNode = 0.0;
+            int returnCode = api.CurvilinearFrozenLineGet(id, frozenLineId, ref xFirstGridLineNode, ref yFirstGridLineNode, ref xSecondGridLineNode, ref ySecondGridLineNode);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(xFirstGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(yFirstGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(xSecondGridLineNode, Is.EqualTo(0.0).Within(1e-9));
+            Assert.That(ySecondGridLineNode, Is.EqualTo(2.0).Within(1e-9));
+        }
+
+        [Test]
+        public void CurvilinearFrozenLineAdd_ShouldIncrementId()
+        {
+            // Arrange
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+            api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
+
+            // Act
+            int newFrozenLineId = -1;
+            int returnCode = api.CurvilinearFrozenLineAdd(id, 1.0, 1.0, 1.0, 3.0, ref newFrozenLineId);
+
+            // Assert
+            Assert.That(returnCode, Is.EqualTo(0));
+            Assert.That(newFrozenLineId, Is.GreaterThan(frozenLineId));
+        }
+
+        [Test]
+        public void CurvilinearSetAndDeleteFrozenLinesTwice_ShouldAddAndDeleteFrozenLineAndReturnErrorCode()
+        {
+            CreateGrid(5, 4, 1.0, 1.0, 1.0, 1.0);
+            int frozenLineId = -1;
+
+            // Set and delete
+            int returnCode = api.CurvilinearFrozenLineAdd(id,
+                                                          0.0,
+                                                          0.0,
+                                                          0.0,
+                                                          2.0,
+                                                          ref frozenLineId);
+            Assert.That(frozenLineId, Is.EqualTo(0));
+
+            returnCode = api.CurvilinearFrozenLineDelete(id, frozenLineId);
+            Assert.That(returnCode, Is.EqualTo(0));
+            returnCode = api.CurvilinearFrozenLineDelete(id, frozenLineId);
+            Assert.That(returnCode, Is.EqualTo(1));
+        }
+
     }
 }

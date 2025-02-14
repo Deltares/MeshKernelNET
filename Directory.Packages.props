@@ -2,13 +2,8 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-<<<<<<< HEAD
-  <ItemGroup> 
-    <PackageVersion Include="Deltares.MeshKernel" Version="6.0.1.3828" /> 
-=======
   <ItemGroup>
     <PackageVersion Include="Deltares.MeshKernel" Version="6.0.1.3796-dev" />
->>>>>>> eaadc25 (Account for comments)
     <PackageVersion Include="DHYDRO.SharedConfigurations" Version="1.0.0.37" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageVersion Include="NetTopologySuite" Version="1.15.0" />

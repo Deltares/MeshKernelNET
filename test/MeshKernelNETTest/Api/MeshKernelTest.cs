@@ -3341,6 +3341,40 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        [TestCase(0,8)]
+        [TestCase(4,8)]
+        [TestCase(8,8)]
+        [TestCase(9,11)]
+        [TestCase(16,11)]
+        public void Mesh2dSplitEdgesThroughAPI(int edgeId, int expectedExtraEdges)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 3, 10, 10))
+            {
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    // Setup
+                    int id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    
+                    // Execute
+                    Assert.AreEqual(0, api.Mesh2dSplitEdges(id, mesh.GetFirstNode(edgeId), mesh.GetLastNode(edgeId)));
+                    
+                    // Assert
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    int extraEdges = mesh2D.NumEdges - mesh.NumEdges;
+                    Assert.AreEqual(expectedExtraEdges, extraEdges);
+                }
+                finally
+                {
+                    api.ClearState();
+                    mesh2D?.Dispose();
+                }
+            }
+        }
+
         [Test]
         public void Mesh2dSnapToAnEmptyLandBoundaryThroughApi()
         {

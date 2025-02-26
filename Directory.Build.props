@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<Company>Deltares</Company>
-		<Copyright>Copyright © Deltares 2023</Copyright>
+		<Copyright>Copyright © Deltares $([System.DateTime]::Now.Year)</Copyright>
 		<Product>$(MSBuildProjectName)</Product>
 		<AssemblyTitle>$(MSBuildProjectName)</AssemblyTitle>
 

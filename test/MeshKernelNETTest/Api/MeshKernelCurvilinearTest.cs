@@ -60,7 +60,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.CurvilinearComputeRectangularGrid(id, makeGridParameters), Is.EqualTo(0));
                     Assert.That(api.CurvilinearGridGetData(id, out fromKernel), Is.EqualTo(0));
-                    Assert.NotNull(fromKernel);
+                    Assert.That(fromKernel, Is.Not.Null);
                     Assert.That((fromKernel.NumN, fromKernel.NumM), Is.EqualTo((numRows, numCols)));
 
                     using (DisposableCurvilinearGrid subject = CreateCurvilinearGrid(numRows, numCols, cellWidth, cellHeight))
@@ -578,7 +578,8 @@ namespace MeshKernelNETTest.Api
 
                     // Assert
                     int gridOut = api.CurvilinearGridGetData(id, out curvilinearGrid);
-                    Assert.NotNull(gridOut);
+                    Assert.That(gridOut, Is.EqualTo(0));
+                    Assert.That(curvilinearGrid, Is.Not.Null);
                 }
                 finally
                 {
@@ -1045,7 +1046,7 @@ namespace MeshKernelNETTest.Api
             // Setup
             using (var grid = CreateCurvilinearGrid(3, 2, 5.0, 2.0))
             {
-                Assert.AreEqual((2, 3), (grid.NumM, grid.NumN));
+                Assert.That((grid.NumM, grid.NumN), Is.EqualTo((2, 3)));
                 for (int row = 0; row < grid.NumM; ++row)
                 {
                     for (int column = 0; column < grid.NumN; ++column)

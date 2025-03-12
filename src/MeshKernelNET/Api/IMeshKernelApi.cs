@@ -9,8 +9,7 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Create a new grid state and return the generated meshKernelId/>
         /// </summary>
-        /// <param name="projectionType">
-        /// Cartesian (0), spherical (1) or spherical accurate(2) state
+        /// <param name="projectionType">Cartesian (0), spherical (1) or spherical accurate(2) state</param>
         /// <returns>Generated meshKernelId</returns>
         int AllocateState(int projectionType);
 

@@ -436,7 +436,7 @@ namespace MeshKernelNET.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_line_mirror", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearLineMirror([In] int meshKernelId,
                                                          [In] double mirroringFactor,
-                                                         [In] double numRowsToMirror,
+                                                         [In] int numRowsToMirror,
                                                          [In] double xFirstGridLineNode,
                                                          [In] double yFirstGridLineNode,
                                                          [In] double xSecondGridLineNode,

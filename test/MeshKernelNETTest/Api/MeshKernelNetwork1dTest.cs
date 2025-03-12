@@ -1,6 +1,9 @@
 ﻿using MeshKernelNET.Api;
 using NUnit.Framework;
 
+// Added alias to still be able to use the classic assert functions
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
+
 namespace MeshKernelNETTest.Api
 {
     [TestFixture]

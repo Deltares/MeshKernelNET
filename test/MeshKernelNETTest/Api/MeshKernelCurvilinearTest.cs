@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using GeoAPI.Geometries;
 using MeshKernelNET.Api;
-using NetTopologySuite.Algorithm;
 using NUnit.Framework;
+
+// Added alias to still be able to use the classic assert functions
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace MeshKernelNETTest.Api
 {

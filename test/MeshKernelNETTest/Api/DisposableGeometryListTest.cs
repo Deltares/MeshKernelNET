@@ -28,10 +28,10 @@ namespace MeshKernelNETTest.Api
 
                 // Assert
 
-                Assert.AreEqual(list.NumberOfCoordinates, nativeGeometryList.numberOfCoordinates);
-                Assert.AreNotEqual(IntPtr.Zero, nativeGeometryList.xCoordinates);
-                Assert.AreNotEqual(IntPtr.Zero, nativeGeometryList.yCoordinates);
-                Assert.AreNotEqual(IntPtr.Zero, nativeGeometryList.zCoordinates);
+                Assert.That(nativeGeometryList.numberOfCoordinates, Is.EqualTo(list.NumberOfCoordinates));
+                Assert.That(nativeGeometryList.xCoordinates, Is.Not.EqualTo(IntPtr.Zero));
+                Assert.That(nativeGeometryList.yCoordinates, Is.Not.EqualTo(IntPtr.Zero));
+                Assert.That(nativeGeometryList.zCoordinates, Is.Not.EqualTo(IntPtr.Zero));
             }
         }
     }

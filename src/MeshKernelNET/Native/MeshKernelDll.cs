@@ -427,6 +427,7 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="mirroringFactor">The x coordinate of the first node of the set line</param>
+        /// <param name="numRowsToMirror">The number of rows to mirror</param>
         /// <param name="xFirstGridLineNode">The x coordinate of the first node of the set line</param>
         /// <param name="yFirstGridLineNode">The y coordinate of the first node of the set line </param>
         /// <param name="xSecondGridLineNode">The x coordinate of the second node of the set line </param>
@@ -435,6 +436,7 @@ namespace MeshKernelNET.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_line_mirror", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int CurvilinearLineMirror([In] int meshKernelId,
                                                          [In] double mirroringFactor,
+                                                         [In] double numRowsToMirror,
                                                          [In] double xFirstGridLineNode,
                                                          [In] double yFirstGridLineNode,
                                                          [In] double xSecondGridLineNode,

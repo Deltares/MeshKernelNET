@@ -740,7 +740,6 @@ namespace MeshKernelNETTest.Api
 
                     var firstIndex = 0;
                     var secondIndex = 2;
-                    int numberOfPolygonVertices = -1;
                     var result = api.PolygonSnapToLandBoundary(id,
                                                                landboundaries,
                                                                ref polygon,

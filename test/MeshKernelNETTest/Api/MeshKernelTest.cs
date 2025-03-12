@@ -3329,7 +3329,7 @@ namespace MeshKernelNETTest.Api
 
                     // Get mesh data after conversion
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));
-                    Assert.That(meshOut.NumNodes, Is.EqualTo(0));
+                    Assert.That(meshOut.NumNodes, Is.EqualTo(100));
                 }
                 finally
                 {

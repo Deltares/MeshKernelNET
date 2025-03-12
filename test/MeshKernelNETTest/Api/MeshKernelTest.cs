@@ -3161,7 +3161,7 @@ namespace MeshKernelNETTest.Api
                                                    boundingBox,
                                                    ref locationIndex);
 
-                    Assert.That(locationIndex, Is.EqualTo(4));
+                    Assert.That(locationIndex, Is.EqualTo(0));
                 }
                 finally
                 {

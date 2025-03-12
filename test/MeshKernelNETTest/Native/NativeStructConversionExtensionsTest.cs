@@ -98,15 +98,15 @@ namespace MeshKernelNETTest.Native
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
 
             // Assert
-            Assert.That(double.MinValue, Is.EqualTo(boundingBox.xLowerLeft));
-            Assert.That(double.MinValue, Is.EqualTo(boundingBox.yLowerLeft));
-            Assert.That(double.MaxValue, Is.EqualTo(boundingBox.xUpperRight));
-            Assert.That(double.MaxValue, Is.EqualTo(boundingBox.yUpperRight));
+            Assert.That(boundingBox.xLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBox.yLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBox.xUpperRight, Is.EqualTo(double.MaxValue));
+            Assert.That(boundingBox.yUpperRight, Is.EqualTo(double.MaxValue));
 
-            Assert.That(double.MinValue, Is.EqualTo(boundingBoxNative.xLowerLeft));
-            Assert.That(double.MinValue, Is.EqualTo(boundingBoxNative.yLowerLeft));
-            Assert.That(double.MaxValue, Is.EqualTo(boundingBoxNative.xUpperRight));
-            Assert.That(double.MaxValue, Is.EqualTo(boundingBoxNative.yUpperRight));
+            Assert.That(boundingBoxNative.xLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBoxNative.yLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBoxNative.xUpperRight, Is.EqualTo(double.MaxValue));
+            Assert.That(boundingBoxNative.yUpperRight, Is.EqualTo(double.MaxValue));
         }
 
         [Test]

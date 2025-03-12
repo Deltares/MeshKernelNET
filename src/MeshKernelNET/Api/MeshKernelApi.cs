@@ -979,9 +979,10 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numEdges);
         }
 
-        public int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, ref int numberOfPolygonVertices)
+        public int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref int numberOfPolygonVertices)
         {
-            return MeshKernelDll.Mesh2dCountMeshBoundariesAsPolygons(meshKernelId, ref numberOfPolygonVertices);
+            GeometryListNative selectingPolygonNative = selectingPolygon.CreateNativeObject();
+            return MeshKernelDll.Mesh2dCountMeshBoundariesAsPolygons(meshKernelId, ref selectingPolygonNative, ref numberOfPolygonVertices);
         }
 
         public int Mesh2dCountSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesLengthThreshold, ref int numSmallFlowEdges)
@@ -1229,10 +1230,11 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, ref DisposableGeometryList disposableGeometryList)
+        public int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.Mesh2dGetMeshBoundariesAsPolygons(meshKernelId, ref geometryListNative);
+            GeometryListNative selectingPolygonNative = selectingPolygon.CreateNativeObject();
+            return MeshKernelDll.Mesh2dGetMeshBoundariesAsPolygons(meshKernelId, ref selectingPolygonNative, ref geometryListNative);
         }
 
         public int Mesh2dGetNodeIndex(int meshKernelId,

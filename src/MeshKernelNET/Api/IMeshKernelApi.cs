@@ -386,7 +386,7 @@ namespace MeshKernelNET.Api
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="mirroringFactor">The x coordinate of the first node of the set line</param>
-        /// <param name="numRowsToMirror">The x coordinate of the first node of the set line</param>
+        /// <param name="numRowsToGenerate">The number of rows to generate</param>
         /// <param name="xFirstGridLineNode">The x coordinate of the first node of the set line</param>
         /// <param name="yFirstGridLineNode">The y coordinate of the first node of the set line </param>
         /// <param name="xSecondGridLineNode">The x coordinate of the second node of the set line </param>
@@ -394,7 +394,7 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int CurvilinearLineMirror(int meshKernelId,
                                   double mirroringFactor,
-                                  int numRowsToMirror,
+                                  int numRowsToGenerate,
                                   double xFirstGridLineNode,
                                   double yFirstGridLineNode,
                                   double xSecondGridLineNode,

@@ -393,6 +393,7 @@ namespace MeshKernelNET.Api
 
         public int CurvilinearLineMirror(int meshKernelId,
                                          double mirroringFactor,
+                                         int numRowsToGenerate,
                                          double xFirstGridLineNode,
                                          double yFirstGridLineNode,
                                          double xSecondGridLineNode,
@@ -400,6 +401,7 @@ namespace MeshKernelNET.Api
         {
             return MeshKernelDll.CurvilinearLineMirror(meshKernelId,
                                                        mirroringFactor,
+                                                       numRowsToGenerate,
                                                        xFirstGridLineNode,
                                                        yFirstGridLineNode,
                                                        xSecondGridLineNode,

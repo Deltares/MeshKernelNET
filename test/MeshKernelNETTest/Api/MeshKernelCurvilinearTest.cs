@@ -883,7 +883,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.CurvilinearSet(id, grid), Is.EqualTo(0));
                     // Execute
-                    Assert.That(api.CurvilinearLineMirror(id, 1.2, 0.0, 0.0, 0.0, 50.0), Is.EqualTo(0));
+                    Assert.That(api.CurvilinearLineMirror(id, 1.2, 1, 0.0, 0.0, 0.0, 50.0), Is.EqualTo(0));
                     // Assert
                     Assert.That(api.CurvilinearGridGetData(id, out curvilinearGrid), Is.EqualTo(0));
 

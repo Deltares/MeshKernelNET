@@ -17,8 +17,8 @@ namespace MeshKernelNETTest.Api
                     for (int column = 0; column < numColumns; ++column)
                     {
                         int index = row * numColumns + column;
-                        Assert.AreEqual(mesh.GetNodeX(index), mesh.NodeX[index]);
-                        Assert.AreEqual(mesh.GetNodeY(index), mesh.NodeY[index]);
+                        Assert.That(mesh.NodeX[index], Is.EqualTo(mesh.GetNodeX(index)));
+                        Assert.That(mesh.NodeY[index], Is.EqualTo(mesh.GetNodeY(index)));
                     }
                 }
             }
@@ -30,7 +30,7 @@ namespace MeshKernelNETTest.Api
         {
             using (var grid = TestUtilityFunctions.CreateMesh2D(nodesInRow,nodesInColumn, 15.0, 4.0, 2.0, 3.0))
             {
-                Assert.AreEqual(count, grid.NodeCount());
+                Assert.That(grid.NodeCount(), Is.EqualTo(count));
             }
         }
 
@@ -40,7 +40,7 @@ namespace MeshKernelNETTest.Api
         {
             using (var grid = TestUtilityFunctions.CreateMesh2D(nodesInRow,nodesInColumn, 15.0, 4.0, 2.0, 3.0))
             {
-                Assert.AreEqual(count, grid.EdgeCount());
+                Assert.That(grid.EdgeCount(), Is.EqualTo(count));
             }
         }
     }

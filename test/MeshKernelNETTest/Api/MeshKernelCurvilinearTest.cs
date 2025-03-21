@@ -775,6 +775,34 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
+        public void CurvilinearFullRefineThroughAPI()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableCurvilinearGrid grid = CreateCurvilinearGrid(4, 4, 10, 10))
+            {
+                var id = 0;
+                DisposableCurvilinearGrid curvilinearGrid = null;
+                try
+                {
+                    id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+
+                    Assert.AreEqual(0, api.CurvilinearFullRefine(id, 3, 3));
+
+                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+
+                    Assert.AreEqual((10, 10), (curvilinearGrid.NumM, curvilinearGrid.NumN));
+                }
+                finally
+                {
+                    api.ClearState();
+                    curvilinearGrid?.Dispose();
+                }
+            }
+        }
+
+        [Test]
         public void CurvilinearOrthogonalizeOnBlockThroughAPI()
         {
             // Setup

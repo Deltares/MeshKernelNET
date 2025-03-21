@@ -480,6 +480,15 @@ namespace MeshKernelNET.Api
                                      double yUpperRightCorner);
 
         /// <summary>
+        /// Curvilinear refinement over the entire grid
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state </param>
+        /// <param name="mRefinement">The amount of refinement to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement to compute in n-direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearFullRefine(int meshKernelId, int mRefinement, int nRefinement);
+
+        /// <summary>
         /// Directional curvilinear grid refinement. Additional gridlines are added perpendicularly to the segment defined by
         /// lowerLeftCorner and xUpperRightCorner.
         /// </summary>

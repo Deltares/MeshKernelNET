@@ -467,6 +467,11 @@ namespace MeshKernelNET.Api
                                                           yUpperRightCorner);
         }
 
+        public int CurvilinearFullRefine(int meshKernelId, int mRefinement,int nRefinement)
+        {
+            return MeshKernelDll.CurvilinearFullRefine(meshKernelId, mRefinement, nRefinement);
+        }
+
         public int CurvilinearRefine(int meshKernelId,
                                      double xLowerLeftCorner,
                                      double yLowerLeftCorner,

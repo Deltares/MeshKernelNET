@@ -1183,10 +1183,11 @@ namespace MeshKernelNET.Native
         /// Counts the number of polygon vertices contained in the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygons in selected areas</param>
         /// <param name="numberOfPolygonVertices">The number of polygon points</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_count_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dCountMeshBoundariesAsPolygons([In] int meshKernelId, [In][Out] ref int numberOfPolygonVertices);
+        internal static extern int Mesh2dCountMeshBoundariesAsPolygons([In] int meshKernelId, [In] ref GeometryListNative selectingPolygon, [In][Out] ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Counts the mesh2d small flow edge centers
@@ -1426,9 +1427,10 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The output network boundary polygon</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygons in selected areas</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetMeshBoundariesAsPolygons([In] int meshKernelId, [In][Out] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dGetMeshBoundariesAsPolygons([In] int meshKernelId, [In] ref GeometryListNative selectingPolygon, [In][Out] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Finds the mesh2d node closest to a point, within a search radius

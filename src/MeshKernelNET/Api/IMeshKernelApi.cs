@@ -228,8 +228,9 @@ namespace MeshKernelNET.Api
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to de-refine</param>
         /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to de-refine</param>
         /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to de-refine</param>
+        /// <param name="derefinementFactor">The de-refinement factor</param>
         /// <returns>Error code</returns>
-        int CurvilinearDerefine(int meshKernelId, double xLowerLeftCorner, double yLowerLeftCorner, double xUpperRightCorner, double yUpperRightCorner);
+        int CurvilinearDerefine(int meshKernelId, double xLowerLeftCorner, double yLowerLeftCorner, double xUpperRightCorner, double yUpperRightCorner, int derefinementFactor);
 
         /// <summary>
         /// Finalizes the line shift algorithm

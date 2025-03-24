@@ -201,13 +201,15 @@ namespace MeshKernelNET.Api
                                        double xLowerLeftCorner,
                                        double yLowerLeftCorner,
                                        double xUpperRightCorner,
-                                       double yUpperRightCorner)
+                                       double yUpperRightCorner,
+                                       int derefineFactor)
         {
             return MeshKernelDll.CurvilinearDerefine(meshKernelId,
                                                      xLowerLeftCorner,
                                                      yLowerLeftCorner,
                                                      xUpperRightCorner,
-                                                     yUpperRightCorner);
+                                                     yUpperRightCorner,
+                                                     derefineFactor);
         }
 
         public int CurvilinearFinalizeLineShift(int meshKernelId)

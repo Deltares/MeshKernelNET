@@ -220,19 +220,6 @@ namespace MeshKernelNET.Api
         int CurvilinearDeleteOrthogonalGridFromSplines(int meshKernelId);
 
         /// <summary>
-        /// Directional curvilinear grid de-refinement. Grid lines are removed perpendicularly to the segment defined by
-        /// lowerLeftCorner and xUpperRightCorner.
-        /// </summary>
-        /// <param name="meshKernelId">Id of the mesh state</param>
-        /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to de-refine</param>
-        /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to de-refine</param>
-        /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to de-refine</param>
-        /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to de-refine</param>
-        /// <param name="derefinementFactor">The de-refinement factor</param>
-        /// <returns>Error code</returns>
-        int CurvilinearDerefine(int meshKernelId, double xLowerLeftCorner, double yLowerLeftCorner, double xUpperRightCorner, double yUpperRightCorner, int derefinementFactor);
-
-        /// <summary>
         /// Finalizes the line shift algorithm
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

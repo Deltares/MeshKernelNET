@@ -197,21 +197,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearDeleteOrthogonalGridFromSplines(meshKernelId);
         }
 
-        public int CurvilinearDerefine(int meshKernelId,
-                                       double xLowerLeftCorner,
-                                       double yLowerLeftCorner,
-                                       double xUpperRightCorner,
-                                       double yUpperRightCorner,
-                                       int derefineFactor)
-        {
-            return MeshKernelDll.CurvilinearDerefine(meshKernelId,
-                                                     xLowerLeftCorner,
-                                                     yLowerLeftCorner,
-                                                     xUpperRightCorner,
-                                                     yUpperRightCorner,
-                                                     derefineFactor);
-        }
-
         public int CurvilinearFinalizeLineShift(int meshKernelId)
         {
             return MeshKernelDll.CurvilinearFinalizeLineShift(meshKernelId);

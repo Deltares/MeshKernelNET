@@ -788,7 +788,7 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
                     Assert.AreEqual(0, api.CurvilinearSet(id, grid));
 
-                    Assert.AreEqual(0, api.CurvilinearFullRefine(id, 3, 3));
+                    Assert.AreEqual(0, api.CurvilinearRefine(id, 3, 3));
 
                     Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
 

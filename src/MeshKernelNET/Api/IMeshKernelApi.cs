@@ -486,7 +486,7 @@ namespace MeshKernelNET.Api
         /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
         /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
         /// <returns>Error code</returns>
-        int CurvilinearFullRefine(int meshKernelId, int mRefinement, int nRefinement);
+        int CurvilinearRefine(int meshKernelId, int mRefinement, int nRefinement);
 
         /// <summary>
         /// Directional curvilinear grid refinement. Additional gridlines are added perpendicularly to the segment defined by

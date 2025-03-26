@@ -483,8 +483,8 @@ namespace MeshKernelNET.Api
         /// Curvilinear refinement over the entire grid
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state </param>
-        /// <param name="mRefinement">The amount of refinement to compute in m-direction</param>
-        /// <param name="nRefinement">The amount of refinement to compute in n-direction</param>
+        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
         /// <returns>Error code</returns>
         int CurvilinearFullRefine(int meshKernelId, int mRefinement, int nRefinement);
 

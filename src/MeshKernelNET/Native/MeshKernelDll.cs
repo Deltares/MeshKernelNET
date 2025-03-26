@@ -549,6 +549,18 @@ namespace MeshKernelNET.Native
                                                      [In] int refinement);
 
         /// <summary>
+        /// Curvilinear grid refinement. Additional gridlines are added in both directions, over the entire grid.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_full_refine", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearFullRefine([In] int meshKernelId,
+                                                         [In] int mRefinement,
+                                                         [In] int nRefinement);
+
+        /// <summary>
         /// Converts curvilinear grid to mesh and refreshes the state (interactive)
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

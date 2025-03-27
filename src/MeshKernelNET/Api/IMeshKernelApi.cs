@@ -480,6 +480,15 @@ namespace MeshKernelNET.Api
                                      double yUpperRightCorner);
 
         /// <summary>
+        /// Curvilinear refinement over the entire grid
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state </param>
+        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
+        /// <returns>Error code</returns>
+        int CurvilinearRefine(int meshKernelId, int mRefinement, int nRefinement);
+
+        /// <summary>
         /// Directional curvilinear grid refinement. Additional gridlines are added perpendicularly to the segment defined by
         /// lowerLeftCorner and xUpperRightCorner.
         /// </summary>
@@ -1059,9 +1068,10 @@ namespace MeshKernelNET.Api
         /// Counts the number of polygon vertices contained in the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygon in selected areas</param>
         /// <param name="numberOfPolygonVertices">The number of polygon points</param>
         /// <returns>Error code</returns>
-        int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, ref int numberOfPolygonVertices);
+        int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Counts the mesh2d small flow edge centers
@@ -1279,9 +1289,10 @@ namespace MeshKernelNET.Api
         /// Retrives the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygon in selected areas</param>
         /// <param name="geometryList">The output network boundary polygon</param>
         /// <returns>Error code</returns>
-        int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, ref DisposableGeometryList disposableGeometryList);
+        int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList);
 
         /// <summary>
         /// Get the index of the closest existing vertex

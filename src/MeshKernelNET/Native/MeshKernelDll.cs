@@ -264,13 +264,15 @@ namespace MeshKernelNET.Native
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to de-refine</param>
         /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to de-refine</param>
         /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to de-refine</param>
+        /// <param name="derefineFactor">The de-refine factor</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_derefine", CallingConvention = CallingConvention.Cdecl)]
         public static extern int CurvilinearDerefine([In] int meshKernelId,
                                                      [In] double xLowerLeftCorner,
                                                      [In] double yLowerLeftCorner,
                                                      [In] double xUpperRightCorner,
-                                                     [In] double yUpperRightCorner);
+                                                     [In] double yUpperRightCorner,
+                                                     [In] int derefineFactor);
 
         /// <summary>
         /// Finalizes the line shift algorithm

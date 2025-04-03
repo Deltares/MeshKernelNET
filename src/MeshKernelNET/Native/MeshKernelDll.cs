@@ -264,13 +264,15 @@ namespace MeshKernelNET.Native
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to de-refine</param>
         /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to de-refine</param>
         /// <param name="yUpperRightCorner">The y coordinate of the upper right corner of the block to de-refine</param>
+        /// <param name="derefineFactor">The de-refine factor</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_derefine", CallingConvention = CallingConvention.Cdecl)]
         public static extern int CurvilinearDerefine([In] int meshKernelId,
                                                      [In] double xLowerLeftCorner,
                                                      [In] double yLowerLeftCorner,
                                                      [In] double xUpperRightCorner,
-                                                     [In] double yUpperRightCorner);
+                                                     [In] double yUpperRightCorner,
+                                                     [In] int derefineFactor);
 
         /// <summary>
         /// Finalizes the line shift algorithm
@@ -547,6 +549,18 @@ namespace MeshKernelNET.Native
                                                      [In] double xUpperRightCorner,
                                                      [In] double yUpperRightCorner,
                                                      [In] int refinement);
+
+        /// <summary>
+        /// Curvilinear grid refinement. Additional gridlines are added in both directions, over the entire grid.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_curvilinear_full_refine", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CurvilinearFullRefine([In] int meshKernelId,
+                                                         [In] int mRefinement,
+                                                         [In] int nRefinement);
 
         /// <summary>
         /// Converts curvilinear grid to mesh and refreshes the state (interactive)
@@ -1183,10 +1197,11 @@ namespace MeshKernelNET.Native
         /// Counts the number of polygon vertices contained in the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygons in selected areas</param>
         /// <param name="numberOfPolygonVertices">The number of polygon points</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_count_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dCountMeshBoundariesAsPolygons([In] int meshKernelId, [In][Out] ref int numberOfPolygonVertices);
+        internal static extern int Mesh2dCountMeshBoundariesAsPolygons([In] int meshKernelId, [In] ref GeometryListNative selectingPolygon, [In][Out] ref int numberOfPolygonVertices);
 
         /// <summary>
         /// Counts the mesh2d small flow edge centers
@@ -1426,9 +1441,10 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The output network boundary polygon</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygons in selected areas</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_mesh_boundaries_as_polygons", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetMeshBoundariesAsPolygons([In] int meshKernelId, [In][Out] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dGetMeshBoundariesAsPolygons([In] int meshKernelId, [In] ref GeometryListNative selectingPolygon, [In][Out] ref GeometryListNative geometryListNative);
 
         /// <summary>
         /// Finds the mesh2d node closest to a point, within a search radius

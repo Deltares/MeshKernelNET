@@ -519,6 +519,7 @@ namespace MeshKernelNETTest.Api
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
+            using (var selectingPolygon = new DisposableGeometryList())
             {
                 var id = 0;
                 var mesh2D = new DisposableMesh2D();
@@ -527,7 +528,7 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     int numberOfPolygonVertices = -1;
-                    Assert.That(api.Mesh2dCountMeshBoundariesAsPolygons(id, ref numberOfPolygonVertices), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dCountMeshBoundariesAsPolygons(id, selectingPolygon, ref numberOfPolygonVertices), Is.EqualTo(0));
                     Assert.That(numberOfPolygonVertices, Is.EqualTo(13));
 
                     var geometryListIn = new DisposableGeometryList();
@@ -537,8 +538,7 @@ namespace MeshKernelNETTest.Api
                     double geometrySeparator = api.GetSeparator();
                     geometryListIn.GeometrySeparator = geometrySeparator;
                     geometryListIn.NumberOfCoordinates = numberOfPolygonVertices;
-
-                    Assert.That(api.Mesh2dGetMeshBoundariesAsPolygons(id, ref geometryListIn), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dGetMeshBoundariesAsPolygons(id, selectingPolygon, ref geometryListIn), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
                 }
                 finally

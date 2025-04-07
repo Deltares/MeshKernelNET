@@ -785,13 +785,13 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     id = api.AllocateState(0);
-                    Assert.AreEqual(0, api.CurvilinearSet(id, grid));
+                    Assert.That(api.CurvilinearSet(id, grid), Is.EqualTo(0));
 
-                    Assert.AreEqual(0, api.CurvilinearRefine(id, 3, 3));
+                    Assert.That(api.CurvilinearRefine(id, 3, 3), Is.EqualTo(0));
 
-                    Assert.AreEqual(0, api.CurvilinearGridGetData(id, out curvilinearGrid));
+                    Assert.That(api.CurvilinearGridGetData(id, out curvilinearGrid), Is.EqualTo(0) );
 
-                    Assert.AreEqual((10, 10), (curvilinearGrid.NumM, curvilinearGrid.NumN));
+                    Assert.That((curvilinearGrid.NumM, curvilinearGrid.NumN), Is.EqualTo((10, 10)) );
                 }
                 finally
                 {

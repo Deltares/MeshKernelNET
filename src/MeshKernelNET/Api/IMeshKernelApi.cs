@@ -1006,8 +1006,9 @@ namespace MeshKernelNET.Api
         /// <param name="meshKernelId">Id of the mesh state pertaining to the current domain</param>
         /// <param name="disposableMesh2D">The mesh to merge to the current domain</param>
         /// <param name="searchFraction">Fraction of the shortest edge (along an edge to be connected) to use when determining neighbour edge closeness</param>
+        /// <param name="connect"> Boolean value indicating if the two meshes should be connected</param>
         /// <returns>Error code</returns>
-        int Mesh2dConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction);
+        int Mesh2dConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction, bool connect);
 
         /// <summary>
         /// Converts the projection of a mesh2d

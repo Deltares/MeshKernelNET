@@ -2221,12 +2221,13 @@ namespace MeshKernelNETTest.Api
                 {
                     // Prepare
                     const double searchFraction = 0.1;
+                    bool connect = true;
                     id = api.AllocateState(0);
                     api.Mesh2dSet(id, firstMesh);
                     api.Mesh2dGetData(id, out mesh2D);
 
                     // Execute
-                    var result = api.Mesh2dConnectMeshes(id, secondMesh, searchFraction);
+                    var result = api.Mesh2dConnectMeshes(id, secondMesh, searchFraction, false);
 
                     // Assert
                     Assert.That(result, Is.EqualTo(0));
@@ -2239,7 +2240,6 @@ namespace MeshKernelNETTest.Api
                     mesh2D?.Dispose();
                 }
             }
-
         }
 
         [Test]

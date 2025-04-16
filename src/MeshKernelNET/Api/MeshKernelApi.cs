@@ -1519,6 +1519,24 @@ namespace MeshKernelNET.Api
                                                                    useNodalRefinement);
         }
 
+        public int Mesh2dRefineRidgesBasedOnGriddedSamples<T>(int meshKernelId,
+                                                              in DisposableGriddedSamples<T> griddedSamples,
+                                                              in MeshRefinementParameters meshRefinementParameters,
+                                                              double relativeSearchRadius,
+                                                              int minimumNumSamples,
+                                                              int numberOfSmoothingIterations)
+        {
+            GriddedSamplesNative griddedSamplesNative = griddedSamples.CreateNativeObject();
+            var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
+
+            return MeshKernelDll.Mesh2dRefineRidgesBasedOnGriddedSamples(meshKernelId,
+                                                                         ref griddedSamplesNative,
+                                                                         relativeSearchRadius,
+                                                                         minimumNumSamples,
+                                                                         numberOfSmoothingIterations,
+                                                                         ref meshRefinementParametersNative);
+        }
+
         public int Mesh2dRefineBasedOnPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, in MeshRefinementParameters meshRefinementParameters)
         {
             GeometryListNative disposableGeometryListInNative = disposableGeometryListIn.CreateNativeObject();

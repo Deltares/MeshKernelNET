@@ -2812,6 +2812,94 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        [Test]
+        public void Mesh2dRefineRidgesBasedOnGriddedSamplesThroughAPI()
+        {
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            {
+                var id = 0;
+                DisposableMesh2D meshOut = null;
+                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
+                try
+                {
+                    // Setup
+                    id = api.AllocateState(0);
+
+                    var meshRefinementParameters = new MeshRefinementParameters
+                    {
+                        MaxNumRefinementIterations = 10,
+                        RefineIntersected = false,
+                        UseMassCenterWhenRefining = false,
+                        MinEdgeSize = 2.0,
+                        RefinementType = MeshRefinementTypes.RidgeDetection,
+                        ConnectHangingNodes = true,
+                        AccountForSamplesOutside = false,
+                        SmoothingIterations = 5,
+                        MaxCourantTime = 120.0,
+                        DirectionalRefinement = false
+                    };
+
+
+                    double coordinate = -50.0;
+                    double dx = 100.0;
+                    for (var i = 0; i < griddedSamples.NumX; i++)
+                    {
+                        griddedSamples.CoordinatesX[i] = coordinate + (i * dx);
+                    }
+
+                    coordinate = -50.0;
+                    double dy = 100.0;
+                    for (var j = 0; j < griddedSamples.NumY; j++)
+                    {
+                        griddedSamples.CoordinatesY[j] = coordinate + (j * dy);
+                    }
+
+                    // Parameters for Gaussian bump
+                    double amplitude = 1.0;
+                    double sigma = 100.0; // Controls the width of the bump
+                    double centerX = 0.0;
+                    double centerY = 0.0;
+
+                    // Fill values with Gaussian bump
+                    for (int j = 0; j < griddedSamples.NumY; j++)
+                    {
+                        double y = griddedSamples.CoordinatesY[j];
+                        for (int i = 0; i < griddedSamples.NumX; i++)
+                        {
+                            double x = griddedSamples.CoordinatesX[i];
+
+                            // 2D Gaussian function
+                            double value = amplitude * Math.Exp(-((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)) / (2 * sigma * sigma));
+
+                            griddedSamples.Values[j * griddedSamples.NumX + i] = (float)value;
+                        }
+                    }
+
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    // Execute
+                    Assert.AreEqual(0, api.Mesh2dRefineRidgesBasedOnGriddedSamples(id,
+                                                                                   griddedSamples,
+                                                                                   meshRefinementParameters,
+                                                                                   1.0,
+                                                                                   1,
+                                                                                   10));
+                    meshOut = new DisposableMesh2D();
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    // Assert refinement executed
+                    Assert.AreEqual(16, mesh.NumNodes);
+                    Assert.NotNull(meshOut);
+                    Assert.AreEqual(758, meshOut.NumNodes);
+                }
+                finally
+                {
+                    api.ClearState();
+                    meshOut?.Dispose();
+                    griddedSamples.Dispose();
+                }
+            }
+        }
+
 
         [Test]
         public void Mesh2dTriangulationInterpolationThroughAPI()

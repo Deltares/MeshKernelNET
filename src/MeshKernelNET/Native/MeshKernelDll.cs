@@ -1791,6 +1791,24 @@ namespace MeshKernelNET.Native
                                                                      [In] bool useNodalRefinement);
 
         /// <summary>
+        /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges in a sample set.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="griddedSamplesNative">The gridded samples</param>
+        /// <param name="relativeSearchRadius">The relative search radius relative to the face size, used for some interpolation algorithms</param>
+        /// <param name="minimumNumSamples">The minimum number of samples used for some averaging algorithms</param>
+        /// <param name="numberOfSmoothingIterations">The number of smoothing iterations to apply to the input sample set</param>
+        /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_ridges_based_on_gridded_samples", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dRefineRidgesBasedOnGriddedSamples([In] int meshKernelId,
+                                                                           [In] ref GriddedSamplesNative griddedSamplesNative,
+                                                                           [In] double relativeSearchRadius,
+                                                                           [In] int minimumNumSamples,
+                                                                           [In] int numberOfSmoothingIterations,
+                                                                           [In] ref MeshRefinementParametersNative meshRefinementParameters);
+
+        /// <summary>
         /// Refine a grid based on polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>

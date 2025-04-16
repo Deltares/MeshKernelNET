@@ -74,6 +74,42 @@ namespace MeshKernelNETTest.Api
                 $"{AsText(mesh.EdgeNodes)} != {AsText(meshFromKernel.EdgeNodes)}");
         }
 
+        [TestCase(3,4)]
+        [TestCase(4,3)]
+        public void CreateCurvilinearGrid_CreatesExpectedNumberOfNodesAndEdges(int nx, int ny)
+        {
+            var gridFromKernel = RectangleCurvilinearGridFromMeshKernel(MakeGridParameters(nx, ny));
+
+            var grid = TestUtilityFunctions.CreateCurvilinearGrid(ny, nx, 1, 1);
+
+            Assert.That(grid.NodeCount(), Is.EqualTo(gridFromKernel.NodeCount()));
+            Assert.That(grid.EdgeCount(), Is.EqualTo(gridFromKernel.EdgeCount()));
+        }
+
+        [TestCase(3,4)]
+        [TestCase(4,3)]
+        public void CreateCurvilinearGrid_CreatesExpectedNodeX(int nx, int ny)
+        {
+            var gridFromKernel = RectangleCurvilinearGridFromMeshKernel(MakeGridParameters(nx, ny));
+
+            var grid = TestUtilityFunctions.CreateCurvilinearGrid(ny, nx, 1, 1);
+            
+            Assert.That(grid.NodeX.SequenceEqual(gridFromKernel.NodeX), Is.True, 
+                        $"{AsText(grid.NodeX)} != {AsText(gridFromKernel.NodeX)}");
+        }
+
+        [TestCase(3,4)]
+        [TestCase(4,3)]
+        public void CreateCurvilinearGrid_CreatesExpectedNodeY(int nx, int ny)
+        {
+            var gridFromKernel = RectangleCurvilinearGridFromMeshKernel(MakeGridParameters(nx, ny));
+
+            var grid = TestUtilityFunctions.CreateCurvilinearGrid(ny, nx, 1, 1);
+            
+            Assert.That(grid.NodeY.SequenceEqual(gridFromKernel.NodeY), Is.True,
+                        $"{AsText(grid.NodeY)} != {AsText(gridFromKernel.NodeY)}");
+        }
+        
         /// <summary>
         /// Create a data structure used to create a rectangle grid. 
         /// </summary>
@@ -96,7 +132,16 @@ namespace MeshKernelNETTest.Api
             api.DeallocateState(id);
             return mesh;
         }
-        
+
+        private DisposableCurvilinearGrid RectangleCurvilinearGridFromMeshKernel(MakeGridParameters rectangle)
+        {
+            int id = api.AllocateState(0);
+            api.CurvilinearComputeRectangularGrid(id, rectangle);
+            api.CurvilinearGridGetData(id, out DisposableCurvilinearGrid grid);
+            api.DeallocateState(id);
+            return grid;
+        }
+
         private static string AsText<T>(IEnumerable<T> sequence)
         {
             return "[" + string.Join(",", sequence.Select(x => x.ToString())) + "]";

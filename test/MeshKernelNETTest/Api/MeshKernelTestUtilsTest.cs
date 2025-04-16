@@ -7,7 +7,16 @@ namespace MeshKernelNETTest.Api
 {
     /// <summary>
     /// This test fixture tests whether the utility functions for creating grids produce the same geometry and
-    /// connectivity arrays as corresponding grids produced by MeshKernel. 
+    /// connectivity arrays as corresponding grids produced by MeshKernel.
+    ///
+    /// This test assumes the following conventional convention:
+    /// horizontal == x-direction
+    /// vertical == y-direction
+    /// a row is oriented horizontally, a column oriented vertically.
+    /// width is a length in horizontal direction, height is a length in vertical direction
+    ///
+    /// Note that <see cref="TestUtilityFunctions.CreateMesh2D"/> and <see cref="TestUtilityFunctions.CreateCurvilinearGrid"/>
+    /// take the dimensions in a different order. 
     /// </summary>
     [TestFixture]
     public class MeshKernelTestUtilsTest

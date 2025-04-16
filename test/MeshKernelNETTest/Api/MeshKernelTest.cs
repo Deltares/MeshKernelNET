@@ -3356,18 +3356,18 @@ namespace MeshKernelNETTest.Api
                 {
                     // Setup
                     int id = api.AllocateState(0);
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     Assert.That(mesh.NumEdges,Is.EqualTo(3*3 + 2*4));
                     int numberOfValidEdges = ComputeNumberOfValidEdges(mesh); 
                     Assert.That(numberOfValidEdges, Is.EqualTo(mesh.NumEdges));
                     
                     // Execute
-                    Assert.AreEqual(0, api.Mesh2dSplitEdges(id, mesh.GetFirstNode(edgeId), mesh.GetLastNode(edgeId)));
+                    Assert.That(api.Mesh2dSplitEdges(id, mesh.GetFirstNode(edgeId), mesh.GetLastNode(edgeId)), Is.EqualTo(0));
                     
                     // Assert
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
                     int extraEdges = mesh2D.NumEdges - mesh.NumEdges;
-                    Assert.AreEqual(expectedExtraEdges, extraEdges);
+                    Assert.That(extraEdges, Is.EqualTo(expectedExtraEdges));
                     int newNumberOfValidEdges = ComputeNumberOfValidEdges(mesh2D);
                     int extraValidEdges = newNumberOfValidEdges - numberOfValidEdges;
                     Assert.That(extraValidEdges, Is.EqualTo(expectedExtraValidEdges));

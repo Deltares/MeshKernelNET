@@ -71,12 +71,12 @@ namespace MeshKernelNETTest.Api
             var result = new DisposableCurvilinearGrid(numbOfRows, numbOfColumns);
 
             var nodeIndex = 0;
-            for (var i = 0; i < result.NumM; ++i)
+            for (var v = 0; v < result.NumN; ++v)
             {
-                for (var j = 0; j < result.NumN; ++j)
+                for (var h = 0; h < result.NumM; ++h)
                 {
-                    result.NodeX[nodeIndex] = i * cellWidth;
-                    result.NodeY[nodeIndex] = j * cellHeight;
+                    result.NodeX[nodeIndex] = h * cellWidth;
+                    result.NodeY[nodeIndex] = v * cellHeight;
                     nodeIndex++;
                 }
             }

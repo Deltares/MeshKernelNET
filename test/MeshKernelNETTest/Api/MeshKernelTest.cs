@@ -2816,7 +2816,10 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dRefineRidgesBasedOnGriddedSamplesThroughAPI()
         {
             using (var api = new MeshKernelApi())
-            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 
+                                                        4, 
+                                                        100,
+                                                        200))
             {
                 var id = 0;
                 DisposableMesh2D meshOut = null;
@@ -2877,6 +2880,9 @@ namespace MeshKernelNETTest.Api
                     }
 
                     Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    meshOut = new DisposableMesh2D();
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    Assert.AreEqual(16, meshOut.NumNodes);
                     // Execute
                     Assert.AreEqual(0, api.Mesh2dRefineRidgesBasedOnGriddedSamples(id,
                                                                                    griddedSamples,
@@ -2887,7 +2893,6 @@ namespace MeshKernelNETTest.Api
                     meshOut = new DisposableMesh2D();
                     Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
                     // Assert refinement executed
-                    Assert.AreEqual(16, mesh.NumNodes);
                     Assert.NotNull(meshOut);
                     Assert.AreEqual(758, meshOut.NumNodes);
                 }

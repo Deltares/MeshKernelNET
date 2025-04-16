@@ -26,7 +26,7 @@ namespace MeshKernelNETTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
                     mesh1d.NodeX = new[] { 1.73493900000000, 2.35659313023165, 5.38347452702839, 14.2980910429074, 22.9324017677239, 25.3723169493137, 25.8072280000000 };
                     mesh1d.NodeY = new[] { -7.6626510000000, 1.67281447902331, 10.3513746546384, 12.4797224193970, 15.3007317677239, 24.1623588554512, 33.5111870000000 };
@@ -34,15 +34,15 @@ namespace MeshKernelNETTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
+                    Assert.That(api.Mesh1dSet(id, mesh1d), Is.EqualTo(0));
 
                     IntPtr onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
                     var projectionFactor = 0.0;
-                    Assert.AreEqual(0, api.ContactsComputeSingle(id, onedNodeMaskPinnedAddress, geometryListIn, projectionFactor));
+                    Assert.That(api.ContactsComputeSingle(id, onedNodeMaskPinnedAddress, geometryListIn, projectionFactor), Is.EqualTo(0));
 
                     var contacts = new DisposableContacts();
-                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
-                    Assert.Greater(contacts.NumContacts, 0);
+                    Assert.That(api.ContactsGetData(id, out contacts), Is.EqualTo(0));
+                    Assert.That(contacts.NumContacts, Is.GreaterThan(0));
                 }
                 finally
                 {
@@ -67,7 +67,7 @@ namespace MeshKernelNETTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
                     mesh1d.NodeX = new[] { 1.73493900000000, 2.35659313023165, 5.38347452702839, 14.2980910429074, 22.9324017677239, 25.3723169493137, 25.8072280000000 };
                     mesh1d.NodeY = new[] { -7.6626510000000, 1.67281447902331, 10.3513746546384, 12.4797224193970, 15.3007317677239, 24.1623588554512, 33.5111870000000 };
@@ -75,14 +75,14 @@ namespace MeshKernelNETTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
+                    Assert.That(api.Mesh1dSet(id, mesh1d), Is.EqualTo(0));
 
                     IntPtr onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.AreEqual(0, api.ContactsComputeMultiple(id, onedNodeMaskPinnedAddress));
+                    Assert.That(api.ContactsComputeMultiple(id, onedNodeMaskPinnedAddress), Is.EqualTo(0));
 
                     var contacts = new DisposableContacts();
-                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
-                    Assert.Greater(contacts.NumContacts, 0);
+                    Assert.That(api.ContactsGetData(id, out contacts), Is.EqualTo(0));
+                    Assert.That(contacts.NumContacts, Is.GreaterThan(0));
                 }
                 finally
                 {
@@ -108,7 +108,7 @@ namespace MeshKernelNETTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
                     mesh1d.NodeX = new[] { 1.73493900000000, 2.35659313023165, 5.38347452702839, 14.2980910429074, 22.9324017677239, 25.3723169493137, 25.8072280000000 };
                     mesh1d.NodeY = new[] { -7.6626510000000, 1.67281447902331, 10.3513746546384, 12.4797224193970, 15.3007317677239, 24.1623588554512, 33.5111870000000 };
@@ -116,7 +116,7 @@ namespace MeshKernelNETTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
+                    Assert.That(api.Mesh1dSet(id, mesh1d), Is.EqualTo(0));
 
                     geometryListIn.GeometrySeparator = api.GetSeparator();
                     geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0, 5.0 };
@@ -125,13 +125,13 @@ namespace MeshKernelNETTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     IntPtr onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.AreEqual(0, api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn));
+                    Assert.That(api.ContactsComputeWithPolygons(id, onedNodeMaskPinnedAddress, geometryListIn), Is.EqualTo(0));
 
                     var contacts = new DisposableContacts();
-                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
+                    Assert.That(api.ContactsGetData(id, out contacts), Is.EqualTo(0));
 
                     // Only one contact is generated, because only one polygon is present 
-                    Assert.AreEqual(1, contacts.NumContacts);
+                    Assert.That(contacts.NumContacts, Is.EqualTo(1));
                 }
                 finally
                 {
@@ -157,7 +157,7 @@ namespace MeshKernelNETTest.Api
                 {
                     id = api.AllocateState(0);
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
                     mesh1d.NodeX = new[] { 1.73493900000000, 2.35659313023165, 5.38347452702839, 14.2980910429074, 22.9324017677239, 25.3723169493137, 25.8072280000000 };
                     mesh1d.NodeY = new[] { -7.6626510000000, 1.67281447902331, 10.3513746546384, 12.4797224193970, 15.3007317677239, 24.1623588554512, 33.5111870000000 };
@@ -165,7 +165,7 @@ namespace MeshKernelNETTest.Api
 
                     mesh1d.EdgeNodes = new[] { 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 };
                     mesh1d.NumEdges = 6;
-                    Assert.AreEqual(0, api.Mesh1dSet(id, mesh1d));
+                    Assert.That(api.Mesh1dSet(id, mesh1d), Is.EqualTo(0));
 
                     geometryListIn.GeometrySeparator = api.GetSeparator();
                     geometryListIn.XCoordinates = new[] { 5.0, 25.0, 25.0, 5.0 };
@@ -174,13 +174,13 @@ namespace MeshKernelNETTest.Api
                     geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
 
                     IntPtr onedNodeMaskPinnedAddress = onedNodeMaskPinned.AddrOfPinnedObject();
-                    Assert.AreEqual(0, api.ContactsComputeWithPoints(id, onedNodeMaskPinnedAddress, geometryListIn));
+                    Assert.That(api.ContactsComputeWithPoints(id, onedNodeMaskPinnedAddress, geometryListIn), Is.EqualTo(0));
 
                     var contacts = new DisposableContacts();
-                    Assert.AreEqual(0, api.ContactsGetData(id, out contacts));
+                    Assert.That(api.ContactsGetData(id, out contacts), Is.EqualTo(0));
 
                     // Four contacts are generated, one for each point
-                    Assert.AreEqual(4, contacts.NumContacts);
+                    Assert.That(contacts.NumContacts, Is.EqualTo(4));
                 }
                 finally
                 {

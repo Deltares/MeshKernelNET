@@ -22,10 +22,10 @@ namespace MeshKernelNETTest.Native
             var nativeParameters = parameters.ToOrthogonalizationParametersNative();
 
             // Assert
-            Assert.AreEqual(parameters.OuterIterations, nativeParameters.OuterIterations);
-            Assert.AreEqual(parameters.BoundaryIterations, nativeParameters.BoundaryIterations);
-            Assert.AreEqual(parameters.InnerIterations, nativeParameters.InnerIterations);
-            Assert.AreEqual(0.975, nativeParameters.OrthogonalizationToSmoothingFactor);
+            Assert.That(nativeParameters.OuterIterations, Is.EqualTo(parameters.OuterIterations));
+            Assert.That(nativeParameters.BoundaryIterations, Is.EqualTo(parameters.BoundaryIterations));
+            Assert.That(nativeParameters.InnerIterations, Is.EqualTo(parameters.InnerIterations));
+            Assert.That(nativeParameters.OrthogonalizationToSmoothingFactor, Is.EqualTo(0.975));
         }
 
         [Test]
@@ -38,15 +38,15 @@ namespace MeshKernelNETTest.Native
             var native = makeGridParameters.ToMakeGridParametersNative();
 
             // Assert
-            Assert.AreEqual(native.NumberOfColumns, makeGridParameters.NumberOfColumns);
-            Assert.AreEqual(native.NumberOfRows, makeGridParameters.NumberOfRows);
-            Assert.AreEqual(native.GridAngle, makeGridParameters.GridAngle);
-            Assert.AreEqual(native.OriginXCoordinate, makeGridParameters.OriginXCoordinate);
-            Assert.AreEqual(native.OriginYCoordinate, makeGridParameters.OriginYCoordinate);
-            Assert.AreEqual(native.XGridBlockSize, makeGridParameters.XGridBlockSize);
-            Assert.AreEqual(native.YGridBlockSize, makeGridParameters.YGridBlockSize);
-            Assert.AreEqual(native.UpperRightCornerXCoordinate, makeGridParameters.UpperRightCornerXCoordinate);
-            Assert.AreEqual(native.UpperRightCornerYCoordinate, makeGridParameters.UpperRightCornerYCoordinate);
+            Assert.That(makeGridParameters.NumberOfColumns, Is.EqualTo(native.NumberOfColumns));
+            Assert.That(makeGridParameters.NumberOfRows, Is.EqualTo(native.NumberOfRows));
+            Assert.That(makeGridParameters.GridAngle, Is.EqualTo(native.GridAngle));
+            Assert.That(makeGridParameters.OriginXCoordinate, Is.EqualTo(native.OriginXCoordinate));
+            Assert.That(makeGridParameters.OriginYCoordinate, Is.EqualTo(native.OriginYCoordinate));
+            Assert.That(makeGridParameters.XGridBlockSize, Is.EqualTo(native.XGridBlockSize));
+            Assert.That(makeGridParameters.YGridBlockSize, Is.EqualTo(native.YGridBlockSize));
+            Assert.That(makeGridParameters.UpperRightCornerXCoordinate, Is.EqualTo(native.UpperRightCornerXCoordinate));
+            Assert.That(makeGridParameters.UpperRightCornerYCoordinate, Is.EqualTo(native.UpperRightCornerYCoordinate));
         }
 
         [Test]
@@ -59,11 +59,11 @@ namespace MeshKernelNETTest.Native
             var curvilinearParameters = parameters.ToCurvilinearParametersNative();
 
             // Assert
-            Assert.AreEqual(parameters.MRefinement, curvilinearParameters.MRefinement);
-            Assert.AreEqual(parameters.NRefinement, curvilinearParameters.NRefinement);
-            Assert.AreEqual(parameters.SmoothingIterations, curvilinearParameters.SmoothingIterations);
-            Assert.AreEqual(parameters.SmoothingParameter, curvilinearParameters.SmoothingParameter);
-            Assert.AreEqual(parameters.AttractionParameter, curvilinearParameters.AttractionParameter);
+            Assert.That(curvilinearParameters.MRefinement, Is.EqualTo(parameters.MRefinement));
+            Assert.That(curvilinearParameters.NRefinement, Is.EqualTo(parameters.NRefinement));
+            Assert.That(curvilinearParameters.SmoothingIterations, Is.EqualTo(parameters.SmoothingIterations));
+            Assert.That(curvilinearParameters.SmoothingParameter, Is.EqualTo(parameters.SmoothingParameter));
+            Assert.That(curvilinearParameters.AttractionParameter, Is.EqualTo(parameters.AttractionParameter));
         }
 
         [Test]
@@ -76,16 +76,16 @@ namespace MeshKernelNETTest.Native
             var splinesToCurvilinearParameters = parameters.ToSplinesToCurvilinearParametersNative();
 
             // Assert
-            Assert.AreEqual(parameters.AspectRatio, splinesToCurvilinearParameters.AspectRatio);
-            Assert.AreEqual(parameters.AspectRatioGrowFactor, splinesToCurvilinearParameters.AspectRatioGrowFactor);
-            Assert.AreEqual(parameters.AverageWidth, splinesToCurvilinearParameters.AverageWidth);
-            Assert.AreEqual(Convert.ToInt32(parameters.CurvatureAdaptedGridSpacing), splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing);
-            Assert.AreEqual(Convert.ToInt32(parameters.GrowGridOutside), splinesToCurvilinearParameters.GrowGridOutside);
-            Assert.AreEqual(parameters.MaximumNumberOfGridCellsInTheUniformPart, splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart);
-            Assert.AreEqual(parameters.GridsOnTopOfEachOtherTolerance, splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance);
-            Assert.AreEqual(parameters.MinimumCosineOfCrossingAngles, splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles);
-            Assert.AreEqual(Convert.ToInt32(parameters.CheckFrontCollisions), splinesToCurvilinearParameters.CheckFrontCollisions);
-            Assert.AreEqual(Convert.ToInt32(parameters.RemoveSkinnyTriangles), splinesToCurvilinearParameters.RemoveSkinnyTriangles);
+            Assert.That(splinesToCurvilinearParameters.AspectRatio, Is.EqualTo(parameters.AspectRatio));
+            Assert.That(splinesToCurvilinearParameters.AspectRatioGrowFactor, Is.EqualTo(parameters.AspectRatioGrowFactor));
+            Assert.That(splinesToCurvilinearParameters.AverageWidth, Is.EqualTo(parameters.AverageWidth));
+            Assert.That(splinesToCurvilinearParameters.CurvatureAdaptedGridSpacing, Is.EqualTo(Convert.ToInt32(parameters.CurvatureAdaptedGridSpacing)));
+            Assert.That(splinesToCurvilinearParameters.GrowGridOutside, Is.EqualTo(Convert.ToInt32(parameters.GrowGridOutside)));
+            Assert.That(splinesToCurvilinearParameters.MaximumNumberOfGridCellsInTheUniformPart, Is.EqualTo(parameters.MaximumNumberOfGridCellsInTheUniformPart));
+            Assert.That(splinesToCurvilinearParameters.GridsOnTopOfEachOtherTolerance, Is.EqualTo(parameters.GridsOnTopOfEachOtherTolerance));
+            Assert.That(splinesToCurvilinearParameters.MinimumCosineOfCrossingAngles, Is.EqualTo(parameters.MinimumCosineOfCrossingAngles));
+            Assert.That(splinesToCurvilinearParameters.CheckFrontCollisions, Is.EqualTo(Convert.ToInt32(parameters.CheckFrontCollisions)));
+            Assert.That(splinesToCurvilinearParameters.RemoveSkinnyTriangles, Is.EqualTo(Convert.ToInt32(parameters.RemoveSkinnyTriangles)));
         }
 
         [Test]
@@ -98,15 +98,15 @@ namespace MeshKernelNETTest.Native
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
 
             // Assert
-            Assert.AreEqual(boundingBox.xLowerLeft, double.MinValue);
-            Assert.AreEqual(boundingBox.yLowerLeft, double.MinValue);
-            Assert.AreEqual(boundingBox.xUpperRight, double.MaxValue);
-            Assert.AreEqual(boundingBox.yUpperRight, double.MaxValue);
+            Assert.That(boundingBox.xLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBox.yLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBox.xUpperRight, Is.EqualTo(double.MaxValue));
+            Assert.That(boundingBox.yUpperRight, Is.EqualTo(double.MaxValue));
 
-            Assert.AreEqual(boundingBoxNative.xLowerLeft, double.MinValue);
-            Assert.AreEqual(boundingBoxNative.yLowerLeft, double.MinValue);
-            Assert.AreEqual(boundingBoxNative.xUpperRight, double.MaxValue);
-            Assert.AreEqual(boundingBoxNative.yUpperRight, double.MaxValue);
+            Assert.That(boundingBoxNative.xLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBoxNative.yLowerLeft, Is.EqualTo(double.MinValue));
+            Assert.That(boundingBoxNative.xUpperRight, Is.EqualTo(double.MaxValue));
+            Assert.That(boundingBoxNative.yUpperRight, Is.EqualTo(double.MaxValue));
         }
 
         [Test]
@@ -132,15 +132,15 @@ namespace MeshKernelNETTest.Native
                            polygonWithHole.InteriorRings[0].Coordinates.Length +
                            polygon2.Coordinates.Length;
 
-            Assert.AreEqual(expected + 2, disposableGeometryList.NumberOfCoordinates);
+            Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(expected + 2));
 
             double[] expectedXCoordinates = new[] { 0, 10, 10, 0, 0, innerouterSeparator, 3, 7, 7, 3, 3, geometrySeparator, 5, 15, 15, 5, 5 };
             double[] expectedYCoordinates = new[] { 0, 0, 10, 10, 0, innerouterSeparator, 3, 3, 7, 7, 3, geometrySeparator, 5, 5, 15, 15, 5 };
             double[] expectedZCoordinates = new[] { 0, 0, 0, 0, 0, innerouterSeparator, 0, 0, 0, 0, 0, geometrySeparator, 0, 0, 0, 0, 0 };
 
-            Assert.AreEqual(expectedXCoordinates, disposableGeometryList.XCoordinates);
-            Assert.AreEqual(expectedYCoordinates, disposableGeometryList.YCoordinates);
-            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.Values);
+            Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
+            Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
+            Assert.That(disposableGeometryList.Values, Is.EqualTo(expectedZCoordinates));
         }
 
         [Test]
@@ -159,9 +159,9 @@ namespace MeshKernelNETTest.Native
             var expectedYCoordinates = new[] { 0, 1, 2 };
             var expectedZCoordinates = new[] { 0, 0, 0 };
 
-            Assert.AreEqual(expectedXCoordinates, disposableGeometryList.XCoordinates);
-            Assert.AreEqual(expectedYCoordinates, disposableGeometryList.YCoordinates);
-            Assert.AreEqual(expectedZCoordinates, disposableGeometryList.Values);
+            Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
+            Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
+            Assert.That(disposableGeometryList.Values, Is.EqualTo(expectedZCoordinates));
         }
 
         [Test]
@@ -184,8 +184,8 @@ namespace MeshKernelNETTest.Native
 
             for (var i = 0; i < coordinateArray.Length - 1; i++)
             {
-                Assert.AreEqual(expectedXCoordinates[i], coordinateArray[i].X);
-                Assert.AreEqual(expectedYCoordinates[i], coordinateArray[i].Y);
+                Assert.That(coordinateArray[i].X, Is.EqualTo(expectedXCoordinates[i]));
+                Assert.That(coordinateArray[i].Y, Is.EqualTo(expectedYCoordinates[i]));
             }
         }
     }

@@ -26,19 +26,19 @@ namespace MeshKernelNETTest.Api
                     network1d.GeometrySeparator = separator;
                     network1d.NumberOfCoordinates = 7;
 
-                    Assert.AreEqual(0, api.Network1dSet(id, network1d));
+                    Assert.That(api.Network1dSet(id, network1d), Is.EqualTo(0));
 
                     double[] fixedChainages = { 5.0, separator, 5.0 };
                     var minFaceSize = 0.01;
                     var fixedChainagesOffset = 10.0;
 
-                    Assert.AreEqual(0, api.Network1dComputeFixedChainages(id, fixedChainages, minFaceSize, fixedChainagesOffset));
-                    Assert.AreEqual(0, api.Network1dToMesh1d(id, minFaceSize));
+                    Assert.That(api.Network1dComputeFixedChainages(id, fixedChainages, minFaceSize, fixedChainagesOffset), Is.EqualTo(0));
+                    Assert.That(api.Network1dToMesh1d(id, minFaceSize), Is.EqualTo(0));
 
-                    Assert.AreEqual(0, api.Mesh1dGetData(id, out mesh1D));
+                    Assert.That(api.Mesh1dGetData(id, out mesh1D), Is.EqualTo(0));
 
-                    Assert.AreEqual(6, mesh1D.NumNodes);
-                    Assert.AreEqual(4, mesh1D.NumEdges);
+                    Assert.That(mesh1D.NumNodes, Is.EqualTo(6));
+                    Assert.That(mesh1D.NumEdges, Is.EqualTo(4));
                 }
                 finally
                 {
@@ -67,17 +67,17 @@ namespace MeshKernelNETTest.Api
                     network1d.GeometrySeparator = separator;
                     network1d.NumberOfCoordinates = 7;
 
-                    Assert.AreEqual(0, api.Network1dSet(id, network1d));
+                    Assert.That(api.Network1dSet(id, network1d), Is.EqualTo(0));
 
                     var minFaceSize = 0.01;
                     var fixedChainagesOffset = 1.0;
 
-                    Assert.AreEqual(0, api.Network1dComputeOffsettedChainages(id, fixedChainagesOffset));
-                    Assert.AreEqual(0, api.Network1dToMesh1d(id, minFaceSize));
-                    Assert.AreEqual(0, api.Mesh1dGetData(id, out mesh1D));
+                    Assert.That(api.Network1dComputeOffsettedChainages(id, fixedChainagesOffset), Is.EqualTo(0));
+                    Assert.That(api.Network1dToMesh1d(id, minFaceSize), Is.EqualTo(0));
+                    Assert.That(api.Mesh1dGetData(id, out mesh1D), Is.EqualTo(0));
 
-                    Assert.AreEqual(40, mesh1D.NumEdges);
-                    Assert.AreEqual(41, mesh1D.NumValidNodes);
+                    Assert.That(mesh1D.NumEdges, Is.EqualTo(40));
+                    Assert.That(mesh1D.NumValidNodes, Is.EqualTo(41));
                 }
                 finally
                 {

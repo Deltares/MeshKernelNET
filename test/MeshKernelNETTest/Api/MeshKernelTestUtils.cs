@@ -16,19 +16,19 @@ namespace MeshKernelNETTest.Api
         {
             var result = new DisposableMesh2D();
 
-            var indicesValues = new int[numbOfNodesHorizontal, numbOfNodesVertical];
+            var indicesValues = new int[numbOfNodesVertical, numbOfNodesHorizontal];
             result.NodeX = new double[numbOfNodesHorizontal * numbOfNodesVertical];
             result.NodeY = new double[numbOfNodesHorizontal * numbOfNodesVertical];
             result.NumNodes = numbOfNodesHorizontal * numbOfNodesVertical;
 
             var nodeIndex = 0;
-            for (var i = 0; i < numbOfNodesHorizontal; ++i)
+            for (var v = 0; v < numbOfNodesVertical; ++v)
             {
-                for (var j = 0; j < numbOfNodesVertical; ++j)
+                for (var h = 0; h < numbOfNodesHorizontal; ++h)
                 {
-                    indicesValues[i, j] = (i * numbOfNodesVertical) + j;
-                    result.NodeX[nodeIndex] = xOffset + (i * cellWidth);
-                    result.NodeY[nodeIndex] = yOffset + (j * cellHeight);
+                    indicesValues[v, h] = (v * numbOfNodesHorizontal) + h;
+                    result.NodeX[nodeIndex] = xOffset + (h * cellWidth);
+                    result.NodeY[nodeIndex] = yOffset + (v * cellHeight);
                     nodeIndex++;
                 }
             }
@@ -37,24 +37,24 @@ namespace MeshKernelNETTest.Api
                               (numbOfNodesHorizontal * (numbOfNodesVertical - 1));
             result.EdgeNodes = new int[result.NumEdges * 2];
             var edgeIndex = 0;
-            for (var i = 0; i < numbOfNodesHorizontal - 1; ++i)
+            for (var v = 0; v < numbOfNodesVertical - 1; ++v)
             {
-                for (var j = 0; j < numbOfNodesVertical; ++j)
+                for (var h = 0; h < numbOfNodesHorizontal; ++h)
                 {
-                    result.EdgeNodes[edgeIndex] = indicesValues[i, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[v,h];
                     edgeIndex++;
-                    result.EdgeNodes[edgeIndex] = indicesValues[i + 1, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[v + 1, h];
                     edgeIndex++;
                 }
             }
 
-            for (var i = 0; i < numbOfNodesHorizontal; ++i)
+            for (var v = 0; v < numbOfNodesVertical; ++v)
             {
-                for (var j = 0; j < numbOfNodesVertical - 1; ++j)
+                for (var h = 0; h < numbOfNodesHorizontal - 1; ++h)
                 {
-                    result.EdgeNodes[edgeIndex] = indicesValues[i, j + 1];
+                    result.EdgeNodes[edgeIndex] = indicesValues[v, h];
                     edgeIndex++;
-                    result.EdgeNodes[edgeIndex] = indicesValues[i, j];
+                    result.EdgeNodes[edgeIndex] = indicesValues[v, h + 1];
                     edgeIndex++;
                 }
             }

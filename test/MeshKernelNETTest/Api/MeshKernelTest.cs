@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
 using NUnit.Framework;
@@ -160,54 +161,57 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dInsertEdgeFromCoordinatesThroughApi()
         {
             // Before                                          After
-            // 0 ------- 1 ------- 2 ------- 3                 0 ------- 1 ------- 2 ------- 3
+            //12 ------ 13 ------ 14 ------ 15                12 ------ 13 ------ 14 ------ 15
             // |         |         |         |                 |      .  |         |         |
             // |         |         |         |                 |    .    |         |         |
             // |         |         |         |                 |  .      |         |         |
             // |         |         |         |                 |.        |         |         |
-            // 4 ------- 5 ------- 6 ------- 7                 4 ------- 5 ------- 6 ------- 7
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
             // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // |         |         |         |                 |         |         |         |
+            // 4 ------- 5 ------  6 ------  7                 4 ------- 5 ------- 6 ------- 7
             // |         |         |         |                 |         |         |         |
             // |         |         |         |                 |         |         |         |
             // |         |         |         |                 |         |         |         |  
             // |         |         |         |                 |         |         |         |
-            //12 ------ 13 ------ 14 ------ 15                 2 ------ 13 ------ 14 ------ 15
+            // 0 ------  1 ------  2 ------  3                 0 ------  1 ------  2 ------  3
 
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
-                var id = 0;
+                int numberOfEdgesBefore = mesh.NumEdges;
+                Assert.That(numberOfEdgesBefore, Is.EqualTo(4*3 + 3*4));
+                int numberOfNodesBefore = mesh.NumNodes;
+                Assert.That(numberOfNodesBefore, Is.EqualTo(4*4));
+                
                 var mesh2D = new DisposableMesh2D();
                 try
                 {
-                    int numberOfEdgesBefore = mesh.NumEdges;
-                    id = api.AllocateState(0);
+                    int id = api.AllocateState(0);
 
-                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dSet(id, mesh),Is.EqualTo(0));
 
                     var firstNewNodeIndex = 0;
                     var secondNewNodeIndex = 0;
                     var newEdgeIndex = 0;
                     Assert.That(api.Mesh2dInsertEdgeFromCoordinates(id,
-                                                                           0.0,
-                                                                           400.0,
-                                                                           100.0,
-                                                                           600.0,
-                                                                           ref firstNewNodeIndex,
-                                                                           ref secondNewNodeIndex,
-                                                                           ref newEdgeIndex), Is.EqualTo(0));
+                                                                    0.0,
+                                                                    400.0,
+                                                                    100.0,
+                                                                    600.0,
+                                                                    ref firstNewNodeIndex,
+                                                                    ref secondNewNodeIndex,
+                                                                    ref newEdgeIndex), Is.EqualTo(0));
 
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    Assert.That(mesh2D.NumEdges, Is.Not.EqualTo(2));
+                    Assert.That(mesh2D.NumNodes, Is.EqualTo(numberOfNodesBefore));
                     Assert.That(mesh2D.NumEdges, Is.EqualTo(numberOfEdgesBefore + 1));
-                    Assert.That(firstNewNodeIndex, Is.EqualTo(2));
-                    Assert.That(secondNewNodeIndex, Is.EqualTo(7));
-                    Assert.That(newEdgeIndex, Is.EqualTo(24));
+                    Assert.That(firstNewNodeIndex, Is.EqualTo(8));
+                    Assert.That(secondNewNodeIndex, Is.EqualTo(13));
+                    Assert.That(newEdgeIndex, Is.EqualTo(numberOfEdgesBefore)); // appended at end
                 }
                 finally
                 {
@@ -221,41 +225,59 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dMergeTwoNodesThroughApi()
         {
             // Before                                          After
-            // 0 ------- 1 ------- 2 ------- 3                           0 ------- 1 ------- 2
+            //     21        22        23
+            //12 ------ 13 ------ 14 ------ 15                 12       13 ------ 14 ------ 15
             // |         |         |         |                        .  |         |         |
-            // |         |         |         |                      .    |         |         |
+            // |8        |9        |10       |11                    .    |         |         |
             // |         |         |         |                    .      |         |         |
-            // |         |         |         |                  .        |         |         |
-            // 4 ------- 5 ------- 6 ------- 7                 3 ------- 4 ------- 5 ------- 6
+            // |   18    |   19    |   20    |                  .        |         |         |
+            // 8 ------- 9 ------ 10 ------ 11                 8 ------- 9 ------ 10 ------ 11
             // |         |         |         |                 |         |         |         |
+            // |4        |5        |6        |7                |         |         |         |
             // |         |         |         |                 |         |         |         |
+            // |   15    |   16    |   17    |                 |         |         |         |
+            // 4 ------- 5 ------  6 ------  7                 4 ------- 5 ------- 6 ------- 7
             // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
-            // 8 ------- 9 ------ 10 ------ 11                 7 ------- 8 ------  9 ------ 10
-            // |         |         |         |                 |         |         |         |
-            // |         |         |         |                 |         |         |         |
+            // | 0       |1        |2        |3                |         |         |         |
             // |         |         |         |                 |         |         |         |  
-            // |         |         |         |                 |         |         |         |
-            //12 ------ 13 ------ 14 ------ 15                 11 ------ 12 ------ 13 ------ 14
+            // |   12    |   13    |   14    |                 |         |         |         |
+            // 0 ------  1 ------  2 ------  3                 0 ------  1 ------  2 ------  3
 
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
             {
-                var id = 0;
+                int numberOfEdgesBefore = mesh.NumEdges;
+                Assert.That(numberOfEdgesBefore, Is.EqualTo(4*3 + 3*4));
+                int numberOfNodesBefore = mesh.NumNodes;
+                Assert.That(numberOfNodesBefore, Is.EqualTo(4*4));
+
                 var mesh2D = new DisposableMesh2D();
                 try
                 {
-                    int numberOfEdgesBefore = mesh.NumEdges;
-                    id = api.AllocateState(0);
+                    int id = api.AllocateState(0);
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
-                    Assert.That(api.Mesh2dMergeTwoNodes(id, 0, 4), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dMergeTwoNodes(id, 12, 13), Is.EqualTo(0));
 
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    Assert.That(mesh2D.NumEdges, Is.Not.EqualTo(2));
-                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(numberOfEdgesBefore - 1));
+                    
+                    Assert.That(mesh2D.NumNodes, Is.EqualTo(numberOfNodesBefore));
+                    Assert.That(mesh2D.NumEdges, Is.EqualTo(numberOfEdgesBefore));
+                    
+                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(numberOfEdgesBefore-1));
+                    
+                    var mesh2DEdgeNodes = mesh2D.EdgeNodes;
+                    
+                    const int invalidatedEdge = 21;
+                    int[] invalidatedEdgeNodes = { 42, 43 };
+                    Assert.That(mesh2DEdgeNodes.Select((n,i) => (n,i))
+                                               .Where(t => t.n < 0)
+                                               .Select(t => t.i),Is.EquivalentTo(invalidatedEdgeNodes), AsString(mesh2DEdgeNodes));
+                    const int reconnectedEdge = 8;
+                    int[] reconnectedEdgeNodes = { 8, 13 };
+                    Assert.That(mesh2DEdgeNodes.Skip(2 * 8).Take(2),Is.EquivalentTo(reconnectedEdgeNodes), AsString(mesh2DEdgeNodes));
                 }
                 finally
                 {
@@ -1313,7 +1335,7 @@ namespace MeshKernelNETTest.Api
                     int edgeIndex = -1;
                     Assert.That(api.Mesh2dGetEdge(id, 50.0, 0.0, 0.0, 0.0, 100.0, 100.0, ref edgeIndex), Is.EqualTo(0));
                     //Assert
-                    Assert.That(edgeIndex, Is.EqualTo(0));
+                    Assert.That(edgeIndex, Is.EqualTo(110)); // first horizontal edge, comes after all (110) vertical edges
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
                 }
                 finally
@@ -3251,7 +3273,7 @@ namespace MeshKernelNETTest.Api
                                                    boundingBox,
                                                    ref locationIndex);
 
-                    Assert.That(locationIndex, Is.EqualTo(0));
+                    Assert.That(locationIndex, Is.EqualTo(12));
                 }
                 finally
                 {
@@ -3292,8 +3314,9 @@ namespace MeshKernelNETTest.Api
         }
 
 
-        [Test]
-        public void Mesh2dGetNodeLocationIndexThroughApi()
+        [TestCase(10.0,0.0,1)]
+        [TestCase(0.0,10.0,4)]
+        public void Mesh2dGetNodeLocationIndexThroughApi(double x, double y, int expectedIndex)
         {
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 10, 10))
@@ -3309,12 +3332,12 @@ namespace MeshKernelNETTest.Api
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
                     api.Mesh2dGetNodeLocationIndex(id,
-                                                   10.0,
-                                                   0.0,
+                                                   x,
+                                                   y,
                                                    boundingBox,
                                                    ref locationIndex);
 
-                    Assert.That(locationIndex, Is.EqualTo(4));
+                    Assert.That(locationIndex, Is.EqualTo(expectedIndex));
                 }
                 finally
                 {

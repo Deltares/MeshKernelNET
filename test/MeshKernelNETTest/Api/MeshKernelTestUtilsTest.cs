@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using MeshKernelNET.Api;
 using NUnit.Framework;
@@ -56,7 +55,7 @@ namespace MeshKernelNETTest.Api
             var mesh = TestUtilityFunctions.CreateMesh2D(nx, ny, 1, 1);
             
             Assert.That(mesh.NodeX.SequenceEqual(meshFromKernel.NodeX), Is.True, 
-                $"{AsText(mesh.NodeX)} != {AsText(meshFromKernel.NodeX)}");
+                $"{TestUtilityFunctions.AsString(mesh.NodeX)} != {TestUtilityFunctions.AsString(meshFromKernel.NodeX)}");
         }
 
         [TestCase(3,4)]
@@ -68,7 +67,7 @@ namespace MeshKernelNETTest.Api
             var mesh = TestUtilityFunctions.CreateMesh2D(nx, ny, 1, 1);
             
             Assert.That(mesh.NodeY.SequenceEqual(meshFromKernel.NodeY), Is.True,
-                $"{AsText(mesh.NodeY)} != {AsText(meshFromKernel.NodeY)}");
+                $"{TestUtilityFunctions.AsString(mesh.NodeY)} != {TestUtilityFunctions.AsString(meshFromKernel.NodeY)}");
         }
         
         [TestCase(3,4)]
@@ -80,7 +79,7 @@ namespace MeshKernelNETTest.Api
             var mesh = TestUtilityFunctions.CreateMesh2D(nx, ny, 1, 1);
             
             Assert.That(mesh.EdgeNodes.SequenceEqual(meshFromKernel.EdgeNodes), Is.True,
-                $"{AsText(mesh.EdgeNodes)} != {AsText(meshFromKernel.EdgeNodes)}");
+                $"{TestUtilityFunctions.AsString(mesh.EdgeNodes)} != {TestUtilityFunctions.AsString(meshFromKernel.EdgeNodes)}");
         }
 
         [TestCase(3,4)]
@@ -104,7 +103,7 @@ namespace MeshKernelNETTest.Api
             var grid = TestUtilityFunctions.CreateCurvilinearGrid(ny, nx, 1, 1);
             
             Assert.That(grid.NodeX.SequenceEqual(gridFromKernel.NodeX), Is.True, 
-                        $"{AsText(grid.NodeX)} != {AsText(gridFromKernel.NodeX)}");
+                        $"{TestUtilityFunctions.AsString(grid.NodeX)} != {TestUtilityFunctions.AsString(gridFromKernel.NodeX)}");
         }
 
         [TestCase(3,4)]
@@ -116,7 +115,7 @@ namespace MeshKernelNETTest.Api
             var grid = TestUtilityFunctions.CreateCurvilinearGrid(ny, nx, 1, 1);
             
             Assert.That(grid.NodeY.SequenceEqual(gridFromKernel.NodeY), Is.True,
-                        $"{AsText(grid.NodeY)} != {AsText(gridFromKernel.NodeY)}");
+                        $"{TestUtilityFunctions.AsString(grid.NodeY)} != {TestUtilityFunctions.AsString(gridFromKernel.NodeY)}");
         }
         
         /// <summary>
@@ -149,11 +148,6 @@ namespace MeshKernelNETTest.Api
             api.CurvilinearGridGetData(id, out DisposableCurvilinearGrid grid);
             api.DeallocateState(id);
             return grid;
-        }
-
-        private static string AsText<T>(IEnumerable<T> sequence)
-        {
-            return "[" + string.Join(",", sequence.Select(x => x.ToString())) + "]";
         }
     }
 }

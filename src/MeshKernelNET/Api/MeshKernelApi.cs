@@ -966,6 +966,12 @@ namespace MeshKernelNET.Api
                                                             startingFaceCoordinateY);
         }
 
+        /// <inheritdoc/>
+        public int Mesh2dSplitEdges(int meshKernelId, int firstEdgeNode, int lastEdgeNode)
+        {
+            return MeshKernelDll.Mesh2dSplitEdges(meshKernelId, firstEdgeNode, lastEdgeNode);
+        }
+
         public int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges)
         {
             return MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numEdges);

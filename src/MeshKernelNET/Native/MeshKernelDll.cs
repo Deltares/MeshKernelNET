@@ -1185,6 +1185,16 @@ namespace MeshKernelNET.Native
                                                               [In] double startingFaceCoordinateY);
 
         /// <summary>
+        /// Split a stack (row or column) of edges
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="firstEdgeNode">first node id of one of the edges in the stack</param>
+        /// <param name="lastEdgeNode">second node id of one of the edges in the stack</param>
+        /// <returns>success (zero) or an error code(non-zero)</returns>
+        [DllImport(MeshKernelDllName,EntryPoint = "mkernel_mesh2d_split_row", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dSplitEdges([In] int meshKernelId, [In] int firstEdgeNode, [In] int lastEdgeNode);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

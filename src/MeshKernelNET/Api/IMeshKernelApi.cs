@@ -1033,6 +1033,15 @@ namespace MeshKernelNET.Api
                                      double startingFaceCoordinateY);
 
         /// <summary>
+        /// Split a stack (row or column) of edges, identified by the edge nodes of one of the edges of the stack.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="firstEdgeNode">edge node id</param>
+        /// <param name="lastEdgeNode">edge node id</param>
+        /// <returns></returns>
+        int Mesh2dSplitEdges(int meshKernelId, int firstEdgeNode, int lastEdgeNode);
+
+        /// <summary>
         /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

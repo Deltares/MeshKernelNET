@@ -3340,6 +3340,58 @@ namespace MeshKernelNETTest.Api
             }
         }
 
+        [TestCase(0,8,5)]
+        [TestCase(4,8,5)]
+        [TestCase(8,8,5)]
+        [TestCase(9,11,7)]
+        [TestCase(16,11,7)]
+        public void Mesh2dSplitEdgesThroughApi(int edgeId, int expectedExtraEdges, int expectedExtraValidEdges)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 3, 10, 10))
+            {
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    // Setup
+                    int id = api.AllocateState(0);
+                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
+                    Assert.That(mesh.NumEdges,Is.EqualTo(3*3 + 2*4));
+                    int numberOfValidEdges = ComputeNumberOfValidEdges(mesh); 
+                    Assert.That(numberOfValidEdges, Is.EqualTo(mesh.NumEdges));
+                    
+                    // Execute
+                    Assert.AreEqual(0, api.Mesh2dSplitEdges(id, mesh.GetFirstNode(edgeId), mesh.GetLastNode(edgeId)));
+                    
+                    // Assert
+                    Assert.AreEqual(0, api.Mesh2dGetData(id, out mesh2D));
+                    int extraEdges = mesh2D.NumEdges - mesh.NumEdges;
+                    Assert.AreEqual(expectedExtraEdges, extraEdges);
+                    int newNumberOfValidEdges = ComputeNumberOfValidEdges(mesh2D);
+                    int extraValidEdges = newNumberOfValidEdges - numberOfValidEdges;
+                    Assert.That(extraValidEdges, Is.EqualTo(expectedExtraValidEdges));
+                }
+                finally
+                {
+                    api.ClearState();
+                    mesh2D?.Dispose();
+                }
+            }
+
+            int ComputeNumberOfValidEdges(DisposableMesh2D mesh)
+            {
+                int count = 0;
+                for (int i = 0; i < mesh.NumEdges; ++i)
+                {
+                    if (mesh.EdgeNodes[2 * i] > -1 && mesh.EdgeNodes[2 * i + 1] > -1) 
+                        ++count;
+                }
+
+                return count;
+            }
+        }
+
         [Test]
         public void Mesh2dSnapToAnEmptyLandBoundaryThroughApi()
         {

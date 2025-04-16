@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using MeshKernelNET.Api;
 
 namespace MeshKernelNETTest.Api
@@ -93,5 +96,18 @@ namespace MeshKernelNETTest.Api
             stopwatch.Stop();
             Console.WriteLine($"{stopwatch.Elapsed} -- {actionName}");
         }
+        
+        public static string AsString<T>(IEnumerable<T> sequence)
+        {
+            return "[" + string.Join(",", sequence.Select(x =>
+            {
+                if (x is IFormattable formattable)
+                {
+                    return formattable.ToString(null, CultureInfo.InvariantCulture);
+                }
+                return x?.ToString();
+            })) + "]";
+        }
+
     }
 }

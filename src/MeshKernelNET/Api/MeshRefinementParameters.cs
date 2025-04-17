@@ -13,7 +13,7 @@ namespace MeshKernelNET.Api
                 RefineIntersected = false,
                 UseMassCenterWhenRefining = true,
                 MinEdgeSize = 0.5,
-                RefinementType = 2,
+                RefinementType = MeshRefinementTypes.RefinementLevels,
                 ConnectHangingNodes = true,
                 AccountForSamplesOutside = false,
                 SmoothingIterations = 5,
@@ -50,7 +50,7 @@ namespace MeshKernelNET.Api
         /// Refinement criterion type
         /// </summary>
         [ProtoMember(5)]
-        public int RefinementType { get; set; }
+        public MeshRefinementTypes RefinementType { get; set; }
 
         /// <summary>
         /// Connect hanging nodes at the end of the iteration, 1 yes or 0 no

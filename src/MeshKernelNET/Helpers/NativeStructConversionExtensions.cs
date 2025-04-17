@@ -76,7 +76,7 @@ namespace MeshKernelNET.Helpers
                 RefineIntersected = Convert.ToInt32(meshRefinementParameters.RefineIntersected),
                 UseMassCenterWhenRefining = Convert.ToInt32(meshRefinementParameters.UseMassCenterWhenRefining),
                 MinEdgeSize = meshRefinementParameters.MinEdgeSize,
-                RefinementType = meshRefinementParameters.RefinementType,
+                RefinementType = (int)meshRefinementParameters.RefinementType,
                 ConnectHangingNodes = Convert.ToInt32(meshRefinementParameters.ConnectHangingNodes),
                 AccountForSamplesOutside = Convert.ToInt32(meshRefinementParameters.AccountForSamplesOutside),
                 SmoothingIterations = meshRefinementParameters.SmoothingIterations,

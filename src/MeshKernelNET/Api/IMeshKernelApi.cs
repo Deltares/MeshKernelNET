@@ -1001,14 +1001,21 @@ namespace MeshKernelNET.Api
 
 
         /// <summary>
-        /// Connect two disconnected regions along boundary
+        /// Merge two meshes without adding extra connections
+        /// </summary>
+        /// <param name="meshKernelId">Id of the mesh state pertaining to the current domain</param>
+        /// <param name="disposableMesh2D">The mesh to merge to the current domain</param>
+        /// <returns>Error code</returns>
+        int Mesh2dMergeMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D);
+
+        /// <summary>
+        /// Merge two meshes and add extra connections
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state pertaining to the current domain</param>
         /// <param name="disposableMesh2D">The mesh to merge to the current domain</param>
         /// <param name="searchFraction">Fraction of the shortest edge (along an edge to be connected) to use when determining neighbour edge closeness</param>
-        /// <param name="connect"> Boolean value indicating if the two meshes should be connected</param>
         /// <returns>Error code</returns>
-        int Mesh2dConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction, bool connect);
+        int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction);
 
         /// <summary>
         /// Converts the projection of a mesh2d

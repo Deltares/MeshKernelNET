@@ -940,13 +940,23 @@ namespace MeshKernelNET.Api
                                                                 ref geometryListLandBoundariesNative);
         }
 
-        public int Mesh2dConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction, bool connect)
+        public int Mesh2dMergeMeshes(int meshKernelId, 
+                                     in DisposableMesh2D disposableMesh2D)
         {
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
                                                      ref mesh2D,
-                                                     searchFraction, 
-                                                     connect);
+                                                     0.0, 
+                                                     false);
+        }
+
+        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction)
+        {
+            Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
+            return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
+                                                     ref mesh2D,
+                                                     searchFraction,
+                                                     true);
         }
 
         public int Mesh2dConvertProjection([In] int meshKernelId,

@@ -2220,7 +2220,6 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     // Prepare
-                    const double searchFraction = 0.1;
                     id = api.AllocateState(0);
                     api.Mesh2dSet(id, firstMesh);
                     api.Mesh2dGetData(id, out mesh2D);
@@ -2231,7 +2230,7 @@ namespace MeshKernelNETTest.Api
                     // Assert
                     Assert.That(result, Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    Assert.That(mesh2D.NumNodes, Is.EqualTo(45));
+                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(72));
                 }
                 finally
                 {
@@ -2254,18 +2253,18 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     // Prepare
-                    const double searchFraction = 0.4;
                     id = api.AllocateState(0);
                     api.Mesh2dSet(id, firstMesh);
                     api.Mesh2dGetData(id, out mesh2D);
 
                     // Execute
-                    var result = api.Mesh2dMergeAndConnectMeshes(id, secondMesh,0.4);
+                    const double searchFraction = 0.4;
+                    var result = api.Mesh2dMergeAndConnectMeshes(id, secondMesh, searchFraction);
 
                     // Assert
                     Assert.That(result, Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    Assert.That(mesh2D.NumNodes, Is.EqualTo(45));
+                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(73));
                 }
                 finally
                 {

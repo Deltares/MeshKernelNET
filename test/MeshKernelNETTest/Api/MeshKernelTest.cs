@@ -2208,11 +2208,11 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dConnectMeshesThroughApi()
+        public void Mesh2dMergeMeshesThroughApi()
         {
             // Setup
             using (DisposableMesh2D firstMesh = CreateMesh2D(3, 3, 1, 1))
-            using (DisposableMesh2D secondMesh = CreateMesh2D(6, 6, 0.5, 0.5, 3.0))
+            using (DisposableMesh2D secondMesh = CreateMesh2D(6, 6, 0.5, 0.5, 100.0, 100.0))
             using (var api = new MeshKernelApi())
             {
                 var id = 0;
@@ -2220,18 +2220,17 @@ namespace MeshKernelNETTest.Api
                 try
                 {
                     // Prepare
-                    const double searchFraction = 0.1;
                     id = api.AllocateState(0);
                     api.Mesh2dSet(id, firstMesh);
                     api.Mesh2dGetData(id, out mesh2D);
 
                     // Execute
-                    var result = api.Mesh2dConnectMeshes(id, secondMesh, searchFraction);
+                    var result = api.Mesh2dMergeMeshes(id, secondMesh);
 
                     // Assert
                     Assert.That(result, Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    Assert.That(mesh2D.NumNodes, Is.EqualTo(45));
+                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(72));
                 }
                 finally
                 {
@@ -2239,7 +2238,40 @@ namespace MeshKernelNETTest.Api
                     mesh2D?.Dispose();
                 }
             }
+        }
 
+        [Test]
+        public void Mesh2dMergeAndConnectMeshesThroughApi()
+        {
+            // Setup
+            using (DisposableMesh2D firstMesh = CreateMesh2D(3, 3, 1, 1))
+            using (DisposableMesh2D secondMesh = CreateMesh2D(6, 6, 0.5, 0.5, 1.0))
+            using (var api = new MeshKernelApi())
+            {
+                var id = 0;
+                DisposableMesh2D mesh2D = null;
+                try
+                {
+                    // Prepare
+                    id = api.AllocateState(0);
+                    api.Mesh2dSet(id, firstMesh);
+                    api.Mesh2dGetData(id, out mesh2D);
+
+                    // Execute
+                    const double searchFraction = 0.4;
+                    var result = api.Mesh2dMergeAndConnectMeshes(id, secondMesh, searchFraction);
+
+                    // Assert
+                    Assert.That(result, Is.EqualTo(0));
+                    Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
+                    Assert.That(mesh2D.NumValidEdges, Is.EqualTo(73));
+                }
+                finally
+                {
+                    api.ClearState();
+                    mesh2D?.Dispose();
+                }
+            }
         }
 
         [Test]

@@ -2822,7 +2822,7 @@ namespace MeshKernelNETTest.Api
                                                         200))
             {
                 var id = 0;
-                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
+                var griddedSamples = new DisposableGriddedSamples<double>(6, 7, 0, 0, 0, (int)InterpolationTypes.Double);
                 try
                 {
                     // Setup
@@ -2874,7 +2874,7 @@ namespace MeshKernelNETTest.Api
                             // 2D Gaussian function
                             double value = amplitude * Math.Exp(-((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)) / (2 * sigma * sigma));
 
-                            griddedSamples.Values[j * griddedSamples.NumX + i] = (float)value;
+                            griddedSamples.Values[j * griddedSamples.NumX + i] = value;
                         }
                     }
 
@@ -2891,7 +2891,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.Mesh2dGetData(id, out DisposableMesh2D endMesh), Is.EqualTo(0));
                     // Assert refinement executed
-                    Assert.That(endMesh.NumNodes, Is.EqualTo(1090));
+                    Assert.That(endMesh.NumNodes, Is.EqualTo(758));
                 }
                 finally
                 {

@@ -2822,7 +2822,6 @@ namespace MeshKernelNETTest.Api
                                                         200))
             {
                 var id = 0;
-                DisposableMesh2D meshOut = null;
                 var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
                 try
                 {
@@ -2879,27 +2878,24 @@ namespace MeshKernelNETTest.Api
                         }
                     }
 
-                    Assert.AreEqual(0, api.Mesh2dSet(id, mesh));
-                    meshOut = new DisposableMesh2D();
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
-                    Assert.AreEqual(16, meshOut.NumNodes);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dGetData(id, out DisposableMesh2D startMesh), Is.EqualTo(0));
+                    Assert.That(startMesh.NumNodes, Is.EqualTo(16));
                     // Execute
-                    Assert.AreEqual(0, api.Mesh2dRefineRidgesBasedOnGriddedSamples(id,
-                                                                                   griddedSamples,
-                                                                                   meshRefinementParameters,
-                                                                                   1.0,
-                                                                                   1,
-                                                                                   10));
-                    meshOut = new DisposableMesh2D();
-                    Assert.AreEqual(0, api.Mesh2dGetData(id, out meshOut));
+                    Assert.That(api.Mesh2dRefineRidgesBasedOnGriddedSamples(id,
+                                                                                  griddedSamples,
+                                                                                  meshRefinementParameters,
+                                                                               1.0,
+                                                                               1,
+                                                                               10), Is.EqualTo(0));
+
+                    Assert.That(api.Mesh2dGetData(id, out DisposableMesh2D endMesh), Is.EqualTo(0));
                     // Assert refinement executed
-                    Assert.NotNull(meshOut);
-                    Assert.AreEqual(758, meshOut.NumNodes);
+                    Assert.That(endMesh.NumNodes, Is.EqualTo(1090));
                 }
                 finally
                 {
                     api.ClearState();
-                    meshOut?.Dispose();
                     griddedSamples.Dispose();
                 }
             }

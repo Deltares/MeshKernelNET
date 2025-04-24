@@ -2607,9 +2607,16 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
-                    
-                    // polygon around the node at (1,1)
+                    /*
+                    // original polygon
+                    // polygon around the nodes at (1,1), (2,1)
                     disposableGeometryList.XCoordinates = new[] { 0.6, 0.6, 1.6, 1.6, 0.6 };
+                    disposableGeometryList.XCoordinates = new[] { 2.5, 0.5, 0.5, 2.5, 2.5 };
+                    */
+
+                    // polygon equal to MeshKernel test
+                    // polygon around the nodes at (1,1), (1,2), (2,1), (2,2)
+                    disposableGeometryList.XCoordinates = new[] { 0.6, 0.6, 2.5, 2.5, 0.6 };
                     disposableGeometryList.XCoordinates = new[] { 2.5, 0.5, 0.5, 2.5, 2.5 };
                     disposableGeometryList.NumberOfCoordinates = 5;
 
@@ -2632,6 +2639,17 @@ namespace MeshKernelNETTest.Api
                                                                    ref faceNumEdges,
                                                                    ref faceEdgeIndex), Is.EqualTo(0));
 /*
+                    // original tests
+                    Assert.That(segmentIndexes[0], Is.EqualTo(0));
+                    Assert.That(segmentIndexes[1], Is.EqualTo(0));
+
+                    Assert.That(segmentDistances[0], Is.EqualTo(0.25));
+                    Assert.That(segmentDistances[1], Is.EqualTo(0.75));
+
+                    Assert.That(faceIndexes[0], Is.EqualTo(6));
+                    Assert.That(faceIndexes[1], Is.EqualTo(3));
+
+                    // adjusted tests after refactoring
                     Assert.That(segmentIndexes, Has.Length.EqualTo(4), $"{AsString(segmentIndexes)}");
                     Assert.That(segmentIndexes[0], Is.EqualTo(0), $"{AsString(segmentIndexes)}");
                     Assert.That(segmentIndexes[1], Is.EqualTo(0), $"{AsString(segmentIndexes)}");
@@ -2639,10 +2657,44 @@ namespace MeshKernelNETTest.Api
                     Assert.That(segmentDistances, Has.Length.EqualTo(4), $"{AsString(segmentDistances)}");
                     Assert.That(segmentDistances[0], Is.EqualTo(0.25), $"{AsString(segmentDistances)}");
                     Assert.That(segmentDistances[1], Is.EqualTo(0.75), $"{AsString(segmentDistances)}");
-*/
+
                     Assert.That(faceIndexes, Has.Length.EqualTo(8), $"{AsString(faceIndexes)}");
                     Assert.That(faceIndexes[0], Is.EqualTo(6), $"{AsString(faceIndexes)}");
                     Assert.That(faceIndexes[1], Is.EqualTo(3), $"{AsString(faceIndexes)}");
+*/
+                    Assert.Multiple(() =>
+                    {
+                        // Same tests as MeshKernel 
+                        const double tolerance = 1e-6;
+                        Assert.That(segmentIndexes[0], Is.EqualTo(0), $"{AsString(segmentIndexes)}");
+                        Assert.That(segmentIndexes[1], Is.EqualTo(0), $"{AsString(segmentIndexes)}");
+                        Assert.That(segmentIndexes[2], Is.EqualTo(1), $"{AsString(segmentIndexes)}");
+
+                        Assert.That(segmentDistances[0], Is.EqualTo(0.25).Within(tolerance), $"{AsString(segmentDistances)}");
+                        Assert.That(segmentDistances[1], Is.EqualTo(0.75).Within(tolerance), $"{AsString(segmentDistances)}");
+                        Assert.That(segmentDistances[2], Is.EqualTo(0.21052631578947370).Within(tolerance), $"{AsString(segmentDistances)}");
+
+                        Assert.That(edgeDistances[0], Is.EqualTo(0.6).Within(tolerance), $"{AsString(edgeDistances)}");
+                        Assert.That(edgeDistances[1], Is.EqualTo(0.6).Within(tolerance), $"{AsString(edgeDistances)}");
+                        Assert.That(edgeDistances[2], Is.EqualTo(0.50000000000000000).Within(tolerance), $"{AsString(edgeDistances)}");
+
+                        Assert.That(faceIndexes[0], Is.EqualTo(3), $"{AsString(faceIndexes)}");
+                        Assert.That(faceIndexes[1], Is.EqualTo(3), $"{AsString(faceIndexes)}");
+                        Assert.That(faceIndexes[2], Is.EqualTo(0), $"{AsString(faceIndexes)}");
+                        Assert.That(faceIndexes[3], Is.EqualTo(0), $"{AsString(faceIndexes)}");
+                        Assert.That(faceIndexes[4], Is.EqualTo(1), $"{AsString(faceIndexes)}");
+
+                        Assert.That(faceNumEdges[0], Is.EqualTo(2), $"{AsString(faceNumEdges)}");
+                        Assert.That(faceNumEdges[1], Is.EqualTo(2), $"{AsString(faceNumEdges)}");
+                        Assert.That(faceNumEdges[2], Is.EqualTo(2), $"{AsString(faceNumEdges)}");
+                        Assert.That(faceNumEdges[3], Is.EqualTo(2), $"{AsString(faceNumEdges)}");
+
+                        Assert.That(faceEdgeIndex[0], Is.EqualTo(18), $"{AsString(faceEdgeIndex)}");
+                        Assert.That(faceEdgeIndex[1], Is.EqualTo(15), $"{AsString(faceEdgeIndex)}");
+                        Assert.That(faceEdgeIndex[2], Is.EqualTo(1), $"{AsString(faceEdgeIndex)}");
+                        Assert.That(faceEdgeIndex[3], Is.EqualTo(15), $"{AsString(faceEdgeIndex)}");
+                        Assert.That(faceEdgeIndex[4], Is.EqualTo(1), $"{AsString(faceEdgeIndex)}");
+                    });
                 }
                 finally
                 {

@@ -1394,13 +1394,13 @@ namespace MeshKernelNET.Api
 
             IntPtr edgeNodesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges * 2);
             IntPtr edgeIndexPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges);
-            IntPtr edgeDistancesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * newMesh2D.num_edges);
-            IntPtr segmentDistancesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * newMesh2D.num_edges);
+            IntPtr edgeDistancesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * newMesh2D.num_edges * 2);
+            IntPtr segmentDistancesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * newMesh2D.num_edges * 2);
             IntPtr segmentIndexesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges);
 
-            IntPtr faceIndexesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_faces);
-            IntPtr faceNumEdgesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_faces);
-            IntPtr faceEdgeIndexPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_faces);
+            IntPtr faceIndexesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges);
+            IntPtr faceNumEdgesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges);
+            IntPtr faceEdgeIndexPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * newMesh2D.num_edges);
 
             GeometryListNative boundaryPolygoneNative = boundaryPolygon.CreateNativeObject();
             int successful = MeshKernelDll.Mesh2dIntersectionsFromPolygon(meshKernelId,
@@ -1420,22 +1420,22 @@ namespace MeshKernelNET.Api
             edgeIndex = new int[newMesh2D.num_edges];
             Marshal.Copy(edgeIndexPtr, edgeIndex, 0, edgeIndex.Length);
 
-            edgeDistances = new double[newMesh2D.num_edges];
+            edgeDistances = new double[newMesh2D.num_edges * 2];
             Marshal.Copy(edgeDistancesPtr, edgeDistances, 0, edgeDistances.Length);
 
-            segmentDistances = new double[newMesh2D.num_edges];
+            segmentDistances = new double[newMesh2D.num_edges * 2];
             Marshal.Copy(segmentDistancesPtr, segmentDistances, 0, segmentDistances.Length);
 
             segmentIndexes = new int[newMesh2D.num_edges];
             Marshal.Copy(segmentIndexesPtr, segmentIndexes, 0, segmentIndexes.Length);
 
-            faceIndexes = new int[newMesh2D.num_faces];
+            faceIndexes = new int[newMesh2D.num_edges];
             Marshal.Copy(faceIndexesPtr, faceIndexes, 0, faceIndexes.Length);
 
-            faceNumEdges = new int[newMesh2D.num_faces];
+            faceNumEdges = new int[newMesh2D.num_edges];
             Marshal.Copy(faceNumEdgesPtr, faceNumEdges, 0, faceNumEdges.Length);
 
-            faceEdgeIndex = new int[newMesh2D.num_faces];
+            faceEdgeIndex = new int[newMesh2D.num_edges];
             Marshal.Copy(faceEdgeIndexPtr, faceEdgeIndex, 0, faceEdgeIndex.Length);
 
             Marshal.FreeCoTaskMem(edgeNodesPtr);

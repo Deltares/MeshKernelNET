@@ -2622,7 +2622,8 @@ namespace MeshKernelNETTest.Api
                     int[] faceNumEdges = Array.Empty<int>();
                     int[] faceEdgeIndex = Array.Empty<int>();
 
-                    Assert.That(api.Mesh2dIntersectionsFromPolygon(id, disposableGeometryList,
+                    Assert.That(api.Mesh2dIntersectionsFromPolygon(id, 
+                                                                   disposableGeometryList,
                                                                    ref edgeNodes,
                                                                    ref edgeIndex,
                                                                    ref edgeDistances,

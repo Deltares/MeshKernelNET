@@ -1458,7 +1458,7 @@ namespace MeshKernelNET.Api
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The polygon where to triangulate</param>
-        /// <param name="scaleFactor">Scale factor (-999.0 for internal scaling)</param>
+        /// <param name="scaleFactor">Scale factor (-999.0 = an internal scaling factor will be computed)</param>
         /// <returns>Error code</returns>
         int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList, double scaleFactor);
 

@@ -1455,10 +1455,10 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dMakeGlobal(meshKernelId, numLongitudeNodes, numLatitudeNodes);
         }
 
-        public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList)
+        public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList, double scaleFactor)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
-            return MeshKernelDll.Mesh2dMakeTriangularMeshFromPolygon(meshKernelId, ref geometryListNative);
+            return MeshKernelDll.Mesh2dMakeTriangularMeshFromPolygon(meshKernelId, ref geometryListNative, scaleFactor);
         }
 
         public int Mesh2dMakeTriangularMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList)

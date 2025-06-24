@@ -1670,9 +1670,10 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="geometryListNative">The polygon where to triangulate</param>
+        /// <param name="scaleFactor">Scale factor (-999.0 = an internal scaling factor will be computed)</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_make_triangular_mesh_from_polygon", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dMakeTriangularMeshFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative);
+        internal static extern int Mesh2dMakeTriangularMeshFromPolygon([In] int meshKernelId, [In] ref GeometryListNative geometryListNative, [In] double scaleFactor);
 
         /// <summary>
         /// Make a triangular mesh from samples

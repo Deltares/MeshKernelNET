@@ -489,7 +489,7 @@ namespace MeshKernelNETTest.Api
 
                     geometryListIn.Values = new[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-                    Assert.That(api.Mesh2dMakeTriangularMeshFromPolygon(id, geometryListIn), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dMakeTriangularMeshFromPolygon(id, geometryListIn, -999.0), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
                 }
                 finally

@@ -950,11 +950,12 @@ namespace MeshKernelNET.Api
                                                      false);
         }
 
-        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction)
+        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D,DisposableGeometryList geometryListPolygon, double searchFraction)
         {
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
                                                      ref mesh2D,
+                                                     geometryListPolygon,
                                                      searchFraction,
                                                      true);
         }

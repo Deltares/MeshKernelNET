@@ -1016,7 +1016,7 @@ namespace MeshKernelNET.Api
         /// <param name="geometryListPolygon">Input polygon to define the region of the operation. Can be empty -> whole meshes are considered</param>
         /// <param name="searchFraction">Fraction of the shortest edge (along an edge to be connected) to use when determining neighbour edge closeness</param>
         /// <returns>Error code</returns>
-        int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D,DisposableGeometryList geometryListPolygon, double searchFraction);
+        int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D,in DisposableGeometryList geometryListPolygon, double searchFraction);
 
         /// <summary>
         /// Converts the projection of a mesh2d

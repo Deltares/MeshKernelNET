@@ -1155,11 +1155,16 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state pertaining to the current domain</param>
         /// <param name="mesh2DNative">The mesh to merge to the current domain</param>
+        /// <param name="geometryListNativePolygon">The polygon where to connect the meshes </param>
         /// <param name="searchFraction">Fraction of the shortest edge (along an edge to be connected) to use when determining neighbour edge closeness</param>
         /// <param name="connect">Boolean value indicating if the two meshes should be connected using triangles</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_connect_meshes", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dConnectMeshes([In] int meshKernelId, [In] ref Mesh2DNative mesh2DNative, [In] double searchFraction, [In] bool connect);
+        internal static extern int Mesh2dConnectMeshes([In] int meshKernelId, 
+                                                        [In] ref Mesh2DNative mesh2DNative,
+                                                        [In] GeometryListNative geometryListNativePolygon,
+                                                        [In] double searchFraction,
+                                                        [In] bool connect);
 
         /// <summary>
         /// Converts the projection of a mesh2d

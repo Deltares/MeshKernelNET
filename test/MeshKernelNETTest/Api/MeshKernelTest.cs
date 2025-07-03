@@ -2277,6 +2277,7 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dMergeAndConnectMeshesThroughApi()
         {
             // Setup
+            using(var disposableGeometryList = new DisposableGeometryList())
             using (DisposableMesh2D firstMesh = CreateMesh2D(3, 3, 1, 1))
             using (DisposableMesh2D secondMesh = CreateMesh2D(6, 6, 0.5, 0.5, 1.0))
             using (var api = new MeshKernelApi())
@@ -2292,7 +2293,7 @@ namespace MeshKernelNETTest.Api
 
                     // Execute
                     const double searchFraction = 0.4;
-                    var result = api.Mesh2dMergeAndConnectMeshes(id, secondMesh, searchFraction);
+                    var result = api.Mesh2dMergeAndConnectMeshes(id, secondMesh,disposableGeometryList, searchFraction);
 
                     // Assert
                     Assert.That(result, Is.EqualTo(0));

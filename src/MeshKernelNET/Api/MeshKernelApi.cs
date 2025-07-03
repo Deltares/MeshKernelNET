@@ -943,18 +943,22 @@ namespace MeshKernelNET.Api
         public int Mesh2dMergeMeshes(int meshKernelId, 
                                      in DisposableMesh2D disposableMesh2D)
         {
+            GeometryListNative geometryListPolygonNative = new GeometryListNative { numberOfCoordinates = 0 };
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
                                                      ref mesh2D,
+                                                     geometryListPolygonNative,
                                                      0.0, 
                                                      false);
         }
 
-        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, double searchFraction)
+        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, in DisposableGeometryList geometryListPolygon, double searchFraction)
         {
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
+            GeometryListNative geometryListPolygonNative = geometryListPolygon?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
             return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
                                                      ref mesh2D,
+                                                     geometryListPolygonNative,
                                                      searchFraction,
                                                      true);
         }

@@ -32,7 +32,7 @@ namespace MeshKernelNETTest.Api
             gullyData.XCoordinates[1] = -999;
             gullyData.YCoordinates[1] = -999;
             gullyData.Values[1] = -999;
-            gullyData.NumberOfCoordinates = 1;
+            gullyData.NumberOfCoordinates = 2;
 
             var mesh1D = new DisposableMesh1D(6, 3);
             mesh1D.NodeX[0] = 0;
@@ -43,11 +43,11 @@ namespace MeshKernelNETTest.Api
             mesh1D.NodeX[5] = 100;
             
             mesh1D.NodeY[0] = 0;
-            mesh1D.NodeY[0] = 0;
-            mesh1D.NodeY[0] = 10;
-            mesh1D.NodeY[0] = 10;
-            mesh1D.NodeY[0] = 20;
-            mesh1D.NodeY[0] = 20;
+            mesh1D.NodeY[1] = 0;
+            mesh1D.NodeY[2] = 10;
+            mesh1D.NodeY[3] = 10;
+            mesh1D.NodeY[4] = 20;
+            mesh1D.NodeY[5] = 20;
 
             mesh1D.EdgeNodes[0] = 0;
             mesh1D.EdgeNodes[0] = 1;

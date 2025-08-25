@@ -872,31 +872,34 @@ namespace MeshKernelNETTest.Api
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             using (var api = new MeshKernelApi())
-            using (var geometryListIn = new DisposableGeometryList())
+            using (var polygons = new DisposableGeometryList())
+            using (var samples = new DisposableGeometryList())
             {
-                var id = 0;
                 var mesh2D = new DisposableMesh2D();
                 try
                 {
-                    id = api.AllocateState(0);
+                    int id = api.AllocateState(0);
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
-                    double geometrySeparator = api.GetSeparator();
-                    geometryListIn.GeometrySeparator = geometrySeparator;
-
-                    geometryListIn.XCoordinates = new[] { 50.0, 150.0, 250.0, 50.0, 150.0, 250.0, 50.0, 150.0, 250.0 };
-
-                    geometryListIn.YCoordinates = new[] { 50.0, 50.0, 50.0, 150.0, 150.0, 150.0, 250.0, 250.0, 250.0 };
-
-                    geometryListIn.Values = new[] { 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0 };
-
-                    geometryListIn.NumberOfCoordinates = geometryListIn.XCoordinates.Length;
+                    
+                    polygons.GeometrySeparator = api.GetSeparator();
+                    polygons.XCoordinates = new[] { 125.0, 175.0, 175.0, 125.0, 125.0 };
+                    polygons.YCoordinates = new[] { 125.0, 125.0, 175.0, 175.0, 125.0 };
+                    polygons.NumberOfCoordinates = polygons.XCoordinates.Length;
+                    
+                    samples.GeometrySeparator = api.GetSeparator();
+                    samples.XCoordinates = new[] { 50.0, 150.0, 250.0, 50.0, 150.0, 250.0, 50.0, 150.0, 250.0 };
+                    samples.YCoordinates = new[] { 50.0, 50.0, 50.0, 150.0, 150.0, 150.0, 250.0, 250.0, 250.0 };
+                    samples.Values = new[] { 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0 };
+                    samples.NumberOfCoordinates = samples.XCoordinates.Length;
 
                     var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
                     var relativeSearchRadius = 1.0;
                     var minimumNumSamples = 1;
-                    Assert.That(api.Mesh2dRefineBasedOnSamples(id, geometryListIn, relativeSearchRadius, minimumNumSamples, meshRefinementParameters), Is.EqualTo(0));
+                    
+                    Assert.That(api.Mesh2dRefineBasedOnSamples(id, polygons, samples, relativeSearchRadius, minimumNumSamples, meshRefinementParameters), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
+                    Assert.That(mesh2D.NumNodes, Is.EqualTo(1135));
                 }
                 finally
                 {
@@ -2814,21 +2817,26 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void Mesh2dRefineBasedOnFloatGriddedSamplesThroughAPI()
+        public void Mesh2dRefineBasedOnGriddedSamplesThroughAPI()
         {
             using (var api = new MeshKernelApi())
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
-                var id = 0;
                 DisposableMesh2D meshOut = null;
+                var polygons = new DisposableGeometryList();
                 var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
+                
                 try
                 {
                     // Setup
-                    id = api.AllocateState(0);
-
+                    int id = api.AllocateState(0);
                     var meshRefinementParameters = MeshRefinementParameters.CreateDefault();
 
+                    polygons.GeometrySeparator = api.GetSeparator();
+                    polygons.XCoordinates = new[] { 125.0, 275.0, 275.0, 125.0, 125.0 };
+                    polygons.YCoordinates = new[] { 250.0, 205.0, 75.0, 75.0, 250.0 };
+                    polygons.NumberOfCoordinates = 5;
+                    
                     double coordinate = -50.0;
                     var dx = 100.0;
                     for (var i = 0; i < griddedSamples.NumX; i++)
@@ -2845,17 +2853,18 @@ namespace MeshKernelNETTest.Api
 
                     for (var i = 0; i < griddedSamples.Values.Length; ++i)
                     {
-
                         griddedSamples.Values[i] = -0.05f;
                     }
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     // Execute
                     Assert.That(api.Mesh2dRefineBasedOnGriddedSamples(id,
-                                                                             griddedSamples,
-                                                                             meshRefinementParameters,
-                                                                             true), Is.EqualTo(0));
+                                                                      polygons,
+                                                                      griddedSamples,
+                                                                      meshRefinementParameters,
+                                                                      true), Is.EqualTo(0));
                     meshOut = new DisposableMesh2D();
+                    
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));
                     // Assert
                     Assert.That(meshOut, Is.Not.Null);
@@ -2865,6 +2874,7 @@ namespace MeshKernelNETTest.Api
                 {
                     api.ClearState();
                     meshOut?.Dispose();
+                    polygons.Dispose();
                     griddedSamples.Dispose();
                 }
             }
@@ -2874,17 +2884,15 @@ namespace MeshKernelNETTest.Api
         public void Mesh2dRefineRidgesBasedOnGriddedSamplesThroughAPI()
         {
             using (var api = new MeshKernelApi())
-            using (DisposableMesh2D mesh = CreateMesh2D(4, 
-                                                        4, 
-                                                        100,
-                                                        200))
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
-                var id = 0;
+                var polygons = new DisposableGeometryList();
                 var griddedSamples = new DisposableGriddedSamples<double>(6, 7, 0, 0, 0, (int)InterpolationTypes.Double);
+                
                 try
                 {
                     // Setup
-                    id = api.AllocateState(0);
+                    int id = api.AllocateState(0);
 
                     var meshRefinementParameters = new MeshRefinementParameters
                     {
@@ -2899,7 +2907,11 @@ namespace MeshKernelNETTest.Api
                         MaxCourantTime = 120.0,
                         DirectionalRefinement = false
                     };
-
+                    
+                    polygons.GeometrySeparator = api.GetSeparator();
+                    polygons.XCoordinates = new[] { 150.0, 350.0, 350.0, 150.0, 150.0 };
+                    polygons.YCoordinates = new[] { 300.0, 300.0, 500.0, 500.0, 300.0 };
+                    polygons.NumberOfCoordinates = 5;
 
                     double coordinate = -50.0;
                     double dx = 100.0;
@@ -2941,11 +2953,12 @@ namespace MeshKernelNETTest.Api
                     Assert.That(startMesh.NumNodes, Is.EqualTo(16));
                     // Execute
                     Assert.That(api.Mesh2dRefineRidgesBasedOnGriddedSamples(id,
-                                                                                  griddedSamples,
-                                                                                  meshRefinementParameters,
-                                                                               1.0,
-                                                                               1,
-                                                                               10), Is.EqualTo(0));
+                                                                            polygons,
+                                                                            griddedSamples,
+                                                                            meshRefinementParameters,
+                                                                            1.0,
+                                                                            1,
+                                                                            10), Is.EqualTo(0));
 
                     Assert.That(api.Mesh2dGetData(id, out DisposableMesh2D endMesh), Is.EqualTo(0));
                     // Assert refinement executed
@@ -2954,6 +2967,7 @@ namespace MeshKernelNETTest.Api
                 finally
                 {
                     api.ClearState();
+                    polygons.Dispose();
                     griddedSamples.Dispose();
                 }
             }

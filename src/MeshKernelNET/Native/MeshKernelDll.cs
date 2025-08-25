@@ -1786,12 +1786,14 @@ namespace MeshKernelNET.Native
         /// Refine based on gridded samples
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="griddedSamplesNative">The gridded samples</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_gridded_samples", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dRefineBasedOnGriddedSamples([In] int meshKernelId,
+                                                                     [In] ref GeometryListNative polygons,
                                                                      [In] ref GriddedSamplesNative griddedSamplesNative,
                                                                      [In] ref MeshRefinementParametersNative meshRefinementParameters,
                                                                      [In] bool useNodalRefinement);
@@ -1800,6 +1802,7 @@ namespace MeshKernelNET.Native
         /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges in a sample set.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="griddedSamplesNative">The gridded samples</param>
         /// <param name="relativeSearchRadius">The relative search radius relative to the face size, used for some interpolation algorithms</param>
         /// <param name="minimumNumSamples">The minimum number of samples used for some averaging algorithms</param>
@@ -1808,6 +1811,7 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_ridges_based_on_gridded_samples", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dRefineRidgesBasedOnGriddedSamples([In] int meshKernelId,
+                                                                           [In] ref GeometryListNative polygons,
                                                                            [In] ref GriddedSamplesNative griddedSamplesNative,
                                                                            [In] double relativeSearchRadius,
                                                                            [In] int minimumNumSamples,
@@ -1830,6 +1834,7 @@ namespace MeshKernelNET.Native
         /// Refine a grid based on the samples contained in the geometry list
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="geometryListNative">The sample set</param>
         /// <param name="relativeSearchRadius">
         /// The relative search radius relative to the face size, used for some interpolation
@@ -1840,6 +1845,7 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_refine_based_on_samples", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dRefineBasedOnSamples([In] int meshKernelId,
+                                                              [In] ref GeometryListNative polygons,
                                                               [In] ref GeometryListNative geometryListNative,
                                                               [In] double relativeSearchRadius,
                                                               [In] int minimumNumSamples,

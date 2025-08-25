@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Helpers;
 using MeshKernelNET.Native;
-using NetTopologySuite.Operation.Valid;
 
 namespace MeshKernelNET.Api
 {
@@ -1521,30 +1520,36 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
-                                                     in DisposableGriddedSamples<T> griddedSamples,
-                                                     in MeshRefinementParameters meshRefinementParameters,
-                                                     bool useNodalRefinement)
+                                                        in DisposableGeometryList polygons,
+                                                        in DisposableGriddedSamples<T> griddedSamples,
+                                                        in MeshRefinementParameters meshRefinementParameters,
+                                                        bool useNodalRefinement)
         {
+            GeometryListNative polygonsNative = polygons.CreateNativeObject();
             GriddedSamplesNative griddedSamplesNative = griddedSamples.CreateNativeObject();
             var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
 
             return MeshKernelDll.Mesh2dRefineBasedOnGriddedSamples(meshKernelId,
+                                                                   ref polygonsNative,
                                                                    ref griddedSamplesNative,
                                                                    ref meshRefinementParametersNative,
                                                                    useNodalRefinement);
         }
 
         public int Mesh2dRefineRidgesBasedOnGriddedSamples<T>(int meshKernelId,
+                                                              in DisposableGeometryList polygons,
                                                               in DisposableGriddedSamples<T> griddedSamples,
                                                               in MeshRefinementParameters meshRefinementParameters,
                                                               double relativeSearchRadius,
                                                               int minimumNumSamples,
                                                               int numberOfSmoothingIterations)
         {
+            GeometryListNative polygonsNative = polygons.CreateNativeObject();
             GriddedSamplesNative griddedSamplesNative = griddedSamples.CreateNativeObject();
             var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
 
             return MeshKernelDll.Mesh2dRefineRidgesBasedOnGriddedSamples(meshKernelId,
+                                                                         ref polygonsNative,
                                                                          ref griddedSamplesNative,
                                                                          relativeSearchRadius,
                                                                          minimumNumSamples,
@@ -1559,11 +1564,13 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dRefineBasedOnPolygon(meshKernelId, ref disposableGeometryListInNative, ref meshRefinementParametersNative);
         }
 
-        public int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters)
+        public int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList polygons, in DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters)
         {
+            GeometryListNative polygonsNative = polygons.CreateNativeObject();
             GeometryListNative disposableGeometryListInNative = disposableGeometryListIn.CreateNativeObject();
             var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
-            return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative);
+            
+            return MeshKernelDll.Mesh2dRefineBasedOnSamples(meshKernelId, ref polygonsNative, ref disposableGeometryListInNative, relativeSearchRadius, minimumNumSamples, ref meshRefinementParametersNative);
         }
 
         public int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle)

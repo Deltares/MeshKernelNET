@@ -1552,11 +1552,13 @@ namespace MeshKernelNET.Api
         /// Refine based on gridded samples
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="griddedSamplesNative">The gridded samples</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
         int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
+                                                 in DisposableGeometryList polygons,
                                                  in DisposableGriddedSamples<T> griddedSamplesNative,
                                                  in MeshRefinementParameters meshRefinementParameters,
                                                  bool useNodalRefinement);
@@ -1565,13 +1567,15 @@ namespace MeshKernelNET.Api
         /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges in a sample set.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="griddedSamplesNative">The gridded samples</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
+        /// <param name="griddedSamples">The gridded samples</param>
         /// <param name="relativeSearchRadius">The relative search radius relative to the face size, used for some interpolation algorithms</param>
         /// <param name="minimumNumSamples">The minimum number of samples used for some averaging algorithms</param>
         /// <param name="numberOfSmoothingIterations">The number of smoothing iterations to apply to the input sample set</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <returns>Error code</returns>
         int Mesh2dRefineRidgesBasedOnGriddedSamples<T>(int meshKernelId,
+                                                       in DisposableGeometryList polygons,
                                                        in DisposableGriddedSamples<T> griddedSamples,
                                                        in MeshRefinementParameters meshRefinementParameters,
                                                        double relativeSearchRadius,
@@ -1593,13 +1597,18 @@ namespace MeshKernelNET.Api
         /// Refines a grid based on samples
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="disposableGeometryListIn">The input samples</param>
         /// <param name="relativeSearchRadius">Search radius for refinement.</param>
         /// <param name="minimumNumSamples">The minimum number of samples that must be added in refinement</param>
         /// <param name="meshRefinementParameters"><seealso cref="MeshRefinementParameters"/> specifying how to refine</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList disposableGeometryListIn,
-                                       double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters);
+        int Mesh2dRefineBasedOnSamples(int meshKernelId,
+                                       in DisposableGeometryList polygons,
+                                       in DisposableGeometryList disposableGeometryListIn,
+                                       double relativeSearchRadius,
+                                       int minimumNumSamples,
+                                       in MeshRefinementParameters meshRefinementParameters);
 
         /// <summary>
         /// Rotates a mesh2d about a given point by a given angle

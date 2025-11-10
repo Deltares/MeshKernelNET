@@ -3185,9 +3185,9 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     Assert.That(api.Mesh2dDelete(id,
-                                                        in polygon,
-                                                        deleteMeshInsidePolygonOptions,
-                                                        invertSelection), Is.EqualTo(0));
+                                                 polygon,
+                                                 deleteMeshInsidePolygonOptions,
+                                                 invertSelection), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2d), Is.EqualTo(0));
                     Assert.That(mesh.NumNodes, Is.Not.EqualTo(expectedNumNodes));
                     Assert.That(mesh.NumEdges, Is.Not.EqualTo(expectedNunEdges));
@@ -3596,7 +3596,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
-                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+                    api.Mesh2dSnapToLandBoundary(id, selectingPolygon, landBoundaries);
 
                     // Get mesh data after conversion
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));
@@ -3643,7 +3643,7 @@ namespace MeshKernelNETTest.Api
                     landBoundaries.NumberOfCoordinates = landBoundaries.XCoordinates.Length;
 
                     // execute
-                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+                    api.Mesh2dSnapToLandBoundary(id, selectingPolygon, landBoundaries);
 
                     // assert - only first cell's nodes are snapped
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));

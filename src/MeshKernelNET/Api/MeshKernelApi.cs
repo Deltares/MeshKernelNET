@@ -26,34 +26,34 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.ClearUndoState(meshKernelId);
         }
 
-        public int ContactsComputeBoundary(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList polygons, double searchRadius)
+        public int ContactsComputeBoundary(int meshKernelId, IntPtr oneDNodeMask, DisposableGeometryList polygons, double searchRadius)
         {
             GeometryListNative polygonsNative = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeBoundary(meshKernelId, oneDNodeMask, ref polygonsNative, searchRadius);
         }
 
         /// <inheritdoc/>
-        public int ContactsComputeMultiple(int meshKernelId, in IntPtr oneDNodeMask)
+        public int ContactsComputeMultiple(int meshKernelId, IntPtr oneDNodeMask)
         {
             return MeshKernelDll.ContactsComputeMultiple(meshKernelId, oneDNodeMask);
         }
 
         /// <inheritdoc/>
-        public int ContactsComputeSingle(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList polygons, double projectionFactor)
+        public int ContactsComputeSingle(int meshKernelId, IntPtr oneDNodeMask, DisposableGeometryList polygons, double projectionFactor)
         {
             GeometryListNative geometryListNativeInputPolygon = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeSingle(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon, projectionFactor);
         }
 
         /// <inheritdoc/>
-        public int ContactsComputeWithPoints(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList points)
+        public int ContactsComputeWithPoints(int meshKernelId, IntPtr oneDNodeMask, DisposableGeometryList points)
         {
             GeometryListNative pointsNative = points.CreateNativeObject();
             return MeshKernelDll.ContactsComputeWithPoints(meshKernelId, oneDNodeMask, ref pointsNative);
         }
 
         /// <inheritdoc/>
-        public int ContactsComputeWithPolygons(int meshKernelId, in IntPtr oneDNodeMask, in DisposableGeometryList polygons)
+        public int ContactsComputeWithPolygons(int meshKernelId, IntPtr oneDNodeMask, DisposableGeometryList polygons)
         {
             GeometryListNative geometryListNativeInputPolygon = polygons.CreateNativeObject();
             return MeshKernelDll.ContactsComputeWithPolygons(meshKernelId, oneDNodeMask, ref geometryListNativeInputPolygon);
@@ -82,7 +82,7 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dSnapToLandBoundary(int meshKernelId, in DisposableGeometryList selectingPolygon, in DisposableGeometryList landBoundaries)
+        public int Mesh2dSnapToLandBoundary(int meshKernelId, DisposableGeometryList selectingPolygon, DisposableGeometryList landBoundaries)
         {
             var selectingPolygonNative = selectingPolygon.CreateNativeObject();
             var landBoundariesNative = landBoundaries.CreateNativeObject();
@@ -90,8 +90,8 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeTransfiniteFromSplines(int meshKernelId,
-                                                            in DisposableGeometryList disposableGeometryListIn,
-                                                            in CurvilinearParameters curvilinearParameters)
+                                                            DisposableGeometryList disposableGeometryListIn,
+                                                            CurvilinearParameters curvilinearParameters)
         {
             GeometryListNative geometryListIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -108,9 +108,9 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeOrthogonalGridFromSplines(int meshKernelId,
-                                                               in DisposableGeometryList disposableGeometryListIn,
-                                                               in CurvilinearParameters curvilinearParameters,
-                                                               in SplinesToCurvilinearParameters splinesToCurvilinearParameters)
+                                                               DisposableGeometryList disposableGeometryListIn,
+                                                               CurvilinearParameters curvilinearParameters,
+                                                               SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
             GeometryListNative geometryListNative = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -120,8 +120,8 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeGridFromSplines(int meshKernelId,
-                                                     in DisposableGeometryList disposableGeometryListIn,
-                                                     in CurvilinearParameters curvilinearParameters)
+                                                     DisposableGeometryList disposableGeometryListIn,
+                                                     CurvilinearParameters curvilinearParameters)
         {
             GeometryListNative geometryListNative = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -139,7 +139,7 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeTransfiniteFromPolygon(int meshKernelId,
-                                                            in DisposableGeometryList geometryList,
+                                                            DisposableGeometryList geometryList,
                                                             int firstNode,
                                                             int secondNode,
                                                             int thirdNode,
@@ -155,7 +155,7 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeTransfiniteFromTriangle(int meshKernelId,
-                                                             in DisposableGeometryList geometryList,
+                                                             DisposableGeometryList geometryList,
                                                              int firstNode,
                                                              int secondNode,
                                                              int thirdNode)
@@ -331,9 +331,9 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearInitializeOrthogonalGridFromSplines(int meshKernelId,
-                                                                  in DisposableGeometryList disposableGeometryListIn,
-                                                                  in CurvilinearParameters curvilinearParameters,
-                                                                  in SplinesToCurvilinearParameters splinesToCurvilinearParameters)
+                                                                  DisposableGeometryList disposableGeometryListIn,
+                                                                  CurvilinearParameters curvilinearParameters,
+                                                                  SplinesToCurvilinearParameters splinesToCurvilinearParameters)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             var curvilinearParametersNative = curvilinearParameters.ToCurvilinearParametersNative();
@@ -400,15 +400,15 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearComputeRectangularGrid(int meshKernelId,
-                                                     in MakeGridParameters makeGridParameters)
+                                                     MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.CurvilinearComputeRectangularGrid(meshKernelId, ref makeGridParametersNative);
         }
 
         public int CurvilinearComputeRectangularGridFromPolygon(int meshKernelId,
-                                                                in MakeGridParameters makeGridParameters,
-                                                                in DisposableGeometryList disposableGeometryListIn)
+                                                                MakeGridParameters makeGridParameters,
+                                                                DisposableGeometryList disposableGeometryListIn)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             GeometryListNative geometryListNative = disposableGeometryListIn.CreateNativeObject();
@@ -417,7 +417,7 @@ namespace MeshKernelNET.Api
                                                                               ref geometryListNative);
         }
 
-        public int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int CurvilinearComputeRectangularGridOnExtension(int meshKernelId, MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.CurvilinearComputeRectangularGridOnExtension(meshKernelId, ref makeGridParametersNative);
@@ -473,7 +473,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearRefreshOrthogonalGridFromSplines(meshKernelId);
         }
 
-        public int CurvilinearSet(int meshKernelId, in DisposableCurvilinearGrid grid)
+        public int CurvilinearSet(int meshKernelId, DisposableCurvilinearGrid grid)
         {
             CurvilinearGridNative gridNative = grid.CreateNativeObject();
             return MeshKernelDll.CurvilinearSet(meshKernelId, ref gridNative);
@@ -611,7 +611,7 @@ namespace MeshKernelNET.Api
 
 
         public int CurvilinearSnapToLandBoundary(int meshKernelId,
-                                                 in DisposableGeometryList land,
+                                                 DisposableGeometryList land,
                                                  double sectionControlPoint1x,
                                                  double sectionControlPoint1y,
                                                  double sectionControlPoint2x,
@@ -631,7 +631,7 @@ namespace MeshKernelNET.Api
         }
 
         public int CurvilinearSnapToSpline(int meshKernelId,
-                                           in DisposableGeometryList spline,
+                                           DisposableGeometryList spline,
                                            double sectionControlPoint1x,
                                            double sectionControlPoint1y,
                                            double sectionControlPoint2x,
@@ -798,7 +798,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetProjectionSphericalAccurate(ref projection);
         }
 
-        public int GetSplines(in DisposableGeometryList disposableGeometryListIn, ref DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices)
+        public int GetSplines(DisposableGeometryList disposableGeometryListIn, ref DisposableGeometryList disposableGeometryListOut, int numberOfPointsBetweenVertices)
         {
             GeometryListNative nativeGeometryListIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative nativeGeometryListOut = disposableGeometryListOut.CreateNativeObject();
@@ -845,14 +845,14 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh1dSet(int meshKernelId, in DisposableMesh1D disposableMesh1D)
+        public int Mesh1dSet(int meshKernelId, DisposableMesh1D disposableMesh1D)
         {
             Mesh1DNative mesh1D = disposableMesh1D.CreateNativeObject();
             return MeshKernelDll.Mesh1dSet(meshKernelId, ref mesh1D);
         }
 
         public int Mesh2dAveragingInterpolation(int meshKernelId,
-                                                in DisposableGeometryList samples,
+                                                DisposableGeometryList samples,
                                                 int locationType,
                                                 int averagingMethodType,
                                                 double relativeSearchSize,
@@ -923,8 +923,8 @@ namespace MeshKernelNET.Api
         public int Mesh2dComputeOrthogonalization(int meshKernelId,
                                                   ProjectToLandBoundaryOptions projectToLandBoundaryOption,
                                                   OrthogonalizationParameters orthogonalizationParameters,
-                                                  in DisposableGeometryList geometryListPolygon,
-                                                  in DisposableGeometryList geometryListLandBoundaries)
+                                                  DisposableGeometryList geometryListPolygon,
+                                                  DisposableGeometryList geometryListLandBoundaries)
         {
             var orthogonalizationParametersNative = orthogonalizationParameters.ToOrthogonalizationParametersNative();
 
@@ -940,7 +940,7 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dMergeMeshes(int meshKernelId, 
-                                     in DisposableMesh2D disposableMesh2D)
+                                     DisposableMesh2D disposableMesh2D)
         {
             GeometryListNative geometryListPolygonNative = new GeometryListNative { numberOfCoordinates = 0 };
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
@@ -950,8 +950,8 @@ namespace MeshKernelNET.Api
                                                      0.0, 
                                                      false);
         }
-
-        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, in DisposableMesh2D disposableMesh2D, in DisposableGeometryList geometryListPolygon, double searchFraction)
+        
+        public int Mesh2dMergeAndConnectMeshes(int meshKernelId, DisposableMesh2D disposableMesh2D, DisposableGeometryList geometryListPolygon, double searchFraction)
         {
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             GeometryListNative geometryListPolygonNative = geometryListPolygon?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
@@ -991,7 +991,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numEdges);
         }
 
-        public int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref int numberOfPolygonVertices)
+        public int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, DisposableGeometryList selectingPolygon, ref int numberOfPolygonVertices)
         {
             GeometryListNative selectingPolygonNative = selectingPolygon.CreateNativeObject();
             return MeshKernelDll.Mesh2dCountMeshBoundariesAsPolygons(meshKernelId, ref selectingPolygonNative, ref numberOfPolygonVertices);
@@ -1003,7 +1003,7 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dDelete(int meshKernelId,
-                                in DisposableGeometryList disposableGeometryListOut,
+                                DisposableGeometryList disposableGeometryListOut,
                                 DeleteMeshInsidePolygonOptions deletionOption,
                                 bool invertDeletion)
         {
@@ -1052,7 +1052,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dFinalizeInnerOrtogonalizationIteration(meshKernelId);
         }
 
-        public int Mesh2dFlipEdges(int meshKernelId, bool isTriangulationRequired, ProjectToLandBoundaryOptions projectToLandBoundaryOption, in DisposableGeometryList selectingPolygon, in DisposableGeometryList landBoundaries)
+        public int Mesh2dFlipEdges(int meshKernelId, bool isTriangulationRequired, ProjectToLandBoundaryOptions projectToLandBoundaryOption, DisposableGeometryList selectingPolygon, DisposableGeometryList landBoundaries)
         {
             int isTriangulationRequiredInt = isTriangulationRequired ? 1 : 0;
             var projectToLandBoundaryOptionInt = (int)projectToLandBoundaryOption;
@@ -1242,7 +1242,7 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, in DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList)
+        public int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
             GeometryListNative selectingPolygonNative = selectingPolygon.CreateNativeObject();
@@ -1270,7 +1270,7 @@ namespace MeshKernelNET.Api
                                                     ref vertexIndex);
         }
 
-        public int GetSelectedVerticesInPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int inside, ref int[] selectedVertices)
+        public int GetSelectedVerticesInPolygon(int meshKernelId, DisposableGeometryList disposableGeometryListIn, int inside, ref int[] selectedVertices)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn?.CreateNativeObject() ?? new GeometryListNative { numberOfCoordinates = 0 };
 
@@ -1326,9 +1326,9 @@ namespace MeshKernelNET.Api
 
         public int Mesh2dInitializeOrthogonalization(int meshKernelId,
                                                      ProjectToLandBoundaryOptions projectToLandBoundaryOption,
-                                                     in OrthogonalizationParameters orthogonalizationParameters,
-                                                     in DisposableGeometryList geometryListNativePolygon,
-                                                     in DisposableGeometryList geometryListNativeLandBoundaries)
+                                                     OrthogonalizationParameters orthogonalizationParameters,
+                                                     DisposableGeometryList geometryListNativePolygon,
+                                                     DisposableGeometryList geometryListNativeLandBoundaries)
         {
             var projectToLandBoundaryOptionInt = (int)projectToLandBoundaryOption;
 
@@ -1376,7 +1376,7 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dIntersectionsFromPolygon(int meshKernelId,
-                                                  in DisposableGeometryList boundaryPolygon,
+                                                  DisposableGeometryList boundaryPolygon,
                                                   ref int[] edgeNodes,
                                                   ref int[] edgeIndex,
                                                   ref double[] edgeDistances,
@@ -1458,46 +1458,46 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dMakeGlobal(meshKernelId, numLongitudeNodes, numLatitudeNodes);
         }
 
-        public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryList, double scaleFactor)
+        public int Mesh2dMakeTriangularMeshFromPolygon(int meshKernelId, DisposableGeometryList disposableGeometryList, double scaleFactor)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dMakeTriangularMeshFromPolygon(meshKernelId, ref geometryListNative, scaleFactor);
         }
 
-        public int Mesh2dMakeTriangularMeshFromSamples(int meshKernelId, in DisposableGeometryList disposableGeometryList)
+        public int Mesh2dMakeTriangularMeshFromSamples(int meshKernelId, DisposableGeometryList disposableGeometryList)
         {
             GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dMakeTriangularMeshFromSamples(meshKernelId, ref geometryListNative);
         }
 
-        public int Mesh2dMakeRectangularMesh(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int Mesh2dMakeRectangularMesh(int meshKernelId, MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.Mesh2dMakeRectangularMesh(meshKernelId, ref makeGridParametersNative);
         }
 
-        public int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId, in MakeGridParameters makeGridParameters, in DisposableGeometryList geometryList)
+        public int Mesh2dMakeRectangularMeshFromPolygon(int meshKernelId, MakeGridParameters makeGridParameters, DisposableGeometryList geometryList)
         {
             GeometryListNative geometryListNative = geometryList.CreateNativeObject();
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.Mesh2dMakeRectangularMeshFromPolygon(meshKernelId, ref makeGridParametersNative, ref geometryListNative);
         }
 
-        public int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, in MakeGridParameters makeGridParameters)
+        public int Mesh2dMakeRectangularMeshOnExtension(int meshKernelId, MakeGridParameters makeGridParameters)
         {
             var makeGridParametersNative = makeGridParameters.ToMakeGridParametersNative();
             return MeshKernelDll.Mesh2dMakeRectangularMeshOnExtension(meshKernelId, ref makeGridParametersNative);
         }
 
         /// <inheritdoc/>
-        public int Mesh2dMergeNodes(int meshKernelId, in DisposableGeometryList disposableGeometryList)
+        public int Mesh2dMergeNodes(int meshKernelId, DisposableGeometryList disposableGeometryList)
         {
             GeometryListNative geometryList = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dMergeNodes(meshKernelId, ref geometryList);
         }
 
         /// <inheritdoc/>
-        public int Mesh2dMergeNodesWithMergingDistance(int meshKernelId, in DisposableGeometryList disposableGeometryList, double mergingDistance)
+        public int Mesh2dMergeNodesWithMergingDistance(int meshKernelId, DisposableGeometryList disposableGeometryList, double mergingDistance)
         {
             GeometryListNative geometryList = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.Mesh2dMergeNodesWithMergingDistance(meshKernelId, ref geometryList, mergingDistance);
@@ -1520,9 +1520,9 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
-                                                        in DisposableGeometryList polygons,
-                                                        in DisposableGriddedSamples<T> griddedSamples,
-                                                        in MeshRefinementParameters meshRefinementParameters,
+                                                        DisposableGeometryList polygons,
+                                                        DisposableGriddedSamples<T> griddedSamples,
+                                                        MeshRefinementParameters meshRefinementParameters,
                                                         bool useNodalRefinement)
         {
             GeometryListNative polygonsNative = polygons.CreateNativeObject();
@@ -1537,9 +1537,9 @@ namespace MeshKernelNET.Api
         }
 
         public int Mesh2dRefineRidgesBasedOnGriddedSamples<T>(int meshKernelId,
-                                                              in DisposableGeometryList polygons,
-                                                              in DisposableGriddedSamples<T> griddedSamples,
-                                                              in MeshRefinementParameters meshRefinementParameters,
+                                                              DisposableGeometryList polygons,
+                                                              DisposableGriddedSamples<T> griddedSamples,
+                                                              MeshRefinementParameters meshRefinementParameters,
                                                               double relativeSearchRadius,
                                                               int minimumNumSamples,
                                                               int numberOfSmoothingIterations)
@@ -1557,14 +1557,14 @@ namespace MeshKernelNET.Api
                                                                          ref meshRefinementParametersNative);
         }
 
-        public int Mesh2dRefineBasedOnPolygon(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, in MeshRefinementParameters meshRefinementParameters)
+        public int Mesh2dRefineBasedOnPolygon(int meshKernelId, DisposableGeometryList disposableGeometryListIn, MeshRefinementParameters meshRefinementParameters)
         {
             GeometryListNative disposableGeometryListInNative = disposableGeometryListIn.CreateNativeObject();
             var meshRefinementParametersNative = meshRefinementParameters.ToMeshRefinementParametersNative();
             return MeshKernelDll.Mesh2dRefineBasedOnPolygon(meshKernelId, ref disposableGeometryListInNative, ref meshRefinementParametersNative);
         }
 
-        public int Mesh2dRefineBasedOnSamples(int meshKernelId, in DisposableGeometryList polygons, in DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, in MeshRefinementParameters meshRefinementParameters)
+        public int Mesh2dRefineBasedOnSamples(int meshKernelId, DisposableGeometryList polygons, DisposableGeometryList disposableGeometryListIn, double relativeSearchRadius, int minimumNumSamples, MeshRefinementParameters meshRefinementParameters)
         {
             GeometryListNative polygonsNative = polygons.CreateNativeObject();
             GeometryListNative disposableGeometryListInNative = disposableGeometryListIn.CreateNativeObject();
@@ -1584,7 +1584,7 @@ namespace MeshKernelNET.Api
         }
 
         /// <inheritdoc/>
-        public int Mesh2dSet(int meshKernelId, in DisposableMesh2D disposableMesh2D)
+        public int Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D)
         {
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dSet(meshKernelId, ref mesh2D);
@@ -1602,7 +1602,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetInnerOuterSeparator();
         }
 
-        public int Mesh2dTriangulationInterpolation(int meshKernelId, in DisposableGeometryList samples, int locationType, ref DisposableGeometryList results)
+        public int Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, int locationType, ref DisposableGeometryList results)
         {
             if (samples.NumberOfCoordinates <= 0)
             {
@@ -1614,7 +1614,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, locationType, ref resultsNative);
         }
 
-        public int Network1dComputeFixedChainages(int meshKernelId, in double[] fixedChainages, double minFaceSize, double fixedChainagesOffset)
+        public int Network1dComputeFixedChainages(int meshKernelId, double[] fixedChainages, double minFaceSize, double fixedChainagesOffset)
         {
             int numFixedChainages = fixedChainages.Length;
             IntPtr fixedChainagesPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * numFixedChainages);
@@ -1629,7 +1629,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Network1dComputeOffsettedChainages(meshKernelId, offset);
         }
 
-        public int Network1dSet(int meshKernelId, in DisposableGeometryList offset)
+        public int Network1dSet(int meshKernelId, DisposableGeometryList offset)
         {
             GeometryListNative offsetNative = offset.CreateNativeObject();
             return MeshKernelDll.Network1dSet(meshKernelId, ref offsetNative);
@@ -1640,7 +1640,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Network1dToMesh1d(meshKernelId, minFaceSize);
         }
 
-        public int PolygonCountOffset(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
+        public int PolygonCountOffset(int meshKernelId, DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             int innerPolygonInt = innerPolygon ? 1 : 0;
@@ -1648,7 +1648,7 @@ namespace MeshKernelNET.Api
         }
 
         public int PolygonCountLinearRefine(int meshKernelId, 
-                                            in DisposableGeometryList disposableGeometryListIn,
+                                            DisposableGeometryList disposableGeometryListIn,
                                             int firstIndex,
                                             int secondIndex, ref int numberOfPolygonNodes)
         {
@@ -1656,13 +1656,13 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonCountLinearRefine(meshKernelId, ref geometryListNativeIn, firstIndex, secondIndex, ref numberOfPolygonNodes);
         }
 
-        public int PolygonCountEquidistantRefine(int meshKernelId, in DisposableGeometryList disposableGeometryList, int firstIndex, int secondIndex, double distance, ref int numberOfPolygonVertices)
+        public int PolygonCountEquidistantRefine(int meshKernelId, DisposableGeometryList disposableGeometryList, int firstIndex, int secondIndex, double distance, ref int numberOfPolygonVertices)
         {
             GeometryListNative geometryListInNative = disposableGeometryList.CreateNativeObject();
             return MeshKernelDll.PolygonCountEquidistantRefine(meshKernelId, ref geometryListInNative, firstIndex, secondIndex, distance, ref numberOfPolygonVertices);
         }
 
-        public int GetPointsInPolygon(int meshKernelId, in DisposableGeometryList inputPolygon, in DisposableGeometryList inputPoints, ref DisposableGeometryList selectedPoints)
+        public int GetPointsInPolygon(int meshKernelId, DisposableGeometryList inputPolygon, DisposableGeometryList inputPoints, ref DisposableGeometryList selectedPoints)
         {
             GeometryListNative geometryListNativeInputPolygon = inputPolygon.CreateNativeObject();
             GeometryListNative geometryListNativeinputPoints = inputPoints.CreateNativeObject();
@@ -1670,7 +1670,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetPointsInPolygon(meshKernelId, ref geometryListNativeInputPolygon, ref geometryListNativeinputPoints, ref geometryListNativeSelectedPoints);
         }
 
-        public int PolygonGetOffset(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref DisposableGeometryList disposableGeometryListOut)
+        public int PolygonGetOffset(int meshKernelId, DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref DisposableGeometryList disposableGeometryListOut)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             GeometryListNative geometryListNativeOut = disposableGeometryListOut.CreateNativeObject();
@@ -1678,7 +1678,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.PolygonGetOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref geometryListNativeOut);
         }
 
-        public int PolygonEquidistantRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+        public int PolygonEquidistantRefine(int meshKernelId, DisposableGeometryList disposableGeometryListIn, int firstIndex,
                                  int secondIndex, double distance, ref DisposableGeometryList disposableGeometryListOut)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
@@ -1687,7 +1687,7 @@ namespace MeshKernelNET.Api
         }
 
 
-        public int PolygonLinearRefine(int meshKernelId, in DisposableGeometryList disposableGeometryListIn, int firstIndex,
+        public int PolygonLinearRefine(int meshKernelId, DisposableGeometryList disposableGeometryListIn, int firstIndex,
                                        int secondIndex, ref DisposableGeometryList disposableGeometryListOut)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
@@ -1696,7 +1696,7 @@ namespace MeshKernelNET.Api
         }
 
         public int PolygonSnapToLandBoundary(int meshKernelId, 
-                                             in DisposableGeometryList landboundaries, 
+                                             DisposableGeometryList landboundaries, 
                                              ref DisposableGeometryList polygon,
                                              int firstIndex,
                                              int secondIndex)
@@ -1707,7 +1707,7 @@ namespace MeshKernelNET.Api
         }
 
         public int SplinesToLandBoundary(int meshKernelId, 
-            in DisposableGeometryList landboundaries, 
+            DisposableGeometryList landboundaries, 
             ref DisposableGeometryList splines, 
             int firstIndex,
             int secondIndex)

@@ -1553,15 +1553,15 @@ namespace MeshKernelNET.Api
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="polygons">The region which refinement is done, if empty the whole mesh will be considered</param>
-        /// <param name="griddedSamplesNative">The gridded samples</param>
+        /// <param name="griddedSamples">The gridded samples</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineBasedOnGriddedSamples<T>(int meshKernelId,
-                                                 DisposableGeometryList polygons,
-                                                 DisposableGriddedSamples<T> griddedSamplesNative,
-                                                 MeshRefinementParameters meshRefinementParameters,
-                                                 bool useNodalRefinement);
+        int Mesh2dRefineBasedOnGriddedSamples(int meshKernelId,
+                                              DisposableGeometryList polygons,
+                                              DisposableGriddedSamples griddedSamples,
+                                              MeshRefinementParameters meshRefinementParameters,
+                                              bool useNodalRefinement);
 
         /// <summary>
         /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges a sample set.
@@ -1574,13 +1574,13 @@ namespace MeshKernelNET.Api
         /// <param name="numberOfSmoothingIterations">The number of smoothing iterations to apply to the input sample set</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <returns>Error code</returns>
-        int Mesh2dRefineRidgesBasedOnGriddedSamples<T>(int meshKernelId,
-                                                       DisposableGeometryList polygons,
-                                                       DisposableGriddedSamples<T> griddedSamples,
-                                                       MeshRefinementParameters meshRefinementParameters,
-                                                       double relativeSearchRadius,
-                                                       int minimumNumSamples,
-                                                       int numberOfSmoothingIterations);
+        int Mesh2dRefineRidgesBasedOnGriddedSamples(int meshKernelId,
+                                                    DisposableGeometryList polygons,
+                                                    DisposableGriddedSamples griddedSamples,
+                                                    MeshRefinementParameters meshRefinementParameters,
+                                                    double relativeSearchRadius,
+                                                    int minimumNumSamples,
+                                                    int numberOfSmoothingIterations);
 
         /// <summary>
         /// Refines a grid based on polygon

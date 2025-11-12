@@ -2824,7 +2824,7 @@ namespace MeshKernelNETTest.Api
             {
                 DisposableMesh2D meshOut = null;
                 var polygons = new DisposableGeometryList();
-                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
+                var griddedSamples = new DisposableGriddedSamples(6, 7, 0, 0, 0, InterpolationType.Float);
                 
                 try
                 {
@@ -2852,9 +2852,9 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
-                    for (var i = 0; i < griddedSamples.Values.Length; ++i)
+                    for (var i = 0; i < griddedSamples.FloatValues.Length; ++i)
                     {
-                        griddedSamples.Values[i] = 0.05f;
+                        griddedSamples.FloatValues[i] = 0.05f;
                     }
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
@@ -2888,7 +2888,7 @@ namespace MeshKernelNETTest.Api
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
                 var polygons = new DisposableGeometryList();
-                var griddedSamples = new DisposableGriddedSamples<double>(6, 7, 0, 0, 0, (int)InterpolationTypes.Double);
+                var griddedSamples = new DisposableGriddedSamples(6, 7, 0, 0, 0, InterpolationType.Double);
                 
                 try
                 {
@@ -2945,7 +2945,7 @@ namespace MeshKernelNETTest.Api
                             // 2D Gaussian function
                             double value = amplitude * Math.Exp(-((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)) / (2 * sigma * sigma));
 
-                            griddedSamples.Values[j * griddedSamples.NumX + i] = value;
+                            griddedSamples.DoubleValues[j * griddedSamples.NumX + i] = value;
                         }
                     }
 

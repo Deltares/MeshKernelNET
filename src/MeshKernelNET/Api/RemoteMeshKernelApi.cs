@@ -18,7 +18,6 @@ namespace MeshKernelNET.Api
         public RemoteMeshKernelApi(IRemoteApiProxyProvider provider)
         {
             this.provider = provider;
-
             api = provider.CreateProxy();
         }
 

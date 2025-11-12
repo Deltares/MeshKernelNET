@@ -57,12 +57,8 @@ public class RemoteApiGenerator : IIncrementalGenerator
                 string arguments = string.Join(", ", method.Parameters.Select(p =>
                     $"{GetRefModifier(p.RefKind)}{p.Name}"));
 
-                string generic = method.IsGenericMethod
-                    ? $"<{string.Join(", ", method.TypeParameters.Select(tp => tp.Name))}>"
-                    : "";
-
                 sb.AppendLine("        /// <inheritdoc/>");
-                sb.AppendLine($"        public {returnType} {methodName}{generic}({parameters}) => api.{methodName}{generic}({arguments});");
+                sb.AppendLine($"        public {returnType} {methodName}({parameters}) => api.{methodName}({arguments});");
             }
 
             sb.AppendLine("    }");

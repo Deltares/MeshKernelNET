@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -6,12 +7,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MeshKernelNET.Generators;
 
 [Generator]
+[ExcludeFromCodeCoverage]
 public class RemoteApiGenerator : IIncrementalGenerator
 {
     private const string interfaceName = "IMeshKernelApi";
     private const string implementationName = "RemoteMeshKernelApi";
 
-    private static readonly SymbolDisplayFormat typeNameOnlyFormat = new SymbolDisplayFormat(
+    private static readonly SymbolDisplayFormat typeNameOnlyFormat = new(
         typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameOnly,
         genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
         miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
@@ -34,13 +36,15 @@ public class RemoteApiGenerator : IIncrementalGenerator
             var sb = new StringBuilder();
 
             sb.AppendLine("using System;");
+            sb.AppendLine("using System.Diagnostics.CodeAnalysis;");
             sb.AppendLine();
             sb.AppendLine($"namespace {typeSymbol.ContainingNamespace}");
             sb.AppendLine("{");
             sb.AppendLine("    /// <summary>");
             sb.AppendLine($"    /// Remote wrapper for <see cref=\"{interfaceName}\"/> that executes operations in a separate process.");
             sb.AppendLine("    /// </summary>");
-            sb.AppendLine($"    public partial class {implementationName}");
+            sb.AppendLine("    [ExcludeFromCodeCoverage]");
+            sb.AppendLine($"    public sealed partial class {implementationName}");
             sb.AppendLine("    {");
 
             foreach (IMethodSymbol method in typeSymbol.GetMembers().OfType<IMethodSymbol>())

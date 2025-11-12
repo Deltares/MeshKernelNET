@@ -1627,9 +1627,9 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Network1dComputeOffsettedChainages(meshKernelId, offset);
         }
 
-        public int Network1dSet(int meshKernelId, DisposableGeometryList offset)
+        public int Network1dSet(int meshKernelId, DisposableGeometryList polylines)
         {
-            GeometryListNative offsetNative = offset.CreateNativeObject();
+            GeometryListNative offsetNative = polylines.CreateNativeObject();
             return MeshKernelDll.Network1dSet(meshKernelId, ref offsetNative);
         }
 
@@ -1638,11 +1638,11 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.Network1dToMesh1d(meshKernelId, minFaceSize);
         }
 
-        public int PolygonCountOffset(int meshKernelId, DisposableGeometryList disposableGeometryListIn, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
+        public int PolygonCountOffset(int meshKernelId, DisposableGeometryList disposableGeometryList, bool innerPolygon, double distance, ref int numberOfPolygonVertices)
         {
-            GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
+            GeometryListNative geometryListNative = disposableGeometryList.CreateNativeObject();
             int innerPolygonInt = innerPolygon ? 1 : 0;
-            return MeshKernelDll.PolygonCountOffset(meshKernelId, ref geometryListNativeIn, innerPolygonInt, distance, ref numberOfPolygonVertices);
+            return MeshKernelDll.PolygonCountOffset(meshKernelId, ref geometryListNative, innerPolygonInt, distance, ref numberOfPolygonVertices);
         }
 
         public int PolygonCountLinearRefine(int meshKernelId, 

@@ -1707,14 +1707,14 @@ namespace MeshKernelNET.Api
         /// Count the number of polygon vertices after equidistant refinement
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="disposableGeometryListIn">The input polygon</param>
+        /// <param name="disposableGeometryList">The input polygon</param>
         /// <param name="firstIndex">The index of the first vertex</param>
         /// <param name="secondIndex">The index of the second vertex</param>
         /// <param name="distance">The refinement distance</param>
         /// <param name="numberOfPolygonVertices">The number of vertices after refinement </param>
         /// <returns>Error code</returns>
         int PolygonCountEquidistantRefine(int meshKernelId,
-                               DisposableGeometryList disposableGeometryListIn,
+                               DisposableGeometryList disposableGeometryList,
                                int firstIndex,
                                int secondIndex,
                                double distance,

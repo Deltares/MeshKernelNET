@@ -2461,9 +2461,8 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
-                    int[] hangingEdges = Array.Empty<int>();
-                    Assert.That(api.Mesh2dGetHangingEdges(id, out hangingEdges), Is.EqualTo(0));
-                    Assert.That(hangingEdges.Length, Is.EqualTo(0));
+                    Assert.That(api.Mesh2dGetHangingEdges(id, out var hangingEdges), Is.EqualTo(0));
+                    Assert.That(hangingEdges.Values.Length, Is.EqualTo(0));
                 }
                 finally
                 {

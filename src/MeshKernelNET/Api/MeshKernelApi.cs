@@ -536,7 +536,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.CurvilinearFrozenLinesGetCount(meshKernelId, ref numFrozenLines);
         }
 
-        public int CurvilinearFrozenLinesGetIds(int meshKernelId, out int[] frozenLinesIds)
+        public int CurvilinearFrozenLinesGetIds(int meshKernelId, out IntArrayWrapper frozenLinesIds)
         {
             int numFrozenLines = -1;
             MeshKernelDll.CurvilinearFrozenLinesGetCount(meshKernelId, ref numFrozenLines);
@@ -546,14 +546,14 @@ namespace MeshKernelNET.Api
                 return -1;
             }
 
-            frozenLinesIds = new int[numFrozenLines];
+            frozenLinesIds = new IntArrayWrapper(numFrozenLines);
             if (numFrozenLines == 0)
             {
                 return 0;
             }
-            IntPtr frozenLinesIdsPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * frozenLinesIds.Length);
+            IntPtr frozenLinesIdsPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(int)) * numFrozenLines);
             int success = MeshKernelDll.CurvilinearFrozenLinesGetIds(meshKernelId, frozenLinesIdsPtr);
-            Marshal.Copy(frozenLinesIdsPtr, frozenLinesIds, 0, frozenLinesIds.Length);
+            Marshal.Copy(frozenLinesIdsPtr, frozenLinesIds.Values, 0, numFrozenLines);
             Marshal.FreeCoTaskMem(frozenLinesIdsPtr);
             return success;
         }
@@ -1157,16 +1157,17 @@ namespace MeshKernelNET.Api
                                                ref edgeIndex);
         }
 
-        public int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges)
+        public int Mesh2dGetHangingEdges(int meshKernelId, out IntArrayWrapper hangingEdges)
         {
             int numberOfHangingEdges = -1;
-            hangingEdges = new int[] { };
             int exitCode = MeshKernelDll.Mesh2dCountHangingEdges(meshKernelId, ref numberOfHangingEdges);
             if (exitCode != 0)
             {
+                hangingEdges = null;
                 return exitCode;
             }
 
+            hangingEdges = new IntArrayWrapper(numberOfHangingEdges);
             if (numberOfHangingEdges <= 0)
             {
                 return 0;
@@ -1179,10 +1180,7 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            hangingEdges = new int[numberOfHangingEdges];
-
-            Marshal.Copy(hangingVerticesPtr, hangingEdges, 0, numberOfHangingEdges);
-
+            Marshal.Copy(hangingVerticesPtr, hangingEdges.Values, 0, numberOfHangingEdges);
             Marshal.FreeCoTaskMem(hangingVerticesPtr);
 
             return exitCode;

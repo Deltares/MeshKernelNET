@@ -578,7 +578,7 @@ namespace MeshKernelNET.Api
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="frozenLinesIds">The frozen line ids</param>
         /// <returns>Error code</returns>
-        int CurvilinearFrozenLinesGetIds(int meshKernelId, out int[] frozenLinesIds);
+        int CurvilinearFrozenLinesGetIds(int meshKernelId, out IntArrayWrapper frozenLinesIds);
         
         /// <summary>
         /// Sets the start and end nodes of the line to shift
@@ -1226,7 +1226,7 @@ namespace MeshKernelNET.Api
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="hangingEdges">Pointer to memory where the indices of the hanging edges will be stored</param>
         /// <returns>Error code</returns>
-        int Mesh2dGetHangingEdges(int meshKernelId, out int[] hangingEdges);
+        int Mesh2dGetHangingEdges(int meshKernelId, out IntArrayWrapper hangingEdges);
 
         /// <summary>
         /// Gets the index of the closest mesh edge

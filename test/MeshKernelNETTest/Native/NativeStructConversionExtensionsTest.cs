@@ -12,6 +12,9 @@ namespace MeshKernelNETTest.Native
     [TestFixture]
     public class NativeStructConversionExtensionsTest
     {
+        private const double geometrySeparator = -999.0;
+        private const double innerOuterSeparator = -998.0;
+
         [Test]
         public void GivenOrthogonalizationParameters_ToOrthogonalizationParametersNative_ShouldCreateOrthogonalizationParametersNativeWithValidDefaults()
         {
@@ -123,8 +126,6 @@ namespace MeshKernelNETTest.Native
             var multiPolygon = new List<Polygon>(new[] { polygonWithHole, polygon2 });
 
             // Act
-            double geometrySeparator = -999.0;
-            double innerouterSeparator = -998.0;
             var disposableGeometryList = multiPolygon.ToDisposableGeometryList(geometrySeparator, -998.0);
 
             // Assert
@@ -134,9 +135,9 @@ namespace MeshKernelNETTest.Native
 
             Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(expected + 2));
 
-            double[] expectedXCoordinates = new[] { 0, 10, 10, 0, 0, innerouterSeparator, 3, 7, 7, 3, 3, geometrySeparator, 5, 15, 15, 5, 5 };
-            double[] expectedYCoordinates = new[] { 0, 0, 10, 10, 0, innerouterSeparator, 3, 3, 7, 7, 3, geometrySeparator, 5, 5, 15, 15, 5 };
-            double[] expectedZCoordinates = new[] { 0, 0, 0, 0, 0, innerouterSeparator, 0, 0, 0, 0, 0, geometrySeparator, 0, 0, 0, 0, 0 };
+            double[] expectedXCoordinates = new[] { 0, 10, 10, 0, 0, innerOuterSeparator, 3, 7, 7, 3, 3, geometrySeparator, 5, 15, 15, 5, 5 };
+            double[] expectedYCoordinates = new[] { 0, 0, 10, 10, 0, innerOuterSeparator, 3, 3, 7, 7, 3, geometrySeparator, 5, 5, 15, 15, 5 };
+            double[] expectedZCoordinates = new[] { 0, 0, 0, 0, 0, innerOuterSeparator, 0, 0, 0, 0, 0, geometrySeparator, 0, 0, 0, 0, 0 };
 
             Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
             Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
@@ -150,18 +151,43 @@ namespace MeshKernelNETTest.Native
             var coordinates = new[] { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2), };
 
             // Act
-            double geometrySeparator = -999.0;
-            double innerouterSeparator = -998.0;
-            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerouterSeparator);
+            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
 
             // Assert
             var expectedXCoordinates = new[] { 0, 1, 2 };
             var expectedYCoordinates = new[] { 0, 1, 2 };
             var expectedZCoordinates = new[] { 0, 0, 0 };
 
-            Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
-            Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
-            Assert.That(disposableGeometryList.Values, Is.EqualTo(expectedZCoordinates));
+            Assert.Multiple(() =>
+            {
+                Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
+                Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
+                Assert.That(disposableGeometryList.Values, Is.EqualTo(expectedZCoordinates));
+                Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(3));
+                Assert.That(disposableGeometryList.GeometrySeparator, Is.EqualTo(geometrySeparator));
+                Assert.That(disposableGeometryList.InnerOuterSeparator, Is.EqualTo(innerOuterSeparator));
+            });
+        }
+
+        [Test]
+        public void GivenACoordinateArray_WithSingleCoordinate_ToDisposableGeometryList_ShouldConvertToValidDisposableGeometryList()
+        {
+            //Arrange
+            var coordinates = new[] { new Coordinate(1.23, 4.56, 7.89) };
+
+            // Act
+            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(new[] { 1.23 }));
+                Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(new[] { 4.56 }));
+                Assert.That(disposableGeometryList.Values, Is.EqualTo(new[] { 7.89 }));
+                Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(1));
+                Assert.That(disposableGeometryList.GeometrySeparator, Is.EqualTo(geometrySeparator));
+                Assert.That(disposableGeometryList.InnerOuterSeparator, Is.EqualTo(innerOuterSeparator));
+            });
         }
 
         [Test]
@@ -169,9 +195,7 @@ namespace MeshKernelNETTest.Native
         {
             //Arrange
             var coordinates = new[] { new Coordinate(0.0, 0.0), new Coordinate(1.0, 1.0), new Coordinate(2.0, 2.0), new Coordinate(0.0, 0.0), new Coordinate(-999.0, -999.0), new Coordinate(-998.0, -998.0) };
-            double geometrySeparator = -999.0;
-            double innerouterSeparator = -998.0;
-            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerouterSeparator);
+            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
 
             // Act
             ICollection<IPolygon> featureList = disposableGeometryList.ToPolygonList();

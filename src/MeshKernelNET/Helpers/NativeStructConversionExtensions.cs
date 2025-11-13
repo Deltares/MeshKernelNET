@@ -107,18 +107,31 @@ namespace MeshKernelNET.Helpers
         }
 
         /// <summary>
-        /// Converts a coordinate array into a <see cref="DisposableGeometryList"/>
+        /// Converts a collection of coordinates into a <see cref="DisposableGeometryList"/>.
         /// </summary>
-        /// <param name="coordinates">Coordinate array to convert</param>
-        /// <returns><see cref="DisposableGeometryList"/> with the coordinate array information</returns>
-        public static DisposableGeometryList ToDisposableGeometryList(this Coordinate[] coordinates, double geometrySeparator, double innerOuterSeparator)
+        /// <param name="coordinates">Coordinates to convert.</param>
+        /// <param name="geometrySeparator">The geometry separator.</param>
+        /// <param name="innerOuterSeparator">The separator for inner and outer polygons.</param>
+        /// <returns>A new <see cref="DisposableGeometryList"/> with the coordinates. </returns>
+        public static DisposableGeometryList ToDisposableGeometryList(this IEnumerable<Coordinate> coordinates, double geometrySeparator, double innerOuterSeparator)
         {
-            return DisposableGeometryListFromGeometries(new IGeometry[] { new LineString(coordinates) }, geometrySeparator, innerOuterSeparator);
+            return coordinates.ToArray().ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
         }
 
-        public static DisposableGeometryList ToDisposableGeometryList(this IList<Coordinate> pointValues, double geometrySeparator, double innerOuterSeparator)
+        /// <summary>
+        /// Converts an array of coordinates into a <see cref="DisposableGeometryList"/>.
+        /// </summary>
+        /// <param name="coordinates">Coordinates to convert.</param>
+        /// <param name="geometrySeparator">The geometry separator.</param>
+        /// <param name="innerOuterSeparator">The separator for inner and outer polygons.</param>
+        /// <returns>A new <see cref="DisposableGeometryList"/> with the coordinates. </returns>
+        public static DisposableGeometryList ToDisposableGeometryList(this Coordinate[] coordinates, double geometrySeparator, double innerOuterSeparator)
         {
-            return DisposableGeometryListFromGeometries(new IGeometry[] { new LineString(pointValues.Select(v => new Coordinate(v.X, v.Y, v.Z)).ToArray()) },
+            IGeometry geometry = coordinates.Length == 1
+                                     ? (IGeometry)new Point(coordinates[0])
+                                     : new LineString(coordinates);
+
+            return DisposableGeometryListFromGeometries(new[] { geometry },
                                                         geometrySeparator,
                                                         innerOuterSeparator);
         }

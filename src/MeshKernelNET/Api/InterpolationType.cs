@@ -2,7 +2,7 @@
 
 namespace MeshKernelNET.Api
 {
-    public enum InterpolationTypes
+    public enum InterpolationType
     {
         [Description("Short")]
         Short = 0,

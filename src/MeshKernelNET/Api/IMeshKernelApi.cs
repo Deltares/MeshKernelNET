@@ -107,8 +107,8 @@ namespace MeshKernelNET.Api
         /// Computes the curvature of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="direction">The direction which to compute the smoothness</param>
-        /// <param name="curvature">The grid curvature values the selected direction</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="curvature">The grid curvature values in the selected direction</param>
         /// <returns>Error code</returns>
         int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature);
 
@@ -140,13 +140,13 @@ namespace MeshKernelNET.Api
         /// Computes the smoothness of a curvilinear grid.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="direction">The direction which to compute the smoothness</param>
-        /// <param name="smoothness">The grid smoothness values the selected direction</param>
+        /// <param name="direction">The direction in which to compute the smoothness</param>
+        /// <param name="smoothness">The grid smoothness values in the selected direction</param>
         /// <returns>Error code</returns>
         int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness);
 
         /// <summary>
-        /// Computes a curvilinear mesh a polygon. 3 separate polygon nodes need to be selected.
+        /// Computes a curvilinear mesh in a polygon. 3 separate polygon nodes need to be selected.
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="geometryList">The input polygon</param>
@@ -159,7 +159,7 @@ namespace MeshKernelNET.Api
                                                      int firstNode, int secondNode, int thirdNode, bool useFourthSide);
 
         /// <summary>
-        /// Computes a curvilinear mesh a triangle. 3 separate polygon nodes need to be selected. The MeshKernel
+        /// Computes a curvilinear mesh in a triangle. 3 separate polygon nodes need to be selected. The MeshKernel
         /// implementation differs from the polygon case.
         /// For this reason a different api had to be made.
         /// </summary>
@@ -184,7 +184,7 @@ namespace MeshKernelNET.Api
 
 
         /// <summary>
-        /// Delete the exterior part of a rectangle the curvilinear grid
+        /// Delete the exterior part of a rectangle in the curvilinear grid
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="boundingBox">The bounding box defining the rectangle</param>
@@ -192,7 +192,7 @@ namespace MeshKernelNET.Api
         int CurvilinearDeleteExterior(int meshKernelId, BoundingBox boundingBox);
 
         /// <summary>
-        /// Delete the interior part of a rectangle the curvilinear grid
+        /// Delete the interior part of a rectangle in the curvilinear grid
         /// </summary>
         /// <param name="meshKernelId">Id of the mesh state</param>
         /// <param name="boundingBox">The bounding box defining the rectangle</param>
@@ -321,7 +321,7 @@ namespace MeshKernelNET.Api
         int CurvilinearInsertFace(int meshKernelId, double xCoordinate, double yCoordinate);
 
         /// <summary>
-        /// One advancement of the front curvilinear grid from splines (interactive)
+        /// One advancement of the front in curvilinear grid from splines (interactive)
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="layer"> The layer index</param>
@@ -329,7 +329,7 @@ namespace MeshKernelNET.Api
         int CurvilinearIterateOrthogonalGridFromSplines(int meshKernelId, int layer);
 
         /// <summary>
-        /// Attracts/repulses grid lines a block towards another set grid line
+        /// Attracts/repulses grid lines in a block towards another set grid line
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="repulsionParameter">
@@ -375,7 +375,7 @@ namespace MeshKernelNET.Api
                                   double xSecondGridLineNode,
                                   double ySecondGridLineNode);
 
-        /// @brief Computes the new grid, shifting the line towards the moved nodes and distributing the shifting block specified before
+        /// @brief Computes the new grid, shifting the line towards the moved nodes and distributing the shifting in block specified before
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <returns>Error code</returns>
         int CurvilinearLineShift(int meshKernelId);
@@ -441,7 +441,7 @@ namespace MeshKernelNET.Api
         /// Orthogonalize a curvilinear grid
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state </param>
-        /// <param name="orthogonalizationParameters">The orthogonalization parameters to use the algorithm</param>
+        /// <param name="orthogonalizationParameters">The orthogonalization parameters to use in the algorithm</param>
         /// <param name="xLowerLeftCorner">The x coordinate of the lower left corner of the block to orthogonalize</param>
         /// <param name="yLowerLeftCorner">The y coordinate of the lower left corner of the block to orthogonalize</param>
         /// <param name="xUpperRightCorner">The x coordinate of the upper right corner of the block to orthogonalize</param>
@@ -458,8 +458,8 @@ namespace MeshKernelNET.Api
         /// Curvilinear refinement over the entire grid
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state </param>
-        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute m-direction</param>
-        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute n-direction</param>
+        /// <param name="mRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in m-direction</param>
+        /// <param name="nRefinement">The amount of refinement (positive) o de-refinement (negative) to compute in n-direction</param>
         /// <returns>Error code</returns>
         int CurvilinearRefine(int meshKernelId, int mRefinement, int nRefinement);
 
@@ -512,7 +512,7 @@ namespace MeshKernelNET.Api
                                          double yUpperRightCorner);
 
         /// <summary>
-        /// Adds a frozen the meshkernel state. A frozen line is stored as a pair of coordinates.
+        /// Adds a frozen in the meshkernel state. A frozen line is stored as a pair of coordinates.
         /// The actual edges to freeze are computed during each algorithm execution, as they may change (for example, after a refinement operation).
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -531,7 +531,7 @@ namespace MeshKernelNET.Api
                                      ref int frozenLineId);
 
         /// <summary>
-        /// Deletes a frozen line the meshkernel state
+        /// Deletes a frozen line in the meshkernel state
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="frozenLineId">The id of the frozen line to delete</param>
@@ -565,10 +565,10 @@ namespace MeshKernelNET.Api
                                      ref double ySecondFrozenLineCoordinate);
 
         /// <summary>
-        /// Gets the number of stored frozen lines the state
+        /// Gets the number of stored frozen lines in the state
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="numFrozenLines">The number of stored frozen lines the state</param>
+        /// <param name="numFrozenLines">The number of stored frozen lines in the state</param>
         /// <returns>Error code</returns>
         int CurvilinearFrozenLinesGetCount(int meshKernelId, ref int numFrozenLines);
 
@@ -991,7 +991,7 @@ namespace MeshKernelNET.Api
         /// <param name="projectToLandBoundaryOption">The option to determine how to snap to land boundaries </param>
         /// <param name="orthogonalizationParameters">The structure containing the orthogonalization parameters </param>
         /// <param name="geometryListPolygon">The polygon where to perform the orthogonalization </param>
-        /// <param name="geometryListLandBoundaries">The land boundaries to account for the orthogonalization process </param>
+        /// <param name="geometryListLandBoundaries">The land boundaries to account for in the orthogonalization process </param>
         /// <returns>Error code</returns>
         int Mesh2dComputeOrthogonalization(int meshKernelId,
                                            ProjectToLandBoundaryOptions projectToLandBoundaryOption,
@@ -1016,7 +1016,7 @@ namespace MeshKernelNET.Api
         /// <param name="geometryListPolygon">Input polygon to define the region of the operation. Can be empty -> whole meshes are considered</param>
         /// <param name="searchFraction">Fraction of the shortest edge (along an edge to be connected) to use when determining neighbour edge closeness</param>
         /// <returns>Error code</returns>
-        int Mesh2dMergeAndConnectMeshes(int meshKernelId, DisposableMesh2D disposableMesh2D, DisposableGeometryList geometryListPolygon, double searchFraction);
+        int Mesh2dMergeAndConnectMeshes(int meshKernelId, DisposableMesh2D disposableMesh2D,DisposableGeometryList geometryListPolygon, double searchFraction);
 
         /// <summary>
         /// Converts the projection of a mesh2d
@@ -1051,7 +1051,7 @@ namespace MeshKernelNET.Api
         int Mesh2dSplitEdges(int meshKernelId, int firstEdgeNode, int lastEdgeNode);
 
         /// <summary>
-        /// Count the number of hanging edges a mesh2d.
+        /// Count the number of hanging edges in a mesh2d.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="numEdges">The number of hanging edges</param>
@@ -1059,10 +1059,10 @@ namespace MeshKernelNET.Api
         int Mesh2dCountHangingEdges(int meshKernelId, ref int numEdges);
 
         /// <summary>
-        /// Counts the number of polygon vertices contained the mesh boundary polygon
+        /// Counts the number of polygon vertices contained in the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="selectingPolygon">The input polygon for generating boundary polygon selected areas</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygon in selected areas</param>
         /// <param name="numberOfPolygonVertices">The number of polygon points</param>
         /// <returns>Error code</returns>
         int Mesh2dCountMeshBoundariesAsPolygons(int meshKernelId, DisposableGeometryList selectingPolygon, ref int numberOfPolygonVertices);
@@ -1077,7 +1077,7 @@ namespace MeshKernelNET.Api
         int Mesh2dCountSmallFlowEdgeCenters(int meshKernelId, double smallFlowEdgesLengthThreshold, ref int numSmallFlowEdges);
 
         /// <summary>
-        /// Deletes a mesh a polygon using several options
+        /// Deletes a mesh in a polygon using several options
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryListOut">The polygon where to perform the operation</param>
@@ -1280,7 +1280,7 @@ namespace MeshKernelNET.Api
         /// Retrives the mesh boundary polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="selectingPolygon">The input polygon for generating boundary polygon selected areas</param>
+        /// <param name="selectingPolygon">The input polygon for generating boundary polygon in selected areas</param>
         /// <param name="disposableGeometryList">The output network boundary polygon</param>
         /// <returns>Error code</returns>
         int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList);
@@ -1331,7 +1331,7 @@ namespace MeshKernelNET.Api
         int Mesh2dGetOrthogonality(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
 
         /// <summary>
-        /// Counts the number of polygon nodes contained the mesh boundary polygons computed function
+        /// Counts the number of polygon nodes contained in the mesh boundary polygons computed in function
         /// `mkernel_mesh2d_get_mesh_boundaries_as_polygons`
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
@@ -1363,7 +1363,7 @@ namespace MeshKernelNET.Api
         /// <param name="projectToLandBoundaryOption">The option to determine how to snap to land boundaries</param>
         /// <param name="orthogonalizationParameters">The structure containing the user defined orthogonalization parameters</param>
         /// <param name="geometryListNativePolygon">The polygon where to perform the orthogonalization</param>
-        /// <param name="geometryListNativeLandBoundaries">The land boundaries to account for the orthogonalization process</param>
+        /// <param name="geometryListNativeLandBoundaries">The land boundaries to account for in the orthogonalization process</param>
         /// <returns>Error code</returns>
         int Mesh2dInitializeOrthogonalization(int meshKernelId,
                                               ProjectToLandBoundaryOptions projectToLandBoundaryOption,
@@ -1455,7 +1455,7 @@ namespace MeshKernelNET.Api
         int Mesh2dMakeGlobal(int meshKernelId, int numLongitudeNodes, int numLatitudeNodes);
 
         /// <summary>
-        /// Make a triangular grid a polygon
+        /// Make a triangular grid in a polygon
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="disposableGeometryList">The polygon where to triangulate</param>
@@ -1552,7 +1552,7 @@ namespace MeshKernelNET.Api
         /// Refine based on gridded samples
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="polygons">The region which refinement is done, if empty the whole mesh will be considered</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="griddedSamples">The gridded samples</param>
         /// <param name="meshRefinementParameters">The mesh refinement parameters</param>
         /// <param name="useNodalRefinement">Use nodal refinement</param>
@@ -1564,10 +1564,10 @@ namespace MeshKernelNET.Api
                                               bool useNodalRefinement);
 
         /// <summary>
-        /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges a sample set.
+        /// Refines a mesh2d based on samples with ridge refinement. This method automatically detects the ridges in a sample set.
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
-        /// <param name="polygons">The region which refinement is done, if empty the whole mesh will be considered</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="griddedSamples">The gridded samples</param>
         /// <param name="relativeSearchRadius">The relative search radius relative to the face size, used for some interpolation algorithms</param>
         /// <param name="minimumNumSamples">The minimum number of samples used for some averaging algorithms</param>
@@ -1597,10 +1597,10 @@ namespace MeshKernelNET.Api
         /// Refines a grid based on samples
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
-        /// <param name="polygons">The region which refinement is done, if empty the whole mesh will be considered</param>
+        /// <param name="polygons">The region in which refinement is done, if empty the whole mesh will be considered</param>
         /// <param name="disposableGeometryListIn">The input samples</param>
         /// <param name="relativeSearchRadius">Search radius for refinement.</param>
-        /// <param name="minimumNumSamples">The minimum number of samples that must be added refinement</param>
+        /// <param name="minimumNumSamples">The minimum number of samples that must be added in refinement</param>
         /// <param name="meshRefinementParameters"><seealso cref="MeshRefinementParameters"/> specifying how to refine</param>
         /// <returns>Error code</returns>
         int Mesh2dRefineBasedOnSamples(int meshKernelId,
@@ -1616,7 +1616,7 @@ namespace MeshKernelNET.Api
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="centreX">X-coordinate of the centre of rotation</param>
         /// <param name="centreY">Y-coordinate of the centre of rotation</param>
-        /// <param name="angle">Angle of rotation degrees</param>
+        /// <param name="angle">Angle of rotation in degrees</param>
         /// <returns>Error code</returns>
         int Mesh2dRotate(int meshKernelId, double centreX, double centreY, double angle);
 
@@ -1636,7 +1636,7 @@ namespace MeshKernelNET.Api
         int Mesh2dSet(int meshKernelId, DisposableMesh2D disposableMesh2D);
 
         /// <summary>
-        /// Gets the double value used the back-end library as separator and missing value
+        /// Gets the double value used in the back-end library as separator and missing value
         /// </summary>
         /// <returns>The geometry separator</returns>
         double GetSeparator();
@@ -1736,12 +1736,12 @@ namespace MeshKernelNET.Api
                                       ref int numberOfPolygonVertices);
 
         /// <summary>
-        /// Selects points polygons
+        /// Selects points in polygons
         /// </summary>
         /// <param name="meshKernelId">Id of the grid state</param>
         /// <param name="inputPolygon">The polygon(s) used for selection</param>
         /// <param name="inputPoints">The points to select</param>
-        /// <param name="selectedPoints">The selected points the zCoordinates field (0.0 not selected, 1.0 selected)</param>
+        /// <param name="selectedPoints">The selected points in the zCoordinates field (0.0 not selected, 1.0 selected)</param>
         /// <returns>Error code</returns>
         int GetPointsInPolygon(int meshKernelId,
                                DisposableGeometryList inputPolygon,

@@ -191,6 +191,52 @@ namespace MeshKernelNETTest.Native
         }
 
         [Test]
+        public void GivenACoordinateCollection_ToDisposableGeometryList_ShouldConvertToValidDisposableGeometryList()
+        {
+            //Arrange
+            IEnumerable<Coordinate> coordinates = new[] { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2), }.AsEnumerable();
+
+            // Act
+            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
+
+            // Assert
+            var expectedXCoordinates = new[] { 0, 1, 2 };
+            var expectedYCoordinates = new[] { 0, 1, 2 };
+            var expectedZCoordinates = new[] { 0, 0, 0 };
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(expectedXCoordinates));
+                Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(expectedYCoordinates));
+                Assert.That(disposableGeometryList.Values, Is.EqualTo(expectedZCoordinates));
+                Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(3));
+                Assert.That(disposableGeometryList.GeometrySeparator, Is.EqualTo(geometrySeparator));
+                Assert.That(disposableGeometryList.InnerOuterSeparator, Is.EqualTo(innerOuterSeparator));
+            });
+        }
+
+        [Test]
+        public void GivenACoordinateCollection_WithSingleCoordinate_ToDisposableGeometryList_ShouldConvertToValidDisposableGeometryList()
+        {
+            //Arrange
+            IEnumerable<Coordinate> coordinates = new[] { new Coordinate(1.23, 4.56, 7.89) }.AsEnumerable();
+
+            // Act
+            var disposableGeometryList = coordinates.ToDisposableGeometryList(geometrySeparator, innerOuterSeparator);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(disposableGeometryList.XCoordinates, Is.EqualTo(new[] { 1.23 }));
+                Assert.That(disposableGeometryList.YCoordinates, Is.EqualTo(new[] { 4.56 }));
+                Assert.That(disposableGeometryList.Values, Is.EqualTo(new[] { 7.89 }));
+                Assert.That(disposableGeometryList.NumberOfCoordinates, Is.EqualTo(1));
+                Assert.That(disposableGeometryList.GeometrySeparator, Is.EqualTo(geometrySeparator));
+                Assert.That(disposableGeometryList.InnerOuterSeparator, Is.EqualTo(innerOuterSeparator));
+            });
+        }
+
+        [Test]
         public void GivenACollectionOfFeatures_ToFeatureList_ShouldConvertToValidFeatureList()
         {
             //Arrange

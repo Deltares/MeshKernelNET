@@ -1537,12 +1537,11 @@ namespace MeshKernelNETTest.Api
             api.CurvilinearFrozenLineAdd(id, 0.0, 0.0, 0.0, 2.0, ref frozenLineId);
 
             // Act
-            int[] frozenLinesIds;
-            int returnCode = api.CurvilinearFrozenLinesGetIds(id, out frozenLinesIds);
+            int returnCode = api.CurvilinearFrozenLinesGetIds(id, out var frozenLinesIds);
 
             // Assert
             Assert.That(returnCode, Is.EqualTo(0));
-            Assert.That(frozenLinesIds[0], Is.EqualTo(frozenLineId));
+            Assert.That(frozenLinesIds.Values[0], Is.EqualTo(frozenLineId));
         }
 
         [Test]

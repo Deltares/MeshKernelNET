@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshKernelNET.Generators", "src\MeshKernelNET.Generators\MeshKernelNET.Generators.csproj", "{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BC6B4877-9099-4959-AB56-BE28538FB539} = {D13A0EA4-B770-4003-A8E5-6ECEF1591740}
 		{CCABD237-C42C-4A32-8C52-E6B4B0BE6EAA} = {6E2D9D61-87C3-43CB-954F-D4D6D02BC6D2}
+		{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45} = {D13A0EA4-B770-4003-A8E5-6ECEF1591740}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {95422719-9EC8-468E-A6B3-42F5DDA562E8}

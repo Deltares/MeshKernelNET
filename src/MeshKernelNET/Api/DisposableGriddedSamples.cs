@@ -1,10 +1,11 @@
-﻿using MeshKernelNET.Native;
+﻿using System;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
 {
     [ProtoContract(AsReferenceDefault = true)]
-    public sealed class DisposableGriddedSamples<T> : DisposableNativeObject<GriddedSamplesNative>
+    public sealed class DisposableGriddedSamples : DisposableNativeObject<GriddedSamplesNative>
     {
         [ProtoMember(1)]
         private int numX;
@@ -28,12 +29,21 @@ namespace MeshKernelNET.Api
         private double[] coordinatesY;
 
         [ProtoMember(8)]
-        private T[] values;
+        private short[] shortValues;
 
         [ProtoMember(9)]
-        private int valueType;
+        private float[] floatValues;
 
-        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double cSize, int orgValueType)
+        [ProtoMember(10)]
+        private int[] intValues;
+
+        [ProtoMember(11)]
+        private double[] doubleValues;
+
+        [ProtoMember(12)]
+        private InterpolationType valueType;
+
+        public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double cSize, InterpolationType type)
         {
             numX = nX;
             numY = nY;
@@ -42,8 +52,27 @@ namespace MeshKernelNET.Api
             cellSize = cSize;
             coordinatesX = new double[numX];
             coordinatesY = new double[numY];
-            values = new T[numX * numY];
-            valueType = orgValueType;
+            valueType = type;
+
+            int length = numX * numY;
+
+            switch (type)
+            {
+                case InterpolationType.Short:
+                    shortValues = new short[length];
+                    break;
+                case InterpolationType.Float:
+                    floatValues = new float[length];
+                    break;
+                case InterpolationType.Int:
+                    intValues = new int[length];
+                    break;
+                case InterpolationType.Double:
+                    doubleValues = new double[length];
+                    break;
+                default:
+                    throw new ArgumentException($"Unsupported interpolation type: {type}", nameof(type));
+            }
         }
 
         ~DisposableGriddedSamples()
@@ -53,56 +82,74 @@ namespace MeshKernelNET.Api
 
         public int NumX
         {
-            get { return numX; }
-            set { numX = value; }
+            get => numX;
+            set => numX = value;
         }
 
         public int NumY
         {
-            get { return numY; }
-            set { numY = value; }
+            get => numY;
+            set => numY = value;
         }
 
         public double OriginX
         {
-            get { return originX; }
-            set { originX = value; }
+            get => originX;
+            set => originX = value;
         }
 
         public double OriginY
         {
-            get { return originY; }
-            set { originY = value; }
+            get => originY;
+            set => originY = value;
         }
 
         public double CellSize
         {
-            get { return cellSize; }
-            set { cellSize = value; }
+            get => cellSize;
+            set => cellSize = value;
         }
 
         public double[] CoordinatesX
         {
-            get { return coordinatesX; }
-            set { coordinatesX = value; }
+            get => coordinatesX;
+            set => coordinatesX = value;
         }
 
         public double[] CoordinatesY
         {
-            get { return coordinatesY; }
-            set { coordinatesY = value; }
+            get => coordinatesY;
+            set => coordinatesY = value;
         }
 
-        public T[] Values
+        public InterpolationType ValueType
         {
-            get { return values; }
-            set { values = value; }
+            get => valueType;
+            set => valueType = value;
         }
 
-        public int ValueType
+        public short[] ShortValues
         {
-            get { return valueType; }
-            set { valueType = value; }
+            get => shortValues;
+            set => shortValues = value;
+        }
+
+        public float[] FloatValues
+        {
+            get => floatValues;
+            set => floatValues = value;
+        }
+
+        public int[] IntValues
+        {
+            get => intValues;
+            set => intValues = value;
+        }
+        
+        public double[] DoubleValues
+        {
+            get => doubleValues;
+            set => doubleValues = value;
         }
 
         protected override void SetNativeObject(ref GriddedSamplesNative nativeObject)
@@ -114,8 +161,25 @@ namespace MeshKernelNET.Api
             nativeObject.cell_size = cellSize;
             nativeObject.coordinates_x = GetPinnedObjectPointer(coordinatesX);
             nativeObject.coordinates_y = GetPinnedObjectPointer(coordinatesY);
-            nativeObject.values = GetPinnedObjectPointer(values);
-            nativeObject.value_type = valueType;
+            nativeObject.value_type = (int)valueType;
+
+            switch (valueType)
+            {
+                case InterpolationType.Short:
+                    nativeObject.values = GetPinnedObjectPointer(shortValues);
+                    break;
+                case InterpolationType.Float:
+                    nativeObject.values = GetPinnedObjectPointer(floatValues);
+                    break;
+                case InterpolationType.Int:
+                    nativeObject.values = GetPinnedObjectPointer(intValues);
+                    break;
+                case InterpolationType.Double:
+                    nativeObject.values = GetPinnedObjectPointer(doubleValues);
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unsupported value type: {valueType}");
+            }
         }
     }
 }

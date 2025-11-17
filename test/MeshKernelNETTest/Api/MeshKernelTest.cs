@@ -2461,9 +2461,8 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
-                    int[] hangingEdges = Array.Empty<int>();
-                    Assert.That(api.Mesh2dGetHangingEdges(id, out hangingEdges), Is.EqualTo(0));
-                    Assert.That(hangingEdges.Length, Is.EqualTo(0));
+                    Assert.That(api.Mesh2dGetHangingEdges(id, out var hangingEdges), Is.EqualTo(0));
+                    Assert.That(hangingEdges.Values.Length, Is.EqualTo(0));
                 }
                 finally
                 {
@@ -2824,7 +2823,7 @@ namespace MeshKernelNETTest.Api
             {
                 DisposableMesh2D meshOut = null;
                 var polygons = new DisposableGeometryList();
-                var griddedSamples = new DisposableGriddedSamples<float>(6, 7, 0, 0, 0, (int)InterpolationTypes.Float);
+                var griddedSamples = new DisposableGriddedSamples(6, 7, 0, 0, 0, InterpolationType.Float);
                 
                 try
                 {
@@ -2852,9 +2851,9 @@ namespace MeshKernelNETTest.Api
                         griddedSamples.CoordinatesY[i] = coordinate + (i * dy);
                     }
 
-                    for (var i = 0; i < griddedSamples.Values.Length; ++i)
+                    for (var i = 0; i < griddedSamples.FloatValues.Length; ++i)
                     {
-                        griddedSamples.Values[i] = 0.05f;
+                        griddedSamples.FloatValues[i] = 0.05f;
                     }
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
@@ -2888,7 +2887,7 @@ namespace MeshKernelNETTest.Api
             using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
             {
                 var polygons = new DisposableGeometryList();
-                var griddedSamples = new DisposableGriddedSamples<double>(6, 7, 0, 0, 0, (int)InterpolationTypes.Double);
+                var griddedSamples = new DisposableGriddedSamples(6, 7, 0, 0, 0, InterpolationType.Double);
                 
                 try
                 {
@@ -2945,7 +2944,7 @@ namespace MeshKernelNETTest.Api
                             // 2D Gaussian function
                             double value = amplitude * Math.Exp(-((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)) / (2 * sigma * sigma));
 
-                            griddedSamples.Values[j * griddedSamples.NumX + i] = value;
+                            griddedSamples.DoubleValues[j * griddedSamples.NumX + i] = value;
                         }
                     }
 
@@ -3185,9 +3184,9 @@ namespace MeshKernelNETTest.Api
                     id = api.AllocateState(0);
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
                     Assert.That(api.Mesh2dDelete(id,
-                                                        in polygon,
-                                                        deleteMeshInsidePolygonOptions,
-                                                        invertSelection), Is.EqualTo(0));
+                                                 polygon,
+                                                 deleteMeshInsidePolygonOptions,
+                                                 invertSelection), Is.EqualTo(0));
                     Assert.That(api.Mesh2dGetData(id, out mesh2d), Is.EqualTo(0));
                     Assert.That(mesh.NumNodes, Is.Not.EqualTo(expectedNumNodes));
                     Assert.That(mesh.NumEdges, Is.Not.EqualTo(expectedNunEdges));
@@ -3596,7 +3595,7 @@ namespace MeshKernelNETTest.Api
 
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
-                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+                    api.Mesh2dSnapToLandBoundary(id, selectingPolygon, landBoundaries);
 
                     // Get mesh data after conversion
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));
@@ -3643,7 +3642,7 @@ namespace MeshKernelNETTest.Api
                     landBoundaries.NumberOfCoordinates = landBoundaries.XCoordinates.Length;
 
                     // execute
-                    api.Mesh2dSnapToLandBoundary(id, in selectingPolygon, in landBoundaries);
+                    api.Mesh2dSnapToLandBoundary(id, selectingPolygon, landBoundaries);
 
                     // assert - only first cell's nodes are snapped
                     Assert.That(api.Mesh2dGetData(id, out meshOut), Is.EqualTo(0));

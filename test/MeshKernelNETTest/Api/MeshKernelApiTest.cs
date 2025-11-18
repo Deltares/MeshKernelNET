@@ -8,8 +8,7 @@ using static MeshKernelNETTest.Api.TestUtilityFunctions;
 namespace MeshKernelNETTest.Api
 {
     [TestFixture]
-    [Category("MeshKernelNETMesh2DTests")]
-    public class MeshKernelTest
+    public class MeshKernelApiTest
     {
         [Test]
         public void Mesh2dDeleteNodeThroughApi()

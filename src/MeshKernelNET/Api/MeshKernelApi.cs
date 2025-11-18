@@ -174,14 +174,14 @@ namespace MeshKernelNET.Api
 
         public int CurvilinearDeleteExterior(int meshKernelId, BoundingBox boundingBox)
         {
-            BoundingBoxNative boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
             return MeshKernelDll.CurvilinearDeleteExterior(meshKernelId, ref boundingBoxNative);
         }
 
         public int CurvilinearDeleteInterior(int meshKernelId,
                                              BoundingBox boundingBox)
         {
-            BoundingBoxNative boundingBoxNative = boundingBox.ToBoundingBoxNative();
+            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
             return MeshKernelDll.CurvilinearDeleteInterior(meshKernelId, ref boundingBoxNative);
         }
 
@@ -227,7 +227,7 @@ namespace MeshKernelNET.Api
 
         public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN,  int upperRightM, out DisposableGeometryList boundaryPolygons)
         {
-            int numberOfPolygonNodes = 0; 
+            var numberOfPolygonNodes = 0; 
             boundaryPolygons = new DisposableGeometryList();
             int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId, 
                                                                                  lowerLeftN, 
@@ -611,40 +611,40 @@ namespace MeshKernelNET.Api
 
         public int CurvilinearSnapToLandBoundary(int meshKernelId,
                                                  DisposableGeometryList land,
-                                                 double sectionControlPoint1x,
-                                                 double sectionControlPoint1y,
-                                                 double sectionControlPoint2x,
-                                                 double sectionControlPoint2y,
+                                                 double sectionControlPoint1X,
+                                                 double sectionControlPoint1Y,
+                                                 double sectionControlPoint2X,
+                                                 double sectionControlPoint2Y,
                                                  double regionControlPointX,
                                                  double regionControlPointY)
         {
             var geometryListNative = land.CreateNativeObject();
             return MeshKernelDll.CurvilinearSnapToLandBoundary(meshKernelId,
                                                                ref geometryListNative,
-                                                               sectionControlPoint1x,
-                                                               sectionControlPoint1y,
-                                                               sectionControlPoint2x,
-                                                               sectionControlPoint2y,
+                                                               sectionControlPoint1X,
+                                                               sectionControlPoint1Y,
+                                                               sectionControlPoint2X,
+                                                               sectionControlPoint2Y,
                                                                regionControlPointX,
                                                                regionControlPointY);
         }
 
         public int CurvilinearSnapToSpline(int meshKernelId,
                                            DisposableGeometryList spline,
-                                           double sectionControlPoint1x,
-                                           double sectionControlPoint1y,
-                                           double sectionControlPoint2x,
-                                           double sectionControlPoint2y,
+                                           double sectionControlPoint1X,
+                                           double sectionControlPoint1Y,
+                                           double sectionControlPoint2X,
+                                           double sectionControlPoint2Y,
                                            double regionControlPointX,
                                            double regionControlPointY)
         {
             var geometryListNative = spline.CreateNativeObject();
             return MeshKernelDll.CurvilinearSnapToSpline(meshKernelId,
                                                          ref geometryListNative,
-                                                         sectionControlPoint1x,
-                                                         sectionControlPoint1y,
-                                                         sectionControlPoint2x,
-                                                         sectionControlPoint2y,
+                                                         sectionControlPoint1X,
+                                                         sectionControlPoint1Y,
+                                                         sectionControlPoint2X,
+                                                         sectionControlPoint2Y,
                                                          regionControlPointX,
                                                          regionControlPointY);
         }
@@ -941,7 +941,7 @@ namespace MeshKernelNET.Api
         public int Mesh2dMergeMeshes(int meshKernelId, 
                                      DisposableMesh2D disposableMesh2D)
         {
-            GeometryListNative geometryListPolygonNative = new GeometryListNative { numberOfCoordinates = 0 };
+            var geometryListPolygonNative = new GeometryListNative { numberOfCoordinates = 0 };
             Mesh2DNative mesh2D = disposableMesh2D.CreateNativeObject();
             return MeshKernelDll.Mesh2dConnectMeshes(meshKernelId,
                                                      ref mesh2D,

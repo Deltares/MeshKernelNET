@@ -2,6 +2,9 @@
 
 namespace MeshKernelNET.Api
 {
+    /// <summary>
+    /// Provides an API for mesh generation, manipulation, and analysis operations via the MeshKernel library.
+    /// </summary>
     public interface IMeshKernelApi : IDisposable
     {
         /// <summary>

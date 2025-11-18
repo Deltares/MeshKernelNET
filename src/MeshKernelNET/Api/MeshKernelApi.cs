@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Helpers;
@@ -7,9 +6,9 @@ using MeshKernelNET.Native;
 
 namespace MeshKernelNET.Api
 {
-    [ExcludeFromCodeCoverage]
-    // Excluded because it is tested through the MeshKernelApiRemote
-    // DotCover on the build server does not work correctly with remoting
+    /// <summary>
+    /// Provides an API for mesh generation, manipulation, and analysis operations via the MeshKernel library.
+    /// </summary>
     public sealed class MeshKernelApi : IMeshKernelApi
     {
         /// <inheritdoc/>

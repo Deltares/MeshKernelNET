@@ -1,4 +1,5 @@
-﻿using MeshKernelNET.Native;
+﻿using MeshKernelNET.Helpers;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -139,6 +140,14 @@ namespace MeshKernelNET.Api
             nativeObject.node_y = GetPinnedObjectPointer(NodeY);
             nativeObject.num_m = numM;
             nativeObject.num_n = numN;
+        }
+
+        public void UpdateFromNativeObject(ref CurvilinearGridNative nativeObject)
+        {
+            NumM = nativeObject.num_m;
+            NumN = nativeObject.num_n;
+            NodeX = nativeObject.node_x.CreateValueArray<double>(nativeObject.num_m * nativeObject.num_n);
+            NodeY = nativeObject.node_y.CreateValueArray<double>(nativeObject.num_m * nativeObject.num_n);
         }
     }
 }

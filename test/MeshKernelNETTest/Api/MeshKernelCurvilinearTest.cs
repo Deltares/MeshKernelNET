@@ -7,7 +7,6 @@ using NUnit.Framework;
 namespace MeshKernelNETTest.Api
 {
     [TestFixture]
-    [Category("MeshKernelNETCurvilinearTests")]
     public class MeshKernelCurvilinearTest
     {
         public static DisposableCurvilinearGrid CreateCurvilinearGrid(

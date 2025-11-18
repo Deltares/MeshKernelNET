@@ -8,7 +8,6 @@ using static MeshKernelNETTest.Api.TestUtilityFunctions;
 namespace MeshKernelNETTest.Api
 {
     [TestFixture]
-    [Category("MeshKernelNETMesh2DTests")]
     public class MeshKernelApiTest
     {
         [Test]

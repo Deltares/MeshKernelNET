@@ -4,7 +4,6 @@ using NUnit.Framework;
 namespace MeshKernelNETTest.Api
 {
     [TestFixture]
-    [Category("MeshKernelNETNetwork1DTests")]
     public class MeshKernelNETNetwork1DTests
     {
         [Test]

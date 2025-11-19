@@ -18,9 +18,9 @@ namespace MeshKernelNETTest.Api
                 NodeY = new[] { 0.0, 0.0, 0.0, 0.0 },
                 EdgeNodes = new[] { 0, 1, 1, 2, 2, 3 },
                 NumNodes = 4,
-                NumEdges = 6,
+                NumEdges = 3,
                 NumValidNodes = 4,
-                NumValidEdges = 6
+                NumValidEdges = 3
             };
 
             using (nativeMesh)
@@ -35,9 +35,9 @@ namespace MeshKernelNETTest.Api
                 Assert.That(managedMesh.NodeY, Is.EqualTo(new[] { 0.0, 0.0, 0.0, 0.0 }));
                 Assert.That(managedMesh.EdgeNodes, Is.EqualTo(new[] { 0, 1, 1, 2, 2, 3 }));
                 Assert.That(managedMesh.NumNodes, Is.EqualTo(4));
-                Assert.That(managedMesh.NumEdges, Is.EqualTo(6));
+                Assert.That(managedMesh.NumEdges, Is.EqualTo(3));
                 Assert.That(managedMesh.NumValidNodes, Is.EqualTo(4));
-                Assert.That(managedMesh.NumValidEdges, Is.EqualTo(6));
+                Assert.That(managedMesh.NumValidEdges, Is.EqualTo(3));
             }
         }
     }

@@ -102,7 +102,7 @@ namespace MeshKernelNET.Api
 
         public void UpdateFromNativeObject(ref Mesh1DNative nativeObject)
         {
-            EdgeNodes = nativeObject.edge_nodes.CreateValueArray<int>(nativeObject.num_edges);
+            EdgeNodes = nativeObject.edge_nodes.CreateValueArray<int>(nativeObject.num_edges * 2);
             NodeX = nativeObject.node_x.CreateValueArray<double>(nativeObject.num_nodes);
             NodeY = nativeObject.node_y.CreateValueArray<double>(nativeObject.num_nodes);
             NumValidNodes = nativeObject.num_valid_nodes;

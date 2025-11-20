@@ -1,4 +1,5 @@
-﻿using MeshKernelNET.Native;
+﻿using MeshKernelNET.Helpers;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -54,6 +55,13 @@ namespace MeshKernelNET.Api
             nativeObject.mesh1d_indices = GetPinnedObjectPointer(Mesh1dIndices);
             nativeObject.mesh2d_indices = GetPinnedObjectPointer(Mesh2dIndices);
             nativeObject.num_contacts = NumContacts;
+        }
+
+        public void UpdateFromNativeObject(ref ContactsNative nativeObject)
+        {
+            Mesh1dIndices = nativeObject.mesh1d_indices.CreateValueArray<int>(nativeObject.num_contacts);
+            Mesh2dIndices = nativeObject.mesh2d_indices.CreateValueArray<int>(nativeObject.num_contacts);
+            NumContacts = nativeObject.num_contacts;
         }
     }
 }

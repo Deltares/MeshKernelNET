@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Helpers;
 using MeshKernelNET.Native;
@@ -61,24 +60,26 @@ namespace MeshKernelNET.Api
         public int ContactsGetData(int meshKernelId, out DisposableContacts disposableContacts)
         {
             disposableContacts = new DisposableContacts();
-            ContactsNative contacts = disposableContacts.CreateNativeObject();
-            int exitCode = MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contacts);
+            var contactsNative = new ContactsNative();
+            
+            int exitCode = MeshKernelDll.ContactsGetDimensions(meshKernelId, ref contactsNative);
             if (exitCode != 0)
             {
                 return exitCode;
             }
 
-            disposableContacts = new DisposableContacts(contacts.num_contacts);
-            contacts = disposableContacts.CreateNativeObject();
-            exitCode = MeshKernelDll.ContactsGetData(meshKernelId, ref contacts);
-            if (exitCode != 0)
+            using (var exchangeContacts = new DisposableContacts(contactsNative.num_contacts))
             {
+                contactsNative = exchangeContacts.CreateNativeObject();
+                exitCode = MeshKernelDll.ContactsGetData(meshKernelId, ref contactsNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                disposableContacts.UpdateFromNativeObject(ref contactsNative);
                 return exitCode;
             }
-
-            disposableContacts = CreateDisposableContacts(contacts);
-
-            return exitCode;
         }
 
         public int Mesh2dSnapToLandBoundary(int meshKernelId, DisposableGeometryList selectingPolygon, DisposableGeometryList landBoundaries)
@@ -202,33 +203,34 @@ namespace MeshKernelNET.Api
 
         public int CurvilinearGridGetData(int meshKernelId, out DisposableCurvilinearGrid disposableCurvilinearGrid)
         {
-            var curvilinearGrid = new CurvilinearGridNative();
+            disposableCurvilinearGrid = new DisposableCurvilinearGrid();
+            var curvilinearGridNative = new CurvilinearGridNative();
 
-            int exitCode = MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGrid);
+            int exitCode = MeshKernelDll.CurvilinearGetDimensions(meshKernelId, ref curvilinearGridNative);
             if (exitCode != 0)
             {
-                disposableCurvilinearGrid = new DisposableCurvilinearGrid();
                 return exitCode;
             }
 
-            disposableCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGrid.num_n, curvilinearGrid.num_m);
-            curvilinearGrid = disposableCurvilinearGrid.CreateNativeObject();
-
-            exitCode = MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGrid);
-            if (exitCode != 0)
+            using (var exchangeCurvilinearGrid = new DisposableCurvilinearGrid(curvilinearGridNative.num_n, curvilinearGridNative.num_m))
             {
-                disposableCurvilinearGrid = new DisposableCurvilinearGrid();
+                curvilinearGridNative = exchangeCurvilinearGrid.CreateNativeObject();
+                exitCode = MeshKernelDll.CurvilinearGetData(meshKernelId, ref curvilinearGridNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                disposableCurvilinearGrid.UpdateFromNativeObject(ref curvilinearGridNative);
                 return exitCode;
             }
-
-            disposableCurvilinearGrid = CreateDisposableCurvilinearGrid(curvilinearGrid);
-            return exitCode;
         }
 
         public int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN,  int upperRightM, out DisposableGeometryList boundaryPolygons)
         {
-            var numberOfPolygonNodes = 0; 
             boundaryPolygons = new DisposableGeometryList();
+            
+            var numberOfPolygonNodes = 0; 
             int exitCode = MeshKernelDll.CurvilinearCountGetBoundariesAsPolygons(meshKernelId, 
                                                                                  lowerLeftN, 
                                                                                  lowerLeftM, 
@@ -240,15 +242,12 @@ namespace MeshKernelNET.Api
                 return exitCode;
             }
 
-            using(var exchangePolygons = new DisposableGeometryList())
+            using (var exchangeBoundaryPolygons = new DisposableGeometryList(numberOfPolygonNodes))
             {
-                exchangePolygons.NumberOfCoordinates = numberOfPolygonNodes;
-                exchangePolygons.XCoordinates = new double[numberOfPolygonNodes];
-                exchangePolygons.YCoordinates = new double[numberOfPolygonNodes];
-                exchangePolygons.GeometrySeparator = GetSeparator();
-                exchangePolygons.InnerOuterSeparator = GetInnerOuterSeparator();
+                exchangeBoundaryPolygons.GeometrySeparator = GetSeparator();
+                exchangeBoundaryPolygons.InnerOuterSeparator = GetInnerOuterSeparator();
 
-                var geometryListNative = exchangePolygons.CreateNativeObject();
+                var geometryListNative = exchangeBoundaryPolygons.CreateNativeObject();
                 exitCode = MeshKernelDll.CurvilinearGetBoundariesAsPolygons(meshKernelId,
                                                                             lowerLeftN,
                                                                             lowerLeftM,
@@ -261,13 +260,9 @@ namespace MeshKernelNET.Api
                     return exitCode;
                 }
 
-                boundaryPolygons.NumberOfCoordinates = exchangePolygons.NumberOfCoordinates;
-                boundaryPolygons.XCoordinates = geometryListNative.xCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
-                boundaryPolygons.YCoordinates = geometryListNative.yCoordinates.CreateValueArray<double>(numberOfPolygonNodes);
-                boundaryPolygons.GeometrySeparator = exchangePolygons.GeometrySeparator;
-                boundaryPolygons.InnerOuterSeparator = exchangePolygons.InnerOuterSeparator;
+                boundaryPolygons.UpdateFromNativeObject(ref geometryListNative);
+                return exitCode;
             }
-            return exitCode;
         }
 
         public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
@@ -287,6 +282,7 @@ namespace MeshKernelNET.Api
                                                                  ref locationIndex);
             return exitCode;
         }
+        
         public int CurvilinearGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
             int locationType = -1;
@@ -823,25 +819,27 @@ namespace MeshKernelNET.Api
 
         public int Mesh1dGetData(int meshKernelId, out DisposableMesh1D disposableMesh1D)
         {
-            var newMesh1D = new Mesh1DNative();
+            disposableMesh1D = new DisposableMesh1D();
+            var mesh1DNative = new Mesh1DNative();
 
-            int exitCode = MeshKernelDll.Mesh1dGetDimensions(meshKernelId, ref newMesh1D);
-
+            int exitCode = MeshKernelDll.Mesh1dGetDimensions(meshKernelId, ref mesh1DNative);
             if (exitCode != 0)
             {
-                disposableMesh1D = new DisposableMesh1D();
                 return exitCode;
             }
 
-            disposableMesh1D = new DisposableMesh1D(newMesh1D.num_nodes,
-                                                    newMesh1D.num_edges);
-
-            newMesh1D = disposableMesh1D.CreateNativeObject();
-
-            exitCode = MeshKernelDll.Mesh1dGetData(meshKernelId, ref newMesh1D);
-            disposableMesh1D = CreateDisposableMesh1d(newMesh1D);
-
-            return exitCode;
+            using (var exchangeMesh1D = new DisposableMesh1D(mesh1DNative.num_nodes, mesh1DNative.num_edges))
+            {
+                mesh1DNative = exchangeMesh1D.CreateNativeObject();
+                exitCode = MeshKernelDll.Mesh1dGetData(meshKernelId, ref mesh1DNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+            
+                disposableMesh1D.UpdateFromNativeObject(ref mesh1DNative);
+                return exitCode;
+            }
         }
 
         public int Mesh1dSet(int meshKernelId, DisposableMesh1D disposableMesh1D)
@@ -1087,54 +1085,60 @@ namespace MeshKernelNET.Api
 
         public int Mesh2dGetData(int meshKernelId, out DisposableMesh2D disposableMesh2D)
         {
-            var newMesh2D = new Mesh2DNative();
-
-            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
-
+            disposableMesh2D = new DisposableMesh2D();
+            var mesh2DNative = new Mesh2DNative();
+            
+            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref mesh2DNative);
             if (exitCode != 0)
             {
-                disposableMesh2D = new DisposableMesh2D();
                 return exitCode;
             }
 
-            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
-                                                    newMesh2D.num_edges,
-                                                    newMesh2D.num_faces,
-                                                    newMesh2D.num_face_nodes,
-                                                    newMesh2D.num_valid_nodes,
-                                                    newMesh2D.num_valid_edges);
-
-            newMesh2D = disposableMesh2D.CreateNativeObject();
-
-            exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref newMesh2D);
-            disposableMesh2D = CreateDisposableMesh2D(newMesh2D, true);
-
-            return exitCode;
+            using (var exchangeMesh2D = new DisposableMesh2D(mesh2DNative.num_nodes,
+                                                             mesh2DNative.num_edges,
+                                                             mesh2DNative.num_faces,
+                                                             mesh2DNative.num_face_nodes,
+                                                             mesh2DNative.num_valid_nodes,
+                                                             mesh2DNative.num_valid_edges))
+            {
+                mesh2DNative = exchangeMesh2D.CreateNativeObject();
+                exitCode = MeshKernelDll.Mesh2dGetData(meshKernelId, ref mesh2DNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+            
+                disposableMesh2D.UpdateFromNativeObject(ref mesh2DNative, true);
+                return exitCode;   
+            }
         }
 
         public int Mesh2dGetNodeEdgeData(int meshKernelId, out DisposableMesh2D disposableMesh2D)
         {
-            var newMesh2D = new Mesh2DNative();
-
-            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref newMesh2D);
-
+            var mesh2DNative = new Mesh2DNative();
+            disposableMesh2D = new DisposableMesh2D();
+            
+            int exitCode = MeshKernelDll.Mesh2DGetDimensions(meshKernelId, ref mesh2DNative);
             if (exitCode != 0)
             {
-                disposableMesh2D = new DisposableMesh2D();
                 return exitCode;
             }
 
-            disposableMesh2D = new DisposableMesh2D(newMesh2D.num_nodes,
-                                                    newMesh2D.num_edges, 
-                                                    newMesh2D.num_valid_nodes, 
-                                                    newMesh2D.num_valid_edges);
-
-            newMesh2D = disposableMesh2D.CreateNativeObject();
-
-            exitCode = MeshKernelDll.Mesh2dGetNodeEdgeData(meshKernelId, ref newMesh2D);
-            disposableMesh2D = CreateDisposableMesh2D(newMesh2D);
-
-            return exitCode;
+            using (var exchangeMesh2D = new DisposableMesh2D(mesh2DNative.num_nodes,
+                                                             mesh2DNative.num_edges,
+                                                             mesh2DNative.num_valid_nodes,
+                                                             mesh2DNative.num_valid_edges))
+            {
+                mesh2DNative = exchangeMesh2D.CreateNativeObject();
+                exitCode = MeshKernelDll.Mesh2dGetNodeEdgeData(meshKernelId, ref mesh2DNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+            
+                disposableMesh2D.UpdateFromNativeObject(ref mesh2DNative);
+                return exitCode;
+            }
         }
 
         public int Mesh2dGetEdge(int meshKernelId,
@@ -1176,6 +1180,7 @@ namespace MeshKernelNET.Api
             exitCode = MeshKernelDll.Mesh2dGetHangingEdges(meshKernelId, hangingVerticesPtr);
             if (exitCode != 0)
             {
+                Marshal.FreeCoTaskMem(hangingVerticesPtr);
                 return exitCode;
             }
 
@@ -1729,72 +1734,6 @@ namespace MeshKernelNET.Api
         public int UndoState(ref bool undone, ref int meshKernelId)
         {
             return MeshKernelDll.UndoState(ref undone, ref meshKernelId);
-        }
-
-        private DisposableMesh2D CreateDisposableMesh2D(Mesh2DNative newMesh2DNative, bool addCellInformation = false)
-        {
-            var disposableMesh2D = new DisposableMesh2D
-            {
-                NodeX = newMesh2DNative.node_x.CreateValueArray<double>(newMesh2DNative.num_nodes),
-                NodeY = newMesh2DNative.node_y.CreateValueArray<double>(newMesh2DNative.num_nodes),
-                EdgeNodes = newMesh2DNative.edge_nodes.CreateValueArray<int>(newMesh2DNative.num_edges * 2).ToArray(),
-                NumEdges = newMesh2DNative.num_edges,
-                NumNodes = newMesh2DNative.num_nodes,
-                NumValidNodes = newMesh2DNative.num_valid_nodes,
-                NumValidEdges = newMesh2DNative.num_valid_edges
-            };
-
-            if (addCellInformation && newMesh2DNative.num_faces > 0)
-            {
-                disposableMesh2D.NumFaces = newMesh2DNative.num_faces;
-                disposableMesh2D.NodesPerFace = newMesh2DNative.nodes_per_face.CreateValueArray<int>(newMesh2DNative.num_faces);
-                int numFaceNodes = disposableMesh2D.NodesPerFace.Sum();
-                disposableMesh2D.FaceNodes = newMesh2DNative.face_nodes.CreateValueArray<int>(numFaceNodes);
-                disposableMesh2D.FaceX = newMesh2DNative.face_x.CreateValueArray<double>(newMesh2DNative.num_faces);
-                disposableMesh2D.FaceY = newMesh2DNative.face_y.CreateValueArray<double>(newMesh2DNative.num_faces);
-            }
-
-            return disposableMesh2D;
-        }
-
-        private DisposableMesh1D CreateDisposableMesh1d(Mesh1DNative newMesh1DNative)
-        {
-            var disposableMesh1D = new DisposableMesh1D
-            {
-                EdgeNodes = newMesh1DNative.edge_nodes.CreateValueArray<int>(newMesh1DNative.num_edges),
-                NodeX = newMesh1DNative.node_x.CreateValueArray<double>(newMesh1DNative.num_nodes),
-                NodeY = newMesh1DNative.node_y.CreateValueArray<double>(newMesh1DNative.num_nodes),
-                NumNodes = newMesh1DNative.num_nodes,
-                NumEdges = newMesh1DNative.num_edges,
-                NumValidNodes = newMesh1DNative.num_valid_nodes,
-                NumValidEdges = newMesh1DNative.num_valid_edges,
-            };
-            return disposableMesh1D;
-        }
-
-        private DisposableCurvilinearGrid CreateDisposableCurvilinearGrid(CurvilinearGridNative curvilinearGridNative)
-        {
-            var disposableCurvilinearGrid = new DisposableCurvilinearGrid
-            {
-                NumM = curvilinearGridNative.num_m,
-                NumN = curvilinearGridNative.num_n,
-                NodeX = curvilinearGridNative.node_x.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
-                NodeY = curvilinearGridNative.node_y.CreateValueArray<double>(curvilinearGridNative.num_m * curvilinearGridNative.num_n),
-            };
-
-            return disposableCurvilinearGrid;
-        }
-
-        private DisposableContacts CreateDisposableContacts(ContactsNative contactsNative)
-        {
-            var disposableContacts = new DisposableContacts
-            {
-                Mesh1dIndices = contactsNative.mesh1d_indices.CreateValueArray<int>(contactsNative.num_contacts),
-                Mesh2dIndices = contactsNative.mesh2d_indices.CreateValueArray<int>(contactsNative.num_contacts),
-                NumContacts = contactsNative.num_contacts
-            };
-
-            return disposableContacts;
         }
 
         public void Dispose()

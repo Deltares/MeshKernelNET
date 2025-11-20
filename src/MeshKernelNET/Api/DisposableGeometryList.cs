@@ -1,4 +1,5 @@
-﻿using MeshKernelNET.Native;
+﻿using MeshKernelNET.Helpers;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -24,6 +25,18 @@ namespace MeshKernelNET.Api
         [ProtoMember(6)]
         private double[] values;
 
+        public DisposableGeometryList()
+        {
+        }
+
+        public DisposableGeometryList(int numberOfCoordinates)
+        {
+            NumberOfCoordinates = numberOfCoordinates;
+            XCoordinates = new double[numberOfCoordinates];
+            YCoordinates = new double[numberOfCoordinates];
+            Values = new double[numberOfCoordinates];
+        }
+
         ~DisposableGeometryList()
         {
             Dispose(false);
@@ -32,7 +45,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Separator used for separating multiple geometries
         /// </summary>
-
         public double GeometrySeparator
         {
             get { return geometrySeparator; }
@@ -42,7 +54,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Separator used for separating the outer and inner rings of a polygon geometry
         /// </summary>
-
         public double InnerOuterSeparator
         {
             get { return innerOuterSeparator; }
@@ -52,7 +63,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// Total number of coordinates (including separators)
         /// </summary>
-
         public int NumberOfCoordinates
         {
             get { return numberOfCoordinates; }
@@ -62,7 +72,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// The x coordinates of the geometries
         /// </summary>
-
         public double[] XCoordinates
         {
             get { return xCoordinates; }
@@ -72,7 +81,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// The y coordinates of the geometries
         /// </summary>
-
         public double[] YCoordinates
         {
             get { return yCoordinates; }
@@ -82,7 +90,6 @@ namespace MeshKernelNET.Api
         /// <summary>
         /// The values for the coordinates of the geometries
         /// </summary>
-
         public double[] Values
         {
             get { return values; }
@@ -97,6 +104,16 @@ namespace MeshKernelNET.Api
             nativeObject.numberOfCoordinates = NumberOfCoordinates;
             nativeObject.geometrySeperator = GeometrySeparator;
             nativeObject.innerOuterSeperator = InnerOuterSeparator;
+        }
+
+        public void UpdateFromNativeObject(ref GeometryListNative nativeObject)
+        {
+            XCoordinates = nativeObject.xCoordinates.CreateValueArray<double>(nativeObject.numberOfCoordinates);
+            YCoordinates = nativeObject.yCoordinates.CreateValueArray<double>(nativeObject.numberOfCoordinates);
+            Values = nativeObject.zCoordinates.CreateValueArray<double>(nativeObject.numberOfCoordinates);
+            NumberOfCoordinates = nativeObject.numberOfCoordinates;
+            GeometrySeparator = nativeObject.geometrySeperator;
+            InnerOuterSeparator = nativeObject.innerOuterSeperator;
         }
     }
 }

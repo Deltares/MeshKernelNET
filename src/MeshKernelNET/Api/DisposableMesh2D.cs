@@ -1,4 +1,6 @@
-﻿using MeshKernelNET.Native;
+﻿using System.Linq;
+using MeshKernelNET.Helpers;
+using MeshKernelNET.Native;
 using ProtoBuf;
 
 namespace MeshKernelNET.Api
@@ -270,6 +272,26 @@ namespace MeshKernelNET.Api
             nativeObject.num_valid_edges = NumValidEdges;
             nativeObject.num_faces = NumFaces;
             nativeObject.num_face_nodes = NumFaceNodes;
+        }
+
+        public void UpdateFromNativeObject(ref Mesh2DNative nativeObject, bool addCellInformation = false)
+        {
+            EdgeNodes = nativeObject.edge_nodes.CreateValueArray<int>(nativeObject.num_edges * 2).ToArray();
+            NodeX = nativeObject.node_x.CreateValueArray<double>(nativeObject.num_nodes);
+            NodeY = nativeObject.node_y.CreateValueArray<double>(nativeObject.num_nodes);
+            NumEdges = nativeObject.num_edges;
+            NumNodes = nativeObject.num_nodes;
+            NumValidNodes = nativeObject.num_valid_nodes;
+            NumValidEdges = nativeObject.num_valid_edges;
+
+            if (addCellInformation && nativeObject.num_faces > 0)
+            {
+                NumFaces = nativeObject.num_faces;
+                NodesPerFace = nativeObject.nodes_per_face.CreateValueArray<int>(nativeObject.num_faces);
+                FaceNodes = nativeObject.face_nodes.CreateValueArray<int>(NodesPerFace.Sum());
+                FaceX = nativeObject.face_x.CreateValueArray<double>(nativeObject.num_faces);
+                FaceY = nativeObject.face_y.CreateValueArray<double>(nativeObject.num_faces);
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace MeshKernelNETTest.Api
             ConstructorInfo defaultConstructor = type.GetConstructor(Type.EmptyTypes);
 
             Assert.That(defaultConstructor, Is.Not.Null,
-                        $"Type '{type.Name}' with must have a public parameterless constructor for protobuf serialization.");
+                        $"Type '{type.Name}' with proto contract must have a public parameterless constructor for protobuf serialization.");
         }
 
         [TestCaseSource(nameof(GetProtoContractTypes))]

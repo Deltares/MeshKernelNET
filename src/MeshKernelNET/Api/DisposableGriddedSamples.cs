@@ -43,6 +43,10 @@ namespace MeshKernelNET.Api
         [ProtoMember(12)]
         private InterpolationType valueType;
 
+        public DisposableGriddedSamples()
+        {
+        }
+
         public DisposableGriddedSamples(int nX, int nY, double orgX, double orgY, double cSize, InterpolationType type)
         {
             numX = nX;

@@ -3060,7 +3060,7 @@ namespace MeshKernelNETTest.Api
         // edges   2 * 5 = 60
         // faces   5 * 5 = 25
         // The test is parametrized by all possible combinations of deletion options and selection inversion
-        [TestCase(DeleteMeshInsidePolygonOptions.NotIntersecting,
+        [TestCase(DeleteMeshInsidePolygonOptions.InsideNotIntersecting,
                   true,
                   4,
                   4,
@@ -3072,7 +3072,7 @@ namespace MeshKernelNETTest.Api
         // nodes = 4
         // edges = 1
         // faces = 1
-        [TestCase(DeleteMeshInsidePolygonOptions.Intersecting,
+        [TestCase(DeleteMeshInsidePolygonOptions.InsideAndIntersecting,
                   true,
                   16,
                   24,
@@ -3103,7 +3103,7 @@ namespace MeshKernelNETTest.Api
         //  7---8---9---10
         // nodes = 16
         // faces = 9
-        [TestCase(DeleteMeshInsidePolygonOptions.NotIntersecting,
+        [TestCase(DeleteMeshInsidePolygonOptions.InsideNotIntersecting,
                   false,
                   36,
                   60,
@@ -3123,7 +3123,7 @@ namespace MeshKernelNETTest.Api
         // nodes = 6 * 6 = 36 (no change)
         // edges = 2 * (5 * 6) = 60 (no change)
         // faces = 5 * 5 - 1 = 24
-        [TestCase(DeleteMeshInsidePolygonOptions.Intersecting,
+        [TestCase(DeleteMeshInsidePolygonOptions.InsideAndIntersecting,
                   false,
                   32,
                   48,

@@ -2095,6 +2095,42 @@ namespace MeshKernelNET.Native
             [In] int endSplineIndex);
 
         /// <summary>
+        /// Initialize the spline intersection calculation
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="crossSplines">A set of splines to check against</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_initialise_spline_intersection", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int InitializeSplineIntersection([In] int meshKernelId, [In] ref GeometryListNative crossSplines);
+
+        /// <summary>
+        /// Compute the intersections of a spline with the cached splines and return the number of intersections found
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="spline">A single spline to check for intersections</param>
+        /// <param name="numberOfIntersections">The number of spline intersections computed</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_check_spline_intersection", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int CheckSplineIntersection([In] int meshKernelId, [In] ref GeometryListNative spline, [In][Out] ref int numberOfIntersections);
+
+        /// <summary>
+        /// Get the spline intersection data
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="intersectionData">The spline intersection data</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_spline_intersection_data", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetSplineIntersectionData([In] int meshKernelId, [In][Out] ref SplineIntersectionsNative intersectionData);
+
+        /// <summary>
+        /// Finalize the spline intersection calculation
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_finalise_spline_intersection", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int FinalizeSplineIntersection([In] int meshKernelId);
+
+        /// <summary>
         /// Redo editing action
         /// </summary>
         /// <param name="redone">If the editing action has been re-done</param>

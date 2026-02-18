@@ -268,13 +268,11 @@ namespace MeshKernelNETTest.Api
                     Assert.That(mesh2D.NumValidEdges, Is.EqualTo(numberOfEdgesBefore-1));
                     
                     var mesh2DEdgeNodes = mesh2D.EdgeNodes;
-                    
-                    const int invalidatedEdge = 21;
+
                     int[] invalidatedEdgeNodes = { 42, 43 };
                     Assert.That(mesh2DEdgeNodes.Select((n,i) => (n,i))
                                                .Where(t => t.n < 0)
                                                .Select(t => t.i),Is.EquivalentTo(invalidatedEdgeNodes), AsString(mesh2DEdgeNodes));
-                    const int reconnectedEdge = 8;
                     int[] reconnectedEdgeNodes = { 8, 13 };
                     Assert.That(mesh2DEdgeNodes.Skip(2 * 8).Take(2),Is.EquivalentTo(reconnectedEdgeNodes), AsString(mesh2DEdgeNodes));
                 }
@@ -3695,7 +3693,6 @@ namespace MeshKernelNETTest.Api
         [Test]
         public void Mesh2dGetNodeEdgeDataThroughApi()
         {
-
             // Setup
             using (DisposableMesh2D mesh = CreateMesh2D(7, 10, 10, 10))
             using (var api = new MeshKernelApi())
@@ -3738,6 +3735,174 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
-    }
+        
+        [Test]
+        public void SplinesComputeIntersections_WithIntersectingSplines_ShouldReturnIntersections()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var crossSplines = new DisposableGeometryList())
+            using (var testSpline = new DisposableGeometryList())
+            {
+                var intersections = new DisposableSplineIntersections();
+                
+                try
+                {
+                    // prepare
+                    var id = api.AllocateState(0);
 
+                    crossSplines.XCoordinates = new[] { 0.0, 10.0 };
+                    crossSplines.YCoordinates = new[] { 5.0, 5.0 };
+                    crossSplines.Values = new[] { 0.0, 0.0 };
+                    crossSplines.NumberOfCoordinates = 2;
+
+                    testSpline.XCoordinates = new[] { 5.0, 5.0 };
+                    testSpline.YCoordinates = new[] { 0.0, 10.0 };
+                    testSpline.Values = new[] { 0.0, 0.0 };
+                    testSpline.NumberOfCoordinates = 2;
+
+                    // execute & assert
+                    Assert.That(api.SplineIntersectionsInitialize(id, crossSplines), Is.EqualTo(0));
+                    
+                    Assert.That(api.GetSplineIntersections(id, testSpline, out intersections), Is.EqualTo(0));
+                    Assert.That(intersections.NumIntersections, Is.EqualTo(1));
+                    Assert.That(intersections.IntersectionX[0], Is.EqualTo(5.0));
+                    Assert.That(intersections.IntersectionY[0], Is.EqualTo(5.0));
+                    
+                    Assert.That(api.SplineIntersectionsFinalize(id), Is.EqualTo(0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    intersections.Dispose();
+                }
+            }
+        }
+        
+        [Test]
+        public void SplinesComputeIntersections_WithNonIntersectingSplines_ShouldReturnZeroIntersections()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var crossSplines = new DisposableGeometryList())
+            using (var testSpline = new DisposableGeometryList())
+            {
+                var intersections = new DisposableSplineIntersections();
+                try
+                {
+                    // prepare
+                    var id = api.AllocateState(0);
+
+                    crossSplines.XCoordinates = new[] { 0.0, 10.0 };
+                    crossSplines.YCoordinates = new[] { 0.0, 0.0 };
+                    crossSplines.Values = new[] { 0.0, 0.0 };
+                    crossSplines.NumberOfCoordinates = 2;
+
+                    testSpline.XCoordinates = new[] { 0.0, 10.0 };
+                    testSpline.YCoordinates = new[] { 5.0, 5.0 };
+                    testSpline.Values = new[] { 0.0, 0.0 };
+                    testSpline.NumberOfCoordinates = 2;
+
+                    // execute & assert
+                    Assert.That(api.SplineIntersectionsInitialize(id, crossSplines), Is.EqualTo(0));
+                    
+                    Assert.That(api.GetSplineIntersections(id, testSpline, out intersections), Is.EqualTo(0));
+                    Assert.That(intersections.NumIntersections, Is.EqualTo(0));
+                    
+                    Assert.That(api.SplineIntersectionsFinalize(id), Is.EqualTo(0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    intersections.Dispose();
+                }
+            }
+        }
+
+        [Test]
+        public void SplinesComputeIntersections_CalledMultipleTimes_ShouldWorkCorrectly()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var crossSplines = new DisposableGeometryList())
+            using (var testSpline1 = new DisposableGeometryList())
+            using (var testSpline2 = new DisposableGeometryList())
+            {
+                var intersections1 = new DisposableSplineIntersections();
+                var intersections2 = new DisposableSplineIntersections();
+                
+                try
+                {
+                    // prepare
+                    var id = api.AllocateState(0);
+
+                    // Create horizontal cross spline
+                    crossSplines.XCoordinates = new[] { 0.0, 10.0 };
+                    crossSplines.YCoordinates = new[] { 5.0, 5.0 };
+                    crossSplines.Values = new[] { 0.0, 0.0 };
+                    crossSplines.NumberOfCoordinates = 2;
+
+                    testSpline1.XCoordinates = new[] { 3.0, 3.0 };
+                    testSpline1.YCoordinates = new[] { 0.0, 10.0 };
+                    testSpline1.Values = new[] { 0.0, 0.0 };
+                    testSpline1.NumberOfCoordinates = 2;
+
+                    testSpline2.XCoordinates = new[] { 7.0, 7.0 };
+                    testSpline2.YCoordinates = new[] { 0.0, 10.0 };
+                    testSpline2.Values = new[] { 0.0, 0.0 };
+                    testSpline2.NumberOfCoordinates = 2;
+
+                    // execute & assert
+                    Assert.That(api.SplineIntersectionsInitialize(id, crossSplines), Is.EqualTo(0));
+
+                    Assert.That(api.GetSplineIntersections(id, testSpline1, out intersections1), Is.EqualTo(0));
+                    Assert.That(intersections1.NumIntersections, Is.EqualTo(1));
+                    Assert.That(intersections1.IntersectionX[0], Is.EqualTo(3.0));
+                    Assert.That(intersections1.IntersectionY[0], Is.EqualTo(5.0));
+
+                    Assert.That(api.GetSplineIntersections(id, testSpline2, out intersections2), Is.EqualTo(0));
+                    Assert.That(intersections2.NumIntersections, Is.EqualTo(1));
+                    Assert.That(intersections2.IntersectionX[0], Is.EqualTo(7.0));
+                    Assert.That(intersections2.IntersectionY[0], Is.EqualTo(5.0));
+
+                    Assert.That(api.SplineIntersectionsFinalize(id), Is.EqualTo(0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    intersections1.Dispose();
+                    intersections2.Dispose();
+                }
+            }
+        }
+        
+        [Test]
+        public void SplinesComputeIntersections_WithoutInitialization_ShouldFail()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var testSpline = new DisposableGeometryList())
+            {
+                var intersections = new DisposableSplineIntersections();
+                try
+                {
+                    // prepare
+                    var id = api.AllocateState(0);
+
+                    testSpline.XCoordinates = new[] { 5.0, 5.0 };
+                    testSpline.YCoordinates = new[] { 0.0, 10.0 };
+                    testSpline.Values = new[] { 0.0, 0.0 };
+                    testSpline.NumberOfCoordinates = 2;
+
+                    // execute & assert
+                    Assert.That(api.GetSplineIntersections(id, testSpline, out intersections), Is.Not.EqualTo(0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    intersections.Dispose();
+                }
+            }
+        }
+    }
 }

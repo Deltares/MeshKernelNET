@@ -1823,6 +1823,31 @@ namespace MeshKernelNET.Api
                                   ref DisposableGeometryList splines,
                                   int firstIndex,
                                   int secondIndex);
+        
+        /// <summary>
+        /// Initializes spline intersection checking with a set of cached splines for subsequent intersection checks.
+        /// Must be called before <see cref="GetSplineIntersections"/>.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="crossSplines">The set of splines to cache for intersection checking</param>
+        /// <returns>Error code</returns>
+        int SplineIntersectionsInitialize(int meshKernelId, DisposableGeometryList crossSplines);
+
+        /// <summary>
+        /// Checks the given spline for intersections with the previously cached splines.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="spline">The spline to check for intersections</param>
+        /// <param name="intersections">The intersection data containing all found intersections</param>
+        /// <returns>Error code</returns>
+        int GetSplineIntersections(int meshKernelId, DisposableGeometryList spline, out DisposableSplineIntersections intersections);
+
+        /// <summary>
+        /// Finalizes and cleans up the spline intersection checking.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <returns>Error code</returns>
+        int SplineIntersectionsFinalize(int meshKernelId);
 
         /// <summary>
         /// Redo editing action

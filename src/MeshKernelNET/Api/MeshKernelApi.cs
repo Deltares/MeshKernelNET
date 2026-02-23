@@ -1718,6 +1718,46 @@ namespace MeshKernelNET.Api
             GeometryListNative polygonNative = splines.CreateNativeObject(); 
             return MeshKernelDll.SplinesToLandBoundary(meshKernelId, ref landboundariesNative, ref polygonNative, firstIndex, secondIndex);
         }
+        
+        /// <inheritdoc/>
+        public int SplineIntersectionsInitialize(int meshKernelId, DisposableGeometryList crossSplines)
+        {
+            GeometryListNative crossSplinesNative = crossSplines.CreateNativeObject();
+            return MeshKernelDll.InitializeSplineIntersection(meshKernelId, ref crossSplinesNative);
+        }
+        
+        /// <inheritdoc/>
+        public int GetSplineIntersections(int meshKernelId, DisposableGeometryList spline, out DisposableSplineIntersections intersections)
+        {
+            intersections = new DisposableSplineIntersections();
+            GeometryListNative splineNative = spline.CreateNativeObject();
+    
+            var numberOfIntersections = 0;
+            int exitCode = MeshKernelDll.CheckSplineIntersection(meshKernelId, ref splineNative, ref numberOfIntersections);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+
+            using (var exchangeIntersections = new DisposableSplineIntersections(numberOfIntersections))
+            {
+                SplineIntersectionsNative intersectionsNative = exchangeIntersections.CreateNativeObject();
+                exitCode = MeshKernelDll.GetSplineIntersectionData(meshKernelId, ref intersectionsNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                intersections.UpdateFromNativeObject(ref intersectionsNative);
+                return exitCode;
+            }
+        }
+        
+        /// <inheritdoc/>
+        public int SplineIntersectionsFinalize(int meshKernelId)
+        {
+            return MeshKernelDll.FinalizeSplineIntersection(meshKernelId);
+        }
 
         /// <inheritdoc/>
         public int RedoState(ref bool redone, ref int meshKernelId)

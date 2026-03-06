@@ -1,5 +1,6 @@
 ﻿using System;
 using MeshKernelNET.Api;
+using MeshKernelNET.Native;
 using NUnit.Framework;
 
 namespace MeshKernelNETTest.Api
@@ -281,6 +282,33 @@ namespace MeshKernelNETTest.Api
             var samples = new DisposableGriddedSamples(5, 5, 0.0, 0.0, -1.5, InterpolationType.Float);
 
             Assert.That(samples.CellSize, Is.EqualTo(-1.5));
+        }
+        
+        [Test]
+        public void CreateNativeObject_CreatesValidNativeStructure()
+        {
+            var samples = new DisposableGriddedSamples(3, 4, 1.0, 2.0, 0.5, InterpolationType.Float)
+            {
+                FloatValues = new[] { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 10.1f, 11.1f, 12.2f }
+            };
+
+            using (samples)
+            {
+                GriddedSamplesNative nativeSamples = samples.CreateNativeObject();
+
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(nativeSamples.num_x, Is.EqualTo(3));
+                    Assert.That(nativeSamples.num_y, Is.EqualTo(4));
+                    Assert.That(nativeSamples.origin_x, Is.EqualTo(1.0));
+                    Assert.That(nativeSamples.origin_y, Is.EqualTo(2.0));
+                    Assert.That(nativeSamples.cell_size, Is.EqualTo(0.5));
+                    Assert.That(nativeSamples.coordinates_x, Is.Not.EqualTo(IntPtr.Zero));
+                    Assert.That(nativeSamples.coordinates_y, Is.Not.EqualTo(IntPtr.Zero));
+                    Assert.That(nativeSamples.values, Is.Not.EqualTo(IntPtr.Zero));
+                    Assert.That(nativeSamples.value_type, Is.EqualTo((int)InterpolationType.Float));
+                }
+            }
         }
     }
 }

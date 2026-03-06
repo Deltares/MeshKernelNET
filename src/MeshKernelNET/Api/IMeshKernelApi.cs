@@ -246,52 +246,21 @@ namespace MeshKernelNET.Api
         int CurvilinearGetBoundariesAsPolygons(int meshKernelId, int lowerLeftN, int lowerLeftM, int upperRightN, int upperRightM, out DisposableGeometryList boundaryPolygons);
 
         /// <summary>
-        /// Gets the index of the closest curvilinear edge
+        /// Gets the index of the closest curvilinear location type
         /// </summary>
-        /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="locationType">The location (nodes, edges, or faces) at which the index should be retrieved</param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        int CurvilinearGetEdgeLocationIndex(int meshKernelId,
-                                            double xCoordinate,
-                                            double yCoordinate,
-                                            BoundingBox boundingBox,
-                                            ref int locationIndex);
-
-        /// <summary>
-        /// Gets the index of the closest curvilinear face
-        /// </summary>
-        /// 
-        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
-        /// <param name="xCoordinate">The input point coordinates</param>
-        /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="boundingBox">The input bounding box</param>
-        /// <param name="locationIndex">The location index</param>
-        /// <returns>Error code</returns>
-        int CurvilinearGetFaceLocationIndex(int meshKernelId,
-                                            double xCoordinate,
-                                            double yCoordinate,
-                                            BoundingBox boundingBox,
-                                            ref int locationIndex);
-
-        /// <summary>
-        /// Gets the index of the closest curvilinear node
-        /// </summary>
-        /// 
-        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
-        /// <param name="xCoordinate">The input point coordinates</param>
-        /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="boundingBox">The input bounding box</param>
-        /// <param name="locationIndex">The location index</param>
-        /// <returns>Error code</returns>
-        int CurvilinearGetNodeLocationIndex(int meshKernelId,
-                                            double xCoordinate,
-                                            double yCoordinate,
-                                            BoundingBox boundingBox,
-                                            ref int locationIndex);
+        int CurvilinearGetLocationIndex(int meshKernelId,
+                                        LocationType locationType,
+                                        double xCoordinate,
+                                        double yCoordinate,
+                                        BoundingBox boundingBox,
+                                        ref int locationIndex);
 
         /// <summary>
         /// Initializes the curvilinear line shift algorithm
@@ -737,14 +706,7 @@ namespace MeshKernelNET.Api
         /// <param name="method">The int indicating the averaging method type</param>
         /// <returns>Error code</returns>
         int GetAveragingMethodSimpleAveraging(ref int method);
-
-        /// <summary>
-        /// Gets an int indicating the edge location type
-        /// </summary>
-        /// <param name="type">The int indicating the edge location type</param>
-        /// <returns>Error code</returns>
-        int GetEdgesLocationType(ref int type);
-
+        
         /// <summary>
         /// Gets a pointer to error message
         /// </summary>
@@ -823,26 +785,12 @@ namespace MeshKernelNET.Api
         int GetExitCodeUnknownException(ref int exitCode);
 
         /// <summary>
-        /// Gets an int indicating the faces location type
-        /// </summary>
-        /// <param name="type">The int indicating the face location type</param>
-        /// <returns>Error code</returns>
-        int GetFacesLocationType(ref int type);
-
-        /// <summary>
         /// get geometry error
         /// </summary>
         /// <param name="invalidIndex">The index of the erroneous entity</param>
         /// <param name="type">The entity type (node, edge or face, see MeshLocations)</param>
         /// <returns>Error code</returns>
         int GetGeometryError(ref int invalidIndex, ref int type);
-
-        /// <summary>
-        /// Gets an int indicating the node location type
-        /// </summary>
-        /// <param name="type">The int indicating the node location type</param>
-        /// <returns>Error code</returns>
-        int GetNodesLocationType(ref int type);
 
         /// <summary>
         /// Gets the coordinate projection of the meshkernel state
@@ -922,7 +870,7 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dAveragingInterpolation(int meshKernelId,
                                          DisposableGeometryList samples,
-                                         int locationType,
+                                         LocationType locationType,
                                          int averagingMethodType,
                                          double relativeSearchSize,
                                          int minNumSamples,
@@ -1232,48 +1180,17 @@ namespace MeshKernelNET.Api
         int Mesh2dGetHangingEdges(int meshKernelId, out IntArrayWrapper hangingEdges);
 
         /// <summary>
-        /// Gets the index of the closest mesh edge
+        /// Gets the index of the closest mesh location type
         /// </summary>
-        /// 
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
+        /// <param name="locationType">The location (nodes, edges, or faces) at which the index should be retrieved</param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
-        int Mesh2dGetEdgeLocationIndex(int meshKernelId,
-                                   double xCoordinate,
-                                   double yCoordinate,
-                                   BoundingBox boundingBox,
-                                   ref int locationIndex);
-
-        /// <summary>
-        /// Gets the index of the closest mesh face.
-        /// </summary>
-        /// 
-        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
-        /// <param name="xCoordinate">The input point coordinates</param>
-        /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="boundingBox">The input bounding box</param>
-        /// <param name="locationIndex">The location index</param>
-        /// <returns>Error code</returns>
-        int Mesh2dGetFaceLocationIndex(int meshKernelId,
-                                       double xCoordinate,
-                                       double yCoordinate,
-                                       BoundingBox boundingBox,
-                                       ref int locationIndex);
-
-        /// <summary>
-        /// Gets the index of the closest mesh node
-        /// </summary>
-        /// 
-        /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
-        /// <param name="xCoordinate">The input point coordinates</param>
-        /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="boundingBox">The input bounding box</param>
-        /// <param name="locationIndex">The location index</param>
-        /// <returns>Error code</returns>
-        int Mesh2dGetNodeLocationIndex(int meshKernelId,
+        int Mesh2dGetLocationIndex(int meshKernelId,
+                                   LocationType locationType,
                                    double xCoordinate,
                                    double yCoordinate,
                                    BoundingBox boundingBox,
@@ -1333,6 +1250,16 @@ namespace MeshKernelNET.Api
         /// <returns>Error code</returns>
         int Mesh2dGetOrthogonality(int meshKernelId, ref DisposableGeometryList disposableGeometryListOut);
 
+        /// <summary>
+        /// Retrieves a specified property of a 2D mesh.
+        /// </summary>
+        /// <param name="meshKernelId">The id of the mesh state</param>
+        /// <param name="propertyType">The type of property values to retrieve</param>
+        /// <param name="locationType">The location (nodes, edges, or faces) at which the property should be retrieved</param>
+        /// <param name="propertyValues">The geometry list populated with the values of the requested property</param>
+        /// <returns>Error code</returns>
+        int Mesh2dGetProperty(int meshKernelId, PropertyType propertyType, LocationType locationType, out DisposableGeometryList propertyValues);
+        
         /// <summary>
         /// Counts the number of polygon nodes contained in the mesh boundary polygons computed in function
         /// `mkernel_mesh2d_get_mesh_boundaries_as_polygons`
@@ -1658,7 +1585,7 @@ namespace MeshKernelNET.Api
         /// <param name="locationType">The location type</param>
         /// <param name="results">The interpolation results with x and y coordinates</param>
         /// <returns>Error code</returns>
-        int Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, int locationType, ref DisposableGeometryList results);
+        int Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, LocationType locationType, ref DisposableGeometryList results);
 
         /// <summary>Compute the network chainages from fixed point locations</summary>
         /// <param name="meshKernelId">The id of the mesh state</param>

@@ -2640,12 +2640,59 @@ namespace MeshKernelNETTest.Api
         }
         
         [Test]
+        public void Mesh2dGetPropertyNetlinkContourPolygonThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(3, 2, 1, 1))
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare - a 2-cell mesh with different cell widths
+                    //  3----4------5
+                    //  |    |      |
+                    //  0----1------2
+                    mesh.NumNodes = 6;
+                    mesh.NumEdges = 7;
+                    mesh.NodeX = new[] { 0.0, 2.0, 5.0, 0.0, 2.0, 5.0 };
+                    mesh.NodeY = new[] { 0.0, 0.0, 0.0, 3.0, 3.0, 3.0 };
+                    mesh.EdgeNodes = new[] { 0, 1, 1, 2, 3, 4, 4, 5, 0, 3, 1, 4, 2, 5 };
+
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.NetlinkContourPolygon, LocationType.Edges, out propertyValues), Is.EqualTo(0));
+
+                    // Assert
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(28));
+                    Assert.That(propertyValues.XCoordinates[20], Is.EqualTo(1.0));
+                    Assert.That(propertyValues.YCoordinates[20], Is.EqualTo(3.0));
+                    Assert.That(propertyValues.XCoordinates[21], Is.EqualTo(1.0));
+                    Assert.That(propertyValues.YCoordinates[21], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.XCoordinates[22], Is.EqualTo(3.5));
+                    Assert.That(propertyValues.YCoordinates[22], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.XCoordinates[23], Is.EqualTo(3.5));
+                    Assert.That(propertyValues.YCoordinates[23], Is.EqualTo(3.0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
         [TestCase(PropertyType.Orthogonality, LocationType.Faces)]
         [TestCase(PropertyType.Orthogonality, LocationType.Nodes)]
         [TestCase(PropertyType.EdgeLength, LocationType.Faces)]
         [TestCase(PropertyType.EdgeLength, LocationType.Nodes)]
         [TestCase(PropertyType.FaceCircumcenter, LocationType.Nodes)]
         [TestCase(PropertyType.FaceCircumcenter, LocationType.Edges)]
+        [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Faces)]
+        [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Nodes)]
         public void Mesh2dGetPropertyWithInvalidLocationThroughApi(PropertyType propertyType, LocationType locationType)
         {
             // Setup

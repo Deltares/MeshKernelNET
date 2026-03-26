@@ -1625,19 +1625,6 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void GetEdgesLocationTypeThroughAPI()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int locationType = -1;
-                Assert.That(api.GetEdgesLocationType(ref locationType), Is.EqualTo(0));
-                // Assert
-                Assert.That(locationType, Is.EqualTo(2));
-            }
-        }
-
-        [Test]
         public void GetErrorThroughAPI()
         {
             using (var api = new MeshKernelApi())
@@ -1785,20 +1772,6 @@ namespace MeshKernelNETTest.Api
         }
 
         [Test]
-        public void GetFacesLocationTypeThroughAPI()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int locationType = -1;
-                Assert.That(api.GetFacesLocationType(ref locationType), Is.EqualTo(0));
-
-                // Assert
-                Assert.That(locationType, Is.EqualTo(0));
-            }
-        }
-
-        [Test]
         public void GetGeometryErrorThroughAPI()
         {
             using (var api = new MeshKernelApi())
@@ -1810,19 +1783,6 @@ namespace MeshKernelNETTest.Api
                 // Assert
                 Assert.That(invalidIndex, Is.EqualTo(0));
                 Assert.That(type, Is.EqualTo(3));
-            }
-        }
-
-        [Test]
-        public void GetNodesLocationTypeThroughAPI()
-        {
-            using (var api = new MeshKernelApi())
-            {
-                // Execute
-                int type = -1;
-                Assert.That(api.GetNodesLocationType(ref type), Is.EqualTo(0));
-                // Assert
-                Assert.That(type, Is.EqualTo(1));
             }
         }
 
@@ -1956,17 +1916,16 @@ namespace MeshKernelNETTest.Api
                     samples.Values = new[] { 3.0, 10, 4.0, 5.0 };
                     samples.NumberOfCoordinates = 4;
 
-                    var locationType = 1;
                     var averagingMethodType = 1;
                     var relativeSearchSize = 1.01;
 
-                    Assert.That(api.Mesh2dAveragingInterpolation(id,
-                                                                        samples,
-                                                                        locationType,
-                                                                        averagingMethodType,
-                                                                        relativeSearchSize,
-                                                                        0,
-                                                                        ref results), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dAveragingInterpolation(id, 
+                                                                 samples, 
+                                                                 LocationType.Nodes,
+                                                                 averagingMethodType,
+                                                                 relativeSearchSize, 
+                                                                 0, 
+                                                                 ref results), Is.EqualTo(0));
 
                     var expectedValues = new double[results.NumberOfCoordinates];
                     for (var i = 0; i < results.NumberOfCoordinates; i++) expectedValues[i] = -999;
@@ -2561,6 +2520,155 @@ namespace MeshKernelNETTest.Api
                 }
             }
         }
+        
+        [Test]
+        public void Mesh2dGetPropertyOrthogonalityThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var mesh = new DisposableMesh2D())
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare - a sheared 2-cell parallelogram mesh
+                    //  3----4----5
+                    //  /   /    /
+                    // 0---1----2
+                    mesh.NumNodes = 6;
+                    mesh.NumEdges = 7;
+                    mesh.NodeX = new[] { 0.0, 1.0, 2.0, 0.5, 1.5, 2.5 };
+                    mesh.NodeY = new[] { 0.0, 0.0, 0.0, 1.0, 1.0, 1.0 };
+                    mesh.EdgeNodes = new[] { 0, 1, 1, 2, 3, 4, 4, 5, 0, 3, 1, 4, 2, 5 };
+
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.Orthogonality, LocationType.Edges, out propertyValues), Is.EqualTo(0));
+
+                    // Assert
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(7));
+
+                    // Boundary edges have missing value (-999)
+                    Assert.That(propertyValues.Values.Where((_, i) => i != 5), Is.All.EqualTo(-999.0));
+
+                    // Interior edge 1-4 has non-zero orthogonality due to shear (= 1/sqrt(5))
+                    const double tolerance = 1.0e-4;
+                    Assert.That(propertyValues.Values[5], Is.EqualTo(0.4472).Within(tolerance));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
+        public void Mesh2dGetPropertyEdgeLengthThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.EdgeLength, LocationType.Edges, out propertyValues), Is.EqualTo(0));
+                    
+                    // Assert
+                    Assert.That(propertyValues, Is.Not.Null);
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(mesh.NumEdges));
+                    Assert.That(propertyValues.Values, Is.Not.Null);
+                    Assert.That(propertyValues.Values.Length, Is.EqualTo(mesh.NumEdges));
+                    Assert.That(propertyValues.Values.Take(12), Is.All.EqualTo(200.0));
+                    Assert.That(propertyValues.Values.Skip(12), Is.All.EqualTo(100.0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
+        public void Mesh2dGetPropertyFaceCircumcenterThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (var mesh = new DisposableMesh2D())
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare - a 2-cell mesh with different cell widths
+                    //  3----4------5
+                    //  |    |      |
+                    //  0----1------2
+                    mesh.NumNodes = 6;
+                    mesh.NumEdges = 7;
+                    mesh.NodeX = new[] { 0.0, 2.0, 5.0, 0.0, 2.0, 5.0 };
+                    mesh.NodeY = new[] { 0.0, 0.0, 0.0, 3.0, 3.0, 3.0 };
+                    mesh.EdgeNodes = new[] { 0, 1, 1, 2, 3, 4, 4, 5, 0, 3, 1, 4, 2, 5 };
+
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.FaceCircumcenter, LocationType.Faces, out propertyValues), Is.EqualTo(0));
+
+                    // Assert
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(2));
+                    Assert.That(propertyValues.XCoordinates[0], Is.EqualTo(1.0));
+                    Assert.That(propertyValues.YCoordinates[0], Is.EqualTo(1.5));
+                    Assert.That(propertyValues.XCoordinates[1], Is.EqualTo(3.5));
+                    Assert.That(propertyValues.YCoordinates[1], Is.EqualTo(1.5));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
+        [TestCase(PropertyType.Orthogonality, LocationType.Faces)]
+        [TestCase(PropertyType.Orthogonality, LocationType.Nodes)]
+        [TestCase(PropertyType.EdgeLength, LocationType.Faces)]
+        [TestCase(PropertyType.EdgeLength, LocationType.Nodes)]
+        [TestCase(PropertyType.FaceCircumcenter, LocationType.Nodes)]
+        [TestCase(PropertyType.FaceCircumcenter, LocationType.Edges)]
+        public void Mesh2dGetPropertyWithInvalidLocationThroughApi(PropertyType propertyType, LocationType locationType)
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute & Assert
+                    Assert.That(api.Mesh2dGetProperty(id, propertyType, locationType, out propertyValues), Is.Not.EqualTo(0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
 
         [Test]
         public void Mesh2dGetObtuseTrianglesMassCentersThroughApi()
@@ -2986,9 +3094,6 @@ namespace MeshKernelNETTest.Api
                 {
                     // Setup
                     id = api.AllocateState(0);
-
-                    int locationType = -1;
-                    Assert.That(api.GetNodesLocationType(ref locationType), Is.EqualTo(0));
                     Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
 
                     Assert.That(api.Mesh2dGetData(id, out mesh2D), Is.EqualTo(0));
@@ -3003,7 +3108,7 @@ namespace MeshKernelNETTest.Api
                     results.NumberOfCoordinates = mesh.NumNodes;
 
                     // Execute
-                    Assert.That(api.Mesh2dTriangulationInterpolation(id, samples, locationType, ref results), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dTriangulationInterpolation(id, samples, LocationType.Nodes, ref results), Is.EqualTo(0));
                     // Assert
                     Assert.That(results.Values[4], Is.EqualTo(3));
                 }
@@ -3307,11 +3412,12 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.Mesh2dGetEdgeLocationIndex(id,
-                                                   10.0,
-                                                   0.0,
-                                                   boundingBox,
-                                                   ref locationIndex);
+                    api.Mesh2dGetLocationIndex(id,
+                                               LocationType.Edges,
+                                               10.0,
+                                               0.0,
+                                               boundingBox,
+                                               ref locationIndex);
 
                     Assert.That(locationIndex, Is.EqualTo(12));
                 }
@@ -3338,11 +3444,12 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.Mesh2dGetFaceLocationIndex(id,
-                                                   10.0,
-                                                   0.0,
-                                                   boundingBox,
-                                                   ref locationIndex);
+                    api.Mesh2dGetLocationIndex(id,
+                                               LocationType.Faces,
+                                               10.0,
+                                               0.0,
+                                               boundingBox,
+                                               ref locationIndex);
 
                     Assert.That(locationIndex, Is.EqualTo(0));
                 }
@@ -3371,11 +3478,12 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.Mesh2dGetNodeLocationIndex(id,
-                                                   x,
-                                                   y,
-                                                   boundingBox,
-                                                   ref locationIndex);
+                    api.Mesh2dGetLocationIndex(id,
+                                               LocationType.Nodes,
+                                               x,
+                                               y,
+                                               boundingBox,
+                                               ref locationIndex);
 
                     Assert.That(locationIndex, Is.EqualTo(expectedIndex));
                 }
@@ -3412,7 +3520,7 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int actualIndex = -1;
-                    api.CurvilinearGetEdgeLocationIndex(id, x, y, boundingBox, ref actualIndex);
+                    api.CurvilinearGetLocationIndex(id, LocationType.Edges, x, y, boundingBox, ref actualIndex);
 
                     Assert.That(actualIndex, Is.EqualTo(expectedIndex));
                 }
@@ -3439,11 +3547,12 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetFaceLocationIndex(id,
-                                                        20.0,
-                                                        20.0,
-                                                        boundingBox,
-                                                        ref locationIndex);
+                    api.CurvilinearGetLocationIndex(id,
+                                                    LocationType.Faces,
+                                                    20.0,
+                                                    20.0,
+                                                    boundingBox,
+                                                    ref locationIndex);
 
                     Assert.That(locationIndex, Is.EqualTo(4));
                 }
@@ -3475,9 +3584,11 @@ namespace MeshKernelNETTest.Api
 
                     BoundingBox boundingBox = BoundingBox.CreateDefault();
                     int locationIndex = -1;
-                    api.CurvilinearGetNodeLocationIndex(id, x, y,
-                                                        boundingBox,
-                                                        ref locationIndex);
+                    api.CurvilinearGetLocationIndex(id, 
+                                                    LocationType.Nodes,
+                                                    x, y,
+                                                    boundingBox,
+                                                    ref locationIndex);
 
                     Assert.That(locationIndex, Is.EqualTo(expectedIndex));
                 }

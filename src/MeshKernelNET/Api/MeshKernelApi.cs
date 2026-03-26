@@ -101,7 +101,8 @@ namespace MeshKernelNET.Api
         public int CurvilinearComputeCurvature(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] curvature)
         {
             IntPtr curvaturePtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * curvature.Length);
-            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), curvaturePtr);
+            int directionValue = direction.ToDirectionValue();
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, directionValue, curvaturePtr);
             Marshal.Copy(curvaturePtr, curvature, 0, curvature.Length);
             Marshal.FreeCoTaskMem(curvaturePtr);
             return success;
@@ -132,7 +133,8 @@ namespace MeshKernelNET.Api
         public int CurvilinearComputeSmoothness(int meshKernelId, CurvilinearDirectionOptions direction, ref double[] smoothness)
         {
             IntPtr smoothnessPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(double)) * smoothness.Length);
-            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, Convert.ToInt32(direction), smoothnessPtr);
+            int directionValue = direction.ToDirectionValue();
+            int success = MeshKernelDll.CurvilinearComputeSmoothness(meshKernelId, directionValue, smoothnessPtr);
             Marshal.Copy(smoothnessPtr, smoothness, 0, smoothness.Length);
             Marshal.FreeCoTaskMem(smoothnessPtr);
             return success;
@@ -265,59 +267,16 @@ namespace MeshKernelNET.Api
             }
         }
 
-        public int CurvilinearGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        public int CurvilinearGetLocationIndex(int meshKernelId, LocationType locationType, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetEdgesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
-                                                                 xCoordinate,
-                                                                 yCoordinate,
-                                                                 locationType,
-                                                                 ref boundingBoxNative,
-                                                                 ref locationIndex);
-            return exitCode;
-        }
-        
-        public int CurvilinearGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
-        {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-
-            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
-                                                                 xCoordinate,
-                                                                 yCoordinate,
-                                                                 locationType,
-                                                                 ref boundingBoxNative,
-                                                                 ref locationIndex);
-            return exitCode;
-        }
-
-        public int CurvilinearGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
-        {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetNodesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
-                                                                 xCoordinate,
-                                                                 yCoordinate,
-                                                                 locationType,
-                                                                 ref boundingBoxNative,
-                                                                 ref locationIndex);
-            return exitCode;
+            int locationId = locationType.ToLocationId();
+            return MeshKernelDll.CurvilinearGetLocationIndex(meshKernelId,
+                                                             xCoordinate,
+                                                             yCoordinate,
+                                                             locationId,
+                                                             ref boundingBoxNative,
+                                                             ref locationIndex);
         }
 
         public int CurvilinearInitializeLineShift(int meshKernelId)
@@ -686,11 +645,6 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetAveragingMethodSimpleAveraging(ref method);
         }
 
-        public int GetEdgesLocationType(ref int type)
-        {
-            return MeshKernelDll.GetEdgesLocationType(ref type);
-        }
-
         public int GetError(out string errorMessage)
         {
             var bufferSize = 512;
@@ -758,19 +712,9 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetExitCodeUnknownException(ref exitCode);
         }
 
-        public int GetFacesLocationType(ref int type)
-        {
-            return MeshKernelDll.GetFacesLocationType(ref type);
-        }
-
         public int GetGeometryError(ref int invalidIndex, ref int type)
         {
             return MeshKernelDll.GetGeometryError(ref invalidIndex, ref type);
-        }
-
-        public int GetNodesLocationType(ref int type)
-        {
-            return MeshKernelDll.GetNodesLocationType(ref type);
         }
 
         public int GetProjection(int meshKernelId, ref int projection)
@@ -850,7 +794,7 @@ namespace MeshKernelNET.Api
 
         public int Mesh2dAveragingInterpolation(int meshKernelId,
                                                 DisposableGeometryList samples,
-                                                int locationType,
+                                                LocationType locationType,
                                                 int averagingMethodType,
                                                 double relativeSearchSize,
                                                 int minNumSamples,
@@ -859,9 +803,10 @@ namespace MeshKernelNET.Api
             GeometryListNative samplesNative = samples.CreateNativeObject();
             GeometryListNative resultsNative = results.CreateNativeObject();
 
+            int locationId = locationType.ToLocationId();
             return MeshKernelDll.Mesh2dAveragingInterpolation(meshKernelId,
                                                               ref samplesNative,
-                                                              locationType,
+                                                              locationId,
                                                               averagingMethodType,
                                                               relativeSearchSize,
                                                               minNumSamples,
@@ -1005,9 +950,10 @@ namespace MeshKernelNET.Api
                                 bool invertDeletion)
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListOut.CreateNativeObject();
+            int optionValue = deletionOption.ToOptionValue();
             return MeshKernelDll.Mesh2dDelete(meshKernelId,
                                               ref geometryListNativeIn,
-                                              Convert.ToInt32(deletionOption),
+                                              optionValue,
                                               invertDeletion);
         }
 
@@ -1190,58 +1136,16 @@ namespace MeshKernelNET.Api
             return exitCode;
         }
 
-        public int Mesh2dGetEdgeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
+        public int Mesh2dGetLocationIndex(int meshKernelId, LocationType locationType, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
         {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetEdgesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
             var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
-                                                            xCoordinate,
-                                                            yCoordinate,
-                                                            locationType,
-                                                            ref boundingBoxNative,
-                                                            ref locationIndex);
-            return exitCode;
-        }
-
-        public int Mesh2dGetFaceLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
-        {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetFacesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
-                                                            xCoordinate,
-                                                            yCoordinate,
-                                                            locationType,
-                                                            ref boundingBoxNative,
-                                                            ref locationIndex);
-            return exitCode;
-        }
-
-        public int Mesh2dGetNodeLocationIndex(int meshKernelId, double xCoordinate, double yCoordinate, BoundingBox boundingBox, ref int locationIndex)
-        {
-            int locationType = -1;
-            var exitCode = MeshKernelDll.GetNodesLocationType(ref locationType);
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-            var boundingBoxNative = boundingBox.ToBoundingBoxNative();
-            exitCode = MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
-                                                            xCoordinate,
-                                                            yCoordinate,
-                                                            locationType,
-                                                            ref boundingBoxNative,
-                                                            ref locationIndex);
-            return exitCode;
+            int locationId = locationType.ToLocationId();
+            return MeshKernelDll.Mesh2dGetLocationIndex(meshKernelId,
+                                                        xCoordinate,
+                                                        yCoordinate,
+                                                        locationId,
+                                                        ref boundingBoxNative,
+                                                        ref locationIndex);
         }
 
         public int Mesh2dGetMeshBoundariesAsPolygons(int meshKernelId, DisposableGeometryList selectingPolygon, ref DisposableGeometryList disposableGeometryList)
@@ -1307,6 +1211,37 @@ namespace MeshKernelNET.Api
         {
             GeometryListNative geometryListNativeIn = disposableGeometryListIn.CreateNativeObject();
             return MeshKernelDll.Mesh2dGetOrthogonality(meshKernelId, ref geometryListNativeIn);
+        }
+
+        public int Mesh2dGetProperty(int meshKernelId, PropertyType propertyType, LocationType locationType, out DisposableGeometryList propertyValues)
+        {
+            propertyValues = new DisposableGeometryList();
+            
+            int propertyId = propertyType.ToPropertyId();
+            int locationId = locationType.ToLocationId();
+
+            int dimension = -1;
+            int exitCode = MeshKernelDll.Mesh2dGetPropertyDimension(meshKernelId, propertyId, locationId, ref dimension);
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+
+            using (var exchangePropertyValues = new DisposableGeometryList(dimension))
+            {
+                exchangePropertyValues.GeometrySeparator = GetSeparator();
+                exchangePropertyValues.InnerOuterSeparator = GetInnerOuterSeparator();
+
+                GeometryListNative geometryListNative = exchangePropertyValues.CreateNativeObject();
+                exitCode = MeshKernelDll.Mesh2dGetProperty(meshKernelId, propertyId, locationId, ref geometryListNative);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                propertyValues.UpdateFromNativeObject(ref geometryListNative);
+                return exitCode;
+            }
         }
 
         public int Mesh2dCountObtuseTriangles(int meshKernelId, ref int numObtuseTriangles)
@@ -1604,7 +1539,7 @@ namespace MeshKernelNET.Api
             return MeshKernelDll.GetInnerOuterSeparator();
         }
 
-        public int Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, int locationType, ref DisposableGeometryList results)
+        public int Mesh2dTriangulationInterpolation(int meshKernelId, DisposableGeometryList samples, LocationType locationType, ref DisposableGeometryList results)
         {
             if (samples.NumberOfCoordinates <= 0)
             {
@@ -1613,7 +1548,8 @@ namespace MeshKernelNET.Api
 
             GeometryListNative samplesNative = samples.CreateNativeObject();
             GeometryListNative resultsNative = results.CreateNativeObject();
-            return MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, locationType, ref resultsNative);
+            int locationId = locationType.ToLocationId();
+            return MeshKernelDll.Mesh2dTriangulationInterpolation(meshKernelId, ref samplesNative, locationId, ref resultsNative);
         }
 
         public int Network1dComputeFixedChainages(int meshKernelId, double[] fixedChainages, double minFaceSize, double fixedChainagesOffset)

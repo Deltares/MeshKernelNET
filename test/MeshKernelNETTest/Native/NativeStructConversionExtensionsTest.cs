@@ -16,6 +16,30 @@ namespace MeshKernelNETTest.Native
         private const double innerOuterSeparator = -998.0;
 
         [Test]
+        public void ToLocationId_ReturnsCorrectIntValue_ForEachPropertyType([Values] LocationType locationType)
+        {
+            Assert.That(locationType.ToLocationId(), Is.EqualTo(Convert.ToInt32(locationType)));
+        }
+
+        [Test]
+        public void ToPropertyId_ReturnsCorrectIntValue_ForEachPropertyType([Values] PropertyType propertyType)
+        {
+            Assert.That(propertyType.ToPropertyId(), Is.EqualTo(Convert.ToInt32(propertyType)));
+        }
+
+        [Test]
+        public void ToOptionValue_ReturnsCorrectIntValue_ForEachPropertyType([Values] DeleteMeshInsidePolygonOptions options)
+        {
+            Assert.That(options.ToOptionValue(), Is.EqualTo(Convert.ToInt32(options)));
+        }
+
+        [Test]
+        public void ToDirectionValue_ReturnsCorrectIntValue_ForEachPropertyType([Values] CurvilinearDirectionOptions direction)
+        {
+            Assert.That(direction.ToDirectionValue(), Is.EqualTo(Convert.ToInt32(direction)));
+        }
+
+        [Test]
         public void GivenOrthogonalizationParameters_ToOrthogonalizationParametersNative_ShouldCreateOrthogonalizationParametersNativeWithValidDefaults()
         {
             //Arrange

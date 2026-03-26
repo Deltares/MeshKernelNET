@@ -1392,7 +1392,7 @@ namespace MeshKernelNETTest.Api
                 yUpperRight = 6
             };
             int actualIndex = -1;
-            int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
+            int returnCode = api.CurvilinearGetLocationIndex(id,LocationType.Nodes,x,y,box, ref actualIndex);
 
             // Assert
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));
@@ -1427,7 +1427,7 @@ namespace MeshKernelNETTest.Api
                 yUpperRight = 3.4
             };
             int actualIndex = -1;
-            int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
+            int returnCode = api.CurvilinearGetLocationIndex(id,LocationType.Nodes,x,y,box, ref actualIndex);
 
             // Assert
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));
@@ -1458,7 +1458,7 @@ namespace MeshKernelNETTest.Api
                 yUpperRight = 3.2
             };
             int actualIndex = -1;
-            int returnCode = api.CurvilinearGetNodeLocationIndex(id,x,y,box, ref actualIndex);
+            int returnCode = api.CurvilinearGetLocationIndex(id,LocationType.Nodes,x,y,box, ref actualIndex);
 
             // Assert
             Assert.That(actualIndex,Is.EqualTo(expectedIndex));

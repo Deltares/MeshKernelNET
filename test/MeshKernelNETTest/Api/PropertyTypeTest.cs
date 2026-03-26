@@ -26,6 +26,9 @@ namespace MeshKernelNETTest.Api
                 
                 Assert.That(MeshKernelDll.Mesh2dGetNetLinkContourPolygonPropertyType(ref enumValue), Is.EqualTo(0));
                 Assert.That(enumValue, Is.EqualTo(PropertyType.NetlinkContourPolygon.ToPropertyId()));
+
+                Assert.That(MeshKernelDll.Mesh2dGetFaceBoundsPropertyType(ref enumValue), Is.EqualTo(0));
+                Assert.That(enumValue, Is.EqualTo(PropertyType.FaceBounds.ToPropertyId()));
             });
         }
     }

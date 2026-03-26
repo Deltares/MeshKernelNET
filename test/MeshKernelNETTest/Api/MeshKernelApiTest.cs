@@ -2653,6 +2653,9 @@ namespace MeshKernelNETTest.Api
                     //  3----4------5
                     //  |    |      |
                     //  0----1------2
+                    //
+                    // Left cell:  (0-1-4-3) => expected circumcenter (1.0, 1.5)
+                    // Right cell: (1-2-5-4) => expected circumcenter (3.5, 1.5)
                     mesh.NumNodes = 6;
                     mesh.NumEdges = 7;
                     mesh.NodeX = new[] { 0.0, 2.0, 5.0, 0.0, 2.0, 5.0 };
@@ -2665,16 +2668,32 @@ namespace MeshKernelNETTest.Api
                     // Execute
                     Assert.That(api.Mesh2dGetProperty(id, PropertyType.NetlinkContourPolygon, LocationType.Edges, out propertyValues), Is.EqualTo(0));
 
-                    // Assert
+                    // Assert - verifies that for each edge:
+                    // - A polygon with 4 vertices is returned
+                    // - The polygon consists of:
+                    //     - the two edge nodes
+                    //     - the circumcenters of the neighboring faces (1 or 2 depending on boundary/internal edge)
                     Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(28));
-                    Assert.That(propertyValues.XCoordinates[20], Is.EqualTo(1.0));
-                    Assert.That(propertyValues.YCoordinates[20], Is.EqualTo(3.0));
-                    Assert.That(propertyValues.XCoordinates[21], Is.EqualTo(1.0));
-                    Assert.That(propertyValues.YCoordinates[21], Is.EqualTo(0.0));
-                    Assert.That(propertyValues.XCoordinates[22], Is.EqualTo(3.5));
-                    Assert.That(propertyValues.YCoordinates[22], Is.EqualTo(0.0));
-                    Assert.That(propertyValues.XCoordinates[23], Is.EqualTo(3.5));
-                    Assert.That(propertyValues.YCoordinates[23], Is.EqualTo(3.0));
+                    Assert.That(propertyValues.XCoordinates, Is.EqualTo(new[]
+                    {
+                        2.0, 0.0, 0.0, 2.0, // edge 0-1
+                        5.0, 2.0, 2.0, 5.0, // edge 1-2
+                        0.0, 2.0, 2.0, 0.0, // edge 3-4
+                        2.0, 5.0, 5.0, 2.0, // edge 4-5
+                        1.0, 1.0, 0.0, 0.0, // edge 0-3
+                        1.0, 1.0, 3.5, 3.5, // edge 1-4
+                        3.5, 3.5, 5.0, 5.0  // edge 2-5
+                    }));
+                    Assert.That(propertyValues.YCoordinates, Is.EqualTo(new[]
+                    {
+                        1.5, 1.5, 0.0, 0.0, // edge 0-1
+                        1.5, 1.5, 0.0, 0.0, // edge 1-2
+                        1.5, 1.5, 3.0, 3.0, // edge 3-4
+                        1.5, 1.5, 3.0, 3.0, // edge 4-5
+                        0.0, 3.0, 3.0, 0.0, // edge 0-3
+                        3.0, 0.0, 0.0, 3.0, // edge 1-4
+                        3.0, 0.0, 0.0, 3.0  // edge 2-5
+                    }));
                 }
                 finally
                 {

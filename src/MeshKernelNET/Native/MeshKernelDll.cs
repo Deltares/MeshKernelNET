@@ -333,7 +333,7 @@ namespace MeshKernelNET.Native
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="locationType">The location type</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
@@ -341,7 +341,7 @@ namespace MeshKernelNET.Native
         internal static extern int CurvilinearGetLocationIndex([In] int meshKernelId,
                                                                [In] double xCoordinate,
                                                                [In] double yCoordinate,
-                                                               [In] int locationType,
+                                                               [In] int locationId,
                                                                [In] ref BoundingBoxNative boundingBox,
                                                                [In][Out] ref int locationIndex);
 
@@ -837,6 +837,14 @@ namespace MeshKernelNET.Native
         internal static extern int GetAveragingMethodSimpleAveraging([In][Out] ref int method);
 
         /// <summary>
+        /// Gets an int indicating the edge location type
+        /// </summary>
+        /// <param name="type">The int indicating the edge location type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_edges_location_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetEdgesLocationType([In][Out] ref int type);
+        
+        /// <summary>
         /// Gets a pointer to error message
         /// </summary>
         /// <param name="message">The pointer to the latest error message</param>
@@ -925,6 +933,14 @@ namespace MeshKernelNET.Native
         internal static extern int GetExitCodeUnknownException([In][Out] ref int exitCode);
 
         /// <summary>
+        /// Gets an int indicating the faces location type
+        /// </summary>
+        /// <param name="type">The int indicating the face location type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_faces_location_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetFacesLocationType([In][Out] ref int type);
+        
+        /// <summary>
         /// get geometry error
         /// </summary>
         /// <param name="invalidIndex">The index of the erroneous entity</param>
@@ -932,6 +948,14 @@ namespace MeshKernelNET.Native
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_geometry_error", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int GetGeometryError([In][Out] ref int invalidIndex, [In][Out] ref int type);
+
+        /// <summary>
+        /// Gets an int indicating the node location type
+        /// </summary>
+        /// <param name="type">The int indicating the node location type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_get_nodes_location_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int GetNodesLocationType([In][Out] ref int type);
 
         /// <summary>
         /// Gets the coordinate projection of the meshkernel state
@@ -1026,7 +1050,7 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="samples">The samples coordinates and values</param>
-        /// <param name="locationType">The location type</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="averagingMethodType">The averaging method</param>
         /// <param name="relativeSearchSize">The relative search size around the location</param>
         /// <param name="minNumSamples">
@@ -1038,7 +1062,7 @@ namespace MeshKernelNET.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_averaging_interpolation", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dAveragingInterpolation([In] int meshKernelId,
                                                                 [In] ref GeometryListNative samples,
-                                                                [In] int locationType,
+                                                                [In] int locationId,
                                                                 [In] int averagingMethodType,
                                                                 [In] double relativeSearchSize,
                                                                 [In] int minNumSamples,
@@ -1357,6 +1381,30 @@ namespace MeshKernelNET.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_data", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dGetData([In] int meshKernelId,
                                                  [In][Out] ref Mesh2DNative mesh2DNative);
+        
+        /// <summary>
+        /// Gets an int indicating the orthogonality property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the orthogonality property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_orthogonality_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetOrthogonalityPropertyType([In][Out] ref int type);
+        
+        /// <summary>
+        /// Gets an int indicating the edge length property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the edge length property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_edge_length_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetEdgeLengthPropertyType([In][Out] ref int type);
+
+        /// <summary>
+        /// Gets an int indicating the face circumcenter property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the face circumcenter property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_face_circumcenter_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetFaceCircumcenterPropertyType([In][Out] ref int type);
 
         /// <summary>
         /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure, only the node and edge data
@@ -1416,7 +1464,7 @@ namespace MeshKernelNET.Native
         /// <param name="meshKernelId"> meshKernelId The id of the mesh state </param>
         /// <param name="xCoordinate">The input point coordinates</param>
         /// <param name="yCoordinate">The input point coordinates</param>
-        /// <param name="locationType">The location type</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="boundingBox">The input bounding box</param>
         /// <param name="locationIndex">The location index</param>
         /// <returns>Error code</returns>
@@ -1424,7 +1472,7 @@ namespace MeshKernelNET.Native
         internal static extern int Mesh2dGetLocationIndex([In] int meshKernelId,
                                                           [In] double xCoordinate,
                                                           [In] double yCoordinate,
-                                                          [In] int locationType,
+                                                          [In] int locationId,
                                                           [In] ref BoundingBoxNative boundingBox,
                                                           [In][Out] ref int locationIndex);
 
@@ -1500,7 +1548,7 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="propertyId">The id representing the specific property</param>
-        /// <param name="locationId">The location (nodes, edge centres or face centres) at which the samples should be interpolated</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="geometryListNative">The geometry list that will be populated with the values of the requested property</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_property", CallingConvention = CallingConvention.Cdecl)]
@@ -1511,7 +1559,7 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="propertyId">The value representing the specific property</param>
-        /// <param name="locationId">The location (nodes, edge centres or face centres) at which the samples should be interpolated</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="dimension">The dimension of the specified property</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_property_dimension", CallingConvention = CallingConvention.Cdecl)]
@@ -1918,11 +1966,11 @@ namespace MeshKernelNET.Native
         /// </summary>
         /// <param name="meshKernelId">The id of the mesh state</param>
         /// <param name="samples">The samples coordinates and values</param>
-        /// <param name="locationType">The location type</param>
+        /// <param name="locationId">The location id (nodes, edge centres or face centres)</param>
         /// <param name="results">The interpolation results with x and y coordinates</param>
         /// <returns>Error code</returns>
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_triangulation_interpolation", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dTriangulationInterpolation([In] int meshKernelId, [In] ref GeometryListNative samples, [In] int locationType, [In][Out] ref GeometryListNative results);
+        internal static extern int Mesh2dTriangulationInterpolation([In] int meshKernelId, [In] ref GeometryListNative samples, [In] int locationId, [In][Out] ref GeometryListNative results);
 
         /// <summary>
         /// Compute the network chainages from fixed point locations

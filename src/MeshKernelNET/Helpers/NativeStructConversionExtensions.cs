@@ -10,6 +10,18 @@ namespace MeshKernelNET.Helpers
 {
     public static class NativeStructConversionExtensions
     {
+        internal static int ToLocationId(this LocationType locationType) => 
+            Convert.ToInt32(locationType);
+        
+        internal static int ToPropertyId(this PropertyType propertyType) =>
+            Convert.ToInt32(propertyType);
+        
+        internal static int ToOptionValue(this DeleteMeshInsidePolygonOptions options) =>
+            Convert.ToInt32(options);
+        
+        internal static int ToDirectionValue(this CurvilinearDirectionOptions direction) =>
+            Convert.ToInt32(direction);
+        
         internal static OrthogonalizationParametersNative ToOrthogonalizationParametersNative(this OrthogonalizationParameters orthogonalizationParameters)
         {
             return new OrthogonalizationParametersNative

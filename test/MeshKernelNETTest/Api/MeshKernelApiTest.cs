@@ -2704,6 +2704,46 @@ namespace MeshKernelNETTest.Api
         }
         
         [Test]
+        public void Mesh2dGetPropertyFaceBoundsThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(4, 4, 100, 200))
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.FaceBounds, LocationType.Faces, out propertyValues), Is.EqualTo(0));
+
+                    // Assert
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(54));
+                    Assert.That(propertyValues.XCoordinates[0], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.YCoordinates[0], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.XCoordinates[1], Is.EqualTo(100.0));
+                    Assert.That(propertyValues.YCoordinates[1], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.XCoordinates[2], Is.EqualTo(100.0));
+                    Assert.That(propertyValues.YCoordinates[2], Is.EqualTo(200.0));
+                    Assert.That(propertyValues.XCoordinates[3], Is.EqualTo(0.0));
+                    Assert.That(propertyValues.YCoordinates[3], Is.EqualTo(200.0));
+                    Assert.That(propertyValues.XCoordinates[4], Is.EqualTo(-999.0));
+                    Assert.That(propertyValues.YCoordinates[4], Is.EqualTo(-999.0));
+                    Assert.That(propertyValues.XCoordinates[5], Is.EqualTo(-999.0));
+                    Assert.That(propertyValues.YCoordinates[5], Is.EqualTo(-999.0));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
         [TestCase(PropertyType.Orthogonality, LocationType.Faces)]
         [TestCase(PropertyType.Orthogonality, LocationType.Nodes)]
         [TestCase(PropertyType.EdgeLength, LocationType.Faces)]
@@ -2712,6 +2752,8 @@ namespace MeshKernelNETTest.Api
         [TestCase(PropertyType.FaceCircumcenter, LocationType.Edges)]
         [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Faces)]
         [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Nodes)]
+        [TestCase(PropertyType.FaceBounds, LocationType.Edges)]
+        [TestCase(PropertyType.FaceBounds, LocationType.Nodes)]
         public void Mesh2dGetPropertyWithInvalidLocationThroughApi(PropertyType propertyType, LocationType locationType)
         {
             // Setup

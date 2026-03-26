@@ -941,14 +941,6 @@ namespace MeshKernelNET.Native
         internal static extern int GetFacesLocationType([In][Out] ref int type);
         
         /// <summary>
-        /// Gets an int indicating the edge netlink contour polygon property type for mesh2d
-        /// </summary>
-        /// <param name="type">The int indicating the netlink contour polygon property type</param>
-        /// <returns>Error code</returns>
-        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_netlink_contour_polygon_property_type", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int Mesh2dGetNetLinkContourPolygonPropertyType([In][Out] ref int type);
-        
-        /// <summary>
         /// get geometry error
         /// </summary>
         /// <param name="invalidIndex">The index of the erroneous entity</param>
@@ -1414,6 +1406,22 @@ namespace MeshKernelNET.Native
         [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_face_circumcenter_property_type", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Mesh2dGetFaceCircumcenterPropertyType([In][Out] ref int type);
 
+        /// <summary>
+        /// Gets an int indicating the edge netlink contour polygon property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the netlink contour polygon property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_netlink_contour_polygon_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetNetLinkContourPolygonPropertyType([In][Out] ref int type);
+        
+        /// <summary>
+        /// Gets an int indicating the face bounds property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the face bounds property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_face_bounds_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetFaceBoundsPropertyType([In][Out] ref int type);
+        
         /// <summary>
         /// Gets the mesh state as a <see cref="Mesh2DNative"/> structure, only the node and edge data
         /// </summary>

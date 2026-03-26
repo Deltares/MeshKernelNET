@@ -23,6 +23,11 @@
         /// <summary>
         /// The control volume polygons around mesh edges.
         /// </summary>
-        NetlinkContourPolygon = 3
+        NetlinkContourPolygon = 3,
+        
+        /// <summary>
+        /// The bounding box of the mesh faces.
+        /// </summary>
+        FaceBounds = 4
     }
 }

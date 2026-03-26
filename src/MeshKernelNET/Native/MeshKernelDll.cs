@@ -941,6 +941,14 @@ namespace MeshKernelNET.Native
         internal static extern int GetFacesLocationType([In][Out] ref int type);
         
         /// <summary>
+        /// Gets an int indicating the edge netlink contour polygon property type for mesh2d
+        /// </summary>
+        /// <param name="type">The int indicating the netlink contour polygon property type</param>
+        /// <returns>Error code</returns>
+        [DllImport(MeshKernelDllName, EntryPoint = "mkernel_mesh2d_get_netlink_contour_polygon_property_type", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int Mesh2dGetNetLinkContourPolygonPropertyType([In][Out] ref int type);
+        
+        /// <summary>
         /// get geometry error
         /// </summary>
         /// <param name="invalidIndex">The index of the erroneous entity</param>

@@ -23,6 +23,9 @@ namespace MeshKernelNETTest.Api
 
                 Assert.That(MeshKernelDll.Mesh2dGetFaceCircumcenterPropertyType(ref enumValue), Is.EqualTo(0));
                 Assert.That(enumValue, Is.EqualTo(PropertyType.FaceCircumcenter.ToPropertyId()));
+                
+                Assert.That(MeshKernelDll.Mesh2dGetNetLinkContourPolygonPropertyType(ref enumValue), Is.EqualTo(0));
+                Assert.That(enumValue, Is.EqualTo(PropertyType.NetlinkContourPolygon.ToPropertyId()));
             });
         }
     }

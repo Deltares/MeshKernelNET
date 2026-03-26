@@ -18,6 +18,11 @@
         /// <summary>
         /// The circumcenter of the mesh faces.
         /// </summary>
-        FaceCircumcenter = 2
+        FaceCircumcenter = 2,
+
+        /// <summary>
+        /// The control volume polygons around mesh edges.
+        /// </summary>
+        NetlinkContourPolygon = 3
     }
 }

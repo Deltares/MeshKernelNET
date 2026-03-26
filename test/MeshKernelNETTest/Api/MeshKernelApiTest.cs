@@ -2640,12 +2640,78 @@ namespace MeshKernelNETTest.Api
         }
         
         [Test]
+        public void Mesh2dGetPropertyNetlinkContourPolygonThroughApi()
+        {
+            // Setup
+            using (var api = new MeshKernelApi())
+            using (DisposableMesh2D mesh = CreateMesh2D(3, 2, 1, 1))
+            {
+                var propertyValues = new DisposableGeometryList();
+                try
+                {
+                    // Prepare - a 2-cell mesh with different cell widths
+                    //  3----4------5
+                    //  |    |      |
+                    //  0----1------2
+                    //
+                    // Left cell:  (0-1-4-3) => expected circumcenter (1.0, 1.5)
+                    // Right cell: (1-2-5-4) => expected circumcenter (3.5, 1.5)
+                    mesh.NumNodes = 6;
+                    mesh.NumEdges = 7;
+                    mesh.NodeX = new[] { 0.0, 2.0, 5.0, 0.0, 2.0, 5.0 };
+                    mesh.NodeY = new[] { 0.0, 0.0, 0.0, 3.0, 3.0, 3.0 };
+                    mesh.EdgeNodes = new[] { 0, 1, 1, 2, 3, 4, 4, 5, 0, 3, 1, 4, 2, 5 };
+
+                    int id = api.AllocateState(0);
+                    Assert.That(api.Mesh2dSet(id, mesh), Is.EqualTo(0));
+
+                    // Execute
+                    Assert.That(api.Mesh2dGetProperty(id, PropertyType.NetlinkContourPolygon, LocationType.Edges, out propertyValues), Is.EqualTo(0));
+
+                    // Assert - verifies that for each edge:
+                    // - A polygon with 4 vertices is returned
+                    // - The polygon consists of:
+                    //     - the two edge nodes
+                    //     - the circumcenters of the neighboring faces (1 or 2 depending on boundary/internal edge)
+                    Assert.That(propertyValues.NumberOfCoordinates, Is.EqualTo(28));
+                    Assert.That(propertyValues.XCoordinates, Is.EqualTo(new[]
+                    {
+                        2.0, 0.0, 0.0, 2.0, // edge 0-1
+                        5.0, 2.0, 2.0, 5.0, // edge 1-2
+                        0.0, 2.0, 2.0, 0.0, // edge 3-4
+                        2.0, 5.0, 5.0, 2.0, // edge 4-5
+                        1.0, 1.0, 0.0, 0.0, // edge 0-3
+                        1.0, 1.0, 3.5, 3.5, // edge 1-4
+                        3.5, 3.5, 5.0, 5.0  // edge 2-5
+                    }));
+                    Assert.That(propertyValues.YCoordinates, Is.EqualTo(new[]
+                    {
+                        1.5, 1.5, 0.0, 0.0, // edge 0-1
+                        1.5, 1.5, 0.0, 0.0, // edge 1-2
+                        1.5, 1.5, 3.0, 3.0, // edge 3-4
+                        1.5, 1.5, 3.0, 3.0, // edge 4-5
+                        0.0, 3.0, 3.0, 0.0, // edge 0-3
+                        3.0, 0.0, 0.0, 3.0, // edge 1-4
+                        3.0, 0.0, 0.0, 3.0  // edge 2-5
+                    }));
+                }
+                finally
+                {
+                    api.ClearState();
+                    propertyValues.Dispose();
+                }
+            }
+        }
+        
+        [Test]
         [TestCase(PropertyType.Orthogonality, LocationType.Faces)]
         [TestCase(PropertyType.Orthogonality, LocationType.Nodes)]
         [TestCase(PropertyType.EdgeLength, LocationType.Faces)]
         [TestCase(PropertyType.EdgeLength, LocationType.Nodes)]
         [TestCase(PropertyType.FaceCircumcenter, LocationType.Nodes)]
         [TestCase(PropertyType.FaceCircumcenter, LocationType.Edges)]
+        [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Faces)]
+        [TestCase(PropertyType.NetlinkContourPolygon, LocationType.Nodes)]
         public void Mesh2dGetPropertyWithInvalidLocationThroughApi(PropertyType propertyType, LocationType locationType)
         {
             // Setup

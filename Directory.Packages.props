@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Deltares.MeshKernel" Version="8.2.2.4807" />
-    <PackageVersion Include="DHYDRO.SharedConfigurations" Version="1.0.0.47" />
+    <PackageVersion Include="DHYDRO.SharedConfigurations" Version="1.0.0.48" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="NetTopologySuite" Version="1.15.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using MeshKernelNET.Api;
 using NUnit.Framework;
-using static MeshKernelNETTest.Api.TestUtilityFunctions;
+using static MeshKernelNET.Tests.Api.TestUtilityFunctions;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     [TestFixture]
     public class MeshKernelApiTest

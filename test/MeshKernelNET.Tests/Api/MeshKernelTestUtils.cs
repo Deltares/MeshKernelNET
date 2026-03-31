@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using MeshKernelNET.Api;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     public static class TestUtilityFunctions
     {

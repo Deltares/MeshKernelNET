@@ -1,7 +1,7 @@
 ﻿using MeshKernelNET.Api;
 using NUnit.Framework;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     [TestFixture]
     public class MeshKernelNETNetwork1DTests

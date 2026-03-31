@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     [TestFixture]
     public class MeshKernelMesh2DTest

@@ -2,7 +2,7 @@ using System.Linq;
 using MeshKernelNET.Api;
 using NUnit.Framework;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     /// <summary>
     /// This test fixture tests whether the utility functions for creating grids produce the same geometry and

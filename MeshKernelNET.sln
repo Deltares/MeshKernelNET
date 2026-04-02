@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
+		Nuget.config = Nuget.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshKernelNET.Generators", "src\MeshKernelNET.Generators\MeshKernelNET.Generators.csproj", "{C9A9F408-CC49-4E5D-9F53-E92E1B44BC45}"

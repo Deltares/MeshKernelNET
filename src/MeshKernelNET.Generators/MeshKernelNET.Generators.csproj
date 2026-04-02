@@ -11,8 +11,6 @@
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <Deterministic>true</Deterministic>
-        
-        <RootNamespace>MeshKernelNET.Generators</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -2,7 +2,7 @@
 using MeshKernelNET.Native;
 using NUnit.Framework;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     [TestFixture]
     public class DisposableMesh2DTest

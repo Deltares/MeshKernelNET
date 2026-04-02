@@ -7,7 +7,7 @@ using MeshKernelNET.Api;
 using NUnit.Framework;
 using ProtoBuf;
 
-namespace MeshKernelNETTest.Api
+namespace MeshKernelNET.Tests.Api
 {
     [TestFixture]
     public class MeshKernelSerializationTest

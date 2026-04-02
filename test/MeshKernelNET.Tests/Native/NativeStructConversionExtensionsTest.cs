@@ -7,7 +7,7 @@ using MeshKernelNET.Helpers;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
 
-namespace MeshKernelNETTest.Native
+namespace MeshKernelNET.Tests.Native
 {
     [TestFixture]
     public class NativeStructConversionExtensionsTest

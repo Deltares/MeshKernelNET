@@ -4,8 +4,18 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageId>MeshKernelNET</PackageId>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Deltares MeshKernel .NET Wrapper</Title>
+        <Description>A managed .NET wrapper for the Deltares MeshKernel native library, providing functionality for generating, editing, and manipulating unstructured meshes for use in hydrodynamic simulations.</Description>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Deltares.MeshKernel"/>
+        <PackageReference Include="Deltares.MeshKernel">
+            <IncludeAssets>build;buildTransitive;runtime</IncludeAssets>
+            <PrivateAssets>none</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="DHYDRO.SharedConfigurations"/>
         <PackageReference Include="NetTopologySuite"/>
         <PackageReference Include="protobuf-net"/>

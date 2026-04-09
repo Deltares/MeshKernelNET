@@ -1,7 +1,10 @@
 <Project>
 	<PropertyGroup>
 		<Company>Deltares</Company>
+		<Authors>$(Company)</Authors>
 		<Copyright>Copyright © Deltares $([System.DateTime]::Now.Year)</Copyright>
+		<RepositoryUrl>https://github.com/Deltares/MeshKernelNET</RepositoryUrl>
+		
 		<Product>$(MSBuildProjectName)</Product>
 		<AssemblyTitle>$(MSBuildProjectName)</AssemblyTitle>
 

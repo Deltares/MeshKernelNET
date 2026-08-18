@@ -3424,7 +3424,7 @@ namespace MeshKernelNET.Tests.Api
                 {
                     int projectionType = 1;
                     id = api.AllocateState(projectionType);
-                    Assert.That(api.Mesh2dMakeGlobal(id, 19, 25), Is.EqualTo(0));
+                    Assert.That(api.Mesh2dMakeGlobal(id, 19), Is.EqualTo(0));
 
                     Assert.That(api.Mesh2dGetData(id, out mesh2d), Is.EqualTo(0));
                     Assert.That(mesh2d.NumEdges, Is.EqualTo(1225));

@@ -1,4 +1,7 @@
 # MeshKernelNET
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Deltares_MeshKernelNET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Deltares_MeshKernelNET)
+
 .NET wrapper for the MeshKernel library
 `MeshKernelNET` is a  small C# wrapper around the `MeshKernel`. `MeskKernel` is a library for creating and editing meshes. It supports 1D and 2D unstructured meshes.
 The underlying C++ library `MeshKernel` can be found [here](https://github.com/Deltares/MeshKernel).

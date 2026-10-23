@@ -27,4 +27,12 @@
 		<LangVersion>7.3</LangVersion>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<!-- DHYDROGUI-766 - Enable Security Analyzers and FIPS compliance. Treat weak/broken crypto usage as errors -->
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>Security</AnalysisMode>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<WarningsAsErrors>$(WarningsAsErrors);CA5350;CA5351</WarningsAsErrors>
+	</PropertyGroup>
 </Project>
